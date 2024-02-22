@@ -1,6 +1,7 @@
 #pragma once
 
-/* 클라이언트개발자가 엔진의 기능을 사용하기위해서 항상 접근해야하는 클래스. */
+/* 클라이언트 개발자가 엔진의 기능을 사용하기 위해서 항상 접근 해야하는 클래스 */
+
 #include "Renderer.h"
 #include "Component_Manager.h"
 

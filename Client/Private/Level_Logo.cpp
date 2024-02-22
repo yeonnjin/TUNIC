@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\Level_Logo.h"
+#include "Level_Logo.h"
 
 #include "GameInstance.h"
 #include "Level_Loading.h"
@@ -15,8 +15,8 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-		return E_FAIL;*/
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -37,7 +37,7 @@ HRESULT CLevel_Logo::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	SetWindowText(g_hWnd, TEXT("로고레벨입니다."));
+	SetWindowText(g_hWnd, TEXT("Level : LOGO"));
 	
 
 
@@ -46,13 +46,7 @@ HRESULT CLevel_Logo::Render()
 
 HRESULT CLevel_Logo::Ready_Layer_BackGround(const wstring& strLayerTag)
 {
-	/*CBackGround::BACKGROUND_DESC	BackGroundDesc = {};
-
-	BackGroundDesc.iData = 10;
-	BackGroundDesc.fSpeedPerSec = 10.f;	BackGroundDesc.fRotationPerSec = D3DXToRadian(90.0f);*/
-
-
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_LOGO, strLayerTag, TEXT("Prototype_GameObject_BackGround")/*, &BackGroundDesc*/)))
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_LOGO, strLayerTag, TEXT("Prototype_GameObject_BackGround"))))
 		return E_FAIL;
 
 	return S_OK;

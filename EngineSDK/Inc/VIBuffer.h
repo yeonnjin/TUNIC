@@ -2,11 +2,11 @@
 
 #include "Component.h"
 
-/* 각 형태를 구성하기위한 정점 인덱스를 보유하는 개겣들의 부모다. */
+/* 각 형태를 구성하기위한 정점 인덱스를 보유하는 개체들의 부모 */
 
 BEGIN(Engine)
 
-class CVIBuffer abstract : public CComponent
+class ENGINE_DLL CVIBuffer abstract : public CComponent
 {
 protected:
 	CVIBuffer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

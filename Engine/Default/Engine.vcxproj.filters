@@ -61,6 +61,9 @@
     <Filter Include="01.Utility\02.Components\VIBuffer\Rect">
       <UniqueIdentifier>{6dde1500-565b-4a82-a05d-b8d03aba94d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\02.Components\Texture">
+      <UniqueIdentifier>{9a7d099b-7bc0-40c7-9801-363e3750feb7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.Utility\02.Components\Shader">
       <UniqueIdentifier>{d829722f-8a2c-45ef-aa1f-2e16eaeab6e4}</UniqueIdentifier>
     </Filter>
@@ -119,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="..\Public\Engine_Struct.cpp">
       <Filter>99.Defines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Texture.cpp">
+      <Filter>01.Utility\02.Components\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Shader.h">
       <Filter>01.Utility\02.Components\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Texture.h">
+      <Filter>01.Utility\02.Components\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

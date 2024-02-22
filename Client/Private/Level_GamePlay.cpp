@@ -1,9 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\Level_GamePlay.h"
-
-
-
-
+#include "Level_GamePlay.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -31,8 +27,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 		return E_FAIL;*/
 
-	
-
 	return S_OK;
 }
 
@@ -46,7 +40,7 @@ HRESULT CLevel_GamePlay::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
+	SetWindowText(g_hWnd, TEXT("Level : GAMEPLAY"));
 
 	return S_OK;
 }
@@ -132,7 +126,7 @@ CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceCon
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX(TEXT("Failed To Created : CLevel_GamePlay"));
+		MSG_BOX(TEXT("Failed To Create : CLevel_GamePlay"));
 
 		Safe_Release(pInstance);
 	}

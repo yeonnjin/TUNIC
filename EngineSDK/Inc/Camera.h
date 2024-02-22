@@ -2,9 +2,9 @@
 
 #include "GameObject.h"
 
-/* 모든 카메라 종류마다 필수적으로 필요한 기능을 모아둔다.  */
-/* 뷰스페이스 변환 행렬을 생성하여 장치에 바인딩 해준다.(m_pTransformCom) */
-/* 투영행렬을 생성하여 장치에 바인딩한다. (이제 만드,ㄹ어야지)*/
+/* 모든 카메라 종류마다 필수적으로 필요한 기능을 모아둠 */
+/* 뷰 스페이스 변환 행렬을 생성하여 장치에 바인딩(m_pTransformCom) */
+/* 투영 행렬을 생성하여 장치에 바인딩 */
 
 BEGIN(Engine)
 
@@ -40,8 +40,6 @@ protected:
 
 protected:
 	HRESULT Bind_PipeLines();
-
-
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

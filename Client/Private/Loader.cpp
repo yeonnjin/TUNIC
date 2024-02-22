@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "..\Public\Loader.h"
+#include "Loader.h"
 #include <process.h>
 #include "GameInstance.h"
 //#include "Camera_Free.h"
-//#include "BackGround.h"
+#include "BackGround.h"
 //#include "Terrain.h"
 //#include "Monster.h"
 //#include "Player.h"
@@ -22,9 +22,9 @@ CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 _uint APIENTRY LoadingMain(void* pArg)
 {
-	CoInitializeEx(nullptr, 0);
+	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
-	/* 로더에게 지정된 레벨을 준비해라*/
+	/* 로더에게 지정된 레벨을 준비 */
 	CLoader*		pLoader = (CLoader*)pArg;
 
 	if (FAILED(pLoader->Start()))
@@ -39,7 +39,7 @@ HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 
 	InitializeCriticalSection(&m_Critical_Section);
 
-	/* 스레드를 생성하낟. */
+	/* 스레드 생성 */
 	m_hThread = (HANDLE)_beginthreadex(nullptr, 0, LoadingMain, this, 0, nullptr);
 	if (0 == m_hThread)
 		return E_FAIL;
@@ -74,10 +74,10 @@ HRESULT CLoader::Start()
 HRESULT CLoader::Loading_For_Logo()
 {
 	m_strLoadingText = TEXT("텍스쳐를(을) 로딩 중 입니다.");
-	///* For.Prototype_Component_Texture_Logo */
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
-	//	CTexture::Create(m_pGraphic_Device, CTexture::TYPE_TEX2D, TEXT("../Bin/Resources/Textures/Logo/Logo.png")))))
-	//	return E_FAIL;
+	//* For.Prototype_Component_Texture_Logo */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
+		return E_FAIL;
 
 	
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
@@ -87,9 +87,9 @@ HRESULT CLoader::Loading_For_Logo()
 	m_strLoadingText = TEXT("객체의 원형를(을) 로딩 중 입니다.");
 
 	/* For.Prototype_GameObject_BackGround */
-	/*if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
-		CBackGround::Create(m_pGraphic_Device))))
-		return E_FAIL;*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
+		CBackGround::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	
 	
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
@@ -200,6 +200,8 @@ CLoader * CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, 
 void CLoader::Free()
 {
 	WaitForSingleObject(m_hThread, INFINITE);
+
+	CoUninitialize();
 
 	DeleteObject(m_hThread);
 

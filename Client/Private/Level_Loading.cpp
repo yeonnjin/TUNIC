@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\Level_Loading.h"
+#include "Level_Loading.h"
 #include "Loader.h"
 
 #include "GameInstance.h"
@@ -19,7 +19,7 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 
 	m_eNextLevelID = eNextLevelID;
 
-	/* 스레드를 생성하여 자원로드를 맡긴다. */
+	/* 스레드를 생성하여 자원 로드를 맡김 */
 	m_pLoader = CLoader::Create(m_pDevice, m_pContext, eNextLevelID);
 	if (nullptr == m_pLoader)
 		return E_FAIL;		
@@ -84,7 +84,7 @@ CLevel_Loading * CLevel_Loading::Create(ID3D11Device* pDevice, ID3D11DeviceConte
 
 	if (FAILED(pInstance->Initialize(eNextLevelID)))
 	{
-		MSG_BOX(TEXT("Failed To Created : CLevel_Loading"));
+		MSG_BOX(TEXT("Failed To Create : CLevel_Loading"));
 
 		Safe_Release(pInstance);
 	}

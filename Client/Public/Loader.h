@@ -3,7 +3,7 @@
 #include "Client_Defines.h"
 #include "Base.h"
 
-/* 다음레벨에 대한 자원을 로드한다. */
+/* 다음 레벨에 대한 자원을 로드 */
 
 BEGIN(Engine)
 class CGameInstance;
@@ -26,7 +26,6 @@ public:
 	void Output() {
 		SetWindowText(g_hWnd, m_strLoadingText.c_str());
 	}
-	
 
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
@@ -38,7 +37,6 @@ private:
 	_bool						m_isFinished = { false };
 
 	CGameInstance*				m_pGameInstance = { nullptr };
-
 
 private:
 	HRESULT Loading_For_Logo();
