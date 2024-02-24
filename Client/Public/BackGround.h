@@ -31,6 +31,7 @@ private:
 	CVIBuffer_Rect*		m_pVIBufferCom = { nullptr };
 
 private:
+	_float				m_fX, m_fY, m_fSizeX, m_fSizeY;
 	_float4x4			m_WorldMatrix, m_ViewMatrix, m_ProjMatrix;
 
 private:

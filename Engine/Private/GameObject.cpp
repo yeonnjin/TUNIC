@@ -37,24 +37,24 @@ HRESULT CGameObject::Initialize_Prototype()
 	return S_OK;
 }
 
-/* 실제 게임 내에서 사용되는 객체가 호출하는 함수다. */
+/* 실제 게임 내에서 사용되는 객체가 호출하는 함수 */
 HRESULT CGameObject::Initialize(void* pArg)
 {
-	//if(nullptr != pArg)
-	//{
-	//	GAMEOBJECT_DESC*		pGameObjectDesc = (GAMEOBJECT_DESC*)pArg;		
-	//}
+	if(nullptr != pArg)
+	{
+		GAMEOBJECT_DESC*		pGameObjectDesc = (GAMEOBJECT_DESC*)pArg;		
+	}
 
-	//m_pTransformCom = CTransform::Create(m_pGraphic_Device);
-	//if (nullptr == m_pTransformCom)
-	//	return E_FAIL;
+	m_pTransformCom = CTransform::Create(m_pDevice, m_pContext);
+	if (nullptr == m_pTransformCom)
+		return E_FAIL;
 
-	//if (FAILED(m_pTransformCom->Initialize(pArg)))
-	//	return E_FAIL;
+	if (FAILED(m_pTransformCom->Initialize(pArg)))
+		return E_FAIL;
 
-	//m_Components.emplace(g_strTransformTag, m_pTransformCom);
+	m_Components.emplace(g_strTransformTag, m_pTransformCom);
 
-	//Safe_AddRef(m_pTransformCom);
+	Safe_AddRef(m_pTransformCom);
 	
 	return S_OK;
 }
@@ -96,7 +96,7 @@ void CGameObject::Free()
 {
 	__super::Free();
 
-	/*Safe_Release(m_pTransformCom);*/
+	Safe_Release(m_pTransformCom);
 
 	for (auto& Pair : m_Components)
 		Safe_Release(Pair.second);
@@ -106,6 +106,4 @@ void CGameObject::Free()
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-
-	
 }

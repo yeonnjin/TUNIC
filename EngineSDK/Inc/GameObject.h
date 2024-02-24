@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Base.h"
+#include "Transform.h"
 
 BEGIN(Engine)
 
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 public:
-	typedef struct /*: public CTransform::TRANSFORM_DESC*/
+	typedef struct GameObject_Desc : public CTransform::TRANSFORM_DESC
 	{		
 	}GAMEOBJECT_DESC;
 
@@ -31,7 +31,7 @@ protected:
 	ID3D11DeviceContext*				m_pContext = { nullptr };
 
 	class CGameInstance*				m_pGameInstance = { nullptr };
-	/*class CTransform*					m_pTransformCom = { nullptr };*/
+	CTransform*							m_pTransformCom = { nullptr };
 
 protected:
 	map<const wstring, class CComponent*>		m_Components;
