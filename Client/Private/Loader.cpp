@@ -2,13 +2,14 @@
 #include "Loader.h"
 #include <process.h>
 #include "GameInstance.h"
-//#include "Camera_Free.h"
+#include "Camera_Free.h"
 #include "BackGround.h"
 #include "Terrain.h"
 //#include "Monster.h"
 //#include "Player.h"
 //#include "Effect.h"
 //#include "Sky.h"
+#include "Model.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -74,13 +75,17 @@ HRESULT CLoader::Start()
 HRESULT CLoader::Loading_For_Logo()
 {
 	m_strLoadingText = TEXT("텍스쳐를(을) 로딩 중 입니다.");
-	//* For.Prototype_Component_Texture_Logo */
+	/* For.Prototype_Component_Texture_Logo */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
 		return E_FAIL;
 
 	
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
+	/* For.Prototype_Component_Model_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Model_Fiona"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx"))))
+		return E_FAIL;
 	
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");
 	
@@ -162,10 +167,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	///* For.Prototype_GameObject_Camera_Free */
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Free"),
-	//	CCamera_Free::Create(m_pGraphic_Device))))
-	//	return E_FAIL;
+	/* For.Prototype_GameObject_Camera_Free */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Free"),
+		CCamera_Free::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	///* For.Prototype_GameObject_Player */
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),

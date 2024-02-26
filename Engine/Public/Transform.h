@@ -30,6 +30,7 @@ public:
 		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
 	}*/
 
+	// Set
 	void Set_State(STATE eState, _fvector vState)
 	{
 		_float4 vTemp;
@@ -44,6 +45,7 @@ public:
 
 	void Set_Scaled(_float fScaleX, _float fScaleY, _float fScaleZ);
 
+	// Get
 	_vector Get_State_Vector(STATE eState) {
 		return XMLoadFloat4x4(&m_WorldMatrix).r[eState];
 	}
@@ -59,6 +61,24 @@ public:
 		return _float3(	XMVectorGetX(XMVector3Length(WorldMatrix.r[STATE_RIGHT])),
 						XMVectorGetX(XMVector3Length(WorldMatrix.r[STATE_UP])),
 						XMVectorGetX(XMVector3Length(WorldMatrix.r[STATE_LOOK])));
+	}
+
+	_float4x4 Get_WorldFloat4x4() const {
+		return m_WorldMatrix;
+	}
+
+	_matrix Get_WorldMatrix() const {
+		return XMLoadFloat4x4(&m_WorldMatrix);
+	}
+
+	_float4x4 Get_WorldFloat4x4_Inverse() const {
+		_float4x4 WorldMatrixInverse;
+		XMStoreFloat4x4(&WorldMatrixInverse, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+		return WorldMatrixInverse;
+	}
+
+	_matrix Get_WorldMatrix_Inverse() const {
+		return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix));
 	}
 
 public:
