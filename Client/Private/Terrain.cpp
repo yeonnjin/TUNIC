@@ -117,7 +117,7 @@ CGameObject* CTerrain::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Create : CTerrain"));
+        MSG_BOX(TEXT("Failed To Clone : CTerrain"));
 
         Safe_Release(pInstance);
     }

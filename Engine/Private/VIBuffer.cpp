@@ -48,7 +48,6 @@ HRESULT CVIBuffer::Bind_Buffers()
 {
 	ID3D11Buffer*		pVertexBuffers[] = {
 		m_pVB, 
-	
 	};
 
 	_uint				iVertexStrides[] = {

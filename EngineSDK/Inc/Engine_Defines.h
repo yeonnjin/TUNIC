@@ -10,12 +10,6 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
-namespace Engine
-{
-	enum MOUSEKEYSTATE { DIMKS_LBUTTON, DIMKS_RBUTTON, DIMKS_WHEEL, DIMKS_X, DIMKS_END };
-	enum MOUSEMOVESTATE { DIMMS_X, DIMMS_Y, DIMMS_WHEEL, DIMMS_END };
-}
-
 #include "Effects11/d3dx11effect.h"
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
@@ -35,6 +29,9 @@ using namespace std;
 namespace Engine
 {
 	const wstring g_strTransformTag = TEXT("Com_Transform");
+
+	enum MOUSEKEYSTATE { DIMKS_LBUTTON, DIMKS_RBUTTON, DIMKS_WHEEL, DIMKS_X, DIMKS_END };
+	enum MOUSEMOVESTATE { DIMMS_X, DIMMS_Y, DIMMS_WHEEL, DIMMS_END };
 	enum KEYSTATE { KEY_FREE = 0, KEY_DOWN, KEY_PRESS, KEY_UP, KEY_END };
 }
 

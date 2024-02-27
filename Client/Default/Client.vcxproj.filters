@@ -40,6 +40,9 @@
     <Filter Include="02.GameObjects\Camera">
       <UniqueIdentifier>{9f763b5c-558b-41d5-931e-bec31d162d14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster">
+      <UniqueIdentifier>{2b6c9217-b337-43ce-9ec2-02d92b76628f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,6 +84,9 @@
     <ClInclude Include="..\Public\Camera_Free.h">
       <Filter>02.GameObjects\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02.GameObjects\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -113,6 +119,9 @@
     <ClCompile Include="..\Private\Camera_Free.cpp">
       <Filter>02.GameObjects\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02.GameObjects\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -132,6 +141,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosNorTex.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
