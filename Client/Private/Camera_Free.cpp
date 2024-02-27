@@ -87,7 +87,6 @@ CCamera_Free* CCamera_Free::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	}
 
 	return pInstance;
-
 }
 
 CGameObject* CCamera_Free::Clone(void* pArg)

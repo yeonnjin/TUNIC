@@ -43,7 +43,7 @@ HRESULT CLevel_GamePlay::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	SetWindowText(g_hWnd, TEXT("Level : GAMEPLAY"));
+	SetWindowText(g_hWnd, TEXT("LEVEL : GAMEPLAY"));
 
 	return S_OK;
 }

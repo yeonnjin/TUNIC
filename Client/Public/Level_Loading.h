@@ -17,7 +17,7 @@ private:
 
 public:
 	virtual HRESULT Initialize(LEVEL eNextLevelID);
-	virtual void Tick(_float fTimeDelta) override;
+	virtual void	Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 private:

@@ -11,6 +11,9 @@
 //#include "Sky.h"
 #include "Model.h"
 
+#include "Editor.h"
+#include "Test_Object.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext}
@@ -61,6 +64,9 @@ HRESULT CLoader::Start()
 		break;
 	case LEVEL_GAMEPLAY:
 		hr = Loading_For_GamePlay();
+		break;
+	case LEVEL_TOOL_MAP:
+		hr = Loading_For_Tool_Map();
 		break;
 	}
 
@@ -194,6 +200,64 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	CSky::Create(m_pGraphic_Device))))
 	//	return E_FAIL;
 	//
+	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
+
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Tool_Map()
+{
+	m_strLoadingText = TEXT("텍스쳐를(을) 로딩 중 입니다.");
+	/* Prototype_Component_Texture_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Texture_Terrain"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg")))))
+		return E_FAIL;
+
+	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
+	/* Prototype_Component_VIBuffer_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_VIBuffer_Terrain"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fiona */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx"))))
+		return E_FAIL;
+
+	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");
+	/* For.Prototype_Component_Shader_VtxPosNorTex */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Shader_VtxPosNorTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosNorTex.hlsl"), VTXPOSNORTEX::Elements, VTXPOSNORTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Shader_VtxMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		return E_FAIL;
+
+	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
+	/* For.Prototype_GameObject_Editor */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Editor"),
+		CEditor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_Free */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Free"),
+		CCamera_Free::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Test_Object */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Test_Object"),
+		CTest_Object::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 
 	m_isFinished = true;

@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Level_Loading.h"
+#include "ImGui_Manager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
@@ -11,7 +12,6 @@ CMainApp::CMainApp()
 
 	/*m_pGraphic_Device->SetRenderState(D3DRS_TEXTUREFACTOR, 0x);*/
 }
-
 
 HRESULT CMainApp::Initialize()
 {
@@ -26,10 +26,13 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, EngineDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;
 
+	if (FAILED(CImGui_Manager::Get_Instance()->Initialize(g_hWnd, m_pDevice, m_pContext)))
+		return E_FAIL;
+
 	if (FAILED(Ready_Prototype_Component_For_Static()))
 		return E_FAIL;
 
-	if (FAILED(Open_Level(LEVEL_LOGO)))
+	if (FAILED(Open_Level(LEVEL_TOOL_MAP)))
 		return E_FAIL;
 	
 	return S_OK;
@@ -97,6 +100,7 @@ void CMainApp::Free()
 	Safe_Release(m_pContext);
 
 	Safe_Release(m_pGameInstance);
+
 
 	CGameInstance::Release_Engine();
 }

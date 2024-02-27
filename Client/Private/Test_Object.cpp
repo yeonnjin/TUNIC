@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "Monster.h"
+#include "Test_Object.h"
 
-CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CTest_Object::CTest_Object(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
 }
 
-CMonster::CMonster(const CMonster& rhs)
+CTest_Object::CTest_Object(const CTest_Object& rhs)
     : CGameObject{ rhs }
 {
 }
 
-HRESULT CMonster::Initialize_Prototype()
+HRESULT CTest_Object::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CMonster::Initialize(void* pArg)
+HRESULT CTest_Object::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC		GameObjectDesc{};
 
@@ -32,16 +32,17 @@ HRESULT CMonster::Initialize(void* pArg)
     return S_OK;
 }
 
-void CMonster::Tick(_float fTimeDelta)
-{
-}
-
-void CMonster::Late_Tick(_float fTimeDelta)
+void CTest_Object::Tick(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 
-HRESULT CMonster::Render()
+void CTest_Object::Late_Tick(_float fTimeDelta)
+{
+    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+}
+
+HRESULT CTest_Object::Render()
 {
     if (FAILED(Bind_ShaderMatrix()))
         return E_FAIL;
@@ -61,22 +62,22 @@ HRESULT CMonster::Render()
     return S_OK;
 }
 
-HRESULT CMonster::Add_Components()
+HRESULT CTest_Object::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Shader_VtxMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
     return S_OK;
 }
 
-HRESULT CMonster::Bind_ShaderMatrix()
+HRESULT CTest_Object::Bind_ShaderMatrix()
 {
     if (nullptr == m_pShaderCom)
         return E_FAIL;
@@ -92,13 +93,13 @@ HRESULT CMonster::Bind_ShaderMatrix()
     return S_OK;
 }
 
-CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CTest_Object* CTest_Object::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CMonster* pInstance = new CMonster(pDevice, pContext);
+    CTest_Object* pInstance = new CTest_Object(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed To Create : CMonster"));
+        MSG_BOX(TEXT("Failed To Create : CTest_Object"));
 
         Safe_Release(pInstance);
     }
@@ -106,13 +107,13 @@ CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     return pInstance;
 }
 
-CGameObject* CMonster::Clone(void* pArg)
+CGameObject* CTest_Object::Clone(void* pArg)
 {
-    CMonster* pInstance = new CMonster(*this);
+    CTest_Object* pInstance = new CTest_Object(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Create : CMonster"));
+        MSG_BOX(TEXT("Failed To Create : CTest_Object"));
 
         Safe_Release(pInstance);
     }
@@ -120,11 +121,10 @@ CGameObject* CMonster::Clone(void* pArg)
     return pInstance;
 }
 
-void CMonster::Free()
+void CTest_Object::Free()
 {
     __super::Free();
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }
-
