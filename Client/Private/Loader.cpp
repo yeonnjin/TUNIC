@@ -135,17 +135,27 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	CTexture::Create(m_pGraphic_Device, CTexture::TYPE_TEX2D, TEXT("../Bin/Resources/Textures/Explosion/Explosion%d.png"), 90))))
 	//	return E_FAIL;
 	//
-	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
+	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
+	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
+	_matrix		TransformMatrix = XMMatrixIdentity();
+
 	/* For.Prototype_Component_Model_Fiona */
+	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
 		return E_FAIL;
+
+	/* Prototype_Component_Model_ForkLift */
+	/*TransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_ForkLift"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/ForkLift/ForkLift.fbx", TransformMatrix))))
+		return E_FAIL;*/
 
 	///* Prototype_Component_VIBuffer_Cube */
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"),
@@ -157,7 +167,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	return E_FAIL;*/	
 	
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");
-
 	/* For.Prototype_Component_Shader_VtxPosNorTex */
   	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxPosNorTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosNorTex.hlsl"), VTXPOSNORTEX::Elements, VTXPOSNORTEX::iNumElements))))
@@ -167,6 +176,12 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxAnimMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
+		return E_FAIL;
+
 	
 	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
 
@@ -215,15 +230,18 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg")))))
 		return E_FAIL;
 
-	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
+	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
+	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
+	_matrix		TransformMatrix = XMMatrixIdentity();
 	/* For.Prototype_Component_Model_Fiona */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx"))))
+	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");

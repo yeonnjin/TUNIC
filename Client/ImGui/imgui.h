@@ -1880,12 +1880,15 @@ struct ImGuiTableColumnSortSpecs
 //-----------------------------------------------------------------------------
 
 struct ImNewWrapper {};
+
 inline void* operator new(size_t, ImNewWrapper, void* ptr) { return ptr; }
+
 inline void  operator delete(void*, ImNewWrapper, void*)   {} // This is only required so we can use the symmetrical new()
 #define IM_ALLOC(_SIZE)                     ImGui::MemAlloc(_SIZE)
 #define IM_FREE(_PTR)                       ImGui::MemFree(_PTR)
 #define IM_PLACEMENT_NEW(_PTR)              new(ImNewWrapper(), _PTR)
 #define IM_NEW(_TYPE)                       new(ImNewWrapper(), ImGui::MemAlloc(sizeof(_TYPE))) _TYPE
+
 template<typename T> void IM_DELETE(T* p)   { if (p) { p->~T(); ImGui::MemFree(p); } }
 
 //-----------------------------------------------------------------------------

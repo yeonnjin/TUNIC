@@ -46,4 +46,19 @@ namespace Engine
 		static const unsigned int	iNumElements = { 4 };
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[4];
 	}VTXMESH;
+
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord;
+		XMFLOAT3		vTangent;
+
+		/* 이 정점에게 영향을 주는 뼈들의 인덱스와 가중치 */
+		XMUINT4			vBlendIndices;	// 이 메시에게 영향을 주는 뼈들의 인덱스
+		XMFLOAT4		vBlendWeights;
+
+		static const unsigned int	iNumElements = { 6 };
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[6];
+	}VTXANIMMESH;
 }

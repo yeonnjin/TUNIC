@@ -82,6 +82,12 @@
     <Filter Include="01. Utility\02. Components\Model\Mesh">
       <UniqueIdentifier>{912a977f-f1c6-4959-968d-3b38318dff65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. Components\Model\Bone">
+      <UniqueIdentifier>{b7facbaa-29ba-4d81-a23e-20ed1ad7d257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Model\Animation">
+      <UniqueIdentifier>{636173e1-ea0c-48e4-a642-df6c51a181ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -158,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Mesh.cpp">
       <Filter>01. Utility\02. Components\Model\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bone.cpp">
+      <Filter>01. Utility\02. Components\Model\Bone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animation.cpp">
+      <Filter>01. Utility\02. Components\Model\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Mesh.h">
       <Filter>01. Utility\02. Components\Model\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bone.h">
+      <Filter>01. Utility\02. Components\Model\Bone</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Animation.h">
+      <Filter>01. Utility\02. Components\Model\Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
