@@ -5,6 +5,7 @@
 #include "Object_Manager.h"
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
+#include "ImGui_Manager.h"
 
 #include "Renderer.h"
 
@@ -59,6 +60,11 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	/* 컴포넌트 매니져의 공간 예약 */
 	m_pComponent_Manager = CComponent_Manager::Create(iNumLevels);
 	if (nullptr == m_pComponent_Manager)
+		return E_FAIL;
+
+	/* ImGui 매니져의 공간 예약 */
+	m_pImGui_Manager = CImGui_Manager::Create(EngineDesc.hWnd, *ppDevice, *ppContext);
+	if (nullptr == m_pImGui_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -282,6 +288,20 @@ _float4 CGameInstance::Get_CamPosition_Float4() const
 	return m_pPipeLine->Get_CamPosition_Float4();
 }
 
+/* For.ImGui_Manager */
+void CGameInstance::New_Frame()
+{
+	m_pImGui_Manager->New_Frame();
+}
+
+HRESULT CGameInstance::Render()
+{
+	if (nullptr == m_pImGui_Manager)
+		return E_FAIL;
+
+	return m_pImGui_Manager->Render();
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Free();
@@ -291,6 +311,7 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {	
+	Safe_Release(m_pImGui_Manager);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);	

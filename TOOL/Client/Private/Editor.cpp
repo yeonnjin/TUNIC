@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Editor.h"
 
-#include "ImGui_Manager.h"
-
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -23,8 +21,6 @@ HRESULT CEditor::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	m_pImGui_Manager = CImGui_Manager::Get_Instance();
-
 	return S_OK;
 }
 
@@ -35,7 +31,7 @@ void CEditor::Tick(_float fTimeDelta)
 
 void CEditor::Late_Tick(_float fTimeDelta)
 {
-	m_pImGui_Manager->New_Frame();
+	m_pGameInstance->New_Frame();
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
 	// To Do
@@ -44,7 +40,7 @@ void CEditor::Late_Tick(_float fTimeDelta)
 
 HRESULT CEditor::Render()
 {	
-	m_pImGui_Manager->Render();
+	m_pGameInstance->Render();
 
 	return S_OK;
 }
@@ -119,7 +115,7 @@ CGameObject* CEditor::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed To Create : CEditor"));
+		MSG_BOX(TEXT("Failed To Clone : CEditor"));
 
 		Safe_Release(pInstance);
 	}
@@ -130,6 +126,4 @@ CGameObject* CEditor::Clone(void* pArg)
 void CEditor::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pImGui_Manager);
 }

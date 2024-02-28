@@ -7,7 +7,7 @@
 #include "MainApp.h"
 #include "GameInstance.h"
 
-#include "imgui_impl_win32.h"
+#include "Engine_Defines.h"
 
 #define MAX_LOADSTRING 100
 

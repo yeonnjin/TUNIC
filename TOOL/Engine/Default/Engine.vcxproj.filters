@@ -88,6 +88,15 @@
     <Filter Include="01. Utility\02. Components\Model\Animation">
       <UniqueIdentifier>{636173e1-ea0c-48e4-a642-df6c51a181ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. ImGui">
+      <UniqueIdentifier>{84e6e414-679d-49c1-af24-eafe516b9cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. ImGui\Manager">
+      <UniqueIdentifier>{7ec23862-5681-45b8-89a5-21cf4c001ebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98. ImGui\Etc">
+      <UniqueIdentifier>{1c51e102-1cea-478e-afb5-1b25cfbe3069}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -170,6 +179,33 @@
     </ClCompile>
     <ClCompile Include="..\Private\Animation.cpp">
       <Filter>01. Utility\02. Components\Model\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_demo.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_draw.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_impl_dx11.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_impl_win32.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_tables.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_widgets.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\ImGuizmo.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ImGui_Manager.cpp">
+      <Filter>98. ImGui\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +301,36 @@
     </ClInclude>
     <ClInclude Include="..\Public\Animation.h">
       <Filter>01. Utility\02. Components\Model\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imconfig.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui_impl_dx11.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui_impl_win32.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui_internal.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\ImGuizmo.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imstb_rectpack.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imstb_textedit.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imstb_truetype.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ImGui_Manager.h">
+      <Filter>98. ImGui\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

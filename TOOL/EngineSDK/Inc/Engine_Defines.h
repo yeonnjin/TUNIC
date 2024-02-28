@@ -2,6 +2,8 @@
 
 #pragma warning (disable : 4251)
 
+
+
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
@@ -42,6 +44,12 @@ namespace Engine
 
 using namespace Engine;
 
+/* ImGui */
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+#include "imgui_internal.h"
+
 #ifdef _DEBUG
 
 #define _CRTDBG_MAP_ALLOC
@@ -56,4 +64,6 @@ using namespace Engine;
 #endif
 
 #endif // _DEBUG
+
+
 

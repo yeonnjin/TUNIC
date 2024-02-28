@@ -47,9 +47,6 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 			case LEVEL_GAMEPLAY:
 				pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
 				break;
-			case LEVEL_TOOL_MAP:
-				pLevel = CLevel_Tool_Map::Create(m_pDevice, m_pContext);
-				break;
 			}
 
 			if (nullptr == pLevel)

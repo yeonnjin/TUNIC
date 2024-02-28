@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ImGui_Manager.h"
 
 #include "imgui_impl_win32.h"
@@ -6,8 +5,6 @@
 
 #include "ImGuizmo.h"
 #include "imgui_internal.h"
-
-IMPLEMENT_SINGLETON(CImGui_Manager)
 
 CImGui_Manager::CImGui_Manager()
 {
@@ -179,6 +176,20 @@ void CImGui_Manager::EditTransform(_float* cameraView, _float* cameraProjection,
         ImGui::End();
         ImGui::PopStyleColor(1);
     }
+}
+
+CImGui_Manager* CImGui_Manager::Create(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+    CImGui_Manager* pInstance = new CImGui_Manager();
+
+    if (FAILED(pInstance->Initialize(hWnd, pDevice, pContext)))
+    {
+        MSG_BOX(TEXT("Failed To Create : CObject_Manager"));
+
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
 }
 
 void CImGui_Manager::Free()

@@ -55,15 +55,6 @@
     <Filter Include="99.Defines">
       <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
     </Filter>
-    <Filter Include="96. ImGui">
-      <UniqueIdentifier>{c4a4fcc9-41c4-46f5-b7fe-9d98e92405c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="96. ImGui\ImGui_Manager">
-      <UniqueIdentifier>{c12724cc-3c7b-4cef-9249-c325038316f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="96. ImGui\Etc">
-      <UniqueIdentifier>{cea1a7e0-a497-43e9-acdf-f3668010fecd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -108,9 +99,6 @@
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\ImGui\ImGui_Manager.h">
-      <Filter>96. ImGui\ImGui_Manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Level_Tool_Map.h">
       <Filter>01.Levels\Tool\Map</Filter>
     </ClInclude>
@@ -119,33 +107,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Test_Object.h">
       <Filter>02.GameObjects\Test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imconfig.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imgui.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imgui_impl_dx11.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imgui_impl_win32.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imgui_internal.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\ImGuizmo.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imstb_rectpack.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imstb_textedit.h">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ImGui\imstb_truetype.h">
-      <Filter>96. ImGui\Etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +143,6 @@
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObjects\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\ImGui\ImGui_Manager.cpp">
-      <Filter>96. ImGui\ImGui_Manager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Level_Tool_Map.cpp">
       <Filter>01.Levels\Tool\Map</Filter>
     </ClCompile>
@@ -193,30 +151,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Test_Object.cpp">
       <Filter>02.GameObjects\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_demo.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_draw.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_impl_dx11.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_impl_win32.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_tables.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_widgets.cpp">
-      <Filter>96. ImGui\Etc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ImGui\ImGuizmo.cpp">
-      <Filter>96. ImGui\Etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,10 +179,5 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt">
-      <Filter>96. ImGui\Etc</Filter>
-    </Text>
   </ItemGroup>
 </Project>

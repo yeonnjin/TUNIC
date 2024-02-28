@@ -55,6 +55,11 @@ public: /* For.PipeLine */
 	_vector Get_CamPosition_Vector() const;
 	_float4 Get_CamPosition_Float4() const;
 
+public: /* For.ImGui_Manager */
+	void	New_Frame();
+	HRESULT Render();
+
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -64,6 +69,7 @@ private:
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
+	class CImGui_Manager*			m_pImGui_Manager = { nullptr };
 	/*class CPicking*				m_pPicking = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };*/
 
