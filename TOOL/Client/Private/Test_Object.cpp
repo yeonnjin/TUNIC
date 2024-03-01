@@ -26,7 +26,7 @@ HRESULT CTest_Object::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&GameObjectDesc)))
         return E_FAIL;
 
-    _float4 vPosition = { 1.f, 1.f, 1.f, 1.f };
+    _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     

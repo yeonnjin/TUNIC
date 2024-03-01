@@ -313,9 +313,14 @@ HRESULT CGameInstance::Render()
 	return m_pImGui_Manager->Render();
 }
 
-void CGameInstance::EditTransform(/*const CCamera& camera,*/ _float4x4& matrix)
+void CGameInstance::Set_Perspective(_bool isPerspective, _float fFov, _float fViewWidth)
 {
-	m_pImGui_Manager->EditTransform(/*camera, */matrix);
+	m_pImGui_Manager->Set_Perspective(isPerspective, fFov, fViewWidth);
+}
+
+void CGameInstance::EditTransform(CTransform* pTransformCom)
+{
+	m_pImGui_Manager->EditTransform(pTransformCom);
 }
 
 void CGameInstance::Release_Engine()

@@ -22,6 +22,12 @@ public:
 private:
 	HRESULT			Test_Picking();
 	void			Test();
+	void			Gizmo(/*_float4x4 _matrix*/);
+
+private: // Gizmo
+	_bool			m_isPerspective = { true };		// Perspective or Orthographic
+	_float			m_fFov = { 27.f };
+	_float			m_fViewWidth = { 10.f };		// For Orthographic
 
 private:
 	bool show_demo_window = true;

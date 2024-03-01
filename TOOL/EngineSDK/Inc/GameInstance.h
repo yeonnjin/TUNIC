@@ -61,7 +61,8 @@ public: /* For.Picking */
 public: /* For.ImGui_Manager */
 	void	New_Frame();
 	HRESULT Render();
-	void	EditTransform(/*const class CCamera& camera,*/ _float4x4& matrix);
+	void	Set_Perspective(_bool isPerspective, _float fFov, _float fViewWidth);
+	void	EditTransform(CTransform* pTransformCom);
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };

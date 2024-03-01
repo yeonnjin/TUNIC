@@ -52,16 +52,16 @@ void CCamera_Free::Tick(_float fTimeDelta)
 	}
 
 	// Mouse
-	_long	MouseMove = { 0 };
-
-	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMMS_X))
-	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * m_fMouseSensor);
-	}
-	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMMS_Y))
-	{
-		m_pTransformCom->Turn(m_pTransformCom->Get_State_Vector(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * m_fMouseSensor);
-	}
+	//_long	MouseMove = { 0 };
+	//
+	//if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMMS_X))
+	//{
+	//	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * m_fMouseSensor);
+	//}
+	//if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMMS_Y))
+	//{
+	//	m_pTransformCom->Turn(m_pTransformCom->Get_State_Vector(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * m_fMouseSensor);
+	//}
 
 	__super::Bind_PipeLines();
 }
