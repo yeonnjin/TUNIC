@@ -88,6 +88,9 @@
     <Filter Include="01. Utility\02. Components\Model\Animation">
       <UniqueIdentifier>{636173e1-ea0c-48e4-a642-df6c51a181ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. Components\Model\Animation\Channel">
+      <UniqueIdentifier>{2353dd55-0a61-4dec-b198-acd7bcff597e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -170,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Animation.cpp">
       <Filter>01. Utility\02. Components\Model\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Channel.cpp">
+      <Filter>01. Utility\02. Components\Model\Animation\Channel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Animation.h">
       <Filter>01. Utility\02. Components\Model\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Channel.h">
+      <Filter>01. Utility\02. Components\Model\Animation\Channel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

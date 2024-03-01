@@ -302,6 +302,11 @@ HRESULT CGameInstance::Render()
 	return m_pImGui_Manager->Render();
 }
 
+void CGameInstance::EditTransform(/*const CCamera& camera,*/ _float4x4& matrix)
+{
+	m_pImGui_Manager->EditTransform(/*camera, */matrix);
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Free();

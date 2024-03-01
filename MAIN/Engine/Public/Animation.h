@@ -11,13 +11,21 @@ private:
 	virtual ~CAnimation() = default;
 
 public:
-	HRESULT Initialize(const aiAnimation* pAIAnimation);
+	HRESULT Initialize(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones);
+	void	Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones);
 
 private:
+	_char						m_szName[MAX_PATH] = { "" };
+
+	_float						m_fDuration = { 0.f };			// 전체 재생 길이
+	_float						m_fTicksPerSecond = { 0.f };	// 초당 얼마나 재생하는지 (속도)
+	_float						m_fTrackPosition = { 0.f };		// 현재 애니메이션이 어디까지 재생되었는지
+
+	_uint						m_iNumChannels = { 0 };
 	vector<class CChannel*>		m_Channels;
 
 public:
-	static CAnimation* Create(const aiAnimation* pAIAnimation);
+	static CAnimation* Create(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones);
 	virtual void Free() override;
 };
 

@@ -16,15 +16,6 @@ namespace Engine
 		class CTexture* MaterialTextures[AI_TEXTURE_TYPE_MAX];
 	}MESH_MATERIAL;
 
-	/* Channel */
-	typedef struct
-	{
-		XMFLOAT3		vScale;
-		XMFLOAT4		vRotation;
-		XMFLOAT3		vTranslation;
-		float			fTime;
-	}KEYFRAME;
-
 	/* Vertext */
 	typedef struct ENGINE_DLL
 	{

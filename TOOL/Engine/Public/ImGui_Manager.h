@@ -16,7 +16,7 @@ public:
 	HRESULT Initialize(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	void	New_Frame();
 	HRESULT Render();
-	void	EditTransform(_float* cameraView, _float* cameraProjection, _float* matrix, _bool editTransformDecomposition);
+	void	EditTransform(/*const class CCamera& camera,*/ _float4x4& matrix/*, _bool editTransformDecomposition*/);
 
 public:
 	static CImGui_Manager* Create(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

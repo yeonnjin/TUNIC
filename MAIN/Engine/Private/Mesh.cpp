@@ -142,6 +142,8 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     {
         aiBone* pAIBone = pAIMesh->mBones[i];
 
+       // pAIBone->mOffsetMatrix;
+
         _int    iBoneIndex = { -1 };
 
         auto iter = find_if(Bones.begin(), Bones.end(), [&](CBone* pBone)->_bool

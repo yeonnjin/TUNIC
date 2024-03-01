@@ -35,7 +35,11 @@ void CEditor::Late_Tick(_float fTimeDelta)
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
 	// To Do
-	Test();	
+	Test();
+
+	// GIZMO
+	//CTransform* pTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Transform")));
+	//m_pGameInstance->EditTransform(pTransform->Get_WorldFloat4x4());
 }
 
 HRESULT CEditor::Render()

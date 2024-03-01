@@ -58,7 +58,7 @@ public: /* For.PipeLine */
 public: /* For.ImGui_Manager */
 	void	New_Frame();
 	HRESULT Render();
-
+	void	EditTransform(/*const class CCamera& camera,*/ _float4x4& matrix);
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };

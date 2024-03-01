@@ -53,6 +53,7 @@ CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const vector<cla
     return pInstance;
 }
 
+
 void CAnimation::Free()
 {
     for (auto& pChannel : m_Channels)
