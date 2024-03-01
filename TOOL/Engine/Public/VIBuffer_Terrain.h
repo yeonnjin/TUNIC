@@ -15,6 +15,9 @@ public:
 	virtual HRESULT Initialize_Prototype(const wstring& strHeightMapFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
 
+public:
+	_float3			Compute_Picking(const class CTransform* pTransform) const;
+
 private:
 	_uint	m_iNumVerticesX = { 0 };
 	_uint	m_iNumVerticesZ = { 0 };

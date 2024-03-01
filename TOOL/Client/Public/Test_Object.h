@@ -12,6 +12,12 @@ BEGIN(Client)
 
 class CTest_Object final : public CGameObject
 {
+public:
+	typedef struct Test_Desc : public CGameObject::GAMEOBJECT_DESC
+	{
+		_float3 vPosition;
+	}TEST_DESC;
+
 private:
 	CTest_Object(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CTest_Object(const CTest_Object& rhs);

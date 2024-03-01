@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Editor.h"
 
+#include "Test_Object.h"
+
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -37,6 +39,10 @@ void CEditor::Late_Tick(_float fTimeDelta)
 	// To Do
 	Test();
 
+	// 마우스 눌림 상태 체크 함수 만들어야함~
+	if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON))
+		Test_Picking();
+
 	// GIZMO
 	//CTransform* pTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Transform")));
 	//m_pGameInstance->EditTransform(pTransform->Get_WorldFloat4x4());
@@ -47,6 +53,28 @@ HRESULT CEditor::Render()
 	m_pGameInstance->Render();
 
 	return S_OK;
+}
+
+HRESULT CEditor::Test_Picking()
+{
+	const CVIBuffer_Terrain* pTerrainBuffer = dynamic_cast<const CVIBuffer_Terrain*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Terrain"), TEXT("Com_VIBuffer")));
+	if (nullptr == pTerrainBuffer)
+		return E_FAIL;
+
+	const CTransform* pTerrainTransform = dynamic_cast<const CTransform*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Terrain"), TEXT("Com_Transform")));
+	if (nullptr == pTerrainTransform)
+		return E_FAIL;
+
+	_float3 vPickingPos =  pTerrainBuffer->Compute_Picking(pTerrainTransform);
+
+	if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
+	{
+		CTest_Object::TEST_DESC tDesc = {};
+		tDesc.vPosition = vPickingPos;
+
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
+			return E_FAIL;
+	}
 }
 
 void CEditor::Test()

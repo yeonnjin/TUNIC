@@ -26,6 +26,16 @@ HRESULT CTest_Object::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&GameObjectDesc)))
         return E_FAIL;
 
+    _float4 vPosition = { 1.f, 1.f, 1.f, 1.f };
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+    
+    if (nullptr != pArg)
+    {
+        TEST_DESC* pDesc = (TEST_DESC*)pArg;
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+    }
+
     if (FAILED(Add_Components()))
         return E_FAIL;
 
@@ -34,7 +44,7 @@ HRESULT CTest_Object::Initialize(void* pArg)
 
 void CTest_Object::Tick(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
 }
 
 void CTest_Object::Late_Tick(_float fTimeDelta)
@@ -73,6 +83,9 @@ HRESULT CTest_Object::Add_Components()
     if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
+    /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Rock"),
+        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;*/
 
     return S_OK;
 }

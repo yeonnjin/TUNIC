@@ -20,7 +20,8 @@ public:
 	virtual HRESULT	Render() override;
 
 private:
-	void Test();
+	HRESULT			Test_Picking();
+	void			Test();
 
 private:
 	bool show_demo_window = true;

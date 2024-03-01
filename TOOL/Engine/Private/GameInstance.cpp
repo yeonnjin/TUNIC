@@ -8,6 +8,7 @@
 #include "ImGui_Manager.h"
 
 #include "Renderer.h"
+#include "Picking.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -43,7 +44,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pLevel_Manager)
 		return E_FAIL;
 
-	
+	m_pPicking = CPicking::Create(EngineDesc.hWnd, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY);
+	if (nullptr == m_pPicking)
+		return E_FAIL;
 
 	/* 인풋 디바이스를 초기화 */
 	m_pInput_Device = CInput_Device::Create(hInstance, EngineDesc.hWnd);
@@ -82,6 +85,8 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pObject_Manager->Tick(fTimeDelta);
 
 	m_pPipeLine->Tick();
+
+	m_pPicking->Update();
 
 	m_pObject_Manager->Late_Tick(fTimeDelta);
 	
@@ -288,6 +293,12 @@ _float4 CGameInstance::Get_CamPosition_Float4() const
 	return m_pPipeLine->Get_CamPosition_Float4();
 }
 
+/* For.Picking */
+void CGameInstance::Transform_Picking_To_LocalSpace(const CTransform* pTransform, _float3* pRayDir, _float3* pRayPos)
+{
+	m_pPicking->Transform_Picking_To_LocalSpace(pTransform, pRayDir, pRayPos);
+}
+
 /* For.ImGui_Manager */
 void CGameInstance::New_Frame()
 {
@@ -320,6 +331,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);	
+	Safe_Release(m_pPicking);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);

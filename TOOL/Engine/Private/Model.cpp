@@ -13,6 +13,7 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CModel::CModel(const CModel& rhs)
     : CComponent{ rhs }
+	, m_eModelType{ rhs.m_eModelType }
 	, m_iNumMeshes{ rhs.m_iNumMeshes }
 	, m_Meshes{ rhs.m_Meshes }
 	, m_iNumMaterials{ rhs.m_iNumMaterials }

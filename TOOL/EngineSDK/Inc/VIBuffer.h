@@ -36,6 +36,8 @@ protected:
 	DXGI_FORMAT					m_eIndexFormat = {  };
 	D3D11_PRIMITIVE_TOPOLOGY	m_ePrimitiveTopology = { };
 
+	_float3*					m_pVerticesPos = { nullptr };
+
 protected:
 	HRESULT Create_Buffer(_Out_ ID3D11Buffer** ppBuffer);
 
