@@ -16,7 +16,6 @@ HRESULT CImGui_Manager::Initialize(HWND hWnd, ID3D11Device* pDevice, ID3D11Devic
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    m_io = io;
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(pDevice, pContext);
 
@@ -40,20 +39,6 @@ HRESULT CImGui_Manager::Render()
 	return S_OK;
 }
 
-void CImGui_Manager::Set_Perspective(_bool isPerspective, _float fFov, _float fViewWidth)
-{
-    if (isPerspective)
-    {
-        Perspective(fFov, m_io.DisplaySize.x / m_io.DisplaySize.y, 0.1f, 100.f, m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ).m[0]);
-    }
-    else
-    {
-        float viewHeight = fViewWidth * m_io.DisplaySize.y / m_io.DisplaySize.x;
-        OrthoGraphic(-fViewWidth, fViewWidth, -viewHeight, viewHeight, 1000.f, -1000.f, m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ).m[0]);
-}
-    ImGuizmo::SetOrthographic(!isPerspective);
-}
-
 void CImGui_Manager::EditTransform(CTransform* pTransformCom)
 {
 #ifndef _DEBUG
@@ -62,9 +47,6 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     ImGuizmo::BeginFrame();
 
     _float4x4 matrix = pTransformCom->Get_WorldFloat4x4();
-
-    ImGui::Separator();
-    ImGui::NewLine();
 
     static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::ROTATE);
     static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
@@ -106,21 +88,20 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     }
 
     static bool useSnap(false);
-    ImGui::Checkbox("useSnap", &useSnap);
-
+    ImGui::Checkbox("##UseSnap", &useSnap);
     ImGui::SameLine();
 
-    _float3 snap;
+    _float snap[3] = { 1.f, 1.f, 1.f };
     switch (mCurrentGizmoOperation)
     {
     case ImGuizmo::TRANSLATE:
-        ImGui::InputFloat3("Snap", &snap.x);
+        ImGui::InputFloat3("Snap", &snap[0]);
         break;
     case ImGuizmo::ROTATE:
-        ImGui::InputFloat("Angle Snap", &snap.x);
+        ImGui::InputFloat("Angle Snap", &snap[0]);
         break;
     case ImGuizmo::SCALE:
-        ImGui::InputFloat("Scale Snap", &snap.x);
+        ImGui::InputFloat("Scale Snap", &snap[0]);
         break;
     }
 
@@ -130,66 +111,13 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     _float4x4 ViewMatrix, ProjMatrix;
     ViewMatrix = m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW);
     ProjMatrix = m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ);
-    ImGuizmo::Manipulate(ViewMatrix.m[0], ProjMatrix.m[0], mCurrentGizmoOperation, mCurrentGizmoMode, matrix.m[0], NULL, useSnap ? &snap.x : NULL);
+    ImGuizmo::Manipulate(ViewMatrix.m[0], ProjMatrix.m[0], mCurrentGizmoOperation, mCurrentGizmoMode, matrix.m[0], NULL, useSnap ? &snap[0] : NULL);
     pTransformCom->Set_WorldMatrix(matrix);
 
     // Grid
     _float4x4 identityMatrix;
     XMStoreFloat4x4(&identityMatrix, XMMatrixIdentity());
     ImGuizmo::DrawGrid(ViewMatrix.m[0], ProjMatrix.m[0], identityMatrix.m[0], 100.f);
-}
-
-void CImGui_Manager::Perspective(float fovyInDegrees, float aspectRatio, float znear, float zfar, float* m16)
-{
-    _float ymax, xmax;
-    ymax = znear * tanf(fovyInDegrees * 3.141592f / 180.0f);
-    xmax = ymax * aspectRatio;
-    Frustum(-xmax, xmax, -ymax, ymax, znear, zfar, m16);
-}
-
-void CImGui_Manager::Frustum(float left, float right, float bottom, float top, float znear, float zfar, float* m16)
-{
-    _float temp, temp2, temp3, temp4;
-    temp = 2.0f * znear;
-    temp2 = right - left;
-    temp3 = top - bottom;
-    temp4 = zfar - znear;
-    m16[0] = temp / temp2;
-    m16[1] = 0.0;
-    m16[2] = 0.0;
-    m16[3] = 0.0;
-    m16[4] = 0.0;
-    m16[5] = temp / temp3;
-    m16[6] = 0.0;
-    m16[7] = 0.0;
-    m16[8] = (right + left) / temp2;
-    m16[9] = (top + bottom) / temp3;
-    m16[10] = (-zfar - znear) / temp4;
-    m16[11] = -1.0f;
-    m16[12] = 0.0;
-    m16[13] = 0.0;
-    m16[14] = (-temp * zfar) / temp4;
-    m16[15] = 0.0;
-}
-
-void CImGui_Manager::OrthoGraphic(const float l, float r, float b, const float t, float zn, const float zf, float* m16)
-{
-    m16[0] = 2 / (r - l);
-    m16[1] = 0.0f;
-    m16[2] = 0.0f;
-    m16[3] = 0.0f;
-    m16[4] = 0.0f;
-    m16[5] = 2 / (t - b);
-    m16[6] = 0.0f;
-    m16[7] = 0.0f;
-    m16[8] = 0.0f;
-    m16[9] = 0.0f;
-    m16[10] = 1.0f / (zf - zn);
-    m16[11] = 0.0f;
-    m16[12] = (l + r) / (l - r);
-    m16[13] = (t + b) / (b - t);
-    m16[14] = zn / (zn - zf);
-    m16[15] = 1.0f;
 }
 
 CImGui_Manager* CImGui_Manager::Create(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

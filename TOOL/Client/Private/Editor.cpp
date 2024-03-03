@@ -35,22 +35,21 @@ void CEditor::Tick(_float fTimeDelta)
 void CEditor::Late_Tick(_float fTimeDelta)
 {
 	m_pGameInstance->New_Frame();
-	//ImGuizmo::BeginFrame();
+
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
 	// To Do
 	//Test();
-	Gizmo();
-	// 마우스 눌림 상태 체크 함수 만들어야함~
-	//if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON))
-	//	Test_Picking();
+	//Gizmo();
+
+	if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+		Test_Picking();
 }
 
 HRESULT CEditor::Render()
 {	
 	m_pGameInstance->Render();
 
-	//ImGui::EndFrame();
 	return S_OK;
 }
 
@@ -128,8 +127,6 @@ void CEditor::Test()
 
 void CEditor::Gizmo(/*_float4x4 _matrix*/)
 {
-	m_pGameInstance->Set_Perspective(m_isPerspective, m_fFov, m_fViewWidth);
-
 	ImGui::SetNextWindowPos(ImVec2(1024, 100), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(256, 256), ImGuiCond_Appearing);
 
@@ -138,36 +135,7 @@ void CEditor::Gizmo(/*_float4x4 _matrix*/)
 	ImGui::SetNextWindowSize(ImVec2(320, 340), ImGuiCond_Appearing);
 
 	ImGui::Begin("Editor");
-	//if (ImGui::RadioButton("Full view", !useWindow)) useWindow = false;
-	//ImGui::SameLine();
-	//if (ImGui::RadioButton("Window", useWindow)) useWindow = true;
 
-	ImGui::Text("Camera");
-	bool viewDirty = false;
-	if (ImGui::RadioButton("Perspective", m_isPerspective)) m_isPerspective = true;
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Orthographic", !m_isPerspective)) m_isPerspective = false;
-	if (m_isPerspective)
-	{
-		ImGui::SliderFloat("Fov", &m_fFov, 20.f, 110.f);
-	}
-	else
-	{
-		ImGui::SliderFloat("Ortho width", &m_fViewWidth, 1, 20);
-	}
-	/*viewDirty |= ImGui::SliderFloat("Distance", &camDistance, 1.f, 10.f);
-	ImGui::SliderInt("Gizmo count", &gizmoCount, 1, 4);
-
-	if (viewDirty || firstFrame)
-	{
-		float eye[] = { cosf(camYAngle) * cosf(camXAngle) * camDistance, sinf(camXAngle) * camDistance, sinf(camYAngle) * cosf(camXAngle) * camDistance };
-		float at[] = { 0.f, 0.f, 0.f };
-		float up[] = { 0.f, 1.f, 0.f };
-		LookAt(eye, at, up, cameraView);
-		firstFrame = false;
-	}*/
-
-	//ImGui::Text("X: %f Y: %f", io.MousePos.x, io.MousePos.y);
 	if (ImGuizmo::IsUsing())
 	{
 		ImGui::Text("Using gizmo");

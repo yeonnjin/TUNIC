@@ -143,12 +143,12 @@ _bool CGameInstance::Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState)
 	return m_pInput_Device->Get_DIKeyState(byKeyID, eState);
 }
 
-_byte CGameInstance::Get_DIMouseState(MOUSEKEYSTATE eMouse)
+_bool CGameInstance::Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState)
 {
 	if (nullptr == m_pInput_Device)
 		return 0;
 
-	return m_pInput_Device->Get_DIMouseState(eMouse);
+	return m_pInput_Device->Get_DIMouseState(eMouseID, eState);
 }
 
 _long CGameInstance::Get_DIMouseMove(MOUSEMOVESTATE eMouseState)
@@ -311,11 +311,6 @@ HRESULT CGameInstance::Render()
 		return E_FAIL;
 
 	return m_pImGui_Manager->Render();
-}
-
-void CGameInstance::Set_Perspective(_bool isPerspective, _float fFov, _float fViewWidth)
-{
-	m_pImGui_Manager->Set_Perspective(isPerspective, fFov, fViewWidth);
 }
 
 void CGameInstance::EditTransform(CTransform* pTransformCom)

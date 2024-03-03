@@ -24,7 +24,7 @@ public:
 
 public: /* For.Input_Device */
 	_bool	Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState);
-	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse);
+	_bool	Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState);
 	_long	Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
 
 public: /* For.Renderer */
@@ -61,7 +61,6 @@ public: /* For.Picking */
 public: /* For.ImGui_Manager */
 	void	New_Frame();
 	HRESULT Render();
-	void	Set_Perspective(_bool isPerspective, _float fFov, _float fViewWidth);
 	void	EditTransform(CTransform* pTransformCom);
 
 private:
