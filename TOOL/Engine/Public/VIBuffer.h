@@ -19,7 +19,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	HRESULT Bind_Buffers();
+	HRESULT			Bind_Buffers();
 
 protected:
 	ID3D11Buffer*				m_pVB = { nullptr };

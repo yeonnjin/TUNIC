@@ -23,12 +23,19 @@ public:
 	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<CBone*>& Bones, _fmatrix TransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 
+public:
+	_float3			Compute_Picking(const class CTransform* pTransform) const;
+
 private:
 	_char			m_szName[MAX_PATH] = { "" };
 	_uint			m_iMaterialIndex = { 0 };		// 이 메쉬는 모델에서 로드 해놓은 머테리얼들 중 몇 번째 머테리얼을 이용하는가
 
+	_uint			m_iNumFaces = { 0 };
+
 	_uint			m_iNumBones = { 0 };
 	vector<_uint>	m_Bones;
+
+	_uint*			m_pIndices = { nullptr };
 
 private:
 	HRESULT	Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix);

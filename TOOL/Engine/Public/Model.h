@@ -28,6 +28,8 @@ public:
 	HRESULT Play_Animation(_float fTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 
+	_bool	Check_Picking(const class CTransform* pTransform) const;
+
 private: // Assimp
 	TYPE					m_eModelType = { TYPE_END };
 	const aiScene*			m_pAIScene = { nullptr };

@@ -17,6 +17,7 @@ private:
 
 public:
 	const class CComponent* Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex);
+	_uint					Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 
 public:
 	HRESULT Initialize(_uint iNumLevels);

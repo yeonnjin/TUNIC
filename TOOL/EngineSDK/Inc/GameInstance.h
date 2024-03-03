@@ -17,51 +17,52 @@ private:
 	virtual ~CGameInstance() = default;
 
 public:
-	HRESULT Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, const ENGINE_DESC& EngineDesc, _Inout_ ID3D11Device** ppDevice, _Inout_ ID3D11DeviceContext** ppContext);
-	void	Tick_Engine(_float fTimeDelta);
-	HRESULT Draw(const _float4& vClearColor = _float4(0.f, 0.f, 1.f, 1.f));
-	HRESULT Clear(_uint iClearLevelIndex);
+	HRESULT				Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, const ENGINE_DESC& EngineDesc, _Inout_ ID3D11Device** ppDevice, _Inout_ ID3D11DeviceContext** ppContext);
+	void				Tick_Engine(_float fTimeDelta);
+	HRESULT				Draw(const _float4& vClearColor = _float4(0.f, 0.f, 1.f, 1.f));
+	HRESULT				Clear(_uint iClearLevelIndex);
 
 public: /* For.Input_Device */
-	_bool	Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState);
-	_bool	Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState);
-	_long	Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
+	_bool				Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState);
+	_bool				Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState);
+	_long				Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
 
 public: /* For.Renderer */
-	HRESULT Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
+	HRESULT				Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
 
 public: /* For.Level_Manager */
-	HRESULT Open_Level(_uint iNewLevelID, class CLevel* pNewLevel);
+	HRESULT				Open_Level(_uint iNewLevelID, class CLevel* pNewLevel);
 
 public: /* For.Object_Manager */
-	HRESULT Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
-	HRESULT Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg = nullptr);
-	const CComponent* Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex = 0);
+	HRESULT				Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
+	HRESULT				Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg = nullptr);
+	const CComponent*	Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex = 0);
+	_uint				Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 
 public: /* For.Component_Manager */
-	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& strPrototypeTag, class CComponent* pPrototype);
-	class CComponent* Clone_Component(_uint iLevelIndex, const wstring& strPrototypeTag, void* pArg = nullptr);
+	HRESULT				 Add_Prototype(_uint iLevelIndex, const wstring& strPrototypeTag, class CComponent* pPrototype);
+	class CComponent*	Clone_Component(_uint iLevelIndex, const wstring& strPrototypeTag, void* pArg = nullptr);
 
 public: /* For.Timer_Manager */
-	HRESULT Add_Timer(const wstring& strTimerTag);
-	_float Compute_TimeDelta(const wstring& strTimerTag);
+	HRESULT				Add_Timer(const wstring& strTimerTag);
+	_float				Compute_TimeDelta(const wstring& strTimerTag);
 
 public: /* For.PipeLine */
-	void Set_Transform(CPipeLine::TRANSFORMSTATE eState, _fmatrix TransformMatrix);
-	_matrix Get_Transform_Matrix(CPipeLine::TRANSFORMSTATE eState) const;
-	_float4x4 Get_Transform_Float4x4(CPipeLine::TRANSFORMSTATE eState) const;
-	_matrix Get_Transform_Matrix_Inverse(CPipeLine::TRANSFORMSTATE eState) const;
-	_float4x4 Get_Transform_Float4x4_Inverse(CPipeLine::TRANSFORMSTATE eState) const;
-	_vector Get_CamPosition_Vector() const;
-	_float4 Get_CamPosition_Float4() const;
+	void				Set_Transform(CPipeLine::TRANSFORMSTATE eState, _fmatrix TransformMatrix);
+	_matrix				Get_Transform_Matrix(CPipeLine::TRANSFORMSTATE eState) const;
+	_float4x4			Get_Transform_Float4x4(CPipeLine::TRANSFORMSTATE eState) const;
+	_matrix				Get_Transform_Matrix_Inverse(CPipeLine::TRANSFORMSTATE eState) const;
+	_float4x4			Get_Transform_Float4x4_Inverse(CPipeLine::TRANSFORMSTATE eState) const;
+	_vector				Get_CamPosition_Vector() const;
+	_float4				Get_CamPosition_Float4() const;
 
 public: /* For.Picking */
-	void	Transform_Picking_To_LocalSpace(const class CTransform* pTransform, _Out_ _float3* pRayDir, _Out_ _float3* pRayPos);
+	void				Transform_Picking_To_LocalSpace(const class CTransform* pTransform, _Out_ _float3* pRayDir, _Out_ _float3* pRayPos);
 
 public: /* For.ImGui_Manager */
-	void	New_Frame();
-	HRESULT Render();
-	void	EditTransform(CTransform* pTransformCom);
+	void				New_Frame();
+	HRESULT				Render();
+	void				EditTransform(CTransform* pTransformCom);
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };

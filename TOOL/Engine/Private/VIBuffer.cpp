@@ -71,8 +71,6 @@ HRESULT CVIBuffer::Bind_Buffers()
 	return S_OK;
 }
 
-
-
 HRESULT CVIBuffer::Create_Buffer(ID3D11Buffer ** ppBuffer)
 {
 	return m_pDevice->CreateBuffer(&m_BufferDesc, &m_InitialData, ppBuffer);

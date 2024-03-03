@@ -42,8 +42,17 @@ void CEditor::Late_Tick(_float fTimeDelta)
 	//Test();
 	//Gizmo();
 
-	if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+	if (!m_isUsingGizmo && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
 		Test_Picking();
+
+	if (!m_isUsingGizmo && m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
+		Test_Mesh_Picking();
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
+		m_isUsingGizmo = !m_isUsingGizmo;
+
+	if (m_isUsingGizmo)
+		Gizmo(m_pGizmoTransform);
 }
 
 HRESULT CEditor::Render()
@@ -73,6 +82,33 @@ HRESULT CEditor::Test_Picking()
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
 			return E_FAIL;
 	}
+}
+
+HRESULT CEditor::Test_Mesh_Picking()
+{
+	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Object"));
+	if (0 == iNumObjects)
+		return E_FAIL;
+
+	for (size_t i = 0; i < iNumObjects; ++i)
+	{
+		const CModel* pObjectModel = dynamic_cast<const CModel*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Model"), i));
+		if (nullptr == pObjectModel)
+			return E_FAIL;
+
+		const CTransform* pObjectTransform = dynamic_cast<const CTransform*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Transform"), i));
+		if (nullptr == pObjectTransform)
+			return E_FAIL;
+
+		if (true == pObjectModel->Check_Picking(pObjectTransform))
+		{
+			m_isUsingGizmo = true;
+			m_pGizmoTransform = (CTransform*)pObjectTransform;
+			return S_OK;
+		}			
+	}
+
+	return S_OK;
 }
 
 void CEditor::Test()
@@ -125,7 +161,7 @@ void CEditor::Test()
 	}
 }
 
-void CEditor::Gizmo(/*_float4x4 _matrix*/)
+void CEditor::Gizmo(CTransform* pTransform)
 {
 	ImGui::SetNextWindowPos(ImVec2(1024, 100), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(256, 256), ImGuiCond_Appearing);
@@ -155,7 +191,7 @@ void CEditor::Gizmo(/*_float4x4 _matrix*/)
 	//{
 	//	ImGuizmo::SetID(matId);
 
-	CTransform* pTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Transform")));
+	//CTransform* pTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Transform")));
 	m_pGameInstance->EditTransform(pTransform);
 
 	//	if (ImGuizmo::IsUsing())

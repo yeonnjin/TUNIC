@@ -202,6 +202,14 @@ const CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring
 	return m_pObject_Manager->Get_Component(iLevelIndex, strLayerTag, strComTag, iIndex);
 }
 
+_uint CGameInstance::Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag)
+{
+	if (nullptr == m_pObject_Manager)
+		return 0;
+
+	return m_pObject_Manager->Get_Object_Count(iLevelIndex, strLayerTag);
+}
+
 /* For.Component_Manager */
 HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const wstring & strPrototypeTag, CComponent * pPrototype)
 {

@@ -1,5 +1,6 @@
 #include "Mesh.h"
 
+#include "GameInstance.h"
 #include "Bone.h"
 
 CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -17,8 +18,11 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
     strcpy_s(m_szName, pAIMesh->mName.data);
     m_iMaterialIndex = pAIMesh->mMaterialIndex;
     m_iNumVertices = pAIMesh->mNumVertices;
+    m_pVerticesPos = new _float3[m_iNumVertices];   
     //m_iVertexStride = sizeof(VTXMESH);
-    m_iNumIndices = pAIMesh->mNumFaces * 3;
+    m_iNumFaces = pAIMesh->mNumFaces;
+    m_iNumIndices = m_iNumFaces * 3;
+    m_pIndices = new _uint[m_iNumIndices];
     m_iIndexStride = sizeof(_uint);
     m_iNumVertexBuffers = 1;
     m_eIndexFormat = DXGI_FORMAT_R32_UINT;
@@ -50,9 +54,9 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
 
     for (size_t i = 0; i < pAIMesh->mNumFaces; ++i)
     {
-        pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[0];
-        pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[1];
-        pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
+        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[0];
+        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[1];
+        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[2];
     }
 
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
@@ -71,6 +75,43 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
 HRESULT CMesh::Initialize(void* pArg)
 {
     return S_OK;
+}
+
+_float3 CMesh::Compute_Picking(const CTransform* pTransform) const
+{
+    _float3     vRayDir, vRayPos = {};
+
+    m_pGameInstance->Transform_Picking_To_LocalSpace(pTransform, &vRayDir, &vRayPos);
+
+    _float3 vOut = { 0.f, 0.f, 0.f };
+
+    for (size_t i = 0; i < m_iNumFaces; ++i)
+    {
+        _uint   iIndex = i * 3;
+
+        _uint   iIndices[3] = {
+            m_pIndices[iIndex],
+            m_pIndices[iIndex + 1],
+            m_pIndices[iIndex + 2]
+        };
+
+        _float fDist = {};
+
+        //Intersects(_In_ FXMVECTOR Origin, _In_ FXMVECTOR Direction, _In_ FXMVECTOR V0, _In_ GXMVECTOR V1, _In_ HXMVECTOR V2, _Out_ float& Dist) noexcept;
+        _fvector vOrigin = XMLoadFloat3(&vRayPos);
+        XMStoreFloat3(&vRayDir, XMVector3Normalize(XMLoadFloat3(&vRayDir)));
+        _fvector vDirection = XMLoadFloat3(&vRayDir);
+
+        // 삼각형 충돌
+        if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMLoadFloat3(&m_pVerticesPos[iIndices[0]]), XMLoadFloat3(&m_pVerticesPos[iIndices[1]]), XMLoadFloat3(&m_pVerticesPos[iIndices[2]]), fDist))
+        {
+            vOut = _float3(vRayPos.x + vRayDir.x * fDist, vRayPos.y + vRayDir.y * fDist, vRayPos.z + vRayDir.z * fDist);
+            XMStoreFloat3(&vOut, XMVector3TransformCoord(XMLoadFloat3(&vOut), pTransform->Get_WorldMatrix()));
+            return vOut;
+        }
+    }
+
+    return vOut;
 }
 
 HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix)
@@ -92,6 +133,7 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix T
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        m_pVerticesPos[i] = pVertices[i].vPosition;
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
         memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
@@ -127,6 +169,7 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        m_pVerticesPos[i] = pVertices[i].vPosition;
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
         memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
