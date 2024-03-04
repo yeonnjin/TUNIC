@@ -36,7 +36,7 @@ private:
 
 private:
 	HRESULT Add_Components();
-	HRESULT Bind_ShaderMatrix();
+	HRESULT Bind_ShaderResources();
 
 public:
 	static CTest_Object* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

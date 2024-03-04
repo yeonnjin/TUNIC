@@ -77,6 +77,14 @@ HRESULT CMesh::Initialize(void* pArg)
     return S_OK;
 }
 
+HRESULT CMesh::Stock_Matrices(const vector<CBone*>& Bones, _float4x4* pMeshBoneMatrices)
+{
+    for (_uint i = 0; i < m_iNumBones; ++i)
+        XMStoreFloat4x4(&pMeshBoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * XMLoadFloat4x4(Bones[m_Bones[i]]->Get_CombinedTransformationMatrix()));
+
+    return S_OK;
+}
+
 _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
 {
     _float3     vRayDir, vRayPos = {};
@@ -164,7 +172,7 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     m_BufferDesc.StructureByteStride = m_iVertexStride;
 
     VTXANIMMESH* pVertices = new VTXANIMMESH[m_iNumVertices];
-    ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+    ZeroMemory(pVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
 
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
@@ -185,6 +193,14 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     {
         aiBone* pAIBone = pAIMesh->mBones[i];
 
+        // Offset Matrix
+        _float4x4   OffsetMatrix;
+        memcpy(&OffsetMatrix, &pAIBone->mOffsetMatrix, sizeof(_float4x4));
+        XMStoreFloat4x4(&OffsetMatrix, XMMatrixTranspose(XMLoadFloat4x4(&OffsetMatrix)));
+
+        m_OffsetMatrices.push_back(OffsetMatrix);
+
+        // Bone Index
         _int    iBoneIndex = { -1 };
 
         auto iter = find_if(Bones.begin(), Bones.end(), [&](CBone* pBone)->_bool
@@ -226,6 +242,29 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
             }
         }
     }
+
+    // Offset Matrix 예외 처리
+    if (0 == m_iNumBones)
+    {
+        m_iNumBones = 1;
+
+        _int    iBoneIndex = { -1 };
+
+        auto iter = find_if(Bones.begin(), Bones.end(), [&](CBone* pBone)->_bool
+        {
+            ++iBoneIndex;
+            return pBone->Compare_Name(m_szName);
+        });
+
+        m_Bones.push_back(iBoneIndex);
+
+        _float4x4   OffsetMatrix;
+
+        XMStoreFloat4x4(&OffsetMatrix, XMMatrixIdentity());
+
+        m_OffsetMatrices.push_back(OffsetMatrix);
+    }
+
 
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
     m_InitialData.pSysMem = pVertices;

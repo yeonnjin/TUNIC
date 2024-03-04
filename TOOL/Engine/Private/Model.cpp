@@ -2,6 +2,7 @@
 
 #include "Bone.h"
 #include "Mesh.h"
+#include "Animation.h"
 
 #include "Shader.h"
 #include "Texture.h"
@@ -20,7 +21,12 @@ CModel::CModel(const CModel& rhs)
 	, m_Materials{ rhs.m_Materials }
 	, m_TransformMatrix{ rhs.m_TransformMatrix }
 	, m_Bones{ rhs.m_Bones }
+	, m_iNumAnimations{ rhs.m_iNumAnimations }
+	, m_Animations{ rhs.m_Animations }
 {
+	for (auto& pAnimation : m_Animations)
+		Safe_AddRef(pAnimation);
+
 	for (auto& pBone : m_Bones)
 		Safe_AddRef(pBone);
 
@@ -45,8 +51,11 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
     m_pAIScene = m_Importer.ReadFile(strModelFilePath.c_str(), iOption);
     if (nullptr == m_pAIScene)
         return E_FAIL;
+	
+	/* 최초 상태 변환 행렬 저장 */
+	XMStoreFloat4x4(&m_TransformMatrix, TransformMatrix);
 
-   /* 읽은 정보를 바탕으로 재정리 */
+   // 읽은 정보를 바탕으로 재정리
 
 	/* 전체 뼈 생성 */
 	if (FAILED(Ready_Bones(m_pAIScene->mRootNode)))
@@ -60,12 +69,25 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
 	if (FAILED(Ready_Materials(strModelFilePath.c_str())))
 		return E_FAIL;
 
+	/* 애니메이션 생성 */
+	if (FAILED(Ready_Animations()))
+		return E_FAIL;
+
     return S_OK;
 }
 
 HRESULT CModel::Initialize(void* pArg)
 {
     return S_OK;
+}
+
+HRESULT CModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex)
+{
+	ZeroMemory(m_MeshBoneMatrices, sizeof(_float4x4) * 512);
+
+	m_Meshes[iMeshIndex]->Stock_Matrices(m_Bones, m_MeshBoneMatrices);
+
+	return pShader->Bind_Matrices(pConstantName, m_MeshBoneMatrices, 512);
 }
 
 HRESULT CModel::Bind_ShaderResource(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, aiTextureType eTextureType)
@@ -83,16 +105,19 @@ HRESULT CModel::Bind_ShaderResource(CShader* pShader, const _char* pConstantName
 	// m_Materials : vector<MESH_MATERIAL>;
 	// MESH_MATERIAL : class CTexture* MaterialTextures[AI_TEXTURE_TYPE_MAX];
 	CTexture* pTexture = { m_Materials[iMeshMaterialIndex].MaterialTextures[eTextureType] };
-
-	pTexture->Bind_ShaderResource(pShader, pConstantName);
+	if(nullptr != pTexture)
+		pTexture->Bind_ShaderResource(pShader, pConstantName);
 
 	return S_OK;
 }
 
 HRESULT CModel::Play_Animation(_float fTimeDelta)
 {
+	/* 현재 애니메이션에 맞는 뼈의 상태(m_TransformationMatrix)를 갱신 */
+	m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, m_Bones);
+
 	for(auto& pBone : m_Bones)
-		pBone->Invalidate_CombinedTransformationMatrix(m_Bones);
+		pBone->Invalidate_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_TransformMatrix));
 
 	return S_OK;
 }
@@ -207,6 +232,22 @@ HRESULT CModel::Ready_Bones(aiNode* pAINode, _int iParentIndex)
 	return S_OK;
 }
 
+HRESULT CModel::Ready_Animations()
+{
+	m_iNumAnimations = m_pAIScene->mNumAnimations;
+
+	for (size_t i = 0; i < m_iNumAnimations; ++i)
+	{
+		CAnimation* pAnimation = CAnimation::Create(m_pAIScene->mAnimations[i], m_Bones);
+		if (nullptr == pAnimation)
+			return E_FAIL;
+
+		m_Animations.push_back(pAnimation);
+	}
+
+	return S_OK;
+}
+
 CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
@@ -238,6 +279,11 @@ CComponent* CModel::Clone(void* pArg)
 void CModel::Free()
 {
 	__super::Free();
+
+	for (auto& pAnimation : m_Animations)
+		Safe_Release(pAnimation);
+
+	m_Animations.clear();
 
 	for (auto& pBone : m_Bones)
 		Safe_Release(pBone);

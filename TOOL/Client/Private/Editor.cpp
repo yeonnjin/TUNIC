@@ -24,6 +24,8 @@ HRESULT CEditor::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	m_pGameInstance->Create_Prototype_Model(CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Object/"));
+
 	return S_OK;
 }
 
@@ -40,7 +42,6 @@ void CEditor::Late_Tick(_float fTimeDelta)
 
 	// To Do
 	//Test();
-	//Gizmo();
 
 	if (!m_isUsingGizmo && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
 		Test_Picking();
@@ -187,18 +188,8 @@ void CEditor::Gizmo(CTransform* pTransform)
 		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
 	}
 	ImGui::Separator();
-	//for (int matId = 0; matId < gizmoCount; matId++)
-	//{
-	//	ImGuizmo::SetID(matId);
 
-	//CTransform* pTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Transform")));
 	m_pGameInstance->EditTransform(pTransform);
-
-	//	if (ImGuizmo::IsUsing())
-	//	{
-	//		lastUsing = matId;
-	//	}
-	//}
 
 	ImGui::End();
 	ImGui::EndFrame();

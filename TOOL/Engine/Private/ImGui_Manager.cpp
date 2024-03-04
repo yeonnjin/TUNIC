@@ -19,6 +19,9 @@ HRESULT CImGui_Manager::Initialize(HWND hWnd, ID3D11Device* pDevice, ID3D11Devic
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(pDevice, pContext);
 
+    m_pDevice = pDevice;
+    m_pContext = pContext;
+
 	return S_OK;
 }
 
@@ -120,9 +123,51 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     ImGuizmo::DrawGrid(ViewMatrix.m[0], ProjMatrix.m[0], identityMatrix.m[0], 100.f);
 }
 
+HRESULT CImGui_Manager::Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath)
+{
+    WIN32_FIND_DATA findFileData;
+    _tchar      szFolderPath[MAX_PATH] = TEXT("");
+    wsprintf(szFolderPath, strFolderPath.c_str());
+    lstrcat(szFolderPath, L"*.fbx");
+    HANDLE hFile = FindFirstFile(szFolderPath, &findFileData);
+    if (hFile == INVALID_HANDLE_VALUE)
+        return E_FAIL;
+
+    while (true)
+    {
+        _tchar   szFullPath[MAX_PATH] = TEXT("");
+        lstrcat(szFullPath, strFolderPath.c_str());
+        lstrcat(szFullPath, findFileData.cFileName);
+
+        // Your wchar_t*
+        wstring ws(szFullPath);
+        // your new String
+        string str(ws.begin(), ws.end());
+
+        HRESULT      hr = {};
+
+        if (CModel::TYPE_NONANIM == eType)
+        {
+            if (FAILED(m_pGameInstance->Add_Prototype(4, szFullPath,
+                CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str))))
+                return E_FAIL;
+        }
+        else
+        {
+            if (FAILED(m_pGameInstance->Add_Prototype(4, szFullPath,
+                CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, str))))
+                return E_FAIL;
+        }
+
+        if (!FindNextFileW(hFile, &findFileData))
+            break;
+    }
+}
+
 CImGui_Manager* CImGui_Manager::Create(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CImGui_Manager* pInstance = new CImGui_Manager();
+
 
     if (FAILED(pInstance->Initialize(hWnd, pDevice, pContext)))
     {

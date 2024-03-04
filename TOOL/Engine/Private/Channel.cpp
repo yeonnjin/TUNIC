@@ -83,7 +83,7 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
     else
     {
         // 정확한 CurrentKeyFrame 찾아주기
-        if (fTrackPosition >= m_KeyFrames[m_iCurrentKeyFrame].fTime)
+        if (fTrackPosition >= m_KeyFrames[m_iCurrentKeyFrame + 1].fTime)
             ++m_iCurrentKeyFrame;
 
         // 앞 뒤 KeyFrame의 Time 사이에서 얼마나 지났는지 비율을 구함

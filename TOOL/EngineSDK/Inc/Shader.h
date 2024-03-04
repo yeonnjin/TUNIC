@@ -18,6 +18,7 @@ public:
 public:
 	HRESULT	Begin(_uint iPassIndex);
 	HRESULT Bind_Matrix(const char* pConstantName, const _float4x4* pMatrix);
+	HRESULT Bind_Matrices(const _char* pConstantName, const _float4x4* pMatrices, _uint iNumMatrices);
 	HRESULT Bind_Texture(const char* pConstantName, ID3D11ShaderResourceView* pSRV);
 
 private:

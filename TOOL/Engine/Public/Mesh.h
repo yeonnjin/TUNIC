@@ -24,18 +24,27 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
+	HRESULT			Stock_Matrices(const vector<CBone*>& Bones, _float4x4* pMeshBoneMatrices);
+
+public:
 	_float3			Compute_Picking(const class CTransform* pTransform) const;
 
 private:
-	_char			m_szName[MAX_PATH] = { "" };
-	_uint			m_iMaterialIndex = { 0 };		// 이 메쉬는 모델에서 로드 해놓은 머테리얼들 중 몇 번째 머테리얼을 이용하는가
+	_char				m_szName[MAX_PATH] = { "" };
 
-	_uint			m_iNumFaces = { 0 };
+	// 이 메쉬는 모델에서 로드 해놓은 머테리얼들 중 몇 번째 머테리얼을 이용하는가
+	_uint				m_iMaterialIndex = { 0 };		
 
-	_uint			m_iNumBones = { 0 };
-	vector<_uint>	m_Bones;
+	_uint				m_iNumFaces = { 0 };
 
-	_uint*			m_pIndices = { nullptr };
+	// 뼈의 인덱스 : 모델이 가지고 있는 전체 뼈들 중, 메쉬가 사용하고 있는 뼈의 인덱스들
+	_uint				m_iNumBones = { 0 };
+	vector<_uint>		m_Bones;
+
+	_uint*				m_pIndices = { nullptr };
+
+	// 현재 메쉬에 영향을 주는 뼈들의 순서대로 오프셋 저장
+	vector<_float4x4>	m_OffsetMatrices;
 
 private:
 	HRESULT	Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix);

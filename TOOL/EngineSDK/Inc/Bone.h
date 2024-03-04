@@ -17,12 +17,17 @@ public:
 	HRESULT Initialize(const aiNode* pAINode, _int iParentIndex);
 
 public:
+	// Set
 	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	}
+	// Get
+	const _float4x4* Get_CombinedTransformationMatrix() const {
+		return &m_CombinedTransformationMatrix;
+	}
 	
 public:
-	void	Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones);
+	void	Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix TransformationMatrix);
 	_bool	Compare_Name(const _char* pBoneName) {
 		return !strcmp(m_szName, pBoneName);
 	}

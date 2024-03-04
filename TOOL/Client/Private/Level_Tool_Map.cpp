@@ -77,8 +77,8 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Terrain(const wstring& strLayerTag)
 
 HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Test_Object"))))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Test_Object"))))
+		return E_FAIL;*/
 
 	return S_OK;
 }

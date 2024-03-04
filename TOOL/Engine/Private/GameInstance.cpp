@@ -326,6 +326,14 @@ void CGameInstance::EditTransform(CTransform* pTransformCom)
 	m_pImGui_Manager->EditTransform(pTransformCom);
 }
 
+HRESULT CGameInstance::Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath)
+{
+	if (nullptr == m_pImGui_Manager)
+		return E_FAIL;
+
+	return m_pImGui_Manager->Create_Prototype_Model(eType, strFolderPath);
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Free();

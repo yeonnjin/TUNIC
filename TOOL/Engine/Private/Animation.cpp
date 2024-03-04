@@ -55,6 +55,8 @@ CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const vector<cla
 
 void CAnimation::Free()
 {
+    __super::Free();
+
     for (auto& pChannel : m_Channels)
         Safe_Release(pChannel);
 

@@ -3,6 +3,7 @@
 #include "Base.h"
 
 #include "imgui.h"
+#include "Model.h"
 
 BEGIN(Engine)
 
@@ -17,10 +18,16 @@ public:
 	void	New_Frame();
 	HRESULT Render();
 
+	// GIZMO
 	void	EditTransform(class CTransform* pTransformCom);
+
+	// PROTOTYPE
+	HRESULT	Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
 
 private:
 	class CGameInstance*	m_pGameInstance = { nullptr };
+	ID3D11Device*			m_pDevice = { nullptr };
+	ID3D11DeviceContext*	m_pContext = { nullptr };
 
 public:
 	static CImGui_Manager* Create(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
