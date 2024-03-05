@@ -26,25 +26,27 @@ HRESULT CTest_Object::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&GameObjectDesc)))
         return E_FAIL;
 
+    if (FAILED(Add_Components()))
+        return E_FAIL;
+
     _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-    
+    m_pModelCom->Set_Animation(rand() % 20, true);
+
     if (nullptr != pArg)
     {
         TEST_DESC* pDesc = (TEST_DESC*)pArg;
         m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
     }
 
-    if (FAILED(Add_Components()))
-        return E_FAIL;
-
     return S_OK;
 }
 
 void CTest_Object::Tick(_float fTimeDelta)
 {
-
+    /*if (true == m_pModelCom->isFinished())
+        int a = 10;*/
 }
 
 void CTest_Object::Late_Tick(_float fTimeDelta)

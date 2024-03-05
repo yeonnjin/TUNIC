@@ -299,4 +299,12 @@ CComponent* CMesh::Clone(void* pArg)
 void CMesh::Free()
 {
     __super::Free();
+
+    if (!m_isCloned)
+    {
+        Safe_Delete_Array(m_pVerticesPos);
+        Safe_Delete_Array(m_pIndices);
+    }
 }
+
+    

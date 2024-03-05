@@ -23,7 +23,12 @@ private:
 	HRESULT			Test_Picking();
 	HRESULT			Test_Mesh_Picking();
 	void			Test();
+
+	HRESULT			Load_Model();
+	void			Tool_Model_List();
 	void			Gizmo(CTransform* pTransform);
+
+	string			WStringToString(const std::wstring& wstr);
 
 private: // Gizmo
 	_bool		m_isUsingGizmo = { false };

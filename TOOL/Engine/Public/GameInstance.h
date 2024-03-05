@@ -64,6 +64,7 @@ public: /* For.ImGui_Manager */
 	HRESULT				Render();
 	void				EditTransform(CTransform* pTransformCom);
 	HRESULT				Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
+	vector<wstring>*	Get_Model_List();
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };

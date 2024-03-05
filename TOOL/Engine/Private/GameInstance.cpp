@@ -334,6 +334,14 @@ HRESULT CGameInstance::Create_Prototype_Model(CModel::TYPE eType, const wstring&
 	return m_pImGui_Manager->Create_Prototype_Model(eType, strFolderPath);
 }
 
+vector<wstring>* CGameInstance::Get_Model_List()
+{
+	if (nullptr == m_pImGui_Manager)
+		return nullptr;
+
+	return m_pImGui_Manager->Get_Model_List();
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Free();
@@ -344,6 +352,7 @@ void CGameInstance::Release_Engine()
 void CGameInstance::Free()
 {	
 	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);	

@@ -148,15 +148,19 @@ HRESULT CImGui_Manager::Create_Prototype_Model(CModel::TYPE eType, const wstring
 
         if (CModel::TYPE_NONANIM == eType)
         {
-            if (FAILED(m_pGameInstance->Add_Prototype(4, szFullPath,
+            if (FAILED(m_pGameInstance->Add_Prototype(4, findFileData.cFileName,
                 CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str))))
                 return E_FAIL;
+
+            m_strModels[CModel::TYPE_NONANIM].push_back(findFileData.cFileName);
         }
         else
         {
-            if (FAILED(m_pGameInstance->Add_Prototype(4, szFullPath,
+            if (FAILED(m_pGameInstance->Add_Prototype(4, findFileData.cFileName,
                 CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, str))))
                 return E_FAIL;
+
+            m_strModels[CModel::TYPE_ANIM].push_back(findFileData.cFileName);
         }
 
         if (!FindNextFileW(hFile, &findFileData))

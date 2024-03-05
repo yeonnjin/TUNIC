@@ -4,6 +4,9 @@
 #include "Test_Object.h"
 #include "ImGuizmo.h"
 
+#include <locale>
+#include <codecvt>
+
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -24,7 +27,7 @@ HRESULT CEditor::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	m_pGameInstance->Create_Prototype_Model(CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Object/"));
+	Load_Model();
 
 	return S_OK;
 }
@@ -54,6 +57,8 @@ void CEditor::Late_Tick(_float fTimeDelta)
 
 	if (m_isUsingGizmo)
 		Gizmo(m_pGizmoTransform);
+
+	ImGui::EndFrame();
 }
 
 HRESULT CEditor::Render()
@@ -162,6 +167,49 @@ void CEditor::Test()
 	}
 }
 
+HRESULT CEditor::Load_Model()
+{
+	// NON_ANIM_MODEL
+	m_pGameInstance->Create_Prototype_Model(CModel::TYPE_NONANIM, TEXT("../Bin/Resources/Models/Rock/"));
+
+	// ANIM_MODEL
+	m_pGameInstance->Create_Prototype_Model(CModel::TYPE_ANIM, TEXT("../Bin/Resources/Models/Object/"));
+
+	return S_OK;
+}
+
+std::string WStringToString(const std::wstring& wstr)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	return converter.to_bytes(wstr);
+}
+
+void CEditor::Tool_Model_List()
+{
+	//ImGui::Begin("Object_List");
+	//
+	//static _uint	iCurrentIndex = { 0 };
+	//vector<wstring> strModel = *m_pGameInstance->Get_Model_List();
+	////ImGui::ListBox("NON_ANIM", &iCurrentIndex,strModel, strModel->size(), 4);
+	//
+	//vector<std::string> strVec;
+	//vector<const char*> cstrVec;
+	//for (const auto& wstr : strModel)
+	//{
+	//	std::string str = WStringToString(wstr);
+	//	strVec.push_back(str); // string 버전을 저장
+	//}
+	//
+	//for (const auto& str : strVec)
+	//{
+	//	cstrVec.push_back(str.c_str()); // const char* 버전을 저장
+	//}
+	//
+	////ImGui::ListBox("List Box", &iCurrentIndex, cstrVec.data(), cstrVec.size());
+	//
+	//ImGui::End();
+}
+
 void CEditor::Gizmo(CTransform* pTransform)
 {
 	ImGui::SetNextWindowPos(ImVec2(1024, 100), ImGuiCond_Appearing);
@@ -192,7 +240,7 @@ void CEditor::Gizmo(CTransform* pTransform)
 	m_pGameInstance->EditTransform(pTransform);
 
 	ImGui::End();
-	ImGui::EndFrame();
+	
 }
 
 CEditor* CEditor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -226,4 +274,6 @@ CGameObject* CEditor::Clone(void* pArg)
 void CEditor::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pGizmoTransform);
 }

@@ -22,12 +22,16 @@ public:
 	void	EditTransform(class CTransform* pTransformCom);
 
 	// PROTOTYPE
-	HRESULT	Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
+	HRESULT					Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
+	vector<wstring>*		Get_Model_List() { return m_strModels; }
 
 private:
 	class CGameInstance*	m_pGameInstance = { nullptr };
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
+
+private:
+	vector<wstring>			m_strModels[CModel::TYPE_END];
 
 public:
 	static CImGui_Manager* Create(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

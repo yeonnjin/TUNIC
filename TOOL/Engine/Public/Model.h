@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "Animation.h"
 
 BEGIN(Engine)
 
@@ -15,8 +16,19 @@ private:
 	virtual ~CModel() = default;
 
 public:
+	// Set
+	void	Set_Animation(_uint iAnimIndex, _bool isLoop) {
+		m_iCurrentAnimIndex = iAnimIndex;
+		m_isLoop = isLoop;
+	}
+
+	// Get
 	_uint Get_NumMeshes() const {
 		return m_iNumMeshes;
+	}
+
+	_bool isFinished() {
+		return m_Animations[m_iCurrentAnimIndex]->isFinished();
 	}
 
 public:
@@ -36,6 +48,7 @@ private:
 	TYPE						m_eModelType = { TYPE_END };
 	const aiScene*				m_pAIScene = { nullptr };
 	Assimp::Importer			m_Importer;
+	//_char						m_szName[MAX_PATH] = { "" };
 
 private: 
 	// Mesh	
@@ -53,6 +66,7 @@ private:
 	// Animation
 	_uint						m_iNumAnimations = { 0 };
 	_uint						m_iCurrentAnimIndex = { 0 };
+	_bool						m_isLoop = { false };
 	vector<class CAnimation*>	m_Animations;
 
 	_float4x4					m_MeshBoneMatrices[512];

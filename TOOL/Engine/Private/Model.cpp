@@ -20,16 +20,16 @@ CModel::CModel(const CModel& rhs)
 	, m_iNumMaterials{ rhs.m_iNumMaterials }
 	, m_Materials{ rhs.m_Materials }
 	, m_TransformMatrix{ rhs.m_TransformMatrix }
-	, m_Bones{ rhs.m_Bones }
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
-	, m_Animations{ rhs.m_Animations }
 {
-	for (auto& pAnimation : m_Animations)
-		Safe_AddRef(pAnimation);
+	// 깊은 복사
+	for (auto& pPrototypeAnimation : rhs.m_Animations)
+		m_Animations.push_back(pPrototypeAnimation->Clone());
 
-	for (auto& pBone : m_Bones)
-		Safe_AddRef(pBone);
+	for (auto& pPrototypeBone : rhs.m_Bones)
+		m_Bones.push_back(pPrototypeBone->Clone());
 
+	// 얕은 복사
 	for (auto& pMesh : m_Meshes)
 		Safe_AddRef(pMesh);
 	
@@ -56,6 +56,9 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
 	XMStoreFloat4x4(&m_TransformMatrix, TransformMatrix);
 
    // 읽은 정보를 바탕으로 재정리
+
+	/* 이름 저장 */
+	//strcpy_s(m_szName, m_pAIScene->mName.data);
 
 	/* 전체 뼈 생성 */
 	if (FAILED(Ready_Bones(m_pAIScene->mRootNode)))
@@ -114,7 +117,7 @@ HRESULT CModel::Bind_ShaderResource(CShader* pShader, const _char* pConstantName
 HRESULT CModel::Play_Animation(_float fTimeDelta)
 {
 	/* 현재 애니메이션에 맞는 뼈의 상태(m_TransformationMatrix)를 갱신 */
-	m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, m_Bones);
+	m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, m_Bones, m_isLoop);
 
 	for(auto& pBone : m_Bones)
 		pBone->Invalidate_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_TransformMatrix));
