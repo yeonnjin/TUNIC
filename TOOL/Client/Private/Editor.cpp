@@ -7,6 +7,9 @@
 #include <locale>
 #include <codecvt>
 
+#include <fstream>
+//#include "Texture.h"
+
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -58,6 +61,12 @@ void CEditor::Late_Tick(_float fTimeDelta)
 	if (m_isUsingGizmo)
 		Gizmo(m_pGizmoTransform);
 
+	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
+		Save_File();
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
+		Load_File();
+
 	ImGui::EndFrame();
 }
 
@@ -87,6 +96,8 @@ HRESULT CEditor::Test_Picking()
 
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
 			return E_FAIL;
+
+		++m_iObjectCount;
 	}
 }
 
@@ -115,6 +126,7 @@ HRESULT CEditor::Test_Mesh_Picking()
 	}
 
 	return S_OK;
+
 }
 
 void CEditor::Test()
@@ -241,6 +253,214 @@ void CEditor::Gizmo(CTransform* pTransform)
 
 	ImGui::End();
 	
+}
+
+HRESULT CEditor::Save_File()
+{
+	ofstream fout;
+	fout.open("../Bin/Resources/Data/Model/Model1.dat", ios::out | ios::binary);
+
+	_uint iObjectCount = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Object"));
+	if (0 == iObjectCount)
+		return E_FAIL;
+
+	// Object Count
+	fout.write(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
+
+	// MODEL
+	for (size_t i = 0; i < iObjectCount; ++i)
+	{
+		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Model"), i));
+		if (nullptr == pObjectModel)
+			return E_FAIL;
+
+		MODELFILE* pModelFile = pObjectModel->Get_ModelFile();
+
+		// Mesh	
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumMeshes), sizeof(_uint));
+
+		for (size_t i = 0; i < pModelFile->Meshes.size(); ++i)
+		{
+			MESHFILE* pMeshFile = pModelFile->Meshes[i]->Get_MeshFile();
+			fout.write(reinterpret_cast<char*>(&pMeshFile->szName), sizeof(_char) * MAX_PATH);
+			fout.write(reinterpret_cast<char*>(&pMeshFile->iMaterialIndex), sizeof(_uint));
+			fout.write(reinterpret_cast<char*>(&pMeshFile->iNumFaces), sizeof(_uint));
+
+			fout.write(reinterpret_cast<char*>(&pMeshFile->iNumBones), sizeof(_uint));
+			for (size_t j = 0; j < pMeshFile->Bones.size(); ++j)
+				fout.write(reinterpret_cast<char*>(&pMeshFile->Bones[j]), sizeof(_uint));
+
+			fout.write(reinterpret_cast<char*>(&pMeshFile->iNumOffsetMatrices), sizeof(_uint));
+			for (size_t j = 0; j < pMeshFile->OffsetMatrices.size(); ++j)
+				fout.write(reinterpret_cast<char*>(&pMeshFile->OffsetMatrices[j]), sizeof(_float4x4));
+		}
+
+		// Material
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumMaterials), sizeof(_uint));
+
+		for (size_t i = 0; i < pModelFile->Materials.size(); ++i)
+		{
+			for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
+			{
+				CTexture* pTexture = pModelFile->Materials[i].MaterialTextures[j];
+				if (nullptr == pTexture)
+					continue;
+
+				_tchar szPath[MAX_PATH] = { L"" };
+				wsprintf(szPath, pTexture->Get_TextureFile());
+				fout.write(reinterpret_cast<char*>(&szPath), sizeof(_tchar) * MAX_PATH);
+			}
+		}
+
+		// Bone
+		fout.write(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
+		for (size_t i = 0; i < pModelFile->Bones.size(); ++i)
+		{
+			BONEFILE* pBoneFile = pModelFile->Bones[i]->Get_BoneFile();
+			fout.write(reinterpret_cast<char*>(&pBoneFile->szName), sizeof(_char) * MAX_PATH);
+			fout.write(reinterpret_cast<char*>(&pBoneFile->TransformationMatrix), sizeof(_float4x4));
+			fout.write(reinterpret_cast<char*>(&pBoneFile->iParentBoneIndex), sizeof(_int));
+		}
+
+		// Animation
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumAnimations), sizeof(_uint));
+		fout.write(reinterpret_cast<char*>(&pModelFile->iCurrentAnimIndex), sizeof(_uint));
+		fout.write(reinterpret_cast<char*>(&pModelFile->isLoop), sizeof(_bool));
+		for (size_t i = 0; i < pModelFile->Animations.size(); ++i)
+		{
+			ANIMFILE* pAnimFile = pModelFile->Animations[i]->Get_AnimFile();
+			fout.write(reinterpret_cast<char*>(&pAnimFile->szName), sizeof(_char) * MAX_PATH);
+			fout.write(reinterpret_cast<char*>(&pAnimFile->fDuration), sizeof(_float));
+			fout.write(reinterpret_cast<char*>(&pAnimFile->fTicksPerSecond), sizeof(_float));
+			fout.write(reinterpret_cast<char*>(&pAnimFile->fTrackPosition), sizeof(_float));
+
+			fout.write(reinterpret_cast<char*>(&pAnimFile->iNumChannels), sizeof(_uint));
+
+			// Channel
+			for (size_t j = 0; j < pAnimFile->Channels.size(); ++j)
+			{
+				CHANNELFILE* pChannelFile = pAnimFile->Channels[j]->Get_ChannelFile();
+				fout.write(reinterpret_cast<char*>(&pChannelFile->szName), sizeof(_char) * MAX_PATH);
+				fout.write(reinterpret_cast<char*>(&pChannelFile->iBoneIndex), sizeof(_int));
+				fout.write(reinterpret_cast<char*>(&pChannelFile->iNumKeyFrames), sizeof(_uint));
+
+				// KeyFrame
+				for (size_t k = 0; k < pChannelFile->KeyFrames.size(); ++k)
+					fout.write(reinterpret_cast<char*>(&pChannelFile->KeyFrames[k]), sizeof(KEYFRAME));
+			}
+		}
+
+		fout.write(reinterpret_cast<char*>(&pModelFile->MeshBoneMatrices), sizeof(_float4x4) * 512);
+	}
+
+	fout.close();
+
+	return S_OK;
+}
+
+HRESULT CEditor::Load_File()
+{
+	ifstream fin;
+	fin.open("../Bin/Resources/Data/Model/Model1.dat", ios::in | ios::binary);
+
+	_uint iObjectCount;
+
+	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
+
+	// MODEL
+	for (size_t i = 0; i < iObjectCount; ++i)
+	{		
+		MODELFILE* pModelFile = new MODELFILE;
+
+		// Mesh	
+		fin.read(reinterpret_cast<char*>(&pModelFile->iNumMeshes), sizeof(_uint));
+
+		for (size_t i = 0; i < pModelFile->iNumMeshes; ++i)
+		{
+			MESHFILE* pMeshFile = new MESHFILE;
+			_char* szTest;/* = new _char[MAX_PATH];*/
+			fin.read(reinterpret_cast<char*>(&szTest), sizeof(_char) * MAX_PATH);
+			pMeshFile->szName = szTest;
+			//strcpy_s(pMeshFile->szName, szTest);
+			fin.read(reinterpret_cast<char*>(&pMeshFile->iMaterialIndex), sizeof(_uint));
+			fin.read(reinterpret_cast<char*>(&pMeshFile->iNumFaces), sizeof(_uint));
+
+			fin.read(reinterpret_cast<char*>(&pMeshFile->iNumBones), sizeof(_uint));
+			for (size_t j = 0; j < pMeshFile->iNumBones; ++j)
+			{
+				_uint iBone = {};
+				fin.read(reinterpret_cast<char*>(&iBone), sizeof(_uint));
+				pMeshFile->Bones.push_back(iBone);
+			}
+			
+			fin.read(reinterpret_cast<char*>(&pMeshFile->iNumOffsetMatrices), sizeof(_uint));
+			for (size_t j = 0; j < pMeshFile->iNumOffsetMatrices; ++j)
+			{
+				_float4x4 OffsetMatrices = {};
+				fin.read(reinterpret_cast<char*>(&OffsetMatrices), sizeof(_float4x4));
+				pMeshFile->OffsetMatrices.push_back(OffsetMatrices);
+			}
+		}
+
+		//// Material
+		//fin.read(reinterpret_cast<char*>(&pModelFile->iNumMaterials), sizeof(_uint));
+
+		//for (size_t i = 0; i < pModelFile->Materials.size(); ++i)
+		//{
+		//	for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
+		//	{
+		//		CTexture* pTexture = pModelFile->Materials[i].MaterialTextures[j];
+		//		if (nullptr == pTexture)
+		//			continue;
+
+		//		_tchar szPath[MAX_PATH] = { L"" };
+		//		wsprintf(szPath, pTexture->Get_TextureFile());
+		//		fin.read(reinterpret_cast<char*>(&szPath), sizeof(_tchar) * MAX_PATH);
+		//	}
+		//}
+
+		//// Bone
+		//fout.write(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
+		//for (size_t i = 0; i < pModelFile->Bones.size(); ++i)
+		//{
+		//	BONEFILE* pBoneFile = pModelFile->Bones[i]->Get_BoneFile();
+		//	fout.write(reinterpret_cast<char*>(&pBoneFile->szName), sizeof(_char) * MAX_PATH);
+		//	fout.write(reinterpret_cast<char*>(&pBoneFile->TransformationMatrix), sizeof(_float4x4));
+		//	fout.write(reinterpret_cast<char*>(&pBoneFile->iParentBoneIndex), sizeof(_int));
+		//}
+
+		//// Animation
+		//fout.write(reinterpret_cast<char*>(&pModelFile->iNumAnimations), sizeof(_uint));
+		//fout.write(reinterpret_cast<char*>(&pModelFile->iCurrentAnimIndex), sizeof(_uint));
+		//fout.write(reinterpret_cast<char*>(&pModelFile->isLoop), sizeof(_bool));
+		//for (size_t i = 0; i < pModelFile->Animations.size(); ++i)
+		//{
+		//	ANIMFILE* pAnimFile = pModelFile->Animations[i]->Get_AnimFile();
+		//	fout.write(reinterpret_cast<char*>(&pAnimFile->szName), sizeof(_char) * MAX_PATH);
+		//	fout.write(reinterpret_cast<char*>(&pAnimFile->fDuration), sizeof(_float));
+		//	fout.write(reinterpret_cast<char*>(&pAnimFile->fTicksPerSecond), sizeof(_float));
+		//	fout.write(reinterpret_cast<char*>(&pAnimFile->fTrackPosition), sizeof(_float));
+
+		//	fout.write(reinterpret_cast<char*>(&pAnimFile->iNumChannels), sizeof(_uint));
+
+		//	// Channel
+		//	for (size_t j = 0; j < pAnimFile->Channels.size(); ++j)
+		//	{
+		//		CHANNELFILE* pChannelFile = pAnimFile->Channels[j]->Get_ChannelFile();
+		//		fout.write(reinterpret_cast<char*>(&pChannelFile->szName), sizeof(_char) * MAX_PATH);
+		//		fout.write(reinterpret_cast<char*>(&pChannelFile->iBoneIndex), sizeof(_int));
+		//		fout.write(reinterpret_cast<char*>(&pChannelFile->iNumKeyFrames), sizeof(_uint));
+
+		//		// KeyFrame
+		//		for (size_t k = 0; k < pChannelFile->KeyFrames.size(); ++k)
+		//			fout.write(reinterpret_cast<char*>(&pChannelFile->KeyFrames[k]), sizeof(KEYFRAME));
+		//	}
+	}
+	
+
+	fin.close();
+
+	return S_OK;
 }
 
 CEditor* CEditor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

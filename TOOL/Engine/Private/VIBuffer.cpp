@@ -82,4 +82,7 @@ void CVIBuffer::Free()
 
 	Safe_Release(m_pVB);
 	Safe_Release(m_pIB);
+
+	if (!m_isCloned)
+		Safe_Delete_Array(m_pVerticesPos);
 }

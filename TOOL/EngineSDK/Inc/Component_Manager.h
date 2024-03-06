@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Channel.h"
+#include "Animation.h"
+#include "Bone.h"
+#include "Mesh.h "
 #include "Model.h"
 #include "Shader.h"
 #include "Texture.h"

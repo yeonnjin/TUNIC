@@ -106,6 +106,18 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
     Bones[m_iBoneIndex]->Set_TransformationMatrix(TransformationMatrix);
 }
 
+HRESULT CChannel::Ready_ChannelFile()
+{
+    m_tChannelFile.szName = m_szName;
+
+    m_tChannelFile.iBoneIndex = m_iBoneIndex;
+
+    m_tChannelFile.iNumKeyFrames = m_iNumKeyFrames;
+    m_tChannelFile.KeyFrames = m_KeyFrames;
+
+    return S_OK;
+}
+
 CChannel* CChannel::Create(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones)
 {
     CChannel* pInstance = new CChannel();

@@ -32,7 +32,7 @@ HRESULT CTest_Object::Initialize(void* pArg)
     _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-    m_pModelCom->Set_Animation(rand() % 20, true);
+    m_pModelCom->Set_Animation(0, true);
 
     if (nullptr != pArg)
     {
@@ -47,6 +47,12 @@ void CTest_Object::Tick(_float fTimeDelta)
 {
     /*if (true == m_pModelCom->isFinished())
         int a = 10;*/
+    static _uint iIndex = 0;
+    if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+    {
+        iIndex++;
+        m_pModelCom->Set_Animation(iIndex, true);
+    }
 }
 
 void CTest_Object::Late_Tick(_float fTimeDelta)
@@ -91,6 +97,9 @@ HRESULT CTest_Object::Add_Components()
     if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
+    /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fox"),
+        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;*/
     /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Rock"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;*/

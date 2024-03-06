@@ -30,7 +30,7 @@ private:
 
 private:
 	HRESULT Add_Components();
-	HRESULT Bind_ShaderMatrix();
+	HRESULT Bind_ShaderResources();
 
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

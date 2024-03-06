@@ -21,6 +21,8 @@ CModel::CModel(const CModel& rhs)
 	, m_Materials{ rhs.m_Materials }
 	, m_TransformMatrix{ rhs.m_TransformMatrix }
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
+	//, m_pModelFile{ rhs.m_pModelFile }
+	, m_tModelFile{ rhs.m_tModelFile }
 {
 	// ±Ì¿∫ ∫πªÁ
 	for (auto& pPrototypeAnimation : rhs.m_Animations)
@@ -143,6 +145,7 @@ _bool CModel::Check_Picking(const class CTransform* pTransform) const
 
 		if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
 			return true;
+
 	}
 
 	return false;
@@ -247,6 +250,31 @@ HRESULT CModel::Ready_Animations()
 
 		m_Animations.push_back(pAnimation);
 	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Ready_ModelFile()
+{
+	// Mesh	
+	m_tModelFile.iNumMeshes = m_iNumMeshes;
+	m_tModelFile.Meshes = m_Meshes;
+
+	// Material
+	m_tModelFile.iNumMaterials = m_iNumMaterials;
+	m_tModelFile.Materials = m_Materials;
+
+	// Bone
+	m_tModelFile.TransformMatrix = m_TransformMatrix;
+	m_tModelFile.Bones = m_Bones;
+
+	// Animation
+	m_tModelFile.iNumAnimations = m_iNumAnimations;
+	m_tModelFile.iCurrentAnimIndex = m_iCurrentAnimIndex;
+	m_tModelFile.isLoop = m_isLoop;
+	m_tModelFile.Animations = m_Animations;
+
+	m_tModelFile.MeshBoneMatrices = m_MeshBoneMatrices;
 
 	return S_OK;
 }

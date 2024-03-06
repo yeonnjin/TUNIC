@@ -7,7 +7,7 @@
 
 BEGIN(Engine)
 
-class CMesh final : public CVIBuffer
+class ENGINE_DLL CMesh final : public CVIBuffer
 {
 private:
 	CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -18,6 +18,9 @@ public:
 	_uint	Get_MaterialIndex() const {
 		return m_iMaterialIndex;
 	}
+
+	// File
+	MESHFILE* Get_MeshFile() { Ready_MeshFile(); return &m_tMeshFile; }
 
 public:
 	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<CBone*>& Bones, _fmatrix TransformMatrix);
@@ -46,9 +49,13 @@ private:
 	// 현재 메쉬에 영향을 주는 뼈들의 순서대로 오프셋 저장
 	vector<_float4x4>	m_OffsetMatrices;
 
+	// FILE
+	MESHFILE			m_tMeshFile;
+
 private:
 	HRESULT	Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix);
 	HRESULT Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<CBone*>& Bones);
+	HRESULT Ready_MeshFile();
 
 public:
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<class CBone*>& Bones, _fmatrix TransformMatrix);

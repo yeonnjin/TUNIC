@@ -22,7 +22,7 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
     //m_iVertexStride = sizeof(VTXMESH);
     m_iNumFaces = pAIMesh->mNumFaces;
     m_iNumIndices = m_iNumFaces * 3;
-    m_pIndices = new _uint[m_iNumIndices];
+    //m_pIndices = new _uint[m_iNumIndices];
     m_iIndexStride = sizeof(_uint);
     m_iNumVertexBuffers = 1;
     m_eIndexFormat = DXGI_FORMAT_R32_UINT;
@@ -54,9 +54,9 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
 
     for (size_t i = 0; i < pAIMesh->mNumFaces; ++i)
     {
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[0];
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[1];
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[2];
+        pIndices[iNumIndices++] /*= m_pIndices[iNumIndices]*/ = pAIMesh->mFaces[i].mIndices[0];
+        pIndices[iNumIndices++] /*= m_pIndices[iNumIndices]*/ = pAIMesh->mFaces[i].mIndices[1];
+        pIndices[iNumIndices++] /*= m_pIndices[iNumIndices]*/ = pAIMesh->mFaces[i].mIndices[2];
     }
 
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
@@ -98,9 +98,12 @@ _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
         _uint   iIndex = i * 3;
 
         _uint   iIndices[3] = {
-            m_pIndices[iIndex],
+            /*m_pIndices[iIndex],
             m_pIndices[iIndex + 1],
-            m_pIndices[iIndex + 2]
+            m_pIndices[iIndex + 2]*/
+            iIndex,
+            iIndex + 1,
+            iIndex + 2
         };
 
         _float fDist = {};
@@ -277,6 +280,24 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     return S_OK;
 }
 
+HRESULT CMesh::Ready_MeshFile()
+{
+    m_tMeshFile.szName = m_szName;
+
+    m_tMeshFile.iMaterialIndex = m_iMaterialIndex;
+
+    m_tMeshFile.iNumFaces = m_iNumFaces;
+
+    m_tMeshFile.iNumBones = m_iNumBones;
+    m_tMeshFile.Bones = m_Bones;
+
+    //m_tMeshFile.pIndices = &m_pIndices;
+    m_tMeshFile.iNumOffsetMatrices = m_OffsetMatrices.size();
+    m_tMeshFile.OffsetMatrices = m_OffsetMatrices;
+
+    return S_OK;
+}
+
 CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<CBone*>& Bones, _fmatrix TransformMatrix)
 {
     CMesh* pInstance = new CMesh(pDevice, pContext);
@@ -300,11 +321,11 @@ void CMesh::Free()
 {
     __super::Free();
 
-    if (!m_isCloned)
-    {
-        Safe_Delete_Array(m_pVerticesPos);
-        Safe_Delete_Array(m_pIndices);
-    }
+    //if (!m_isCloned)
+    //{
+    //    Safe_Delete_Array(m_pVerticesPos);
+    //    //Safe_Delete_Array(m_pIndices);
+    //}
 }
 
     

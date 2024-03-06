@@ -8,20 +8,26 @@
 
 BEGIN(Engine)
 
-class CAnimation final : public CBase
+class ENGINE_DLL CAnimation final : public CBase
 {
 private:
 	CAnimation();
 	virtual ~CAnimation() = default;
 	
 public:
+	
+	// Set
+	void	Set_Cloned() {
+		m_isCloned = true;
+	}
+
+	// Get
 	_bool	isFinished() const {
 		return m_isFinished;
 	}
 
-	void	Set_Cloned() {
-		m_isCloned = true;
-	}
+	// File
+	ANIMFILE* Get_AnimFile() { Ready_AnimFile(); return &m_tAnimFile; }
 
 public:
 	HRESULT Initialize(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones);
@@ -40,6 +46,12 @@ private:
 
 	_bool						m_isFinished = { false };
 	_bool						m_isCloned = { false };
+
+	// FILE
+	ANIMFILE					m_tAnimFile = {};
+
+private:
+	HRESULT						Ready_AnimFile();
 
 public:
 	static CAnimation* Create(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones);

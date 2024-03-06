@@ -20,19 +20,32 @@ public:
 	virtual HRESULT	Render() override;
 
 private:
+	// PICKING
 	HRESULT			Test_Picking();
 	HRESULT			Test_Mesh_Picking();
 	void			Test();
 
+	// MODEL_LIST
 	HRESULT			Load_Model();
 	void			Tool_Model_List();
 	void			Gizmo(CTransform* pTransform);
 
-	string			WStringToString(const std::wstring& wstr);
+	// FILE
+	HRESULT			Save_File();
+	HRESULT			Load_File();
 
-private: // Gizmo
+
+
+
+
+	//string			WStringToString(const std::wstring& wstr);
+
+private: // GIZMO
 	_bool		m_isUsingGizmo = { false };
 	CTransform* m_pGizmoTransform = { nullptr };
+
+private: // FILE
+	_uint		m_iObjectCount = { 0 };
 
 private:
 	bool show_demo_window = true;

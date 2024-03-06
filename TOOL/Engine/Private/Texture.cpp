@@ -62,6 +62,7 @@ HRESULT CTexture::Initialize_Prototype(const wstring& strTextureFilePath, _uint 
     }
 
     m_iNumTextures = iNumTextures;
+    wsprintf(m_szTextureFilePath, strTextureFilePath.c_str());
 
     return S_OK;
 }

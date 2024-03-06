@@ -201,9 +201,6 @@
     <ClCompile Include="..\ImGui\imgui_impl_win32.cpp">
       <Filter>98. ImGui\Etc</Filter>
     </ClCompile>
-    <ClCompile Include="..\ImGui\imgui_tables.cpp">
-      <Filter>98. ImGui\Etc</Filter>
-    </ClCompile>
     <ClCompile Include="..\ImGui\imgui_widgets.cpp">
       <Filter>98. ImGui\Etc</Filter>
     </ClCompile>
@@ -218,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Picking.cpp">
       <Filter>01. Utility\06. Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_tables.cpp">
+      <Filter>99. Defines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,17 @@ void CBone::Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones,
     }
 }
 
+HRESULT CBone::Ready_BoneFile()
+{
+    m_tBoneFile.szName = m_szName;
+
+    m_tBoneFile.TransformationMatrix = m_TransformationMatrix;
+
+    m_tBoneFile.iParentBoneIndex = m_iParentBoneIndex;
+
+    return S_OK;
+}
+
 CBone* CBone::Create(const aiNode* pAINode, _int iParentIndex)
 {
     CBone* pInstance = new CBone();

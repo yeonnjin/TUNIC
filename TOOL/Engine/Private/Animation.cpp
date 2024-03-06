@@ -57,6 +57,21 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
     }
 }
 
+HRESULT CAnimation::Ready_AnimFile()
+{
+    m_tAnimFile.szName = m_szName;
+
+    m_tAnimFile.fDuration = m_fDuration;
+    m_tAnimFile.fTicksPerSecond = m_fTicksPerSecond;
+    m_tAnimFile.fTrackPosition = m_fTrackPosition;
+
+    m_tAnimFile.iNumChannels = m_iNumChannels;
+    m_tAnimFile.Channels = m_Channels;
+    m_tAnimFile.CurrentKeyFrameIndices = m_CurrentKeyFrameIndices;
+
+    return S_OK;
+}
+
 CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones)
 {
     CAnimation* pInstance = new CAnimation();

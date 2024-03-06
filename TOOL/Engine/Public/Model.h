@@ -31,6 +31,9 @@ public:
 		return m_Animations[m_iCurrentAnimIndex]->isFinished();
 	}
 
+	// File
+	MODELFILE* Get_ModelFile() { Ready_ModelFile(); return &m_tModelFile; }
+
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
@@ -49,6 +52,8 @@ private:
 	const aiScene*				m_pAIScene = { nullptr };
 	Assimp::Importer			m_Importer;
 	//_char						m_szName[MAX_PATH] = { "" };
+	/*MODELFILE*					m_pModelFile;*/
+	MODELFILE					m_tModelFile;
 
 private: 
 	// Mesh	
@@ -76,6 +81,7 @@ private:
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 	HRESULT Ready_Bones(aiNode* pAINode, _int iParentIndex = -1);
 	HRESULT Ready_Animations();
+	HRESULT Ready_ModelFile();
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix = XMMatrixIdentity());

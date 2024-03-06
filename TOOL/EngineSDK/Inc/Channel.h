@@ -8,11 +8,15 @@
 
 BEGIN(Engine)
 
-class CChannel final : public CBase
+class ENGINE_DLL CChannel final : public CBase
 {
 private:
 	CChannel();
 	virtual ~CChannel() = default;
+
+public:
+	// File
+	CHANNELFILE* Get_ChannelFile() { Ready_ChannelFile(); return &m_tChannelFile; }
 
 public:
 	HRESULT Initialize(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones);
@@ -24,6 +28,11 @@ private:
 
 	_uint				m_iNumKeyFrames = { 0 };
 	vector<KEYFRAME>	m_KeyFrames;
+
+	CHANNELFILE			m_tChannelFile = {};
+
+private:
+	HRESULT				Ready_ChannelFile();
 
 public:
 	static CChannel* Create(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones);

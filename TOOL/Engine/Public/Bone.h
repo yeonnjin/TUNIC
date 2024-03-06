@@ -7,7 +7,7 @@
 
 BEGIN(Engine)
 
-class CBone final : public CBase
+class ENGINE_DLL CBone final : public CBase
 {
 private:
 	CBone();
@@ -23,6 +23,8 @@ public:
 		return &m_CombinedTransformationMatrix;
 	}
 	
+	// File
+	BONEFILE* Get_BoneFile() { Ready_BoneFile(); return &m_tBoneFile; }
 public:
 	HRESULT Initialize(const aiNode* pAINode, _int iParentIndex);
 	void	Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix TransformationMatrix);
@@ -37,6 +39,12 @@ private:
 	_float4x4		m_CombinedTransformationMatrix;		// 최종 상태 행렬
 
 	_int			m_iParentBoneIndex = { -1 };
+
+	//FILE
+	BONEFILE		m_tBoneFile = {};
+
+private:
+	HRESULT			Ready_BoneFile();
 
 public:
 	static CBone* Create(const aiNode* pAINode, _int  iParentIndex);
