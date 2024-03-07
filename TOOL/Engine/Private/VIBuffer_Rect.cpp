@@ -130,7 +130,4 @@ CComponent * CVIBuffer_Rect::Clone(void * pArg)
 void CVIBuffer_Rect::Free()
 {
 	__super::Free();
-
-
-
 }

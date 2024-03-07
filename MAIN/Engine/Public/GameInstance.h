@@ -23,9 +23,9 @@ public:
 	HRESULT Clear(_uint iClearLevelIndex);
 
 public: /* For.Input_Device */
-	_bool	Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState);
-	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse);
-	_long	Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
+	_bool				Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState);
+	_bool				Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState);
+	_long				Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
 
 public: /* For.Renderer */
 	HRESULT Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
@@ -34,9 +34,10 @@ public: /* For.Level_Manager */
 	HRESULT Open_Level(_uint iNewLevelID, class CLevel* pNewLevel);
 
 public: /* For.Object_Manager */
-	HRESULT Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
-	HRESULT Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg = nullptr);
-	const CComponent* Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex = 0);
+	HRESULT				Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
+	HRESULT				Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg = nullptr);
+	const CComponent*	Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex = 0);
+	_uint				Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& strPrototypeTag, class CComponent* pPrototype);
@@ -55,6 +56,9 @@ public: /* For.PipeLine */
 	_vector Get_CamPosition_Vector() const;
 	_float4 Get_CamPosition_Float4() const;
 
+public: /* For.Picking */
+	void				Transform_Picking_To_LocalSpace(const class CTransform* pTransform, _Out_ _float3* pRayDir, _Out_ _float3* pRayPos);
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -64,8 +68,7 @@ private:
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
-	/*class CPicking*				m_pPicking = { nullptr };
-	class CFont_Manager*			m_pFont_Manager = { nullptr };*/
+	class CPicking*					m_pPicking = { nullptr };
 
 public:		
 	static void Release_Engine();

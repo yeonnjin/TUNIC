@@ -1,5 +1,6 @@
 #include "Mesh.h"
 
+#include "GameInstance.h"
 #include "Bone.h"
 
 CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -17,8 +18,11 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
     strcpy_s(m_szName, pAIMesh->mName.data);
     m_iMaterialIndex = pAIMesh->mMaterialIndex;
     m_iNumVertices = pAIMesh->mNumVertices;
+    m_pVerticesPos = new _float3[m_iNumVertices];   
     //m_iVertexStride = sizeof(VTXMESH);
-    m_iNumIndices = pAIMesh->mNumFaces * 3;
+    m_iNumFaces = pAIMesh->mNumFaces;
+    m_iNumIndices = m_iNumFaces * 3;
+    //m_pIndices = new _uint[m_iNumIndices];
     m_iIndexStride = sizeof(_uint);
     m_iNumVertexBuffers = 1;
     m_eIndexFormat = DXGI_FORMAT_R32_UINT;
@@ -55,7 +59,7 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
         pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
     }
 
-    ZeroMemory(&m_InitialData, sizeof(m_InitialData));
+    ZeroMemory(&m_InitialData, sizeof m_InitialData);
     m_InitialData.pSysMem = pIndices;
 
     if (FAILED(__super::Create_Buffer(&m_pIB)))
@@ -71,6 +75,51 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
 HRESULT CMesh::Initialize(void* pArg)
 {
     return S_OK;
+}
+
+HRESULT CMesh::Stock_Matrices(const vector<CBone*>& Bones, _float4x4* pMeshBoneMatrices)
+{
+    for (_uint i = 0; i < m_iNumBones; ++i)
+        XMStoreFloat4x4(&pMeshBoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * XMLoadFloat4x4(Bones[m_Bones[i]]->Get_CombinedTransformationMatrix()));
+
+    return S_OK;
+}
+
+_float3 CMesh::Compute_Picking(const CTransform* pTransform) const
+{
+    _float3     vRayDir, vRayPos = {};
+
+    m_pGameInstance->Transform_Picking_To_LocalSpace(pTransform, &vRayDir, &vRayPos);
+
+    _float3 vOut = { 0.f, 0.f, 0.f };
+
+    for (size_t i = 0; i < m_iNumFaces; ++i)
+    {
+        _uint   iIndex = i * 3;
+
+        _uint   iIndices[3] = {
+            iIndex,
+            iIndex + 1,
+            iIndex + 2
+        };
+
+        _float fDist = {};
+
+        //Intersects(_In_ FXMVECTOR Origin, _In_ FXMVECTOR Direction, _In_ FXMVECTOR V0, _In_ GXMVECTOR V1, _In_ HXMVECTOR V2, _Out_ float& Dist) noexcept;
+        _fvector vOrigin = XMLoadFloat3(&vRayPos);
+        XMStoreFloat3(&vRayDir, XMVector3Normalize(XMLoadFloat3(&vRayDir)));
+        _fvector vDirection = XMLoadFloat3(&vRayDir);
+
+        // 삼각형 충돌
+        if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMLoadFloat3(&m_pVerticesPos[iIndices[0]]), XMLoadFloat3(&m_pVerticesPos[iIndices[1]]), XMLoadFloat3(&m_pVerticesPos[iIndices[2]]), fDist))
+        {
+            vOut = _float3(vRayPos.x + vRayDir.x * fDist, vRayPos.y + vRayDir.y * fDist, vRayPos.z + vRayDir.z * fDist);
+            XMStoreFloat3(&vOut, XMVector3TransformCoord(XMLoadFloat3(&vOut), pTransform->Get_WorldMatrix()));
+            return vOut;
+        }
+    }
+
+    return vOut;
 }
 
 HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix)
@@ -92,6 +141,7 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix T
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        m_pVerticesPos[i] = pVertices[i].vPosition;
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
         memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
@@ -122,11 +172,12 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     m_BufferDesc.StructureByteStride = m_iVertexStride;
 
     VTXANIMMESH* pVertices = new VTXANIMMESH[m_iNumVertices];
-    ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+    ZeroMemory(pVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
 
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        m_pVerticesPos[i] = pVertices[i].vPosition;
         memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
         memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
@@ -142,8 +193,14 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     {
         aiBone* pAIBone = pAIMesh->mBones[i];
 
-       // pAIBone->mOffsetMatrix;
+        // Offset Matrix
+        _float4x4   OffsetMatrix;
+        memcpy(&OffsetMatrix, &pAIBone->mOffsetMatrix, sizeof(_float4x4));
+        XMStoreFloat4x4(&OffsetMatrix, XMMatrixTranspose(XMLoadFloat4x4(&OffsetMatrix)));
 
+        m_OffsetMatrices.push_back(OffsetMatrix);
+
+        // Bone Index
         _int    iBoneIndex = { -1 };
 
         auto iter = find_if(Bones.begin(), Bones.end(), [&](CBone* pBone)->_bool
@@ -186,6 +243,30 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
         }
     }
 
+    // Offset Matrix 예외 처리
+    if (0 == m_iNumBones)
+    {
+        m_iNumBones = 1;
+
+        _int    iBoneIndex = { -1 };
+
+        auto iter = find_if(Bones.begin(), Bones.end(), [&](CBone* pBone)->_bool
+        {
+            ++iBoneIndex;
+            return pBone->Compare_Name(m_szName);
+        });
+
+        m_Bones.push_back(iBoneIndex);
+
+        _float4x4   OffsetMatrix;
+
+        XMStoreFloat4x4(&OffsetMatrix, XMMatrixIdentity());
+
+        m_OffsetMatrices.push_back(OffsetMatrix);
+    }
+
+
+
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
     m_InitialData.pSysMem = pVertices;
 
@@ -193,6 +274,24 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
         return E_FAIL;
 
     Safe_Delete_Array(pVertices);
+
+    return S_OK;;
+}
+
+HRESULT CMesh::Ready_MeshFile()
+{
+    m_tMeshFile.szName = m_szName;
+
+    m_tMeshFile.iMaterialIndex = m_iMaterialIndex;
+
+    m_tMeshFile.iNumFaces = m_iNumFaces;
+
+    m_tMeshFile.iNumBones = m_iNumBones;
+    m_tMeshFile.Bones = m_Bones;
+
+    //m_tMeshFile.pIndices = &m_pIndices;
+    m_tMeshFile.iNumOffsetMatrices = m_OffsetMatrices.size();
+    m_tMeshFile.OffsetMatrices = m_OffsetMatrices;
 
     return S_OK;
 }

@@ -59,14 +59,16 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
 
 HRESULT CAnimation::Ready_AnimFile()
 {
-    m_tAnimFile.szName = m_szName;
+    strcpy_s(m_tAnimFile.szName, m_szName);
 
     m_tAnimFile.fDuration = m_fDuration;
     m_tAnimFile.fTicksPerSecond = m_fTicksPerSecond;
     m_tAnimFile.fTrackPosition = m_fTrackPosition;
 
     m_tAnimFile.iNumChannels = m_iNumChannels;
-    m_tAnimFile.Channels = m_Channels;
+    for (size_t i = 0; i < m_iNumChannels; ++i)
+        m_tAnimFile.Channels.push_back(*m_Channels[i]->Get_ChannelFile());
+
     m_tAnimFile.CurrentKeyFrameIndices = m_CurrentKeyFrameIndices;
 
     return S_OK;

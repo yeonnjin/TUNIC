@@ -62,8 +62,16 @@ HRESULT CTexture::Initialize_Prototype(const wstring& strTextureFilePath, _uint 
     }
 
     m_iNumTextures = iNumTextures;
-    wsprintf(m_szTextureFilePath, strTextureFilePath.c_str());
 
+    /*_int size = WideCharToMultiByte(CP_UTF8, 0, strTextureFilePath.c_str(), -1, NULL, 0, NULL, NULL);
+
+    _char* buffer = new _char[size + 1];
+    WideCharToMultiByte(CP_UTF8, 0, strTextureFilePath.c_str(), -1, buffer, size, NULL, NULL);
+
+    strcpy_s(m_tMaterialFile.szTexturePath, buffer);
+
+    delete[] buffer;*/
+    
     return S_OK;
 }
 

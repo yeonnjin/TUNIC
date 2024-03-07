@@ -108,8 +108,8 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
 
 HRESULT CChannel::Ready_ChannelFile()
 {
-    m_tChannelFile.szName = m_szName;
-
+    strcpy_s(m_tChannelFile.szName, m_szName);
+   
     m_tChannelFile.iBoneIndex = m_iBoneIndex;
 
     m_tChannelFile.iNumKeyFrames = m_iNumKeyFrames;

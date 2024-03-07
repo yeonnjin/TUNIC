@@ -16,6 +16,9 @@ HRESULT CAnimation::Initialize(const aiAnimation* pAIAnimation, const vector<cla
     /* 이 애니메이션은 몇 개의 뼈를 컨트롤 해야하는지 */
     m_iNumChannels = pAIAnimation->mNumChannels;
 
+    /* 각 채널의 CurrentKeyFrame을 0으로 초기화 */
+    m_CurrentKeyFrameIndices.resize(m_iNumChannels);
+
     for (size_t i = 0; i < m_iNumChannels; ++i)
     {
         CChannel* pChannel = CChannel::Create(pAIAnimation->mChannels[i], Bones);
@@ -28,15 +31,45 @@ HRESULT CAnimation::Initialize(const aiAnimation* pAIAnimation, const vector<cla
     return S_OK;
 }
 
-void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones)
+void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
 {
+    m_isFinished = false;
+
     m_fTrackPosition += m_fTicksPerSecond * fTimeDelta;
 
-    for (auto* pChannel : m_Channels)
+    if (m_fDuration <= m_fTrackPosition)
+    {
+        // 반복 상태가 아닐 때
+        if (false == isLoop)
+        {
+            m_isFinished = true;
+            return;
+        }
+
+        // 반복 상태일 때 초기화
+        m_fTrackPosition = 0.f;
+    }
+
+    for (_uint i = 0; i < m_iNumChannels; ++i)
     {
         /* 이 뼈의 생태 행렬을 만들어서 CBone의 TransformationMatrix를 바꿈 */
-        pChannel->Invalidate_TransformationMatrix(Bones, m_fTrackPosition);
+        m_Channels[i]->Invalidate_TransformationMatrix(Bones, m_fTrackPosition, &m_CurrentKeyFrameIndices[i]);
     }
+}
+
+HRESULT CAnimation::Ready_AnimFile()
+{
+    m_tAnimFile.szName = m_szName;
+
+    m_tAnimFile.fDuration = m_fDuration;
+    m_tAnimFile.fTicksPerSecond = m_fTicksPerSecond;
+    m_tAnimFile.fTrackPosition = m_fTrackPosition;
+
+    m_tAnimFile.iNumChannels = m_iNumChannels;
+    m_tAnimFile.Channels = m_Channels;
+    m_tAnimFile.CurrentKeyFrameIndices = m_CurrentKeyFrameIndices;
+
+    return S_OK;
 }
 
 CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones)
@@ -53,10 +86,22 @@ CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const vector<cla
     return pInstance;
 }
 
+CAnimation* CAnimation::Clone()
+{
+    CAnimation* pInstance = new CAnimation(*this);
+    pInstance->Set_Cloned();
+    return pInstance;
+}
+
 void CAnimation::Free()
 {
-    for (auto& pChannel : m_Channels)
-        Safe_Release(pChannel);
+    __super::Free();
 
-    m_Channels.clear();
+    if (!m_isCloned)
+    {
+        for (auto& pChannel : m_Channels)
+            Safe_Release(pChannel);
+
+        m_Channels.clear();
+    }
 }

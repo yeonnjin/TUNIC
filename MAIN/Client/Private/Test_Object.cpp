@@ -29,29 +29,53 @@ HRESULT CTest_Object::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+    m_pModelCom->Set_Animation(0, true);
+
+    if (nullptr != pArg)
+    {
+        TEST_DESC* pDesc = (TEST_DESC*)pArg;
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+    }
+
     return S_OK;
 }
 
 void CTest_Object::Tick(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+    /*if (true == m_pModelCom->isFinished())
+        int a = 10;*/
+    static _uint iIndex = 0;
+    if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+    {
+        iIndex++;
+        m_pModelCom->Set_Animation(iIndex, true);
+    }
 }
 
 void CTest_Object::Late_Tick(_float fTimeDelta)
 {
+    m_pModelCom->Play_Animation(fTimeDelta);
+
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 
 HRESULT CTest_Object::Render()
 {
-    if (FAILED(Bind_ShaderMatrix()))
+    if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
 
     _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
-        m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, aiTextureType_DIFFUSE);
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, aiTextureType_DIFFUSE)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
+            return E_FAIL;
 
         if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
@@ -65,7 +89,7 @@ HRESULT CTest_Object::Render()
 HRESULT CTest_Object::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Shader_VtxMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
@@ -73,11 +97,17 @@ HRESULT CTest_Object::Add_Components()
     if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
+    /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fox"),
+        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;*/
+    /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Rock"),
+        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;*/
 
     return S_OK;
 }
 
-HRESULT CTest_Object::Bind_ShaderMatrix()
+HRESULT CTest_Object::Bind_ShaderResources()
 {
     if (nullptr == m_pShaderCom)
         return E_FAIL;
@@ -89,6 +119,9 @@ HRESULT CTest_Object::Bind_ShaderMatrix()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
+
+    //if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
+    //    return E_FAIL;
 
     return S_OK;
 }

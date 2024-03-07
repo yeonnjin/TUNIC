@@ -12,7 +12,7 @@ private:
 	virtual ~CTexture() = default;
 
 public:
-	_tchar* Get_TextureFile() { return m_szTextureFilePath; }
+	MATERIALFILE* Get_MaterialFile() { return &m_tMaterialFile; }
 
 public:
 	virtual HRESULT Initialize_Prototype(const wstring& strTextureFilePath, _uint iNumTextures);
@@ -25,7 +25,7 @@ private:
 	vector<ID3D11ShaderResourceView*>	m_Textures;
 	_uint								m_iNumTextures = { 0 };
 
-	_tchar								m_szTextureFilePath[MAX_PATH] = { L"" };
+	MATERIALFILE						m_tMaterialFile = {};
 
 public:
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strTextureFilePath, _uint iNumTexture = 1);

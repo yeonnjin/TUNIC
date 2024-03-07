@@ -45,6 +45,11 @@ public:
 
 	void Set_Scaled(_float fScaleX, _float fScaleY, _float fScaleZ);
 
+	void Set_WorldMatrix(_float4x4 matrix)
+	{
+		memcpy(&m_WorldMatrix, &matrix, sizeof(_float4x4));
+	}
+
 	// Get
 	_vector Get_State_Vector(STATE eState) {
 		return XMLoadFloat4x4(&m_WorldMatrix).r[eState];

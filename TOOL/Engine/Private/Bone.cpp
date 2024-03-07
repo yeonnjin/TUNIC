@@ -31,7 +31,7 @@ void CBone::Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones,
 
 HRESULT CBone::Ready_BoneFile()
 {
-    m_tBoneFile.szName = m_szName;
+    strcpy_s(m_tBoneFile.szName, m_szName);
 
     m_tBoneFile.TransformationMatrix = m_TransformationMatrix;
 

@@ -11,6 +11,9 @@
 //#include "Sky.h"
 #include "Model.h"
 
+
+#include "Test_Object.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext}
@@ -106,7 +109,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* Prototype_Component_Texture_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile%d.dds"), 2))))
 		return E_FAIL;
 
 	///* Prototype_Component_Texture_Player */
@@ -139,10 +142,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 	_matrix		TransformMatrix = XMMatrixIdentity();
 
-	/* For.Prototype_Component_Model_Fiona */
+	///* For.Prototype_Component_Model_Fiona */
+	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
+	//	return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fox */
 	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fox"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fox/fox.fbx", TransformMatrix))))
 		return E_FAIL;
 
 	/* Prototype_Component_Model_ForkLift */

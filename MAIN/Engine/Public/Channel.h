@@ -16,7 +16,7 @@ private:
 
 public:
 	HRESULT Initialize(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones);
-	void	Invalidate_TransformationMatrix(const vector<class CBone*>& Bones, _float fTrackPosition);
+	void	Invalidate_TransformationMatrix(const vector<class CBone*>& Bones, _float fTrackPosition, _uint* pCurrentKeyFrameIndex);
 
 private:
 	_char				m_szName[MAX_PATH] = { "" };
@@ -24,7 +24,11 @@ private:
 
 	_uint				m_iNumKeyFrames = { 0 };
 	vector<KEYFRAME>	m_KeyFrames;
-	_uint				m_iCurrentKeyFrame = { 0 };		// 현재 뼈는 어떤 키 프레임을 취해야 하는가?
+
+	CHANNELFILE			m_tChannelFile = {};
+
+private:
+	HRESULT				Ready_ChannelFile();
 
 public:
 	static CChannel* Create(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones);

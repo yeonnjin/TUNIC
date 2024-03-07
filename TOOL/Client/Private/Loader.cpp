@@ -233,7 +233,7 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	m_strLoadingText = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 	/* Prototype_Component_Texture_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile%d.dds"), 2))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
@@ -244,17 +244,17 @@ HRESULT CLoader::Loading_For_Tool_Map()
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 	_matrix		TransformMatrix = XMMatrixIdentity();
-	/* For.Prototype_Component_Model_Fiona */
+	///* For.Prototype_Component_Model_Fiona */
 	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
 		return E_FAIL;
 
-	///* For.Prototype_Component_Model_Fox */
-	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fox"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", TransformMatrix))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Model_Fox */
+	/*TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", TransformMatrix))))
+		return E_FAIL;*/
 
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");
 	/* For.Prototype_Component_Shader_VtxPosNorTex */

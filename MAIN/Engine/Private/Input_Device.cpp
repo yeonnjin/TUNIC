@@ -24,6 +24,26 @@ _bool CInput_Device::Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState)
 	return (m_eKeyState[byKeyID] == eState);
 }
 
+_bool CInput_Device::Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState)
+{
+	if (m_tMouseState.rgbButtons[eMouseID] != 0)
+	{
+		if (m_eMouseState[eMouseID] == KEY_FREE)
+			m_eMouseState[eMouseID] = KEY_DOWN;
+		else
+			m_eMouseState[eMouseID] = KEY_PRESS;
+	}
+	else
+	{
+		if (m_eMouseState[eMouseID] == KEY_DOWN || m_eMouseState[eMouseID] == KEY_PRESS)
+			m_eMouseState[eMouseID] = KEY_UP;
+		else
+			m_eMouseState[eMouseID] = KEY_FREE;
+	}
+
+	return (m_eMouseState[eMouseID] == eState);
+}
+
 HRESULT CInput_Device::Initialize(HINSTANCE hInst, HWND hWnd)
 {
 	// DInput 컴객체를 생성하는 함수

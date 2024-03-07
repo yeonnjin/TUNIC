@@ -64,8 +64,11 @@ HRESULT CChannel::Initialize(const aiNodeAnim* pAIChannel, const vector<class CB
     return S_OK;
 }
 
-void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones, _float fTrackPosition)
+void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones, _float fTrackPosition, _uint* pCurrentKeyFrameIndex)
 {
+    if (0.f == fTrackPosition)
+        (*pCurrentKeyFrameIndex) = 0;
+
     KEYFRAME    tKeyFrame = m_KeyFrames.back();
 
     _float3     vScale;
@@ -83,17 +86,17 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
     else
     {
         // 정확한 CurrentKeyFrame 찾아주기
-        if (fTrackPosition >= m_KeyFrames[m_iCurrentKeyFrame].fTime)
-            ++m_iCurrentKeyFrame;
+        while (fTrackPosition >= m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].fTime)
+            ++(*pCurrentKeyFrameIndex);
 
         // 앞 뒤 KeyFrame의 Time 사이에서 얼마나 지났는지 비율을 구함
-        _float  fRatio =  (fTrackPosition - m_KeyFrames[m_iCurrentKeyFrame].fTime)
-                        / (m_KeyFrames[m_iCurrentKeyFrame + 1].fTime - m_KeyFrames[m_iCurrentKeyFrame].fTime);
+        _float  fRatio =  (fTrackPosition - m_KeyFrames[(*pCurrentKeyFrameIndex)].fTime)
+                        / (m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].fTime - m_KeyFrames[(*pCurrentKeyFrameIndex)].fTime);
 
         // 선형보간
-        XMStoreFloat3(&vScale, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[m_iCurrentKeyFrame].vScale), XMLoadFloat3(&m_KeyFrames[m_iCurrentKeyFrame + 1].vScale), fRatio));
-        XMStoreFloat4(&vRotation, XMQuaternionSlerp(XMLoadFloat4(&m_KeyFrames[m_iCurrentKeyFrame].vRotation), XMLoadFloat4(&m_KeyFrames[m_iCurrentKeyFrame + 1].vRotation), fRatio));
-        XMStoreFloat3(&vTranslation, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[m_iCurrentKeyFrame].vTranslation), XMLoadFloat3(&m_KeyFrames[m_iCurrentKeyFrame + 1].vTranslation), fRatio));
+        XMStoreFloat3(&vScale, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vScale), XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vScale), fRatio));
+        XMStoreFloat4(&vRotation, XMQuaternionSlerp(XMLoadFloat4(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vRotation), XMLoadFloat4(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vRotation), fRatio));
+        XMStoreFloat3(&vTranslation, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vTranslation), XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vTranslation), fRatio));
     }
 
     // 스 * 자 * 이 행렬
@@ -101,6 +104,18 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
 
     // Bone의 TransformationMatrix 세팅
     Bones[m_iBoneIndex]->Set_TransformationMatrix(TransformationMatrix);
+}
+
+HRESULT CChannel::Ready_ChannelFile()
+{
+    m_tChannelFile.szName = m_szName;
+
+    m_tChannelFile.iBoneIndex = m_iBoneIndex;
+
+    m_tChannelFile.iNumKeyFrames = m_iNumKeyFrames;
+    m_tChannelFile.KeyFrames = m_KeyFrames;
+
+    return S_OK;
 }
 
 CChannel* CChannel::Create(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones)

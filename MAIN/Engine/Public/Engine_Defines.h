@@ -13,9 +13,6 @@
 #include "Effects11/d3dx11effect.h"
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
-#include "assimp\scene.h"
-#include "assimp\Importer.hpp"
-#include "assimp\postprocess.h"
 
 using namespace DirectX;
 
@@ -30,10 +27,12 @@ namespace Engine
 {
 	const wstring g_strTransformTag = TEXT("Com_Transform");
 
-	enum MOUSEKEYSTATE { DIMKS_LBUTTON, DIMKS_RBUTTON, DIMKS_WHEEL, DIMKS_X, DIMKS_END };
+	enum MOUSEID { DIMKS_LBUTTON, DIMKS_RBUTTON, DIMKS_WHEEL, DIMKS_X, DIMKS_END };
 	enum MOUSEMOVESTATE { DIMMS_X, DIMMS_Y, DIMMS_WHEEL, DIMMS_END };
 	enum KEYSTATE { KEY_FREE = 0, KEY_DOWN, KEY_PRESS, KEY_UP, KEY_END };
 }
+
+#define AI_TEXTURE_TYPE_MAX 21
 
 #include "Engine_Macro.h"
 #include "Engine_Function.h"

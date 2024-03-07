@@ -7,6 +7,8 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include <fstream>
+
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CComponent{ pDevice, pContext }
 {
@@ -23,6 +25,7 @@ CModel::CModel(const CModel& rhs)
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
 	//, m_pModelFile{ rhs.m_pModelFile }
 	, m_tModelFile{ rhs.m_tModelFile }
+	, m_MaterialFiles{ rhs.m_MaterialFiles }
 {
 	// ±Ì¿∫ ∫πªÁ
 	for (auto& pPrototypeAnimation : rhs.m_Animations)
@@ -79,6 +82,15 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
 		return E_FAIL;
 
     return S_OK;
+}
+
+HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile/*const _char* strDataFilePath*/)
+{
+	
+
+
+
+	return S_OK;
 }
 
 HRESULT CModel::Initialize(void* pArg)
@@ -145,7 +157,6 @@ _bool CModel::Check_Picking(const class CTransform* pTransform) const
 
 		if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
 			return true;
-
 	}
 
 	return false;
@@ -212,6 +223,12 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 			MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
 			if (nullptr == MeshMaterial.MaterialTextures[j])
 				return E_FAIL;
+
+			MATERIALFILE tMaterialFile = {};
+			strcpy_s(tMaterialFile.szTexturePath, strTextureFilePath.C_Str());
+			tMaterialFile.iTextureIndex = j;
+
+			m_MaterialFiles.push_back(tMaterialFile);			
 		}
 
 		m_Materials.push_back(MeshMaterial);
@@ -258,23 +275,41 @@ HRESULT CModel::Ready_ModelFile()
 {
 	// Mesh	
 	m_tModelFile.iNumMeshes = m_iNumMeshes;
-	m_tModelFile.Meshes = m_Meshes;
+	for(size_t i = 0 ; i < m_iNumMeshes; ++i)
+		m_tModelFile.Meshes.push_back(*m_Meshes[i]->Get_MeshFile());
 
 	// Material
 	m_tModelFile.iNumMaterials = m_iNumMaterials;
-	m_tModelFile.Materials = m_Materials;
+	m_tModelFile.Materials = m_MaterialFiles;
+	//for (size_t i = 0; i < m_iNumMaterials; ++i)
+	//{
+	//	//m_tModelFile.Materials.push_back(*m_Materials[i].MaterialTextures);
+	//	for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
+	//	{
+	//		if (nullptr == m_Materials[i].MaterialTextures[j])
+	//			continue;
 
+	//		m_tModelFile.Materials.push_back(m_tMaterialFile);
+	//		//m_tModelFile.Materials[j] = *m_Materials[i].MaterialTextures[j]->Get_MaterialFile();
+	//	}		
+	//}
 	// Bone
 	m_tModelFile.TransformMatrix = m_TransformMatrix;
-	m_tModelFile.Bones = m_Bones;
+
+	m_tModelFile.iNumBones = m_Bones.size();
+	for (size_t i = 0; i < m_Bones.size(); ++i)
+		m_tModelFile.Bones.push_back(*m_Bones[i]->Get_BoneFile());
 
 	// Animation
 	m_tModelFile.iNumAnimations = m_iNumAnimations;
 	m_tModelFile.iCurrentAnimIndex = m_iCurrentAnimIndex;
 	m_tModelFile.isLoop = m_isLoop;
-	m_tModelFile.Animations = m_Animations;
 
-	m_tModelFile.MeshBoneMatrices = m_MeshBoneMatrices;
+	for (size_t i = 0; i < m_iNumAnimations; ++i)
+		m_tModelFile.Animations.push_back(*m_Animations[i]->Get_AnimFile());
+
+	for (size_t i = 0; i < 512; ++i)
+		m_tModelFile.MeshBoneMatrices[i] = m_MeshBoneMatrices[i];
 
 	return S_OK;
 }

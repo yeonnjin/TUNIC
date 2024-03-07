@@ -217,7 +217,7 @@
       <Filter>01. Utility\06. Picking</Filter>
     </ClCompile>
     <ClCompile Include="..\ImGui\imgui_tables.cpp">
-      <Filter>99. Defines</Filter>
+      <Filter>98. ImGui\Etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

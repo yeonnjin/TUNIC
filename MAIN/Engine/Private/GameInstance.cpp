@@ -7,6 +7,7 @@
 #include "Timer_Manager.h"
 
 #include "Renderer.h"
+#include "Picking.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -42,7 +43,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pLevel_Manager)
 		return E_FAIL;
 
-	
+	m_pPicking = CPicking::Create(EngineDesc.hWnd, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY);
+	if (nullptr == m_pPicking)
+		return E_FAIL;
 
 	/* 인풋 디바이스를 초기화 */
 	m_pInput_Device = CInput_Device::Create(hInstance, EngineDesc.hWnd);
@@ -76,6 +79,8 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pObject_Manager->Tick(fTimeDelta);
 
 	m_pPipeLine->Tick();
+
+	m_pPicking->Update();
 
 	m_pObject_Manager->Late_Tick(fTimeDelta);
 	
@@ -132,12 +137,12 @@ _bool CGameInstance::Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState)
 	return m_pInput_Device->Get_DIKeyState(byKeyID, eState);
 }
 
-_byte CGameInstance::Get_DIMouseState(MOUSEKEYSTATE eMouse)
+_bool CGameInstance::Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState)
 {
 	if (nullptr == m_pInput_Device)
 		return 0;
 
-	return m_pInput_Device->Get_DIMouseState(eMouse);
+	return m_pInput_Device->Get_DIMouseState(eMouseID, eState);
 }
 
 _long CGameInstance::Get_DIMouseMove(MOUSEMOVESTATE eMouseState)
@@ -189,6 +194,14 @@ const CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring
 		return nullptr;
 
 	return m_pObject_Manager->Get_Component(iLevelIndex, strLayerTag, strComTag, iIndex);
+}
+
+_uint CGameInstance::Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag)
+{
+	if (nullptr == m_pObject_Manager)
+		return 0;
+
+	return m_pObject_Manager->Get_Object_Count(iLevelIndex, strLayerTag);
 }
 
 /* For.Component_Manager */
@@ -282,6 +295,12 @@ _float4 CGameInstance::Get_CamPosition_Float4() const
 	return m_pPipeLine->Get_CamPosition_Float4();
 }
 
+/* For.Picking */
+void CGameInstance::Transform_Picking_To_LocalSpace(const CTransform* pTransform, _float3* pRayDir, _float3* pRayPos)
+{
+	m_pPicking->Transform_Picking_To_LocalSpace(pTransform, pRayDir, pRayPos);
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Free();
@@ -291,9 +310,12 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {	
+	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);	
+	Safe_Release(m_pPicking);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);

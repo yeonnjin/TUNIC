@@ -16,6 +16,15 @@ const CComponent * CObject_Manager::Get_Component(_uint iLevelIndex, const wstri
 	return pLayer->Get_Component(strComTag, iIndex);	
 }
 
+_uint CObject_Manager::Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+	if (nullptr == pLayer)
+		return 0;
+
+	return pLayer->Get_Object_Count();
+}
+
 HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 {
 	m_iNumLevels = iNumLevels;

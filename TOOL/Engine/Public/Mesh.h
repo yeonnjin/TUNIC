@@ -53,7 +53,7 @@ private:
 	MESHFILE			m_tMeshFile;
 
 private:
-	HRESULT	Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix);
+	HRESULT Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix);
 	HRESULT Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<CBone*>& Bones);
 	HRESULT Ready_MeshFile();
 

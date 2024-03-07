@@ -36,6 +36,7 @@ public:
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix);
+	HRESULT			Initialize_Prototype(TYPE eType, MODELFILE* pModelFile/*const _char* strDataFilePath*/);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -54,6 +55,7 @@ private:
 	//_char						m_szName[MAX_PATH] = { "" };
 	/*MODELFILE*					m_pModelFile;*/
 	MODELFILE					m_tModelFile;
+	vector<MATERIALFILE>		m_MaterialFiles;
 
 private: 
 	// Mesh	
