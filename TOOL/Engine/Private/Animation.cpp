@@ -69,7 +69,7 @@ HRESULT CAnimation::Ready_AnimFile()
     for (size_t i = 0; i < m_iNumChannels; ++i)
         m_tAnimFile.Channels.push_back(*m_Channels[i]->Get_ChannelFile());
 
-    m_tAnimFile.CurrentKeyFrameIndices = m_CurrentKeyFrameIndices;
+    //m_tAnimFile.CurrentKeyFrameIndices = m_CurrentKeyFrameIndices;
 
     return S_OK;
 }

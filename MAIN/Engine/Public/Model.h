@@ -32,13 +32,12 @@ public:
 	}
 
 public:
-	//virtual HRESULT Initialize_Prototype(TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix);
 	HRESULT Initialize_Prototype(TYPE eType, MODELFILE* pModelFile);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
 	HRESULT Bind_BoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
-	//HRESULT	Bind_ShaderResource(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex, aiTextureType eTextureType);
+	HRESULT	Bind_ShaderResource(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex, AITEXTURETYPE eTextureType);
 	HRESULT Play_Animation(_float fTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 
@@ -67,9 +66,9 @@ private:
 	_float4x4					m_MeshBoneMatrices[512];
 
 private:
-	HRESULT Ready_Meshes();
+	HRESULT Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile);
 	HRESULT Ready_Materials(const _char* pModelFilePath);
-	//HRESULT Ready_Bones(aiNode* pAINode, _int iParentIndex = -1);
+	HRESULT Ready_Bones(_uint iNumBones, vector<BONEFILE>& pBoneFile);
 	HRESULT Ready_Animations();
 	HRESULT Ready_ModelFile();
 

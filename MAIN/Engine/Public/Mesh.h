@@ -20,7 +20,7 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<CBone*>& Bones, _fmatrix TransformMatrix);
+	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bones/*, _fmatrix TransformMatrix*/);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -50,11 +50,11 @@ private:
 	vector<_uint>	m_Bones;
 
 private:
-	HRESULT	Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix);
-	HRESULT Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<CBone*>& Bones);
+	HRESULT	Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile);
+	HRESULT Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CBone*>& Bones);
 
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<class CBone*>& Bones, _fmatrix TransformMatrix);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

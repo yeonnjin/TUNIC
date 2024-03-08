@@ -23,7 +23,7 @@ public:
 	}
 	
 public:
-	HRESULT Initialize(const aiNode* pAINode, _int iParentIndex);
+	HRESULT Initialize(BONEFILE* pBoneFile);
 	void	Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix TransformationMatrix);
 	_bool	Compare_Name(const _char* pBoneName) {
 		return !strcmp(m_szName, pBoneName);
@@ -38,7 +38,7 @@ private:
 	_int			m_iParentBoneIndex = { -1 };
 
 public:
-	static CBone* Create(const aiNode* pAINode, _int  iParentIndex);
+	static CBone* Create(BONEFILE* pBoneFile);
 	CBone* Clone();
 	virtual void Free() override;
 };

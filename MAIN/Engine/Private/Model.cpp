@@ -40,48 +40,28 @@ CModel::CModel(const CModel& rhs)
 	}
 }
 
-//HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix)
-//{
-//	///* Type 별 옵션 설정 : NONANIM 일 경우 옵션 적용 */
-//	//m_eModelType = eType;
-//	//_uint iOption = { aiProcessPreset_TargetRealtime_Fast | aiProcess_ConvertToLeftHanded };
-//	//iOption = m_eModelType == TYPE_NONANIM ? iOption | aiProcess_PreTransformVertices : iOption;
-//
-//	///* 파일의 정보를 읽어서 aiScene 안에 모든 데이터 저장 */
-// //   m_pAIScene = m_Importer.ReadFile(strModelFilePath.c_str(), iOption);
-// //   if (nullptr == m_pAIScene)
-// //       return E_FAIL;
-//	//
-//	///* 최초 상태 변환 행렬 저장 */
-//	//XMStoreFloat4x4(&m_TransformMatrix, TransformMatrix);
-//
-// //  // 읽은 정보를 바탕으로 재정리
-//
-//	///* 이름 저장 */
-//	////strcpy_s(m_szName, m_pAIScene->mName.data);
-//
-//	///* 전체 뼈 생성 */
-//	//if (FAILED(Ready_Bones(m_pAIScene->mRootNode)))
-//	//	return E_FAIL;
-//
-//	///* 모델을 구성하는 메쉬 생성 */
-//	//if (FAILED(Ready_Meshes()))
-//	//	return E_FAIL;
-//
-//	///* 머테리얼 생성 */
-//	//if (FAILED(Ready_Materials(strModelFilePath.c_str())))
-//	//	return E_FAIL;
-//
-//	///* 애니메이션 생성 */
-//	//if (FAILED(Ready_Animations()))
-//	//	return E_FAIL;
-//
-//    return S_OK;
-//}
-
 HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 {
+	if (nullptr == pModelFile)
+		return E_FAIL;
+
 	m_eModelType = eType;
+
+	/* 전체 뼈 생성 */
+	if (FAILED(Ready_Bones(pModelFile->iNumBones, pModelFile->Bones)))
+		return E_FAIL;
+
+	/* 모델을 구성하는 메쉬 생성 */
+	if (FAILED(Ready_Meshes(pModelFile->iNumMeshes, pModelFile->Meshes)))
+		return E_FAIL;
+
+	/* 머테리얼 생성 */
+	if (FAILED(Ready_Materials(strModelFilePath.c_str())))
+		return E_FAIL;
+
+	/* 애니메이션 생성 */
+	if (FAILED(Ready_Animations()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -113,26 +93,26 @@ _bool CModel::Check_Picking(const CTransform* pTransform) const
 	return false;
 }
 
-//HRESULT CModel::Bind_ShaderResource(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, aiTextureType eTextureType)
-//{
-//	if (iMeshIndex >= m_iNumMeshes)
-//		return E_FAIL;
-//
-//	// 바인드 할 메쉬의 머테리얼 인덱스
-//	_uint iMeshMaterialIndex = { m_Meshes[iMeshIndex]->Get_MaterialIndex() };
-//
-//	if (iMeshMaterialIndex >= m_iNumMaterials)
-//		return E_FAIL;
-//
-//	// 해당 머테리얼 인덱스에 해당하는 구조체에서 원하는 타입의 텍스쳐 클래스 주소 받아옴
-//	// m_Materials : vector<MESH_MATERIAL>;
-//	// MESH_MATERIAL : class CTexture* MaterialTextures[AI_TEXTURE_TYPE_MAX];
-//	CTexture* pTexture = { m_Materials[iMeshMaterialIndex].MaterialTextures[eTextureType] };
-//	if(nullptr != pTexture)
-//		pTexture->Bind_ShaderResource(pShader, pConstantName);
-//
-//	return S_OK;
-//}
+HRESULT CModel::Bind_ShaderResource(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, AITEXTURETYPE eTextureType)
+{
+	if (iMeshIndex >= m_iNumMeshes)
+		return E_FAIL;
+
+	// 바인드 할 메쉬의 머테리얼 인덱스
+	_uint iMeshMaterialIndex = { m_Meshes[iMeshIndex]->Get_MaterialIndex() };
+
+	if (iMeshMaterialIndex >= m_iNumMaterials)
+		return E_FAIL;
+
+	// 해당 머테리얼 인덱스에 해당하는 구조체에서 원하는 타입의 텍스쳐 클래스 주소 받아옴
+	// m_Materials : vector<MESH_MATERIAL>;
+	// MESH_MATERIAL : class CTexture* MaterialTextures[AI_TEXTURE_TYPE_MAX];
+	CTexture* pTexture = { m_Materials[iMeshMaterialIndex].MaterialTextures[eTextureType] };
+	if(nullptr != pTexture)
+		pTexture->Bind_ShaderResource(pShader, pConstantName);
+
+	return S_OK;
+}
 
 HRESULT CModel::Play_Animation(_float fTimeDelta)
 {
@@ -155,9 +135,9 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Meshes()
+HRESULT CModel::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile)
 {
-	/*m_iNumMeshes = m_pAIScene->mNumMeshes;
+	m_iNumMeshes = iNumMeshes;
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
@@ -224,23 +204,19 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 	return S_OK;
 }
 
-//HRESULT CModel::Ready_Bones(aiNode* pAINode, _int iParentIndex)
-//{
-//	CBone* pBone = CBone::Create(pAINode, iParentIndex);
-//	if (nullptr == pBone)
-//		return E_FAIL;
-//
-//	m_Bones.push_back(pBone);
-//
-//	_int iParent = m_Bones.size() - 1;
-//
-//	for (size_t i = 0; i < pAINode->mNumChildren; ++i)
-//	{
-//		Ready_Bones(pAINode->mChildren[i], iParent);
-//	}
-//
-//	return S_OK;
-//}
+HRESULT CModel::Ready_Bones(_uint iNumBones, vector<BONEFILE>& pBoneFile)
+{
+	for (size_t i = 0; i < iNumBones; ++i)
+	{
+		CBone* pBone = CBone::Create(&pBoneFile[i]);
+		if (nullptr == pBone)
+			return E_FAIL;
+
+		m_Bones.push_back(pBone);
+	}
+
+	return S_OK;
+}
 
 HRESULT CModel::Ready_Animations()
 {

@@ -74,46 +74,30 @@ namespace Engine
 	/* File */
 	typedef struct ENGINE_DLL
 	{
-		// Mesh	
-		_uint						iNumMeshes = { 0 };
-		vector<class CMesh*>		Meshes;
+		_char						szName[MAX_PATH];
 
-		// Material
-		_uint						iNumMaterials = { 0 };
-		vector<MESH_MATERIAL>		Materials;
+		_int						iBoneIndex = { -1 };
 
-		// Bone
-		_float4x4					TransformMatrix;
-		// _uint iNumBones;
-		vector<class CBone*>		Bones;
-
-		// Animation
-		_uint						iNumAnimations = { 0 };
-		_uint						iCurrentAnimIndex = { 0 };
-		_bool						isLoop = { false };
-		vector<class CAnimation*>	Animations;
-		
-		_float4x4*					MeshBoneMatrices; // [512]
-	}MODELFILE;
+		_uint						iNumKeyFrames = { 0 };
+		vector<KEYFRAME>			KeyFrames;
+	}CHANNELFILE;
 
 	typedef struct ENGINE_DLL
 	{
-		_char*						szName = { "" };
+		_char						szName[MAX_PATH];
 
-		_uint						iMaterialIndex = { 0 };
+		_float						fDuration = { 0.f };
+		_float						fTicksPerSecond = { 0.f };
+		_float						fTrackPosition = { 0.f };
 
-		_uint						iNumFaces = { 0 };
-
-		_uint						iNumBones = { 0 };
-		vector<_uint>				Bones;
-
-		_uint						iNumOffsetMatrices = { 0 };
-		vector<_float4x4>			OffsetMatrices;
-	}MESHFILE;
+		_uint						iNumChannels = { 0 };
+		vector<CHANNELFILE>			Channels;
+		vector<_uint>				CurrentKeyFrameIndices;
+	}ANIMFILE;
 
 	typedef struct ENGINE_DLL
 	{
-		_char*						szName = { "" };
+		_char						szName[MAX_PATH];
 
 		_float4x4					TransformationMatrix;
 
@@ -122,24 +106,54 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
-		_char*						szName = { "" };
+		_char						szTexturePath[MAX_PATH];
 
-		_float						fDuration = { 0.f };			
-		_float						fTicksPerSecond = { 0.f };	
-		_float						fTrackPosition = { 0.f };		
-
-		_uint						iNumChannels = { 0 };
-		vector<class CChannel*>		Channels;
-		vector<_uint>				CurrentKeyFrameIndices;
-	}ANIMFILE;
+		_uint						iTextureIndex;
+	}MATERIALFILE;
 
 	typedef struct ENGINE_DLL
 	{
-		_char*						szName = { "" };
+		_char						szName[MAX_PATH];
 
-		_int						iBoneIndex = { -1 };
+		_uint						iMaterialIndex = { 0 };
 
-		_uint						iNumKeyFrames = { 0 };
-		vector<KEYFRAME>			KeyFrames;
-	}CHANNELFILE;
+		_uint						iNumFaces = { 0 };
+
+		_uint						iNumBones = { 0 };
+		vector<_uint>				Bones;
+
+		_uint						iNumVertices;
+		_float3*					pVerticesPos = { nullptr };
+		_uint						iNumIndices;
+		_uint*						pIndices = { nullptr };
+
+		_uint						iNumOffsetMatrices = { 0 };
+		vector<_float4x4>			OffsetMatrices;
+	}MESHFILE;
+
+	typedef struct ENGINE_DLL
+	{
+		// Mesh	
+		_uint						iNumMeshes = { 0 };
+		vector<MESHFILE>			Meshes;
+
+		// Material
+		_uint						iNumMaterials = { 0 };
+		vector<MATERIALFILE>		Materials;
+		//MATERIALFILE				Materials[AI_TEXTURE_TYPE_MAX];
+
+		// Bone
+		_float4x4					TransformMatrix;
+
+		_uint						iNumBones;
+		vector<BONEFILE>			Bones;
+
+		// Animation
+		_uint						iNumAnimations = { 0 };
+		_uint						iCurrentAnimIndex = { 0 };
+		_bool						isLoop = { false };
+		vector<ANIMFILE>			Animations;
+
+		_float4x4					MeshBoneMatrices[512] = {};
+	}MODELFILE;
 }

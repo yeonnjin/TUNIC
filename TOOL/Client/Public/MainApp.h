@@ -27,6 +27,8 @@ private:
 
 private:
 	HRESULT Ready_Default_Setting();
+	HRESULT Ready_Gara();
+
 	HRESULT Open_Level(LEVEL eLevelID);
 	HRESULT Ready_Prototype_Component_For_Static();
 

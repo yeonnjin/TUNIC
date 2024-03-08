@@ -4,15 +4,11 @@ CBone::CBone()
 {
 }
 
-HRESULT CBone::Initialize(const aiNode* pAINode, _int iParentIndex)
+HRESULT CBone::Initialize(BONEFILE* pBoneFile)
 {
-    m_iParentBoneIndex = iParentIndex;
-
-    strcpy_s(m_szName, pAINode->mName.data);
-
-    memcpy(&m_TransformationMatrix, &pAINode->mTransformation, sizeof(_float4x4));
-    // column 형식으로 저장되어 있는 매트릭스를 row 형식으로 전치 시켜줌
-    XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
+    m_iParentBoneIndex = pBoneFile->iParentBoneIndex;
+    strcpy_s(m_szName, pBoneFile->szName);
+    memcpy(&m_TransformationMatrix, &pBoneFile->TransformationMatrix, sizeof(_float4x4));
     XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
 
     return S_OK;
@@ -29,22 +25,11 @@ void CBone::Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones,
     }
 }
 
-HRESULT CBone::Ready_BoneFile()
-{
-    m_tBoneFile.szName = m_szName;
-
-    m_tBoneFile.TransformationMatrix = m_TransformationMatrix;
-
-    m_tBoneFile.iParentBoneIndex = m_iParentBoneIndex;
-
-    return S_OK;
-}
-
-CBone* CBone::Create(const aiNode* pAINode, _int iParentIndex)
+CBone* CBone::Create(BONEFILE* pBoneFile)
 {
     CBone* pInstance = new CBone();
 
-    if (FAILED(pInstance->Initialize(pAINode, iParentIndex)))
+    if (FAILED(pInstance->Initialize(pBoneFile)))
     {
         MSG_BOX(TEXT("Failed To Create : CBone"));
 

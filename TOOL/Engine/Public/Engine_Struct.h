@@ -92,7 +92,7 @@ namespace Engine
 
 		_uint						iNumChannels = { 0 };
 		vector<CHANNELFILE>			Channels;
-		vector<_uint>				CurrentKeyFrameIndices;
+		//vector<_uint>				CurrentKeyFrameIndices;
 	}ANIMFILE;
 
 	typedef struct ENGINE_DLL
@@ -101,7 +101,7 @@ namespace Engine
 
 		_float4x4					TransformationMatrix;
 
-		_int						iParentBoneIndex = { -1 };
+		_int						iParentBoneIndex;
 	}BONEFILE;
 
 	typedef struct ENGINE_DLL
@@ -122,7 +122,11 @@ namespace Engine
 		_uint						iNumBones = { 0 };
 		vector<_uint>				Bones;
 
-		_float3*					pVerticesPos = { nullptr };
+		_uint						iNumVertices;
+		VTXMESH*					pMeshVertices = { nullptr };
+		VTXANIMMESH*				pAnimMeshVertices = { nullptr };
+
+		_uint						iNumIndices;
 		_uint*						pIndices = { nullptr };
 
 		_uint						iNumOffsetMatrices = { 0 };
@@ -131,6 +135,9 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
+		// Type
+		_uint						iType;
+
 		// Mesh	
 		_uint						iNumMeshes = { 0 };
 		vector<MESHFILE>			Meshes;

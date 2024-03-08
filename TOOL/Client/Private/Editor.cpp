@@ -1,3 +1,5 @@
+
+
 #include "stdafx.h"
 #include "Editor.h"
 
@@ -275,103 +277,88 @@ HRESULT CEditor::Save_File()
 
 		MODELFILE* pModelFile = pObjectModel->Get_ModelFile();
 
+		// Type
+		_uint iType = pModelFile->iType;
+		fout.write(reinterpret_cast<char*>(&iType), sizeof(_uint));
+
+		// Mesh
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumMeshes), sizeof(_uint));
+		for (size_t j = 0; j < pModelFile->iNumMeshes; ++j)
+		{
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].szName), sizeof(_char) * MAX_PATH);
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].iMaterialIndex), sizeof(_uint));
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].iNumFaces), sizeof(_uint));
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].iNumBones), sizeof(_uint));
+			for (size_t k = 0; k < pModelFile->Meshes[j].iNumBones; ++k)
+				fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].Bones[k]), sizeof(_uint));
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].iNumVertices), sizeof(_uint));
+
+			if(CModel::TYPE_NONANIM == iType)
+				fout.write(reinterpret_cast<char*>(pModelFile->Meshes[j].pMeshVertices), sizeof(VTXMESH) * pModelFile->Meshes[j].iNumVertices);
+			else
+				fout.write(reinterpret_cast<char*>(pModelFile->Meshes[j].pAnimMeshVertices), sizeof(VTXANIMMESH) * pModelFile->Meshes[j].iNumVertices);
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].iNumIndices), sizeof(_uint));
+			fout.write(reinterpret_cast<char*>(pModelFile->Meshes[j].pIndices), sizeof(_uint) * pModelFile->Meshes[j].iNumIndices);
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].iNumOffsetMatrices), sizeof(_uint));
+			for (size_t k = 0; k < pModelFile->Meshes[j].iNumOffsetMatrices; ++k)
+				fout.write(reinterpret_cast<char*>(&pModelFile->Meshes[j].OffsetMatrices[k]), sizeof(_float4x4));
+		}
+
+		// Material
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumMaterials), sizeof(_uint));
+		for (size_t j = 0; j < pModelFile->iNumMaterials; ++j)
+			fout.write(reinterpret_cast<char*>(&pModelFile->Materials[j]), sizeof(MATERIALFILE));
+
+		// Bone
+		fout.write(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumBones), sizeof(_uint));
+		for (size_t j = 0; j < pModelFile->iNumBones; ++j)
+		{
+			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j].szName), sizeof(_char) * MAX_PATH);
+			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j].TransformationMatrix), sizeof(_float4x4));
+			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j].iParentBoneIndex), sizeof(_int));
+
+			/*BONEFILE tBoneFile = pModelFile->Bones[j];
+			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j]), sizeof(BONEFILE));*/
+		}
+			
+
+		// Animation
+		fout.write(reinterpret_cast<char*>(&pModelFile->iNumAnimations), sizeof(_uint));
+		fout.write(reinterpret_cast<char*>(&pModelFile->iCurrentAnimIndex), sizeof(_uint));
+		fout.write(reinterpret_cast<char*>(&pModelFile->isLoop), sizeof(_bool));
+		for (size_t j = 0; j < pModelFile->iNumAnimations; ++j)
+		{
+			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].szName), sizeof(_char) * MAX_PATH);
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].fDuration), sizeof(_float));
+			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].fTicksPerSecond), sizeof(_float));
+			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].fTrackPosition), sizeof(_float));
+
+			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].iNumChannels), sizeof(_uint));
+			for (size_t k = 0; k < pModelFile->Animations[j].iNumChannels; ++k)
+			{
+				fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].szName), sizeof(_char) * MAX_PATH);
+				fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].iBoneIndex), sizeof(_int));
+
+				fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].iNumKeyFrames), sizeof(_uint));
+				for (size_t l = 0; l < pModelFile->Animations[j].Channels[k].iNumKeyFrames; ++l)
+				{
+					fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].KeyFrames[l]), sizeof(KEYFRAME));
+				}
+			}
+		}
+
+		for (size_t j = 0; j < 512; ++j)
+			fout.write(reinterpret_cast<char*>(&pModelFile->MeshBoneMatrices[j]), sizeof(_float4x4));
+
 		int a = 0;
 	}
-
-
-
-
-#pragma region Prev
-	//// MODEL
-	//for (size_t i = 0; i < iObjectCount; ++i)
-	//{
-	//	CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Object"), TEXT("Com_Model"), i));
-	//	if (nullptr == pObjectModel)
-	//		return E_FAIL;
-
-	//	MODELFILE* pModelFile = pObjectModel->Get_ModelFile();
-
-	//	// Mesh	
-	//	fout.write(reinterpret_cast<char*>(&pModelFile->iNumMeshes), sizeof(_uint));
-
-	//	for (size_t i = 0; i < pModelFile->Meshes.size(); ++i)
-	//	{
-	//		MESHFILE* pMeshFile = pModelFile->Meshes[i]->Get_MeshFile();
-	//		fout.write(reinterpret_cast<char*>(&pMeshFile->szName), sizeof(_char) * MAX_PATH);
-	//		fout.write(reinterpret_cast<char*>(&pMeshFile->iMaterialIndex), sizeof(_uint));
-	//		fout.write(reinterpret_cast<char*>(&pMeshFile->iNumFaces), sizeof(_uint));
-
-	//		fout.write(reinterpret_cast<char*>(&pMeshFile->iNumBones), sizeof(_uint));
-	//		for (size_t j = 0; j < pMeshFile->Bones.size(); ++j)
-	//			fout.write(reinterpret_cast<char*>(&pMeshFile->Bones[j]), sizeof(_uint));
-
-	//		fout.write(reinterpret_cast<char*>(&pMeshFile->iNumOffsetMatrices), sizeof(_uint));
-	//		for (size_t j = 0; j < pMeshFile->OffsetMatrices.size(); ++j)
-	//			fout.write(reinterpret_cast<char*>(&pMeshFile->OffsetMatrices[j]), sizeof(_float4x4));
-	//	}
-
-	//	// Material
-	//	fout.write(reinterpret_cast<char*>(&pModelFile->iNumMaterials), sizeof(_uint));
-
-	//	for (size_t i = 0; i < pModelFile->Materials.size(); ++i)
-	//	{
-	//		for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
-	//		{
-	//			CTexture* pTexture = pModelFile->Materials[i].MaterialTextures[j];
-	//			
-	//			_tchar szPath[MAX_PATH] = { L"" };
-	//			if (nullptr != pTexture)
-	//				wsprintf(szPath, pTexture->Get_TextureFile());
-	//			fout.write(reinterpret_cast<char*>(&szPath), sizeof(_tchar) * MAX_PATH);
-	//		}
-	//	}
-
-	//	// Bone
-	//	fout.write(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
-	//	_uint iNumBones = pModelFile->Bones.size();
-	//	fout.write(reinterpret_cast<char*>(&iNumBones), sizeof(_uint));
-	//	for (size_t i = 0; i < pModelFile->Bones.size(); ++i)
-	//	{
-	//		BONEFILE* pBoneFile = pModelFile->Bones[i]->Get_BoneFile();
-	//		fout.write(reinterpret_cast<char*>(&pBoneFile->szName), sizeof(_char) * MAX_PATH);
-	//		fout.write(reinterpret_cast<char*>(&pBoneFile->TransformationMatrix), sizeof(_float4x4));
-	//		fout.write(reinterpret_cast<char*>(&pBoneFile->iParentBoneIndex), sizeof(_int));
-	//	}
-
-	//	// Animation
-	//	fout.write(reinterpret_cast<char*>(&pModelFile->iNumAnimations), sizeof(_uint));
-	//	fout.write(reinterpret_cast<char*>(&pModelFile->iCurrentAnimIndex), sizeof(_uint));
-	//	fout.write(reinterpret_cast<char*>(&pModelFile->isLoop), sizeof(_bool));
-	//	for (size_t i = 0; i < pModelFile->Animations.size(); ++i)
-	//	{
-	//		ANIMFILE* pAnimFile = pModelFile->Animations[i]->Get_AnimFile();
-	//		fout.write(reinterpret_cast<char*>(&pAnimFile->szName), sizeof(_char) * MAX_PATH);
-	//		fout.write(reinterpret_cast<char*>(&pAnimFile->fDuration), sizeof(_float));
-	//		fout.write(reinterpret_cast<char*>(&pAnimFile->fTicksPerSecond), sizeof(_float));
-	//		fout.write(reinterpret_cast<char*>(&pAnimFile->fTrackPosition), sizeof(_float));
-
-	//		fout.write(reinterpret_cast<char*>(&pAnimFile->iNumChannels), sizeof(_uint));
-
-	//		// Channel
-	//		for (size_t j = 0; j < pAnimFile->Channels.size(); ++j)
-	//		{
-	//			CHANNELFILE* pChannelFile = pAnimFile->Channels[j]->Get_ChannelFile();
-	//			fout.write(reinterpret_cast<char*>(&pChannelFile->szName), sizeof(_char) * MAX_PATH);
-	//			fout.write(reinterpret_cast<char*>(&pChannelFile->iBoneIndex), sizeof(_int));
-	//			fout.write(reinterpret_cast<char*>(&pChannelFile->iNumKeyFrames), sizeof(_uint));
-
-	//			// KeyFrame
-	//			for (size_t k = 0; k < pChannelFile->KeyFrames.size(); ++k)
-	//				fout.write(reinterpret_cast<char*>(&pChannelFile->KeyFrames[k]), sizeof(KEYFRAME));
-	//		}
-	//	}
-
-	//	for (size_t i = 0; i < 512; ++i)
-	//	{
-	//		fout.write(reinterpret_cast<char*>(&pModelFile->MeshBoneMatrices[i]), sizeof(_float4x4));
-	//	}
-	//}
-#pragma endregion
 
 	fout.close();
 
@@ -380,124 +367,155 @@ HRESULT CEditor::Save_File()
 
 HRESULT CEditor::Load_File()
 {
-	//ifstream fin;
-	//fin.open("../Bin/Resources/Data/Model/Model1.dat", ios::in | ios::binary);
+	ifstream fin;
+	fin.open("../Bin/Resources/Data/Model/Model1.dat", ios::in | ios::binary);
 
-	//_uint iObjectCount;
+	_uint iObjectCount;
+	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
+	for (size_t i = 0; i < iObjectCount; ++i)
+	{
+		MODELFILE tModelFile = {};
+		//ZeroMemory(pModelFile, sizeof(MODELFILE));
 
-	//fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
+		// Type
+		fin.read(reinterpret_cast<char*>(&tModelFile.iType), sizeof(_uint));
 
-	//// MODEL
-	//for (size_t i = 0; i < iObjectCount; ++i)
-	//{		
-	//	MODELFILE* pModelFile = new MODELFILE;
+		// Mesh
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMeshes), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+		{
+			MESHFILE tMeshFile{};
+			fin.read(reinterpret_cast<char*>(&tMeshFile.szName), sizeof(_char) * MAX_PATH);
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iMaterialIndex), sizeof(_uint));
 
-	//	// Mesh	
-	//	fin.read(reinterpret_cast<char*>(&pModelFile->iNumMeshes), sizeof(_uint));
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumFaces), sizeof(_uint));
 
-	//	for (size_t i = 0; i < pModelFile->iNumMeshes; ++i)
-	//	{
-	//		MESHFILE* pMeshFile = new MESHFILE;
-	//		//_char* szName;/* = new _char[MAX_PATH];*/
-	//		//_char* szName = new _char[MAX_PATH];
-	//		pMeshFile->szName = new _char[MAX_PATH];
-	//		fin.read(reinterpret_cast<char*>(&pMeshFile->szName), sizeof(_char) * MAX_PATH);
-	//		
-	//		//pMeshFile->szName = szName;
-	//		//strcpy_s(pMeshFile->szName, szTest);
-	//		fin.read(reinterpret_cast<char*>(&pMeshFile->iMaterialIndex), sizeof(_uint));
-	//		fin.read(reinterpret_cast<char*>(&pMeshFile->iNumFaces), sizeof(_uint));
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumBones), sizeof(_uint));
+			for (size_t k = 0; k < tMeshFile.iNumBones; ++k)
+			{
+				_uint	iBoneIndex{};
+				fin.read(reinterpret_cast<char*>(&iBoneIndex), sizeof(_uint));
+				tMeshFile.Bones.push_back(iBoneIndex);
+			}
 
-	//		fin.read(reinterpret_cast<char*>(&pMeshFile->iNumBones), sizeof(_uint));
-	//		for (size_t j = 0; j < pMeshFile->iNumBones; ++j)
-	//		{
-	//			_uint iBone = {};
-	//			fin.read(reinterpret_cast<char*>(&iBone), sizeof(_uint));
-	//			pMeshFile->Bones.push_back(iBone);
-	//		}
-	//		
-	//		fin.read(reinterpret_cast<char*>(&pMeshFile->iNumOffsetMatrices), sizeof(_uint));
-	//		for (size_t j = 0; j < pMeshFile->iNumOffsetMatrices; ++j)
-	//		{
-	//			_float4x4 OffsetMatrices = {};
-	//			fin.read(reinterpret_cast<char*>(&OffsetMatrices), sizeof(_float4x4));
-	//			pMeshFile->OffsetMatrices.push_back(OffsetMatrices);
-	//		}
-	//	}
+			_uint iNumVertices{};
+			fin.read(reinterpret_cast<char*>(&iNumVertices), sizeof(_uint));
+			tMeshFile.iNumVertices = iNumVertices;
 
-	//	// Material
-	//	fin.read(reinterpret_cast<char*>(&pModelFile->iNumMaterials), sizeof(_uint));
+			if (CModel::TYPE_NONANIM == tModelFile.iType)
+			{
+				tMeshFile.pMeshVertices = new VTXMESH[iNumVertices];
+				ZeroMemory(tMeshFile.pMeshVertices, sizeof(VTXMESH) * iNumVertices);
+				for (size_t k = 0; k < iNumVertices; ++k)
+				{
+					VTXMESH tMesh{};
+					fin.read(reinterpret_cast<char*>(&tMesh), sizeof(VTXMESH));
+					memcpy(&tMeshFile.pMeshVertices[k], &tMesh, sizeof(VTXMESH));
+				}
+			}
+			else
+			{
+				tMeshFile.pAnimMeshVertices = new VTXANIMMESH[iNumVertices];
+				ZeroMemory(tMeshFile.pAnimMeshVertices, sizeof(VTXANIMMESH) * iNumVertices);
+				for (size_t k = 0; k < iNumVertices; ++k)
+				{
+					VTXANIMMESH tMesh{};
+					fin.read(reinterpret_cast<char*>(&tMesh), sizeof(VTXANIMMESH));
+					memcpy(&tMeshFile.pAnimMeshVertices[k], &tMesh, sizeof(VTXANIMMESH));
+				}
+			}
 
-	//	for (size_t i = 0; i < pModelFile->iNumMaterials; ++i)
-	//	{
-	//		for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
-	//		{
-	//			_tchar* szPath = new _tchar[MAX_PATH];
-	//			//_tchar szPath[MAX_PATH] = { L"" };
-	//			fin.read(reinterpret_cast<char*>(&szPath), sizeof(_tchar) * MAX_PATH);
-	//		}
-	//	}
+			_uint iNumIndices{};
+			fin.read(reinterpret_cast<char*>(&iNumIndices), sizeof(_uint));
+			tMeshFile.iNumIndices = iNumIndices;
 
-	//	// Bone
-	//	fin.read(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
+			tMeshFile.pIndices = new _uint[iNumIndices];
+			ZeroMemory(tMeshFile.pIndices, sizeof(_uint) * iNumIndices);
+			for (size_t k = 0; k < iNumIndices; ++k)
+			{
+				_uint iIndex{};
+				fin.read(reinterpret_cast<char*>(&iIndex), sizeof(_uint));
+				memcpy(&tMeshFile.pIndices[k], &iIndex, sizeof(_uint));
+			}
 
-	//	_uint iNumBones = {};
-	//	fin.read(reinterpret_cast<char*>(&iNumBones), sizeof(_uint));
-	//	for (size_t i = 0; i < iNumBones; ++i)
-	//	{
-	//		BONEFILE* pBoneFile = new BONEFILE;
-	//		_char* szName = new _char[MAX_PATH];
-	//		fin.read(reinterpret_cast<char*>(&szName), sizeof(_char) * MAX_PATH);
-	//		pBoneFile->szName = szName;
-	//		fin.read(reinterpret_cast<char*>(&pBoneFile->TransformationMatrix), sizeof(_float4x4));
-	//		fin.read(reinterpret_cast<char*>(&pBoneFile->iParentBoneIndex), sizeof(_int));
-	//	}
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumOffsetMatrices), sizeof(_uint));
+			for (size_t k = 0; k < tMeshFile.iNumOffsetMatrices; ++k)
+			{
+				_float4x4	OffsetMatrix{};
+				fin.read(reinterpret_cast<char*>(&OffsetMatrix), sizeof(_float4x4));
+				tMeshFile.OffsetMatrices.push_back(OffsetMatrix);
+			}
+			tModelFile.Meshes.push_back(tMeshFile);
+		}
 
-	//	// Animation
-	//	fin.read(reinterpret_cast<char*>(&pModelFile->iNumAnimations), sizeof(_uint));
-	//	fin.read(reinterpret_cast<char*>(&pModelFile->iCurrentAnimIndex), sizeof(_uint));
-	//	fin.read(reinterpret_cast<char*>(&pModelFile->isLoop), sizeof(_bool));
-	//	for (size_t i = 0; i < pModelFile->iNumAnimations; ++i)
-	//	{
-	//		ANIMFILE* pAnimFile = new ANIMFILE;
-	//		_char* szName = new _char[MAX_PATH];
-	//		fin.read(reinterpret_cast<char*>(&szName), sizeof(_char) * MAX_PATH);
-	//		pAnimFile->szName = szName;
-	//		fin.read(reinterpret_cast<char*>(&pAnimFile->fDuration), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&pAnimFile->fTicksPerSecond), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&pAnimFile->fTrackPosition), sizeof(_float));
+		// Material
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMaterials), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumMaterials; ++j)
+		{
+			MATERIALFILE tMaterialFile{};
+			fin.read(reinterpret_cast<char*>(&tMaterialFile), sizeof(MATERIALFILE));
+			tModelFile.Materials.push_back(tMaterialFile);
+		}
 
-	//		fin.read(reinterpret_cast<char*>(&pAnimFile->iNumChannels), sizeof(_uint));
+		// Bone
+		fin.read(reinterpret_cast<char*>(&tModelFile.TransformMatrix), sizeof(_float4x4));
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumBones), sizeof(_uint));
+		//tModelFile.Bones.reserve(tModelFile.iNumBones);
+		for (size_t j = 0; j < tModelFile.iNumBones; ++j)
+		{
+			BONEFILE tBoneFile = {};
+			fin.read(reinterpret_cast<char*>(&tBoneFile.szName), sizeof(_char) * MAX_PATH);
+			fin.read(reinterpret_cast<char*>(&tBoneFile.TransformationMatrix), sizeof(_float4x4));
+			fin.read(reinterpret_cast<char*>(&tBoneFile.iParentBoneIndex), sizeof(_int));
+			tModelFile.Bones.push_back(tBoneFile);
 
-	//		// Channel
-	//		for (size_t j = 0; j < pAnimFile->iNumChannels; ++j)
-	//		{
-	//			CHANNELFILE* pChannelFile = new CHANNELFILE;
-	//			_char* szName = new _char[MAX_PATH];
-	//			fin.read(reinterpret_cast<char*>(&szName), sizeof(_char) * MAX_PATH);
-	//			pChannelFile->szName = szName;
-	//			fin.read(reinterpret_cast<char*>(&pChannelFile->iBoneIndex), sizeof(_int));
+			/*BONEFILE tBoneFile = {};
+			fin.read(reinterpret_cast<char*>(&tBoneFile), sizeof(BONEFILE));
+			tModelFile.Bones.push_back(tBoneFile);*/
+		}
 
-	//			fin.read(reinterpret_cast<char*>(&pChannelFile->iNumKeyFrames), sizeof(_uint));
-	//			// KeyFrame
-	//			for (size_t k = 0; k < pChannelFile->iNumKeyFrames; ++k)
-	//			{
-	//				KEYFRAME tKeyFrame = {};
-	//				fin.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(KEYFRAME));
-	//				pChannelFile->KeyFrames.push_back(tKeyFrame);
-	//			}				
-	//		}
-	//	}
+		// Animation
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumAnimations), sizeof(_uint));
+		fin.read(reinterpret_cast<char*>(&tModelFile.iCurrentAnimIndex), sizeof(_uint));
+		fin.read(reinterpret_cast<char*>(&tModelFile.isLoop), sizeof(_bool));
+		for (size_t j = 0; j < tModelFile.iNumAnimations; ++j)
+		{
+			ANIMFILE tAnimFile{};
+			fin.read(reinterpret_cast<char*>(&tAnimFile.szName), sizeof(_char) * MAX_PATH);
 
-	//	// MeshBoneMatrices
-	//	_float4x4 MeshBoneMatrices[512];
-	//	for (size_t i = 0; i < 512; ++i)
-	//	{
-	//		fin.read(reinterpret_cast<char*>(&MeshBoneMatrices[i]), sizeof(_float4x4));
-	//	}
-	//}
-	//
-	//fin.close();
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fDuration), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fTicksPerSecond), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fTrackPosition), sizeof(_float));
+
+			fin.read(reinterpret_cast<char*>(&tAnimFile.iNumChannels), sizeof(_uint));
+			for (size_t k = 0; k < tAnimFile.iNumChannels; ++k)
+			{
+				CHANNELFILE tChannelFile = {};
+				fin.read(reinterpret_cast<char*>(&tChannelFile.szName), sizeof(_char) * MAX_PATH);
+				fin.read(reinterpret_cast<char*>(&tChannelFile.iBoneIndex), sizeof(_int));
+
+				fin.read(reinterpret_cast<char*>(&tChannelFile.iNumKeyFrames), sizeof(_uint));
+				for (size_t l = 0; l < tChannelFile.iNumKeyFrames; ++l)
+				{
+					KEYFRAME tKeyFrame = {};
+					fin.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(KEYFRAME));
+					tChannelFile.KeyFrames.push_back(tKeyFrame);
+				}
+				tAnimFile.Channels.push_back(tChannelFile);
+			}
+
+			tModelFile.Animations.push_back(tAnimFile);
+			/*fin.read(reinterpret_cast<char*>(&tAnimFile), sizeof(ANIMFILE));
+			tModelFile.Animations.push_back(tAnimFile);*/
+		}
+
+		for (size_t j = 0; j < 512; ++j)
+			fin.read(reinterpret_cast<char*>(&tModelFile.MeshBoneMatrices[j]), sizeof(_float4x4));
+
+		int a = 0;
+	}
+
+	fin.close();
 
 	return S_OK;
 }

@@ -13,14 +13,18 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<CBone*>& Bones, _fmatrix TransformMatrix)
+HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bone)
 {
-    strcpy_s(m_szName, pAIMesh->mName.data);
-    m_iMaterialIndex = pAIMesh->mMaterialIndex;
-    m_iNumVertices = pAIMesh->mNumVertices;
+    strcpy_s(m_szName, pMeshFile->szName);
+    m_iMaterialIndex = pMeshFile->iMaterialIndex;
+    m_iNumVertices = pMeshFile->iNumVertices;
+
     m_pVerticesPos = new _float3[m_iNumVertices];   
-    //m_iVertexStride = sizeof(VTXMESH);
-    m_iNumFaces = pAIMesh->mNumFaces;
+    
+
+
+
+    m_iNumFaces = pMeshFile->iNumFaces;
     m_iNumIndices = m_iNumFaces * 3;
     //m_pIndices = new _uint[m_iNumIndices];
     m_iIndexStride = sizeof(_uint);
@@ -122,7 +126,7 @@ _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
     return vOut;
 }
 
-HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix TransformationMatrix)
+HRESULT CMesh::Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile)
 {
     m_iVertexStride = sizeof(VTXMESH);
 
@@ -158,7 +162,7 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix T
     return S_OK;
 }
 
-HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<CBone*>& Bones)
+HRESULT CMesh::Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CBone*>& Bones)
 {
     m_iVertexStride = sizeof(VTXANIMMESH);
 
@@ -278,25 +282,7 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     return S_OK;;
 }
 
-HRESULT CMesh::Ready_MeshFile()
-{
-    m_tMeshFile.szName = m_szName;
-
-    m_tMeshFile.iMaterialIndex = m_iMaterialIndex;
-
-    m_tMeshFile.iNumFaces = m_iNumFaces;
-
-    m_tMeshFile.iNumBones = m_iNumBones;
-    m_tMeshFile.Bones = m_Bones;
-
-    //m_tMeshFile.pIndices = &m_pIndices;
-    m_tMeshFile.iNumOffsetMatrices = m_OffsetMatrices.size();
-    m_tMeshFile.OffsetMatrices = m_OffsetMatrices;
-
-    return S_OK;
-}
-
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, const aiMesh* pAIMesh, const vector<CBone*>& Bones, _fmatrix TransformMatrix)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones)
 {
     CMesh* pInstance = new CMesh(pDevice, pContext);
 

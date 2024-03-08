@@ -26,6 +26,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, EngineDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Gara()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Prototype_Component_For_Static()))
 		return E_FAIL;
 
@@ -50,6 +53,85 @@ HRESULT CMainApp::Render()
 	m_pGameInstance->Draw();	
 
 	return	S_OK;
+}
+
+HRESULT CMainApp::Ready_Gara()
+{
+	ID3D11Texture2D* pTexture2D = { nullptr };
+
+	D3D11_TEXTURE2D_DESC	TextureDesc{};
+
+	TextureDesc.Width = 256;
+	TextureDesc.Height = 256;
+	TextureDesc.MipLevels = 1;
+	TextureDesc.ArraySize = 1;
+	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.SampleDesc.Count = 1;
+
+	TextureDesc.Usage = D3D11_USAGE_DYNAMIC;
+	TextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+	TextureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	TextureDesc.MiscFlags = 0;
+
+	_uint* pPixels = new _uint[256 * 256];
+	ZeroMemory(pPixels, sizeof(_uint) * 256 * 256);
+
+	for (size_t i = 0; i < 256; ++i)
+	{
+		for (size_t j = 0; j < 256; ++j)
+		{
+			_uint iIndex = i * 256 + j;
+
+			pPixels[iIndex] = D3DCOLOR_ARGB(255, 255, 255, 255);
+		}
+	}
+
+	D3D11_SUBRESOURCE_DATA	SubResourceData{};
+
+	SubResourceData.pSysMem = pPixels;
+	SubResourceData.SysMemPitch = 256 * 4;	// 가로 한 줄의 바이트 크기
+
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, &SubResourceData, &pTexture2D)))
+		return E_FAIL;
+
+	D3D11_MAPPED_SUBRESOURCE	MapSubResource{};
+
+	m_pContext->Map(pTexture2D, 0, D3D11_MAP_WRITE_DISCARD, 0, &MapSubResource);
+
+	for (size_t i = 0; i < 256; ++i)
+	{
+		for (size_t j = 0; j < 256; ++j)
+		{
+			_uint	iIndex = i * 256 + j;
+
+			if (j < 128)
+				pPixels[iIndex] = D3DCOLOR_ARGB(255, 255, 255, 0);
+			else
+				pPixels[iIndex] = D3DCOLOR_ARGB(255, 0, 255, 255);
+		}
+	}
+
+	memcpy(MapSubResource.pData, pPixels, sizeof(_uint) * 256 * 256);
+
+	m_pContext->Unmap(pTexture2D, 0);
+
+	ID3D11ShaderResourceView* pSRV = { nullptr };
+
+	if (FAILED(m_pDevice->CreateShaderResourceView(pTexture2D, nullptr, &pSRV)))
+		return E_FAIL;
+
+	if (FAILED(DirectX::SaveDDSTextureToFile(m_pContext, pTexture2D, TEXT("../Bin/Resources/Textures/Terrain/Mask.dds"))))
+		return E_FAIL;
+
+	Safe_Release(pSRV);
+	Safe_Release(pTexture2D);
+
+	Safe_Delete_Array(pPixels);
+
+	return S_OK;
 }
 
 HRESULT CMainApp::Open_Level(LEVEL eLevelID)

@@ -47,26 +47,30 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
     m_BufferDesc.MiscFlags = 0;
     m_BufferDesc.StructureByteStride = 0;
 
-    _uint* pIndices = new _uint[m_iNumIndices];
-    _uint* m_pIndices = new _uint[m_iNumIndices];
-    ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
+    //_uint* pIndices = new _uint[m_iNumIndices];
+    m_pIndices = new _uint[m_iNumIndices];
+    ZeroMemory(m_pIndices, sizeof(_uint) * m_iNumIndices);
 
     _uint iNumIndices = { 0 };
 
     for (size_t i = 0; i < pAIMesh->mNumFaces; ++i)
     {
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[0];
+        /*pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[0];
         pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[1];
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[2];
+        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[2];*/
+
+        m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[0];
+        m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[1];
+        m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
     }
 
     ZeroMemory(&m_InitialData, sizeof m_InitialData);
-    m_InitialData.pSysMem = pIndices;
+    m_InitialData.pSysMem = m_pIndices;
 
     if (FAILED(__super::Create_Buffer(&m_pIB)))
         return E_FAIL;
 
-    Safe_Delete_Array(pIndices);
+ //   Safe_Delete_Array(pIndices);
 
 #pragma endregion
 
@@ -136,25 +140,25 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix T
     m_BufferDesc.MiscFlags = 0;
     m_BufferDesc.StructureByteStride = m_iVertexStride;
 
-    VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
-    ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+    m_tMeshFile.pMeshVertices = new VTXMESH[m_iNumVertices];
+    ZeroMemory(m_tMeshFile.pMeshVertices, sizeof(VTXMESH) * m_iNumVertices);
 
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
-        memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
-        m_pVerticesPos[i] = pVertices[i].vPosition;
-        memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
-        memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
-        memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+        memcpy(&m_tMeshFile.pMeshVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        m_pVerticesPos[i] = m_tMeshFile.pMeshVertices[i].vPosition;
+        memcpy(&m_tMeshFile.pMeshVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
+        memcpy(&m_tMeshFile.pMeshVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
+        memcpy(&m_tMeshFile.pMeshVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
     }
 
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
-    m_InitialData.pSysMem = pVertices;
+    m_InitialData.pSysMem = m_tMeshFile.pMeshVertices;
 
     if (FAILED(__super::Create_Buffer(&m_pVB)))
         return E_FAIL;
 
-    Safe_Delete_Array(pVertices);
+    //Safe_Delete_Array(pVertices);
 
     return S_OK;
 }
@@ -164,7 +168,7 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     m_iVertexStride = sizeof(VTXANIMMESH);
 
     ZeroMemory(&m_BufferDesc, sizeof(m_BufferDesc));
-
+    
     m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
     m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
     m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -172,16 +176,16 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     m_BufferDesc.MiscFlags = 0;
     m_BufferDesc.StructureByteStride = m_iVertexStride;
 
-    VTXANIMMESH* pVertices = new VTXANIMMESH[m_iNumVertices];
-    ZeroMemory(pVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
+    m_tMeshFile.pAnimMeshVertices = new VTXANIMMESH[m_iNumVertices];
+    ZeroMemory(m_tMeshFile.pAnimMeshVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
 
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
-        memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
-        m_pVerticesPos[i] = pVertices[i].vPosition;
-        memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
-        memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
-        memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+        memcpy(&m_tMeshFile.pAnimMeshVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+        m_pVerticesPos[i] = m_tMeshFile.pAnimMeshVertices[i].vPosition;
+        memcpy(&m_tMeshFile.pAnimMeshVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
+        memcpy(&m_tMeshFile.pAnimMeshVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
+        memcpy(&m_tMeshFile.pAnimMeshVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
     }
 
     /* 해당 메쉬와 관련된 Bone들의 정보를 정리, 저장 */
@@ -218,28 +222,28 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
         for (size_t j = 0; j < iNumWeights; ++j)
         {
             // 정점 별로 최대 4개의 뼈로부터 가중치를 받을 수 있기 때문에 비워져있는 값만 하나씩 채워줌
-            if (0.f == pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x)
+            if (0.f == m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x)
             {
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.x = i;
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x = pAIBone->mWeights[j].mWeight;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.x = i;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.x = pAIBone->mWeights[j].mWeight;
             }
 
-            else if (0.f == pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y)
+            else if (0.f == m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y)
             {
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.y = i;
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y = pAIBone->mWeights[j].mWeight;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.y = i;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.y = pAIBone->mWeights[j].mWeight;
             }
 
-            else if (0.f == pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z)
+            else if (0.f == m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z)
             {
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.z = i;
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z = pAIBone->mWeights[j].mWeight;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.z = i;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.z = pAIBone->mWeights[j].mWeight;
             }
 
-            else if (0.f == pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w)
+            else if (0.f == m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w)
             {
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.w = i;
-                pVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w = pAIBone->mWeights[j].mWeight;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendIndices.w = i;
+                m_tMeshFile.pAnimMeshVertices[pAIBone->mWeights[j].mVertexId].vBlendWeights.w = pAIBone->mWeights[j].mWeight;
             }
         }
     }
@@ -266,15 +270,13 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
         m_OffsetMatrices.push_back(OffsetMatrix);
     }
 
-
-
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
-    m_InitialData.pSysMem = pVertices;
+    m_InitialData.pSysMem = m_tMeshFile.pAnimMeshVertices;
 
     if (FAILED(__super::Create_Buffer(&m_pVB)))
         return E_FAIL;
 
-    Safe_Delete_Array(pVertices);
+    //Safe_Delete_Array(pVertices);
 
     return S_OK;;
 }
@@ -290,7 +292,8 @@ HRESULT CMesh::Ready_MeshFile()
     m_tMeshFile.iNumBones = m_iNumBones;
     m_tMeshFile.Bones = m_Bones;
 
-    m_tMeshFile.pVerticesPos = m_pVerticesPos;
+    m_tMeshFile.iNumVertices = m_iNumVertices;
+    m_tMeshFile.iNumIndices = m_iNumIndices;
     m_tMeshFile.pIndices = m_pIndices;
 
     m_tMeshFile.iNumOffsetMatrices = m_OffsetMatrices.size();
@@ -321,6 +324,11 @@ CComponent* CMesh::Clone(void* pArg)
 void CMesh::Free()
 {
     __super::Free();
+
+    //if (!m_isCloned)
+    Safe_Delete_Array(m_pIndices);
+    Safe_Delete_Array(m_tMeshFile.pAnimMeshVertices);
+    Safe_Delete_Array(m_tMeshFile.pMeshVertices);
 }
 
     

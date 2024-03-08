@@ -273,6 +273,9 @@ HRESULT CModel::Ready_Animations()
 
 HRESULT CModel::Ready_ModelFile()
 {
+	// Type
+	m_tModelFile.iType = m_eModelType;
+	
 	// Mesh	
 	m_tModelFile.iNumMeshes = m_iNumMeshes;
 	for(size_t i = 0 ; i < m_iNumMeshes; ++i)
@@ -281,18 +284,7 @@ HRESULT CModel::Ready_ModelFile()
 	// Material
 	m_tModelFile.iNumMaterials = m_iNumMaterials;
 	m_tModelFile.Materials = m_MaterialFiles;
-	//for (size_t i = 0; i < m_iNumMaterials; ++i)
-	//{
-	//	//m_tModelFile.Materials.push_back(*m_Materials[i].MaterialTextures);
-	//	for (size_t j = 0; j < AI_TEXTURE_TYPE_MAX; ++j)
-	//	{
-	//		if (nullptr == m_Materials[i].MaterialTextures[j])
-	//			continue;
 
-	//		m_tModelFile.Materials.push_back(m_tMaterialFile);
-	//		//m_tModelFile.Materials[j] = *m_Materials[i].MaterialTextures[j]->Get_MaterialFile();
-	//	}		
-	//}
 	// Bone
 	m_tModelFile.TransformMatrix = m_TransformMatrix;
 
