@@ -310,7 +310,6 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {	
-	Safe_Release(m_pImGui_Manager);
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);

@@ -225,7 +225,7 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 				return E_FAIL;
 
 			MATERIALFILE tMaterialFile = {};
-			strcpy_s(tMaterialFile.szTexturePath, strTextureFilePath.C_Str());
+			strcpy_s(tMaterialFile.szTexturePath, szFullPath);
 			tMaterialFile.iTextureIndex = j;
 
 			m_MaterialFiles.push_back(tMaterialFile);			

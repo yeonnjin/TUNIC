@@ -5,10 +5,10 @@ CChannel::CChannel()
 {
 }
 
-HRESULT CChannel::Initialize(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones)
+HRESULT CChannel::Initialize(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones)
 {
     // 해당 노드가 가르키는 뼈를 찾아서 이름과 인덱스 저장
-    strcpy_s(m_szName, pAIChannel->mNodeName.data);
+    strcpy_s(m_szName, pChannelFile->szName);
 
     auto iter = find_if(Bones.begin(), Bones.end(), [&](CBone* pBone)->_bool
     {
@@ -17,8 +17,7 @@ HRESULT CChannel::Initialize(const aiNodeAnim* pAIChannel, const vector<class CB
     });
 
     // 3가지 조건 중에 가장 큰 값을 찾아 KeyFrame의 개수로 저장
-    m_iNumKeyFrames = max(pAIChannel->mNumScalingKeys, pAIChannel->mNumRotationKeys);
-    m_iNumKeyFrames = max(m_iNumKeyFrames, pAIChannel->mNumPositionKeys);
+    m_iNumKeyFrames = pChannelFile->iNumKeyFrames;
 
     _float3     vScale;
     _float4     vRotation;
@@ -26,40 +25,7 @@ HRESULT CChannel::Initialize(const aiNodeAnim* pAIChannel, const vector<class CB
     _float      fTime;          // 3개 중 하나만 걸릴 수 있으므로 매 번 값을 받아줌
 
     for (size_t i = 0; i < m_iNumKeyFrames; ++i)
-    {
-        KEYFRAME    tKeyFrame{};
-
-        if (i < pAIChannel->mNumScalingKeys)
-        {
-            memcpy(&vScale, &pAIChannel->mScalingKeys[i].mValue, sizeof(_float3));
-
-            fTime = pAIChannel->mScalingKeys[i].mTime;
-        }
-
-        if (i < pAIChannel->mNumRotationKeys)
-        {
-            vRotation.x = pAIChannel->mRotationKeys[i].mValue.x;
-            vRotation.y = pAIChannel->mRotationKeys[i].mValue.y;
-            vRotation.z = pAIChannel->mRotationKeys[i].mValue.z;
-            vRotation.w = pAIChannel->mRotationKeys[i].mValue.w;
-
-            fTime = pAIChannel->mRotationKeys[i].mTime;
-        }
-
-        if (i < pAIChannel->mNumPositionKeys)
-        {
-            memcpy(&vTranslation, &pAIChannel->mPositionKeys[i].mValue, sizeof(_float3));
-            
-            fTime = pAIChannel->mPositionKeys[i].mTime;
-        }
-
-        tKeyFrame.vScale = vScale;
-        tKeyFrame.vRotation = vRotation;
-        tKeyFrame.vTranslation = vTranslation;
-        tKeyFrame.fTime = fTime;
-
-        m_KeyFrames.push_back(tKeyFrame);
-    }
+        m_KeyFrames.push_back(pChannelFile->KeyFrames[i]);
 
     return S_OK;
 }
@@ -106,23 +72,11 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
     Bones[m_iBoneIndex]->Set_TransformationMatrix(TransformationMatrix);
 }
 
-HRESULT CChannel::Ready_ChannelFile()
-{
-    m_tChannelFile.szName = m_szName;
-
-    m_tChannelFile.iBoneIndex = m_iBoneIndex;
-
-    m_tChannelFile.iNumKeyFrames = m_iNumKeyFrames;
-    m_tChannelFile.KeyFrames = m_KeyFrames;
-
-    return S_OK;
-}
-
-CChannel* CChannel::Create(const aiNodeAnim* pAIChannel, const vector<class CBone*>& Bones)
+CChannel* CChannel::Create(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones)
 {
     CChannel* pInstance = new CChannel();
 
-    if (FAILED(pInstance->Initialize(pAIChannel, Bones)))
+    if (FAILED(pInstance->Initialize(pChannelFile, Bones)))
     {
         MSG_BOX(TEXT("Failed To Create : CChannel"));
 

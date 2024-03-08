@@ -37,6 +37,12 @@ HRESULT CMonster::Initialize(void* pArg)
 
 void CMonster::Tick(_float fTimeDelta)
 {
+    static _uint iIndex = 0;
+    if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+    {
+        iIndex++;
+        m_pModelCom->Set_Animation(iIndex, true);
+    }
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)
@@ -55,7 +61,7 @@ HRESULT CMonster::Render()
 
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
-        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, aiTextureType_DIFFUSE)))
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))

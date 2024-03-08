@@ -92,7 +92,6 @@ namespace Engine
 
 		_uint						iNumChannels = { 0 };
 		vector<CHANNELFILE>			Channels;
-		//vector<_uint>				CurrentKeyFrameIndices;
 	}ANIMFILE;
 
 	typedef struct ENGINE_DLL

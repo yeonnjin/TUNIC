@@ -42,8 +42,8 @@ private:
 	HRESULT Loading_For_Logo();
 	HRESULT Loading_For_GamePlay();
 
-private: // Tool
-	HRESULT Loading_For_Tool_Map();
+private:
+	HRESULT Test_For_Model();
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID);

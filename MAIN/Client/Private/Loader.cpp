@@ -13,6 +13,7 @@
 
 
 #include "Test_Object.h"
+#include <fstream>
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
@@ -107,9 +108,19 @@ HRESULT CLoader::Loading_For_GamePlay()
 {
 	m_strLoadingText = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 
-	/* Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
+	/* Prototype_Component_Texture_Terrain_Diffuse */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain_Diffuse"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile%d.dds"), 2))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Terrain_Mask */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain_Mask"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Mask.dds"), 1))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Terrain_Brush */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain_Brush"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Brush.png"), 1))))
 		return E_FAIL;
 
 	///* Prototype_Component_Texture_Player */
@@ -142,6 +153,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 	_matrix		TransformMatrix = XMMatrixIdentity();
 
+	Test_For_Model();
 	///* For.Prototype_Component_Model_Fiona */
 	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
@@ -149,10 +161,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	return E_FAIL;
 
 	/* For.Prototype_Component_Model_Fox */
-	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	/*TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fox"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fox/fox.fbx", TransformMatrix))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	/* Prototype_Component_Model_ForkLift */
 	/*TransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -223,6 +235,170 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_isFinished = true;
 
 	return S_OK;
+}
+
+HRESULT CLoader::Test_For_Model()
+{
+	ifstream fin;
+	fin.open("../Bin/Resources/Data/Model/Model1.dat", ios::in | ios::binary);
+
+	_uint iObjectCount;
+	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
+	for (size_t i = 0; i < iObjectCount; ++i)
+	{
+		MODELFILE tModelFile = {};
+
+		// Type
+		fin.read(reinterpret_cast<char*>(&tModelFile.iType), sizeof(_uint));
+
+		// Mesh
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMeshes), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+		{
+			MESHFILE tMeshFile{};
+			fin.read(reinterpret_cast<char*>(&tMeshFile.szName), sizeof(_char) * MAX_PATH);
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iMaterialIndex), sizeof(_uint));
+
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumFaces), sizeof(_uint));
+
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumBones), sizeof(_uint));
+			for (size_t k = 0; k < tMeshFile.iNumBones; ++k)
+			{
+				_uint	iBoneIndex{};
+				fin.read(reinterpret_cast<char*>(&iBoneIndex), sizeof(_uint));
+				tMeshFile.Bones.push_back(iBoneIndex);
+			}
+
+			_uint iNumVertices{};
+			fin.read(reinterpret_cast<char*>(&iNumVertices), sizeof(_uint));
+			tMeshFile.iNumVertices = iNumVertices;
+
+			if (CModel::TYPE_NONANIM == tModelFile.iType)
+			{
+				tMeshFile.pMeshVertices = new VTXMESH[iNumVertices];
+				ZeroMemory(tMeshFile.pMeshVertices, sizeof(VTXMESH) * iNumVertices);
+				for (size_t k = 0; k < iNumVertices; ++k)
+				{
+					VTXMESH tMesh{};
+					fin.read(reinterpret_cast<char*>(&tMesh), sizeof(VTXMESH));
+					memcpy(&tMeshFile.pMeshVertices[k], &tMesh, sizeof(VTXMESH));
+				}
+			}
+			else
+			{
+				tMeshFile.pAnimMeshVertices = new VTXANIMMESH[iNumVertices];
+				ZeroMemory(tMeshFile.pAnimMeshVertices, sizeof(VTXANIMMESH) * iNumVertices);
+				for (size_t k = 0; k < iNumVertices; ++k)
+				{
+					VTXANIMMESH tMesh{};
+					fin.read(reinterpret_cast<char*>(&tMesh), sizeof(VTXANIMMESH));
+					memcpy(&tMeshFile.pAnimMeshVertices[k], &tMesh, sizeof(VTXANIMMESH));
+				}
+			}
+
+			_uint iNumIndices{};
+			fin.read(reinterpret_cast<char*>(&iNumIndices), sizeof(_uint));
+			tMeshFile.iNumIndices = iNumIndices;
+
+			tMeshFile.pIndices = new _uint[iNumIndices];
+			ZeroMemory(tMeshFile.pIndices, sizeof(_uint) * iNumIndices);
+			for (size_t k = 0; k < iNumIndices; ++k)
+			{
+				_uint iIndex{};
+				fin.read(reinterpret_cast<char*>(&iIndex), sizeof(_uint));
+				memcpy(&tMeshFile.pIndices[k], &iIndex, sizeof(_uint));
+			}
+
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumOffsetMatrices), sizeof(_uint));
+			for (size_t k = 0; k < tMeshFile.iNumOffsetMatrices; ++k)
+			{
+				_float4x4	OffsetMatrix{};
+				fin.read(reinterpret_cast<char*>(&OffsetMatrix), sizeof(_float4x4));
+				tMeshFile.OffsetMatrices.push_back(OffsetMatrix);
+			}
+			tModelFile.Meshes.push_back(tMeshFile);
+		}
+
+		// Material
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMaterials), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumMaterials; ++j)
+		{
+			MATERIALFILE tMaterialFile{};
+			fin.read(reinterpret_cast<char*>(&tMaterialFile), sizeof(MATERIALFILE));
+			tModelFile.Materials.push_back(tMaterialFile);
+		}
+
+		// Bone
+		fin.read(reinterpret_cast<char*>(&tModelFile.TransformMatrix), sizeof(_float4x4));
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumBones), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumBones; ++j)
+		{
+			BONEFILE tBoneFile = {};
+			fin.read(reinterpret_cast<char*>(&tBoneFile), sizeof(BONEFILE));
+			tModelFile.Bones.push_back(tBoneFile);
+		}
+
+		// Animation
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumAnimations), sizeof(_uint));
+		fin.read(reinterpret_cast<char*>(&tModelFile.iCurrentAnimIndex), sizeof(_uint));
+		fin.read(reinterpret_cast<char*>(&tModelFile.isLoop), sizeof(_bool));
+		for (size_t j = 0; j < tModelFile.iNumAnimations; ++j)
+		{
+			ANIMFILE tAnimFile{};
+			fin.read(reinterpret_cast<char*>(&tAnimFile.szName), sizeof(_char) * MAX_PATH);
+
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fDuration), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fTicksPerSecond), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fTrackPosition), sizeof(_float));
+
+			fin.read(reinterpret_cast<char*>(&tAnimFile.iNumChannels), sizeof(_uint));
+			for (size_t k = 0; k < tAnimFile.iNumChannels; ++k)
+			{
+				CHANNELFILE tChannelFile = {};
+				fin.read(reinterpret_cast<char*>(&tChannelFile.szName), sizeof(_char) * MAX_PATH);
+				fin.read(reinterpret_cast<char*>(&tChannelFile.iBoneIndex), sizeof(_int));
+
+				fin.read(reinterpret_cast<char*>(&tChannelFile.iNumKeyFrames), sizeof(_uint));
+				for (size_t l = 0; l < tChannelFile.iNumKeyFrames; ++l)
+				{
+					KEYFRAME tKeyFrame = {};
+					fin.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(KEYFRAME));
+					tChannelFile.KeyFrames.push_back(tKeyFrame);
+				}
+				tAnimFile.Channels.push_back(tChannelFile);
+			}
+
+			tModelFile.Animations.push_back(tAnimFile);
+		}
+
+		for (size_t j = 0; j < 512; ++j)
+			fin.read(reinterpret_cast<char*>(&tModelFile.MeshBoneMatrices[j]), sizeof(_float4x4));
+
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fox"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, &tModelFile))))
+			return E_FAIL;
+
+		for(size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pMeshVertices);
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pAnimMeshVertices);
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pIndices);
+
+		int a = 0;
+	}
+
+	fin.close();
+
+	return S_OK;
+
+	/*TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fox"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fox/fox.fbx", TransformMatrix))))
+		return E_FAIL;*/
 }
 
 CLoader * CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID)

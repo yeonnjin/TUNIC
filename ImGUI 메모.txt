@@ -1,0 +1,15 @@
+#ImGUI
+
+1. 엔진
+- ImGui 관련 파일들
+- ImGui_Manager -> 다른 매니저들처럼 GameInstance 통해서 생성하고 호출
+- Engine_Defines.h 에서 누수 체크 코드 전에 ImGui 관련 헤더들 포함
+- 추가 포함 디렉터리에 ImGui 폴더 경로 잡아주기
+- imgui.h 80번 줄쯤에 ENGINE_EXPORTS 관련 코드 넣어줘야함
+- CImGui_Manager::EditTransform 는 기즈모 관련, 수정중..
+
+2. 클라이언트
+- Level_Tool_Map 에서 필요한 객체들 준비
+- Editor 에서 실질적으로 ImGui 관련 작업 수행
+- Client.cpp 에서 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 함수 전과 내부에 ImGui_ImplWin32_WndProcHandler( ) 관련 코드 넣어줘야함 -> 없으면 입력 감지 안됨~
+- 추가 포함 디렉터리에 ImGui 폴더 경로 잡아주기

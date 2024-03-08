@@ -46,9 +46,6 @@ private:
 	// 현재 메쉬에 영향을 주는 뼈들의 순서대로 오프셋 저장
 	vector<_float4x4>	m_OffsetMatrices;
 
-	_uint			m_iNumBones = { 0 };
-	vector<_uint>	m_Bones;
-
 private:
 	HRESULT	Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile);
 	HRESULT Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CBone*>& Bones);

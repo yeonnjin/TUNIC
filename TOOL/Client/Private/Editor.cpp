@@ -318,15 +318,7 @@ HRESULT CEditor::Save_File()
 		fout.write(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
 		fout.write(reinterpret_cast<char*>(&pModelFile->iNumBones), sizeof(_uint));
 		for (size_t j = 0; j < pModelFile->iNumBones; ++j)
-		{
-			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j].szName), sizeof(_char) * MAX_PATH);
-			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j].TransformationMatrix), sizeof(_float4x4));
-			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j].iParentBoneIndex), sizeof(_int));
-
-			/*BONEFILE tBoneFile = pModelFile->Bones[j];
-			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j]), sizeof(BONEFILE));*/
-		}
-			
+			fout.write(reinterpret_cast<char*>(&pModelFile->Bones[j]), sizeof(BONEFILE));
 
 		// Animation
 		fout.write(reinterpret_cast<char*>(&pModelFile->iNumAnimations), sizeof(_uint));
@@ -340,24 +332,22 @@ HRESULT CEditor::Save_File()
 			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].fTicksPerSecond), sizeof(_float));
 			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].fTrackPosition), sizeof(_float));
 
+			// Channel
 			fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].iNumChannels), sizeof(_uint));
 			for (size_t k = 0; k < pModelFile->Animations[j].iNumChannels; ++k)
 			{
 				fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].szName), sizeof(_char) * MAX_PATH);
 				fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].iBoneIndex), sizeof(_int));
 
+				// KeyFrame
 				fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].iNumKeyFrames), sizeof(_uint));
 				for (size_t l = 0; l < pModelFile->Animations[j].Channels[k].iNumKeyFrames; ++l)
-				{
 					fout.write(reinterpret_cast<char*>(&pModelFile->Animations[j].Channels[k].KeyFrames[l]), sizeof(KEYFRAME));
-				}
 			}
 		}
 
 		for (size_t j = 0; j < 512; ++j)
 			fout.write(reinterpret_cast<char*>(&pModelFile->MeshBoneMatrices[j]), sizeof(_float4x4));
-
-		int a = 0;
 	}
 
 	fout.close();
@@ -375,7 +365,6 @@ HRESULT CEditor::Load_File()
 	for (size_t i = 0; i < iObjectCount; ++i)
 	{
 		MODELFILE tModelFile = {};
-		//ZeroMemory(pModelFile, sizeof(MODELFILE));
 
 		// Type
 		fin.read(reinterpret_cast<char*>(&tModelFile.iType), sizeof(_uint));
@@ -460,18 +449,11 @@ HRESULT CEditor::Load_File()
 		// Bone
 		fin.read(reinterpret_cast<char*>(&tModelFile.TransformMatrix), sizeof(_float4x4));
 		fin.read(reinterpret_cast<char*>(&tModelFile.iNumBones), sizeof(_uint));
-		//tModelFile.Bones.reserve(tModelFile.iNumBones);
 		for (size_t j = 0; j < tModelFile.iNumBones; ++j)
 		{
 			BONEFILE tBoneFile = {};
-			fin.read(reinterpret_cast<char*>(&tBoneFile.szName), sizeof(_char) * MAX_PATH);
-			fin.read(reinterpret_cast<char*>(&tBoneFile.TransformationMatrix), sizeof(_float4x4));
-			fin.read(reinterpret_cast<char*>(&tBoneFile.iParentBoneIndex), sizeof(_int));
-			tModelFile.Bones.push_back(tBoneFile);
-
-			/*BONEFILE tBoneFile = {};
 			fin.read(reinterpret_cast<char*>(&tBoneFile), sizeof(BONEFILE));
-			tModelFile.Bones.push_back(tBoneFile);*/
+			tModelFile.Bones.push_back(tBoneFile);
 		}
 
 		// Animation
@@ -505,14 +487,21 @@ HRESULT CEditor::Load_File()
 			}
 
 			tModelFile.Animations.push_back(tAnimFile);
-			/*fin.read(reinterpret_cast<char*>(&tAnimFile), sizeof(ANIMFILE));
-			tModelFile.Animations.push_back(tAnimFile);*/
 		}
 
 		for (size_t j = 0; j < 512; ++j)
 			fin.read(reinterpret_cast<char*>(&tModelFile.MeshBoneMatrices[j]), sizeof(_float4x4));
 
 		int a = 0;
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pMeshVertices);
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pAnimMeshVertices);
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pIndices);
 	}
 
 	fin.close();

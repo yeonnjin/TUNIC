@@ -91,6 +91,9 @@
     <Filter Include="01. Utility\02. Components\Model\Animation\Channel">
       <UniqueIdentifier>{2353dd55-0a61-4dec-b198-acd7bcff597e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\06. Picking">
+      <UniqueIdentifier>{436fa7b3-bcde-48df-bb82-413825d1f6e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -176,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Channel.cpp">
       <Filter>01. Utility\02. Components\Model\Animation\Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Picking.cpp">
+      <Filter>01. Utility\06. Picking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Channel.h">
       <Filter>01. Utility\02. Components\Model\Animation\Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Picking.h">
+      <Filter>01. Utility\06. Picking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

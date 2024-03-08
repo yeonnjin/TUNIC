@@ -6,22 +6,22 @@ CAnimation::CAnimation()
 {
 }
 
-HRESULT CAnimation::Initialize(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones)
+HRESULT CAnimation::Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones)
 {
-    strcpy_s(m_szName, pAIAnimation->mName.data);
+    strcpy_s(m_szName, pAnimFile->szName);
 
-    m_fDuration = pAIAnimation->mDuration;
-    m_fTicksPerSecond = pAIAnimation->mTicksPerSecond;
+    m_fDuration = pAnimFile->fDuration;
+    m_fTicksPerSecond = pAnimFile->fTicksPerSecond;
 
     /* 이 애니메이션은 몇 개의 뼈를 컨트롤 해야하는지 */
-    m_iNumChannels = pAIAnimation->mNumChannels;
+    m_iNumChannels = pAnimFile->iNumChannels;
 
     /* 각 채널의 CurrentKeyFrame을 0으로 초기화 */
     m_CurrentKeyFrameIndices.resize(m_iNumChannels);
 
     for (size_t i = 0; i < m_iNumChannels; ++i)
     {
-        CChannel* pChannel = CChannel::Create(pAIAnimation->mChannels[i], Bones);
+        CChannel* pChannel = CChannel::Create(&pAnimFile->Channels[i], Bones);
         if (nullptr == pChannel)
             return E_FAIL;
 
@@ -57,26 +57,11 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
     }
 }
 
-HRESULT CAnimation::Ready_AnimFile()
-{
-    m_tAnimFile.szName = m_szName;
-
-    m_tAnimFile.fDuration = m_fDuration;
-    m_tAnimFile.fTicksPerSecond = m_fTicksPerSecond;
-    m_tAnimFile.fTrackPosition = m_fTrackPosition;
-
-    m_tAnimFile.iNumChannels = m_iNumChannels;
-    m_tAnimFile.Channels = m_Channels;
-    m_tAnimFile.CurrentKeyFrameIndices = m_CurrentKeyFrameIndices;
-
-    return S_OK;
-}
-
-CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const vector<class CBone*>& Bones)
+CAnimation* CAnimation::Create(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones)
 {
     CAnimation* pInstance = new CAnimation();
 
-    if (FAILED(pInstance->Initialize(pAIAnimation, Bones)))
+    if (FAILED(pInstance->Initialize(pAnimFile, Bones)))
     {
         MSG_BOX(TEXT("Failed To Create : CAnimation"));
 

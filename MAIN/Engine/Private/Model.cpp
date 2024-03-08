@@ -47,6 +47,8 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 
 	m_eModelType = eType;
 
+	XMStoreFloat4x4(&m_TransformMatrix, XMMatrixIdentity());
+
 	/* 傈眉 焕 积己 */
 	if (FAILED(Ready_Bones(pModelFile->iNumBones, pModelFile->Bones)))
 		return E_FAIL;
@@ -56,11 +58,11 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 		return E_FAIL;
 
 	/* 赣抛府倔 积己 */
-	if (FAILED(Ready_Materials(strModelFilePath.c_str())))
+	if (FAILED(Ready_Materials(pModelFile->iNumMaterials, pModelFile->Materials)))
 		return E_FAIL;
 
 	/* 局聪皋捞记 积己 */
-	if (FAILED(Ready_Animations()))
+	if (FAILED(Ready_Animations(pModelFile->iNumAnimations, pModelFile->Animations)))
 		return E_FAIL;
 
 	return S_OK;
@@ -141,65 +143,46 @@ HRESULT CModel::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile)
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType, m_pAIScene->mMeshes[i], m_Bones, XMLoadFloat4x4(&m_TransformMatrix));
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType, &pMeshFile[i], m_Bones);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.push_back(pMesh);
-	}*/
+	}
 
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
+HRESULT CModel::Ready_Materials(_uint iNumMaterials, vector<MATERIALFILE>& pMaterialFile)
 {
-	//m_iNumMaterials = m_pAIScene->mNumMaterials;
+	m_iNumMaterials = iNumMaterials;
 
-	//// FACE, BODY, ...
-	//for (size_t i = 0; i < m_iNumMaterials; i++)
-	//{		
-	//	aiMaterial* pAIMaterial = m_pAIScene->mMaterials[i];
+	// FACE, BODY, ...
+	for (size_t i = 0; i < m_iNumMaterials; i++)
+	{		
+		MESH_MATERIAL			MeshMaterial{};
 
-	//	MESH_MATERIAL			MeshMaterial{};
+		// DIFFUSE, ...
+		for (size_t j = TEX_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; j++)
+		{			
+			if (j != pMaterialFile[i].iTextureIndex)
+				continue;
 
-	//	// DIFFUSE, ...
-	//	for (size_t j = aiTextureType_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; j++)
-	//	{			
-	//		aiString		strTextureFilePath;
+			_char			szFullPath[MAX_PATH] = { "" };
+			strcpy_s(szFullPath, pMaterialFile[i].szTexturePath);
 
-	//		if (FAILED(pAIMaterial->GetTexture(aiTextureType(j), 0, &strTextureFilePath)))
-	//			continue;
+			// ..\Bin\Resources\Models\Fiona\ 
+			_tchar			szPerfectPath[MAX_PATH] = { L"" };
 
-	//		// DRIVE + DIRECTORY
-	//		_char			szDrive[MAX_PATH] = { "" };
-	//		_char			szDirectory[MAX_PATH] = { "" };
-	//		_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
+			MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
 
+			MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
+			if (nullptr == MeshMaterial.MaterialTextures[j])
+				return E_FAIL;
+		}
 
-	//		_char			szFileName[MAX_PATH] = { "" };
-	//		_char			szEXT[MAX_PATH] = { "" };
-
-	//		// FILENAME + EXT		
-	//		_splitpath_s(strTextureFilePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szEXT, MAX_PATH);
-
-	//		_char			szFullPath[MAX_PATH] = { "" };
-	//		strcpy_s(szFullPath, szDrive);
-	//		strcat_s(szFullPath, szDirectory);
-	//		strcat_s(szFullPath, szFileName);
-	//		strcat_s(szFullPath, szEXT);
-
-	//		// ..\Bin\Resources\Models\Fiona\ 
-	//		_tchar			szPerfectPath[MAX_PATH] = { L"" };
-
-	//		MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
-
-	//		MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
-	//		if (nullptr == MeshMaterial.MaterialTextures[j])
-	//			return E_FAIL;
-	//	}
-
-	//	m_Materials.push_back(MeshMaterial);
-	//}
+		m_Materials.push_back(MeshMaterial);
+	}
 
 	return S_OK;
 }
@@ -218,52 +201,27 @@ HRESULT CModel::Ready_Bones(_uint iNumBones, vector<BONEFILE>& pBoneFile)
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Animations()
+HRESULT CModel::Ready_Animations(_uint iNumAnimations, vector<ANIMFILE>& pAnimFile)
 {
-	/*m_iNumAnimations = m_pAIScene->mNumAnimations;
+	m_iNumAnimations = iNumAnimations;
 
 	for (size_t i = 0; i < m_iNumAnimations; ++i)
 	{
-		CAnimation* pAnimation = CAnimation::Create(m_pAIScene->mAnimations[i], m_Bones);
+		CAnimation* pAnimation = CAnimation::Create(&pAnimFile[i], m_Bones);
 		if (nullptr == pAnimation)
 			return E_FAIL;
 
 		m_Animations.push_back(pAnimation);
-	}*/
+	}
 
 	return S_OK;
 }
 
-HRESULT CModel::Ready_ModelFile()
-{
-	// Mesh	
-	m_tModelFile.iNumMeshes = m_iNumMeshes;
-	m_tModelFile.Meshes = m_Meshes;
-
-	// Material
-	m_tModelFile.iNumMaterials = m_iNumMaterials;
-	m_tModelFile.Materials = m_Materials;
-
-	// Bone
-	m_tModelFile.TransformMatrix = m_TransformMatrix;
-	m_tModelFile.Bones = m_Bones;
-
-	// Animation
-	m_tModelFile.iNumAnimations = m_iNumAnimations;
-	m_tModelFile.iCurrentAnimIndex = m_iCurrentAnimIndex;
-	m_tModelFile.isLoop = m_isLoop;
-	m_tModelFile.Animations = m_Animations;
-
-	m_tModelFile.MeshBoneMatrices = m_MeshBoneMatrices;
-
-	return S_OK;
-}
-
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, MODELFILE* pModelFile)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, strModelFilePath, TransformMatrix)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFile)))
 	{
 		MSG_BOX(TEXT("Failed To Create : CModel"));
 

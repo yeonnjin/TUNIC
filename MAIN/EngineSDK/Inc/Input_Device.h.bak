@@ -19,7 +19,7 @@ private:
 public:
 	_bool Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState);
 
-	_bool Get_DIMouseState(MOUSEID eMouseID, KEYSTATE eState);
+	_byte Get_DIMouseState(MOUSEKEYSTATE eMouse) { return m_tMouseState.rgbButtons[eMouse]; }
 
 	_long Get_DIMouseMove(MOUSEMOVESTATE eMouseMoveState) { return *(((_long*)&m_tMouseState) + eMouseMoveState); }
 
@@ -39,8 +39,6 @@ private:
 	_byte					m_byKeyState[256];	// 키보드에 있는 모든 키 값을 저장하기 위한 변수
 	KEYSTATE				m_eKeyState[256];	// 해당 키의 상태 값 저장
 	DIMOUSESTATE			m_tMouseState;
-	KEYSTATE				m_eMouseState[3];
-	
 
 public:
 	static CInput_Device* Create(HINSTANCE hInst, HWND hWnd);
