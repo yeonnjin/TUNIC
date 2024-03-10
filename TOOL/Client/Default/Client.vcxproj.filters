@@ -49,11 +49,14 @@
     <Filter Include="01.Levels\Tool\Map\Editor">
       <UniqueIdentifier>{7aedb692-05f3-427c-870f-bdaa0d5da53c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Test">
-      <UniqueIdentifier>{967bb5e1-2a9b-441e-b724-4649aa136f42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.Defines">
       <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map_Object">
+      <UniqueIdentifier>{23c9ecf9-bd7f-43e7-a107-a8a636ac7ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Test_Object">
+      <UniqueIdentifier>{967bb5e1-2a9b-441e-b724-4649aa136f42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +109,10 @@
       <Filter>01.Levels\Tool\Map\Editor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Test_Object.h">
-      <Filter>02.GameObjects\Test</Filter>
+      <Filter>02.GameObjects\Test_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Map_Object.h">
+      <Filter>02.GameObjects\Map_Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +156,10 @@
       <Filter>01.Levels\Tool\Map\Editor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Test_Object.cpp">
-      <Filter>02.GameObjects\Test</Filter>
+      <Filter>02.GameObjects\Test_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Map_Object.cpp">
+      <Filter>02.GameObjects\Map_Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,10 +182,10 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosNorTex.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

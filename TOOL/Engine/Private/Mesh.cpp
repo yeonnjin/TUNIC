@@ -55,10 +55,6 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
 
     for (size_t i = 0; i < pAIMesh->mNumFaces; ++i)
     {
-        /*pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[0];
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[1];
-        pIndices[iNumIndices++] = m_pIndices[iNumIndices] = pAIMesh->mFaces[i].mIndices[2];*/
-
         m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[0];
         m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[1];
         m_pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
@@ -101,22 +97,25 @@ _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
     for (size_t i = 0; i < m_iNumFaces; ++i)
     {
         _uint   iIndex = i * 3;
-
         _uint   iIndices[3] = {
             iIndex,
             iIndex + 1,
             iIndex + 2
         };
 
+         i += 3;
+
         _float fDist = {};
 
         //Intersects(_In_ FXMVECTOR Origin, _In_ FXMVECTOR Direction, _In_ FXMVECTOR V0, _In_ GXMVECTOR V1, _In_ HXMVECTOR V2, _Out_ float& Dist) noexcept;
-        _fvector vOrigin = XMLoadFloat3(&vRayPos);
+        _fvector vOrigin = XMVectorSetW(XMLoadFloat3(&vRayPos), 1.f);
         XMStoreFloat3(&vRayDir, XMVector3Normalize(XMLoadFloat3(&vRayDir)));
         _fvector vDirection = XMLoadFloat3(&vRayDir);
 
         // 삼각형 충돌
-        if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMLoadFloat3(&m_pVerticesPos[iIndices[0]]), XMLoadFloat3(&m_pVerticesPos[iIndices[1]]), XMLoadFloat3(&m_pVerticesPos[iIndices[2]]), fDist))
+        if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[0]]]), 1.f), 
+                                                                            XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]), 1.f), 
+                                                                            XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[2]]]), 1.f), fDist))
         {
             vOut = _float3(vRayPos.x + vRayDir.x * fDist, vRayPos.y + vRayDir.y * fDist, vRayPos.z + vRayDir.z * fDist);
             XMStoreFloat3(&vOut, XMVector3TransformCoord(XMLoadFloat3(&vOut), pTransform->Get_WorldMatrix()));
@@ -146,8 +145,10 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix T
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
         memcpy(&m_tMeshFile.pMeshVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
-        m_pVerticesPos[i] = m_tMeshFile.pMeshVertices[i].vPosition;
+        XMStoreFloat3(&m_tMeshFile.pMeshVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&m_tMeshFile.pMeshVertices[i].vPosition), TransformationMatrix));
+        memcpy(&m_pVerticesPos[i], &m_tMeshFile.pMeshVertices[i].vPosition, sizeof(_float3));
         memcpy(&m_tMeshFile.pMeshVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
+        XMStoreFloat3(&m_tMeshFile.pMeshVertices[i].vNormal, XMVector3TransformCoord(XMLoadFloat3(&m_tMeshFile.pMeshVertices[i].vNormal), TransformationMatrix));
         memcpy(&m_tMeshFile.pMeshVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
         memcpy(&m_tMeshFile.pMeshVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
     }

@@ -10,18 +10,12 @@ END
 
 BEGIN(Client)
 
-class CTest_Object final : public CGameObject
+class CMap_Object final : public CGameObject
 {
-public:
-	typedef struct Test_Desc : public CGameObject::GAMEOBJECT_DESC
-	{
-		_float3 vPosition;
-	}TEST_DESC;
-
 private:
-	CTest_Object(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CTest_Object(const CTest_Object& rhs);
-	virtual ~CTest_Object() = default;
+	CMap_Object(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CMap_Object(const CMap_Object& rhs);
+	virtual ~CMap_Object() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -39,7 +33,7 @@ private:
 	HRESULT Bind_ShaderResources();
 
 public:
-	static CTest_Object* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CMap_Object* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

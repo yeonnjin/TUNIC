@@ -94,7 +94,7 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     ImGui::Checkbox("##UseSnap", &useSnap);
     ImGui::SameLine();
 
-    _float snap[3] = { 1.f, 1.f, 1.f };
+    static _float snap[3] = { 1.f, 1.f, 1.f };
     switch (mCurrentGizmoOperation)
     {
     case ImGuizmo::TRANSLATE:

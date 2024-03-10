@@ -334,12 +334,20 @@ HRESULT CGameInstance::Create_Prototype_Model(CModel::TYPE eType, const wstring&
 	return m_pImGui_Manager->Create_Prototype_Model(eType, strFolderPath);
 }
 
-vector<wstring>* CGameInstance::Get_Model_List()
+//_uint CGameInstance::Get_Model_List_Size(CModel::TYPE eType)
+//{
+//	if (nullptr == m_pImGui_Manager)
+//		return 0;
+//
+//	return m_pImGui_Manager->Get_Model_List_Size(eType);
+//}
+
+vector<wstring>* CGameInstance::Get_Model_List(CModel::TYPE eType)
 {
 	if (nullptr == m_pImGui_Manager)
 		return nullptr;
 
-	return m_pImGui_Manager->Get_Model_List();
+	return m_pImGui_Manager->Get_Model_List(eType);
 }
 
 void CGameInstance::Release_Engine()

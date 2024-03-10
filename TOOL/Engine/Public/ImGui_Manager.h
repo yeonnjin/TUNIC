@@ -23,7 +23,8 @@ public:
 
 	// PROTOTYPE
 	HRESULT					Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
-	vector<wstring>*		Get_Model_List() { return m_strModels; }
+	_uint					Get_Model_List_Size(CModel::TYPE eType) { return m_strModels[eType].size(); }
+	vector<wstring>*		Get_Model_List(CModel::TYPE eType) { return &m_strModels[eType]; }
 
 private:
 	class CGameInstance*	m_pGameInstance = { nullptr };

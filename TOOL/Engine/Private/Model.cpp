@@ -86,10 +86,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
 
 HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile/*const _char* strDataFilePath*/)
 {
-	
-
-
-
 	return S_OK;
 }
 

@@ -30,7 +30,7 @@ HRESULT CMonster::Initialize(void* pArg)
         return E_FAIL;
 
     m_pModelCom->Set_Animation(0, true);
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(rand() % 20, 2.f, rand() % 20, 1.f));
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(0.f, 1.f, 0.f, 1.f)/* XMVectorSet(rand() % 20, 2.f, rand() % 20, 1.f)*/);
 
     return S_OK;
 }

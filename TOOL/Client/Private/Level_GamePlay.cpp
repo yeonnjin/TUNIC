@@ -23,8 +23,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_LandObject()))
+	if (FAILED(Ready_Land_Object()))
 		return E_FAIL;
+
 
 	/*
 	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
@@ -76,7 +77,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_LandObject()
+HRESULT CLevel_GamePlay::Ready_Land_Object()
 {
 	///* 랜드오브젝트용 객체들에게 필요한 데이터를 구한다.*/
 	//CLandObject::LANDOBJECT_DESC		LandObjectDesc = {};
@@ -89,6 +90,16 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 
 	/* 구한정보들을 각 랜드오브젝트르 생성할 때 던진다. */
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Map_Object(TEXT("Layer_Map_Object"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+HRESULT CLevel_GamePlay::Ready_Map_Object(const wstring& strLayerTag)
+{
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Map_Object"))))
 		return E_FAIL;
 
 	return S_OK;

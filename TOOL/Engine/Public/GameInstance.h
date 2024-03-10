@@ -40,7 +40,7 @@ public: /* For.Object_Manager */
 	_uint				Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 
 public: /* For.Component_Manager */
-	HRESULT				 Add_Prototype(_uint iLevelIndex, const wstring& strPrototypeTag, class CComponent* pPrototype);
+	HRESULT				Add_Prototype(_uint iLevelIndex, const wstring& strPrototypeTag, class CComponent* pPrototype);
 	class CComponent*	Clone_Component(_uint iLevelIndex, const wstring& strPrototypeTag, void* pArg = nullptr);
 
 public: /* For.Timer_Manager */
@@ -64,7 +64,8 @@ public: /* For.ImGui_Manager */
 	HRESULT				Render();
 	void				EditTransform(CTransform* pTransformCom);
 	HRESULT				Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
-	vector<wstring>*	Get_Model_List();
+	//_uint				Get_Model_List_Size(CModel::TYPE eType);
+	vector<wstring>*	Get_Model_List(CModel::TYPE eType);
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };

@@ -20,34 +20,43 @@ public:
 	virtual HRESULT	Render() override;
 
 private:
+	// TAB
+	void			Frame_Tab();
+
 	// PICKING
 	HRESULT			Test_Picking();
 	HRESULT			Test_Mesh_Picking();
 	void			Test();
+	void			Gizmo(CTransform* pTransform);
+	void			Tool_Picking();
 
 	// MODEL_LIST
 	HRESULT			Load_Model();
 	void			Tool_Model_List();
-	void			Gizmo(CTransform* pTransform);
 
 	// FILE
 	HRESULT			Save_File();
 	HRESULT			Load_File();
+	void			Tool_File();
 
 
 
 
 
-	//string			WStringToString(const std::wstring& wstr);
+	string					WStringToString(wstring& wstr);
 
 private: // GIZMO
-	_bool		m_isUsingGizmo = { false };
-	CTransform* m_pGizmoTransform = { nullptr };
+	_bool					m_isUsingPicking = { true };
+	_bool					m_isUsingGizmo = { false };
+	CTransform*				m_pGizmoTransform = { nullptr };
+
+private: // MODEL_LIST
+	vector<wstring>			m_strModels;
 
 private: // FILE
-	_uint		m_iObjectCount = { 0 };
+	_uint					m_iObjectCount = { 0 };
 
-private:
+private: // TEST
 	bool show_demo_window = true;
 	bool show_another_window = true;
 	_float4 clear_color = _float4();
