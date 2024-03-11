@@ -71,7 +71,7 @@ HRESULT CTest_Object::Render()
 
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
-        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, aiTextureType_DIFFUSE)))
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
@@ -89,21 +89,15 @@ HRESULT CTest_Object::Render()
 HRESULT CTest_Object::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
-    /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fox"),
-        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-        return E_FAIL;*/
-    /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Rock"),
-        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-        return E_FAIL;*/
-
+  
     return S_OK;
 }
 

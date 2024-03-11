@@ -2,6 +2,9 @@
 #include "Level_GamePlay.h"
 
 #include "Camera_Free.h"
+#include "Map_Object.h"
+
+#include <fstream>
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -24,6 +27,9 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_LandObject()))
+		return E_FAIL;
+
+	if(FAILED(Ready_Layer_MapObj(TEXT("Layer_MapObject"))))
 		return E_FAIL;
 
 	/*
@@ -105,8 +111,8 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster"))))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster"))))
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -119,6 +125,39 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 			return E_FAIL;
 	}
 */
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
+{
+	ifstream fin;
+	fin.open("../Bin/Resources/Data/Map/Map1.dat", ios::in | ios::binary);
+
+	// Object Count
+	_uint iNumObjects;
+	fin.read(reinterpret_cast<char*>(&iNumObjects), sizeof(_uint));
+	for (size_t i = 0; i < iNumObjects; ++i)
+	{
+		MAPOBJFILE tMapObjFile = {};
+
+		// TransformMatrix
+		fin.read(reinterpret_cast<char*>(&tMapObjFile.TransformMatrix), sizeof(_float4x4));
+
+		// ModelComTag
+		fin.read(reinterpret_cast<char*>(&tMapObjFile.szModelComTag), sizeof(_char) * MAX_PATH);
+
+		// Desc
+		CMap_Object::MAPOBJ_DESC tDesc = {};
+		tDesc.TransformMatrix = tMapObjFile.TransformMatrix;
+
+		wstring wstr(&tMapObjFile.szModelComTag[0], &tMapObjFile.szModelComTag[MAX_PATH]);
+		tDesc.strModelComTag = wstr;
+
+		// Clone
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

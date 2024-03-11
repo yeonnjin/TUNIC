@@ -28,6 +28,7 @@ private:
 	/*HRESULT Ready_Layer_Player(const wstring& strLayerTag, CLandObject::LANDOBJECT_DESC& LandObjectDesc); */
 	HRESULT Ready_Layer_Monster(const wstring& strLayerTag);
 	HRESULT Ready_Layer_Effect(const wstring& strLayerTag);
+	HRESULT Ready_Layer_MapObj(const wstring& strLayerTag);
 	
 
 public:

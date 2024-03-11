@@ -19,10 +19,8 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
     m_iMaterialIndex = pAIMesh->mMaterialIndex;
     m_iNumVertices = pAIMesh->mNumVertices;
     m_pVerticesPos = new _float3[m_iNumVertices];   
-    //m_iVertexStride = sizeof(VTXMESH);
     m_iNumFaces = pAIMesh->mNumFaces;
     m_iNumIndices = m_iNumFaces * 3;
-    //m_pIndices = new _uint[m_iNumIndices];
     m_iIndexStride = sizeof(_uint);
     m_iNumVertexBuffers = 1;
     m_eIndexFormat = DXGI_FORMAT_R32_UINT;
@@ -65,8 +63,6 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
 
     if (FAILED(__super::Create_Buffer(&m_pIB)))
         return E_FAIL;
-
- //   Safe_Delete_Array(pIndices);
 
 #pragma endregion
 
@@ -277,8 +273,6 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(const aiMesh* pAIMesh, const vector<
     if (FAILED(__super::Create_Buffer(&m_pVB)))
         return E_FAIL;
 
-    //Safe_Delete_Array(pVertices);
-
     return S_OK;;
 }
 
@@ -326,7 +320,6 @@ void CMesh::Free()
 {
     __super::Free();
 
-    //if (!m_isCloned)
     Safe_Delete_Array(m_pIndices);
     Safe_Delete_Array(m_tMeshFile.pAnimMeshVertices);
     Safe_Delete_Array(m_tMeshFile.pMeshVertices);

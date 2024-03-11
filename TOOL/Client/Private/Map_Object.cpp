@@ -21,11 +21,27 @@ HRESULT CMap_Object::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Add_Components()))
+    if (nullptr == pArg)
         return E_FAIL;
 
-    _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(rand() % 10, 3.f, rand() % 10, 1.f));
+    MAPOBJ_DESC* pDesc = (MAPOBJ_DESC*)pArg;
+
+    // 맵 오브젝트 로드 시
+    if (true == pDesc->isLoad)
+    {
+        m_pTransformCom->Set_WorldMatrix(pDesc->TransformMatrix);
+    }
+    // 피킹 시
+    else
+    {
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+    }
+    
+    m_strModelComTag = pDesc->strModelComTag;
+    
+
+    if (FAILED(Add_Components()))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -78,7 +94,7 @@ HRESULT CMap_Object::Add_Components()
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Object"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
@@ -98,6 +114,22 @@ HRESULT CMap_Object::Bind_ShaderResources()
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CMap_Object::Ready_MapObj_File()
+{
+    // TransformMatrix
+    m_tMapObjFile.TransformMatrix = m_pTransformCom->Get_WorldFloat4x4();
+
+    // ModelComTag
+    _int size = WideCharToMultiByte(CP_UTF8, 0, m_strModelComTag.c_str(), -1, NULL, 0, NULL, NULL);
+    _char* buffer = new _char[MAX_PATH];
+    ZeroMemory(buffer, sizeof(_char) * MAX_PATH);
+    WideCharToMultiByte(CP_UTF8, 0, m_strModelComTag.c_str(), -1, buffer, MAX_PATH - 1, NULL, NULL);
+    memcpy(&m_tMapObjFile.szModelComTag, buffer, sizeof(_char) * MAX_PATH);
+    delete[] buffer;
 
     return S_OK;
 }
@@ -122,7 +154,7 @@ CGameObject* CMap_Object::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Create : CMap_Object"));
+        MSG_BOX(TEXT("Failed To Clone : CMap_Object"));
 
         Safe_Release(pInstance);
     }

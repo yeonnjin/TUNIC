@@ -9,8 +9,9 @@
 
 #include <fstream>
 
-CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strModelComTag)
     : CComponent{ pDevice, pContext }
+	, m_strModelComTag{ strModelComTag }
 {
 }
 
@@ -23,9 +24,9 @@ CModel::CModel(const CModel& rhs)
 	, m_Materials{ rhs.m_Materials }
 	, m_TransformMatrix{ rhs.m_TransformMatrix }
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
-	//, m_pModelFile{ rhs.m_pModelFile }
 	, m_tModelFile{ rhs.m_tModelFile }
 	, m_MaterialFiles{ rhs.m_MaterialFiles }
+	, m_strModelComTag{ rhs.m_strModelComTag }
 {
 	// 깊은 복사
 	for (auto& pPrototypeAnimation : rhs.m_Animations)
@@ -62,9 +63,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
 
    // 읽은 정보를 바탕으로 재정리
 
-	/* 이름 저장 */
-	//strcpy_s(m_szName, m_pAIScene->mName.data);
-
 	/* 전체 뼈 생성 */
 	if (FAILED(Ready_Bones(m_pAIScene->mRootNode)))
 		return E_FAIL;
@@ -82,11 +80,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const string& strModelFilePath,
 		return E_FAIL;
 
     return S_OK;
-}
-
-HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile/*const _char* strDataFilePath*/)
-{
-	return S_OK;
 }
 
 HRESULT CModel::Initialize(void* pArg)
@@ -269,6 +262,14 @@ HRESULT CModel::Ready_Animations()
 
 HRESULT CModel::Ready_ModelFile()
 {
+	// ModelTag
+	/*_int size = WideCharToMultiByte(CP_UTF8, 0, m_strModelComTag.c_str(), -1, NULL, 0, NULL, NULL);
+	_char* buffer = new _char[size + 1];
+	WideCharToMultiByte(CP_UTF8, 0, m_strModelComTag.c_str(), -1, buffer, size, NULL, NULL);
+	strcpy_s(m_tModelFile.szModelComTag, buffer);
+	delete[] buffer;*/
+	m_tModelFile.strModelComTag = m_strModelComTag;
+
 	// Type
 	m_tModelFile.iType = m_eModelType;
 	
@@ -302,9 +303,9 @@ HRESULT CModel::Ready_ModelFile()
 	return S_OK;
 }
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, const wstring& strModelComTag, _fmatrix TransformMatrix)
 {
-	CModel* pInstance = new CModel(pDevice, pContext);
+	CModel* pInstance = new CModel(pDevice, pContext, strModelComTag);
 
 	if (FAILED(pInstance->Initialize_Prototype(eType, strModelFilePath, TransformMatrix)))
 	{

@@ -134,6 +134,9 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
+		// ModelTag
+		_char						szModelComTag[MAX_PATH];
+
 		// Type
 		_uint						iType;
 
@@ -160,4 +163,11 @@ namespace Engine
 
 		_float4x4					MeshBoneMatrices[512] = {};
 	}MODELFILE;
+
+	/* Map Parsing */
+	typedef struct ENGINE_DLL
+	{
+		_float4x4					TransformMatrix;
+		_char						szModelComTag[MAX_PATH];
+	}MAPOBJFILE;
 }

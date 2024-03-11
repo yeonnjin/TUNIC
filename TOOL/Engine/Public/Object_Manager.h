@@ -16,8 +16,11 @@ private:
 	virtual ~CObject_Manager() = default;
 
 public:
-	const class CComponent* Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex);
-	_uint					Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
+	const class CComponent*		Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex);
+	_uint						Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
+	const class CGameObject*	Get_Object(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex);
+	HRESULT						Clear_Layer(_uint iLevelIndex, const wstring& strLayerTag);
+	HRESULT						Delete_Object(_uint iLevelIndex, const wstring& strLayerTag, _int iIndex);
 
 public:
 	HRESULT Initialize(_uint iNumLevels);

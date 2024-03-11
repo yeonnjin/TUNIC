@@ -14,8 +14,11 @@ private:
 	virtual ~CLayer() = default;
 
 public:
-	const class CComponent* Get_Component(const wstring& strComTag, _uint iIndex);
-	_uint					Get_Object_Count() { return m_GameObjects.size(); }
+	const class CComponent*		Get_Component(const wstring& strComTag, _uint iIndex);
+	_uint						Get_Object_Count() { return m_GameObjects.size(); }
+	const class CGameObject*	Get_Object(_uint iIndex);
+	HRESULT						Clear();
+	HRESULT						Delete_Object(int iIndex);
 
 public:
 	HRESULT Initialize();

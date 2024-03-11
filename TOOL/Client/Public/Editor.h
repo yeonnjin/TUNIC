@@ -34,10 +34,15 @@ private:
 	HRESULT			Load_Model();
 	void			Tool_Model_List();
 
+	// MAP
+	HRESULT			Save_Map_File();
+	HRESULT			Load_Map_File();
+	void			Tool_Map_File();
+
 	// FILE
-	HRESULT			Save_File();
-	HRESULT			Load_File();
-	void			Tool_File();
+	HRESULT			Save_Model_File();
+	HRESULT			Load_Model_File();
+	void			Tool_Model_File();
 
 
 
@@ -48,6 +53,7 @@ private:
 private: // GIZMO
 	_bool					m_isUsingPicking = { true };
 	_bool					m_isUsingGizmo = { false };
+	_int					m_iTargetIndex = { -1 };
 	CTransform*				m_pGizmoTransform = { nullptr };
 
 private: // MODEL_LIST

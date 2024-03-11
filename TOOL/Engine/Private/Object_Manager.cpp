@@ -25,6 +25,39 @@ _uint CObject_Manager::Get_Object_Count(_uint iLevelIndex, const wstring& strLay
 	return pLayer->Get_Object_Count();
 }
 
+const CGameObject* CObject_Manager::Get_Object(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+
+	if (nullptr == pLayer)
+		return nullptr;
+
+	return pLayer->Get_Object(iIndex);
+}
+
+HRESULT CObject_Manager::Clear_Layer(_uint iLevelIndex, const wstring& strLayerTag)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+
+	if (nullptr == pLayer)
+		return E_FAIL;
+
+	return pLayer->Clear();
+}
+
+HRESULT CObject_Manager::Delete_Object(_uint iLevelIndex, const wstring& strLayerTag, _int iIndex)
+{
+	if (-1 == iIndex)
+		return E_FAIL;
+
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+
+	if (nullptr == pLayer)
+		return E_FAIL;
+
+	return pLayer->Delete_Object(iIndex);
+}
+
 HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 {
 	m_iNumLevels = iNumLevels;

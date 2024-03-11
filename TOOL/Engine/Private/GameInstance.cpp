@@ -210,6 +210,30 @@ _uint CGameInstance::Get_Object_Count(_uint iLevelIndex, const wstring& strLayer
 	return m_pObject_Manager->Get_Object_Count(iLevelIndex, strLayerTag);
 }
 
+const CGameObject* CGameInstance::Get_Object(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex)
+{
+	if (nullptr == m_pObject_Manager)
+		return 0;
+
+	return m_pObject_Manager->Get_Object(iLevelIndex, strLayerTag, iIndex);
+}
+
+HRESULT CGameInstance::Clear_Layer(_uint iLevelIndex, const wstring& strLayerTag)
+{
+	if (nullptr == m_pObject_Manager)
+		return E_FAIL;
+
+	return m_pObject_Manager->Clear_Layer(iLevelIndex, strLayerTag);
+}
+
+HRESULT CGameInstance::Delete_Object(_uint iLevelIndex, const wstring& strLayerTag, _int iIndex)
+{
+	if (nullptr == m_pObject_Manager)
+		return E_FAIL;
+
+	return m_pObject_Manager->Delete_Object(iLevelIndex, strLayerTag, iIndex);
+}
+
 /* For.Component_Manager */
 HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const wstring & strPrototypeTag, CComponent * pPrototype)
 {

@@ -12,8 +12,41 @@ const CComponent * CLayer::Get_Component(const wstring & strComTag, _uint iIndex
 	for (size_t i = 0; i < iIndex; i++)
 		++iter;
 	
-
 	return (*iter)->Get_Component(strComTag);
+}
+
+const CGameObject* CLayer::Get_Object(_uint iIndex)
+{
+	auto	iter = m_GameObjects.begin();
+
+	for (size_t i = 0; i < iIndex; i++)
+		++iter;
+
+	return (*iter);
+}
+
+HRESULT CLayer::Clear()
+{
+	for (auto& pGameObject : m_GameObjects)
+		Safe_Release(pGameObject);
+
+	m_GameObjects.clear();
+
+	return S_OK;
+}
+
+HRESULT CLayer::Delete_Object(int iIndex)
+{
+	auto	iter = m_GameObjects.begin();
+
+	for (size_t i = 0; i < iIndex; i++)
+		++iter;
+
+	Safe_Release((*iter));
+
+	m_GameObjects.erase(iter);
+
+	return S_OK;
 }
 
 HRESULT CLayer::Initialize()

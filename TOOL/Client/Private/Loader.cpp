@@ -159,7 +159,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Model_Fiona */
 	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TEXT("Prototype_Component_Model_Fiona"), TransformMatrix))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Fox */
@@ -178,8 +178,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	///* Prototype_Component_Model_ForkLift */
 	TransformMatrix = XMMatrixScaling(0.001f, 0.001f, 0.001f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Map_Object"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/ForkLift/ForkLift.fbx", TransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_ForkLift"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/ForkLift/ForkLift.fbx", TEXT("Prototype_Component_Model_ForkLift"), TransformMatrix))))
 		return E_FAIL;
 
 	/* Prototype_Component_Model_ForkLift */
@@ -291,14 +291,14 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	/* For.Prototype_Component_Model_Fiona */
 	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TEXT("Prototype_Component_Model_Fiona"),TransformMatrix))))
 		return E_FAIL;
 
 	/* Prototype_Component_Model_ForkLift */
 	//TransformMatrix = XMMatrixIdentity();
 	TransformMatrix = XMMatrixScaling(0.001f, 0.001f, 0.001f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Object"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/ForkLift/ForkLift.fbx", TransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_ForkLift"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/ForkLift/ForkLift.fbx", TEXT("Prototype_Component_Model_ForkLift"),TransformMatrix))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Fox */

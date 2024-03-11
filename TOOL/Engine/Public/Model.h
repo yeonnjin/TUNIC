@@ -11,7 +11,7 @@ public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
 
 private:
-	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strModelComTag);
 	CModel(const CModel& rhs);
 	virtual ~CModel() = default;
 
@@ -36,7 +36,6 @@ public:
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix);
-	HRESULT			Initialize_Prototype(TYPE eType, MODELFILE* pModelFile/*const _char* strDataFilePath*/);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -52,8 +51,9 @@ private:
 	TYPE						m_eModelType = { TYPE_END };
 	const aiScene*				m_pAIScene = { nullptr };
 	Assimp::Importer			m_Importer;
-	//_char						m_szName[MAX_PATH] = { "" };
-	/*MODELFILE*					m_pModelFile;*/
+
+	// File
+	const wstring				m_strModelComTag;
 	MODELFILE					m_tModelFile;
 	vector<MATERIALFILE>		m_MaterialFiles;
 
@@ -86,7 +86,7 @@ private:
 	HRESULT Ready_ModelFile();
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, _fmatrix TransformMatrix = XMMatrixIdentity());
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const string& strModelFilePath, const wstring& strModelComTag, _fmatrix TransformMatrix = XMMatrixIdentity());
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

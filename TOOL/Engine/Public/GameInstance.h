@@ -38,6 +38,9 @@ public: /* For.Object_Manager */
 	HRESULT				Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg = nullptr);
 	const CComponent*	Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex = 0);
 	_uint				Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
+	const CGameObject*	Get_Object(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex = 0);
+	HRESULT				Clear_Layer(_uint iLevelIndex, const wstring& strLayerTag);
+	HRESULT				Delete_Object(_uint iLevelIndex, const wstring& strLayerTag, _int iIndex);
 
 public: /* For.Component_Manager */
 	HRESULT				Add_Prototype(_uint iLevelIndex, const wstring& strPrototypeTag, class CComponent* pPrototype);

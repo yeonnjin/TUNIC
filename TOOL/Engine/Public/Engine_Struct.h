@@ -71,7 +71,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[6];
 	}VTXANIMMESH;
 
-	/* File */
+	/* Model_File */
 	typedef struct ENGINE_DLL
 	{
 		_char						szName[MAX_PATH];
@@ -134,6 +134,10 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
+		// ModelTag
+		//_char						szModelComTag[MAX_PATH];
+		wstring						strModelComTag;
+
 		// Type
 		_uint						iType;
 
@@ -160,4 +164,18 @@ namespace Engine
 
 		_float4x4					MeshBoneMatrices[512] = {};
 	}MODELFILE;
+
+	/* Map Parsing */
+	typedef struct ENGINE_DLL
+	{
+		// 필요한 거
+		// 1. 오브젝트 전체 개수? -> 상위 단
+		// ========================================
+		// 2. 오브젝트 위치
+		// 3. 오브젝트 이름 -> 복사할 프로토타입 태그
+		// 4. 얘가 가지고 있는 모델이랑 컴포넌트 이름?
+
+		_float4x4				TransformMatrix;
+		_char					szModelComTag[MAX_PATH];
+	}MAPOBJFILE;
 }

@@ -43,6 +43,12 @@
     <Filter Include="99.Defines">
       <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Map_Object">
+      <UniqueIdentifier>{f5117154-5d6b-4b47-9dd0-dd6ed5d112a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Test_Object">
+      <UniqueIdentifier>{78221f4b-af9d-496a-829a-f324ccd4612f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -87,6 +93,12 @@
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Map_Object.h">
+      <Filter>02.GameObjects\Map_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Test_Object.h">
+      <Filter>02.GameObjects\Test_Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -121,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObjects\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Map_Object.cpp">
+      <Filter>02.GameObjects\Map_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Test_Object.cpp">
+      <Filter>02.GameObjects\Test_Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
