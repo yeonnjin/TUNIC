@@ -11,7 +11,8 @@
 #include <fstream>
 //#include "Texture.h"
 
-
+#define DATAPATH "../Bin/Resources/Data/Map/Map5.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Model5.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -151,7 +152,7 @@ HRESULT CEditor::Test_Mesh_Picking()
 	if (0 == iNumObjects)
 		return E_FAIL;
 
-	for (size_t i = 0; i < iNumObjects; ++i)
+	for (size_t i = 1; i < iNumObjects; ++i)
 	{
 		const CModel* pObjectModel = dynamic_cast<const CModel*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Model"), i));
 		if (nullptr == pObjectModel)
@@ -167,6 +168,37 @@ HRESULT CEditor::Test_Mesh_Picking()
 			m_iTargetIndex = i;
 			m_pGizmoTransform = (CTransform*)pObjectTransform;
 			return S_OK;
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CEditor::Map_Picking()
+{
+	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"));
+	if (0 == iNumObjects)
+		return E_FAIL;
+
+	for (size_t i = 0; i < iNumObjects; ++i)
+	{
+		const CModel* pObjectModel = dynamic_cast<const CModel*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Model"), i));
+		if (nullptr == pObjectModel)
+			return E_FAIL;
+
+		const CTransform* pObjectTransform = dynamic_cast<const CTransform*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Transform"), i));
+		if (nullptr == pObjectTransform)
+			return E_FAIL;
+
+		_float3 vPickingPosition;
+		if (true == pObjectModel->Check_Picking(pObjectTransform, vPickingPosition))
+		{
+			CMap_Object::MAPOBJ_DESC tDesc = {};
+			tDesc.isLoad = false;
+			tDesc.vPosition = vPickingPosition;
+			tDesc.strModelComTag = TEXT("Prototype_Component_Model_ForkLift");
+			if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+				return E_FAIL;
 		}
 	}
 
@@ -223,7 +255,7 @@ HRESULT CEditor::Save_Map_File()
 {
 	// 官捞呈府 颇老 积己
 	ofstream fout;
-	fout.open("../Bin/Resources/Data/Map/Map1.dat", ios::out | ios::binary);
+	fout.open(DATAPATH, ios::out | ios::binary);
 
 	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"));
 	if (0 == iNumObjects)
@@ -257,7 +289,7 @@ HRESULT CEditor::Load_Map_File()
 		return E_FAIL;
 
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Map/Map1.dat", ios::in | ios::binary);
+	fin.open(DATAPATH, ios::in | ios::binary);
 
 	// Object Count
 	_uint iNumObjects;
@@ -385,7 +417,7 @@ HRESULT CEditor::Load_Map_File()
 HRESULT CEditor::Save_Model_File()
 {
 	ofstream fout;
-	fout.open("../Bin/Resources/Data/Model/Model3.dat", ios::out | ios::binary);
+	fout.open(MODELPATH, ios::out | ios::binary);
 
 	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"));
 	if (0 == iNumObjects)
@@ -697,7 +729,8 @@ void CEditor::Tool_Picking()
 	if (m_isUsingPicking && !m_isUsingGizmo)
 	{
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-			Test_Picking();
+			//Test_Picking();
+			Map_Picking();
 
 		else if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Test_Mesh_Picking();

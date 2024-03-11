@@ -3,6 +3,7 @@
 
 #include "Editor.h"
 #include "Camera_Free.h"
+#include "Map_Object.h"
 
 CLevel_Tool_Map::CLevel_Tool_Map(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel{ pDevice, pContext }
@@ -69,14 +70,24 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Camera(const wstring& strLayerTag)
 
 HRESULT CLevel_Tool_Map::Ready_Layer_Terrain(const wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Terrain"))))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Terrain"))))
+		return E_FAIL;*/
 
 	return S_OK;
 }
 
 HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 {
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map"))))
+		return E_FAIL;*/
+
+	CMap_Object::MAPOBJ_DESC tDesc = {};
+	tDesc.isLoad = false;
+	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+		return E_FAIL;
+
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Test_Object"))))
 		return E_FAIL;*/
 

@@ -44,7 +44,7 @@ public:
 	HRESULT Play_Animation(_float fTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 
-	_bool	Check_Picking(const class CTransform* pTransform) const;
+	_bool	Check_Picking(const class CTransform* pTransform, _Out_ _float3& vPickingPosition = _float3(0.f, 0.f, 0.f)) const;
 
 private: 
 	// Assimp

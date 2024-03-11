@@ -56,7 +56,7 @@ HRESULT CMap_Object::Render()
         if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(i)))
+        if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
 
         m_pModelCom->Render(i);

@@ -407,7 +407,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 HRESULT CLoader::Test_For_Model()
 {
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Model/Model3.dat", ios::in | ios::binary);
+	fin.open("../Bin/Resources/Data/Model/Model5.dat", ios::in | ios::binary);
 
 	_uint iObjectCount;
 	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));

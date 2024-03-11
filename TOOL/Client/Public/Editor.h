@@ -26,6 +26,7 @@ private:
 	// PICKING
 	HRESULT			Test_Picking();
 	HRESULT			Test_Mesh_Picking();
+	HRESULT			Map_Picking();
 	void			Test();
 	void			Gizmo(CTransform* pTransform);
 	void			Tool_Picking();

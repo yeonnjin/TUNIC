@@ -31,6 +31,8 @@ private:
 
 	CHANNELFILE			m_tChannelFile = {};
 
+	// scale, rotation, position, transformationmatrix
+
 private:
 	HRESULT				Ready_ChannelFile();
 

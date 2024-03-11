@@ -5,6 +5,8 @@ texture2D g_Texture;
 sampler LinearSampler = sampler_state
 {
     Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = wrap;
+    AddressV = wrap;
 };
 
 struct VS_IN

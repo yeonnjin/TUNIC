@@ -138,14 +138,17 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	return S_OK;
 }
 
-_bool CModel::Check_Picking(const class CTransform* pTransform) const
+_bool CModel::Check_Picking(const class CTransform* pTransform, _Out_ _float3& vPickingPosition) const
 {
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
 		_float3 vPickingPos = m_Meshes[i]->Compute_Picking(pTransform);
 
 		if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
+		{
+			vPickingPosition = vPickingPos;
 			return true;
+		}			
 	}
 
 	return false;

@@ -67,7 +67,7 @@ HRESULT CMap_Object::Render()
         if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, /*aiTextureType_HEIGHT*/aiTextureType_DIFFUSE)))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(i)))
+        if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
 
         m_pModelCom->Render(i);
@@ -84,7 +84,7 @@ HRESULT CMap_Object::Add_Components()
     //    return E_FAIL;
 
     ///* For.Com_Model */
-    //if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Map_Object"),
+    //if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Map"),
     //    TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
     //    return E_FAIL;
 

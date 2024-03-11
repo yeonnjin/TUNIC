@@ -132,7 +132,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 {
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Map/Map1.dat", ios::in | ios::binary);
+	fin.open("../Bin/Resources/Data/Map/Map5.dat", ios::in | ios::binary);
 
 	// Object Count
 	_uint iNumObjects;
@@ -164,8 +164,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const wstring & strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Terrain"))))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Terrain"))))
+		return E_FAIL;*/
 
 	/*
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Sky"))))
