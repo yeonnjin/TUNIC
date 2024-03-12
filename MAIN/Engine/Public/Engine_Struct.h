@@ -182,5 +182,8 @@ namespace Engine
 
 		// 최종행렬
 		_matrix			TransformationMatrix;
+
+
+
 	}CHANNELSTATE;
 }

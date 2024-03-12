@@ -31,6 +31,16 @@ HRESULT CAnimation::Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& 
     return S_OK;
 }
 
+void CAnimation::Invalidate_Blending(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
+{
+    for (_uint i = 0; i < m_iNumChannels; ++i)
+    {
+        /* 이 뼈의 생태 행렬을 만들어서 CBone의 TransformationMatrix를 바꿈 */
+        m_Channels[i]->Invalidate_TransformationMatrix(Bones, 0, &m_CurrentKeyFrameIndices[i]);
+    }
+}
+
+
 void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
 {
     m_isFinished = false;

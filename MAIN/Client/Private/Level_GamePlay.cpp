@@ -140,7 +140,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 {
 	//ifstream fin;
-	//fin.open("../Bin/Resources/Data/Map/Final2.dat", ios::in | ios::binary);
+	//fin.open("../Bin/Resources/Data/Map/Model_Map_Beach.dat", ios::in | ios::binary);
 
 	//// Object Count
 	//_uint iNumObjects;

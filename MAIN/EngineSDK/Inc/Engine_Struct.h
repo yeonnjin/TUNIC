@@ -170,4 +170,20 @@ namespace Engine
 		_float4x4						TransformMatrix;
 		_char							szModelComTag[MAX_PATH];
 	}MAPOBJFILE;
+
+	/* Linear */
+	typedef struct
+	{
+		// 키프레임
+		XMFLOAT3		vScale;
+		XMFLOAT4		vRotation;
+		XMFLOAT3		vTranslation;
+		float			fTime;
+
+		// 최종행렬
+		_matrix			TransformationMatrix;
+
+
+
+	}CHANNELSTATE;
 }

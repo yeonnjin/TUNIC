@@ -9,6 +9,8 @@ class ENGINE_DLL CModel final : public CComponent
 {
 public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
+	enum STATE { STATE_PREV, STATE_CUR, STATE_END };
+
 
 private:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -68,10 +70,15 @@ private:
 
 	// Linear
 	_uint							m_iPrevAnimIndex = {};
-	_bool							m_isChanging = { false };
+	_bool							m_isBlending = { false };
+
+	// Linea
+	vector<CHANNELSTATE>			m_ChannelStates[STATE_END];
+	_uint							m_iNumBones = {};
 
 private:
-	HRESULT	Linear_Interpolation();
+	_bool	Animation_Blending(_float fTimeDelta);
+	_bool	is_Blended(_float fTimeDelta);
 
 private:
 	HRESULT Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile);

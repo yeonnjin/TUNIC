@@ -15,6 +15,10 @@ private:
 	virtual ~CChannel() = default;
 
 public:
+	_uint			Get_BoneIndex() { return m_iBoneIndex; }
+	CHANNELSTATE*	Get_ChannelState() { return &m_tChannelState; }
+
+public:
 	HRESULT Initialize(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones);
 	void	Invalidate_TransformationMatrix(const vector<class CBone*>& Bones, _float fTrackPosition, _uint* pCurrentKeyFrameIndex);
 
@@ -24,6 +28,9 @@ private:
 
 	_uint				m_iNumKeyFrames = { 0 };
 	vector<KEYFRAME>	m_KeyFrames;
+
+	// Linear
+	CHANNELSTATE		m_tChannelState = {};
 
 public:
 	static CChannel* Create(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones);

@@ -17,10 +17,15 @@ public:
 		m_isCloned = true;
 	}
 
+	void	Invalidate_Blending(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop);
+
 	// Get
 	_bool	isFinished() const {
 		return m_isFinished;
 	}
+
+	_uint			Get_NumChannels() { return m_iNumChannels; }
+	class CChannel* Get_Channel(_uint iChannelIndex) { return m_Channels[iChannelIndex]; }
 
 public:
 	HRESULT Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);
@@ -42,7 +47,7 @@ private:
 
 	// FILE
 	ANIMFILE					m_tAnimFile = {};
-
+	
 public:
 	static CAnimation* Create(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);
 	CAnimation* Clone();
