@@ -36,13 +36,13 @@ private:
 	void			Tool_Model_List();
 
 	// MAP
-	HRESULT			Save_Map_File();
-	HRESULT			Load_Map_File();
+	HRESULT			Save_Object_File(const wstring& strLayerTag);
+	HRESULT			Load_Object_File(const wstring& strLayerTag);
 	void			Tool_Map_File();
 
 	// FILE
-	HRESULT			Save_Model_File();
-	HRESULT			Load_Model_File();
+	HRESULT			Save_Model_File(const wstring& strLayerTag);
+	HRESULT			Load_Model_File(const wstring& strLayerTag);
 	void			Tool_Model_File();
 
 

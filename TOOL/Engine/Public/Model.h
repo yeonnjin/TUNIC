@@ -48,35 +48,36 @@ public:
 
 private: 
 	// Assimp
-	TYPE						m_eModelType = { TYPE_END };
-	const aiScene*				m_pAIScene = { nullptr };
-	Assimp::Importer			m_Importer;
+	TYPE							m_eModelType = { TYPE_END };
+	const aiScene*					m_pAIScene = { nullptr };
+	Assimp::Importer				m_Importer;
 
 	// File
-	const wstring				m_strModelComTag;
-	MODELFILE					m_tModelFile;
-	vector<MATERIALFILE>		m_MaterialFiles;
+	const wstring					m_strModelComTag;
+	MODELFILE						m_tModelFile;
+	vector<_uint>					m_NumTextures;
+	vector<vector<MATERIALFILE>>	m_MaterialFiles;
 
 private: 
 	// Mesh	
-	_uint						m_iNumMeshes = { 0 };
-	vector<class CMesh*>		m_Meshes;
+	_uint							m_iNumMeshes = { 0 };
+	vector<class CMesh*>			m_Meshes;
 
 	// Material
-	_uint						m_iNumMaterials = { 0 };
-	vector<MESH_MATERIAL>		m_Materials;
+	_uint							m_iNumMaterials = { 0 };
+	vector<MESH_MATERIAL>			m_Materials;
 
 	// Bone
-	_float4x4					m_TransformMatrix;
-	vector<class CBone*>		m_Bones;
+	_float4x4						m_TransformMatrix;
+	vector<class CBone*>			m_Bones;
 
 	// Animation
-	_uint						m_iNumAnimations = { 0 };
-	_uint						m_iCurrentAnimIndex = { 0 };
-	_bool						m_isLoop = { false };
-	vector<class CAnimation*>	m_Animations;
+	_uint							m_iNumAnimations = { 0 };
+	_uint							m_iCurrentAnimIndex = { 0 };
+	_bool							m_isLoop = { false };
+	vector<class CAnimation*>		m_Animations;
 
-	_float4x4					m_MeshBoneMatrices[512];
+	_float4x4						m_MeshBoneMatrices[512];
 
 private:
 	HRESULT Ready_Meshes();

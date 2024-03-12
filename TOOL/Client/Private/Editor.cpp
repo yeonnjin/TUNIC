@@ -11,8 +11,8 @@
 #include <fstream>
 //#include "Texture.h"
 
-#define DATAPATH "../Bin/Resources/Data/Map/Map5.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Model5.dat"
+#define DATAPATH "../Bin/Resources/Data/Map/Map_12_1.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Player.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -196,7 +196,7 @@ HRESULT CEditor::Map_Picking()
 			CMap_Object::MAPOBJ_DESC tDesc = {};
 			tDesc.isLoad = false;
 			tDesc.vPosition = vPickingPosition;
-			tDesc.strModelComTag = TEXT("Prototype_Component_Model_ForkLift");
+			tDesc.strModelComTag = TEXT("Prototype_Component_Model_Flower");
 			if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
 				return E_FAIL;
 		}
@@ -251,13 +251,13 @@ HRESULT CEditor::Load_Model()
 
 #pragma region FILE
 
-HRESULT CEditor::Save_Map_File()
+HRESULT CEditor::Save_Object_File(const wstring& strLayerTag)
 {
 	// 바이너리 파일 생성
 	ofstream fout;
 	fout.open(DATAPATH, ios::out | ios::binary);
 
-	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"));
+	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, strLayerTag);
 	if (0 == iNumObjects)
 		return E_FAIL;
 
@@ -265,7 +265,7 @@ HRESULT CEditor::Save_Map_File()
 	fout.write(reinterpret_cast<char*>(&iNumObjects), sizeof(_uint));
 	for (size_t i = 0; i < iNumObjects; ++i)
 	{
-		CMap_Object* pObject = (CMap_Object*)(m_pGameInstance->Get_Object(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), i));
+		CMap_Object* pObject = (CMap_Object*)(m_pGameInstance->Get_Object(LEVEL_TOOL_MAP, strLayerTag, i));
 		if (nullptr == pObject)
 			return E_FAIL;
 
@@ -283,9 +283,9 @@ HRESULT CEditor::Save_Map_File()
 	return S_OK;
 }
 
-HRESULT CEditor::Load_Map_File()
+HRESULT CEditor::Load_Object_File(const wstring& strLayerTag)
 {
-	if (E_FAIL == m_pGameInstance->Clear_Layer(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object")))
+	if (E_FAIL == m_pGameInstance->Clear_Layer(LEVEL_TOOL_MAP, strLayerTag))
 		return E_FAIL;
 
 	ifstream fin;
@@ -314,7 +314,7 @@ HRESULT CEditor::Load_Map_File()
 		tDesc.strModelComTag = wstr;
 
 		// Clone
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
 			return E_FAIL;
 	}
 
@@ -414,12 +414,12 @@ HRESULT CEditor::Load_Map_File()
 //	return S_OK;
 //}
 
-HRESULT CEditor::Save_Model_File()
+HRESULT CEditor::Save_Model_File(const wstring& strLayerTag)
 {
 	ofstream fout;
 	fout.open(MODELPATH, ios::out | ios::binary);
 
-	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"));
+	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, /*strLayerTag*/TEXT("Layer_Map_Object"));
 	if (0 == iNumObjects)
 		return E_FAIL;
 
@@ -428,7 +428,7 @@ HRESULT CEditor::Save_Model_File()
 	vector<_uint> ObjectIndex;
 	for (size_t i = 0; i < iNumObjects; ++i)
 	{
-		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Model"), i));
+		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, /*strLayerTag*/TEXT("Layer_Map_Object"), TEXT("Com_Model"), i));
 		if (nullptr == pObjectModel)
 			return E_FAIL;
 
@@ -502,7 +502,12 @@ HRESULT CEditor::Save_Model_File()
 		// Material
 		fout.write(reinterpret_cast<char*>(&pModelFile->iNumMaterials), sizeof(_uint));
 		for (size_t j = 0; j < pModelFile->iNumMaterials; ++j)
-			fout.write(reinterpret_cast<char*>(&pModelFile->Materials[j]), sizeof(MATERIALFILE));
+		{
+			fout.write(reinterpret_cast<char*>(&pModelFile->NumTextures[j]), sizeof(_uint));
+			for (size_t k = 0; k < pModelFile->NumTextures[j]; ++k)
+				fout.write(reinterpret_cast<char*>(&pModelFile->Materials[j][k]), sizeof(MATERIALFILE));		
+		}
+			
 
 		// Bone
 		fout.write(reinterpret_cast<char*>(&pModelFile->TransformMatrix), sizeof(_float4x4));
@@ -545,10 +550,10 @@ HRESULT CEditor::Save_Model_File()
 	return S_OK;
 }
 // 수정 필요(모델태그)
-HRESULT CEditor::Load_Model_File()
+HRESULT CEditor::Load_Model_File(const wstring& strLayerTag)
 {
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Model/Model1.dat", ios::in | ios::binary);
+	fin.open(strLayerTag.c_str(), ios::in | ios::binary);
 
 	_uint iObjectCount;
 	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
@@ -633,7 +638,7 @@ HRESULT CEditor::Load_Model_File()
 		{
 			MATERIALFILE tMaterialFile{};
 			fin.read(reinterpret_cast<char*>(&tMaterialFile), sizeof(MATERIALFILE));
-			tModelFile.Materials.push_back(tMaterialFile);
+			tModelFile.Materials[j].push_back(tMaterialFile);
 		}
 
 		// Bone
@@ -729,7 +734,6 @@ void CEditor::Tool_Picking()
 	if (m_isUsingPicking && !m_isUsingGizmo)
 	{
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-			//Test_Picking();
 			Map_Picking();
 
 		else if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
@@ -762,10 +766,32 @@ void CEditor::Tool_Picking()
 
 void CEditor::Tool_Map_File()
 {
-	ImGui::Text("<Map File>");
+	ImGui::Text("<OBJECT FILE>");
+	ImGui::Text("<OBJECT>");
+	if (ImGui::Button("SAVE_OBJECT", ImVec2(100.f, 30.f)))
+	{
+		if (S_OK == Save_Object_File(TEXT("Layer_Map_Object")))
+		{
+			ImGui::SameLine();
+			ImGui::Text("Success To Save : Map_Object");
+		}
+	}
+
+	if (ImGui::Button("LOAD_OBJECT", ImVec2(100.f, 30.f)))
+	{
+		if (S_OK == Load_Object_File(TEXT("Layer_Map_Object")))
+		{
+			ImGui::SameLine();
+			ImGui::Text("Success To Load : Map_Object");
+		}
+	}
+
+	ImGui::Separator();
+
+	ImGui::Text("<MAP>");
 	if (ImGui::Button("SAVE_MAP", ImVec2(100.f, 30.f)))
 	{
-		if (S_OK == Save_Map_File())
+		if (S_OK == Save_Object_File(TEXT("Layer_Map")))
 		{
 			ImGui::SameLine();
 			ImGui::Text("Success To Save : Map");
@@ -774,34 +800,59 @@ void CEditor::Tool_Map_File()
 
 	if (ImGui::Button("LOAD_MAP", ImVec2(100.f, 30.f)))
 	{
-		if (S_OK == Load_Map_File())
+		if (S_OK == Load_Object_File(TEXT("Layer_Map")))
 		{
 			ImGui::SameLine();
 			ImGui::Text("Success To Load : Map");
 		}
 	}
 	ImGui::Separator();
+	ImGui::Separator();
 }
 
 void CEditor::Tool_Model_File()
 {
+	ImGui::Text("<MODEL FILE>");
+	ImGui::Text("<OBEJCT>");
+
 	if (ImGui::Button("SAVE_MODEL", ImVec2(100.f, 30.f)))
 	{
-		if (S_OK == Save_Model_File())
+		if (S_OK == Save_Model_File(TEXT("Layer_Model_Object")))
 		{
 			ImGui::SameLine();
-			ImGui::Text("Success To Save : Model");
+			ImGui::Text("Success To Save : Model_Object");
 		}		
 	}
 		
 	if (ImGui::Button("LOAD_MODEL", ImVec2(100.f, 30.f)))
 	{
-		if (S_OK == Load_Model_File())
+		if (S_OK == Load_Model_File(TEXT("Layer_Model_Object")))
 		{
 			ImGui::SameLine();
-			ImGui::Text("Success To Load : Model");
+			ImGui::Text("Success To Load : Model_Object");
 		}
 	}		
+
+	ImGui::Separator();
+
+	ImGui::Text("<MAP>");
+	if (ImGui::Button("SAVE_MAP", ImVec2(100.f, 30.f)))
+	{
+		if (S_OK == Save_Model_File(TEXT("Layer_Map")))
+		{
+			ImGui::SameLine();
+			ImGui::Text("Success To Save : Model_Map");
+		}
+	}
+
+	if (ImGui::Button("LOAD_MAP", ImVec2(100.f, 30.f)))
+	{
+		if (S_OK == Load_Model_File(TEXT("Layer_Map")))
+		{
+			ImGui::SameLine();
+			ImGui::Text("Success To Load : Model_Map");
+		}
+	}
 }
 #pragma endregion
 
@@ -902,7 +953,8 @@ void CEditor::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pGizmoTransform);
+	if(nullptr != m_pGizmoTransform)
+		Safe_Release(m_pGizmoTransform);
 }
 #pragma endregion
 

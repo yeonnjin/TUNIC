@@ -3,6 +3,7 @@
 
 #include "Camera_Free.h"
 #include "Map_Object.h"
+#include "Player.h"
 
 #include <fstream>
 
@@ -90,8 +91,8 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 	//LandObjectDesc.pTerrainVIBuffer = (CVIBuffer_Terrain*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer")));	
 
 	///* 구한정보들을 각 랜드오브젝트르 생성할 때 던진다. */
-	//if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"), LandObjectDesc)))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
 
 	/* 구한정보들을 각 랜드오브젝트르 생성할 때 던진다. */
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
@@ -99,15 +100,22 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 
 	return S_OK;
 }
-//
-//HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag, CLandObject::LANDOBJECT_DESC& LandObjectDesc)
-//{
-//	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Player"), &LandObjectDesc)))
-//		return E_FAIL;*/
-//
-//	return S_OK;
-//}
-//
+
+HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
+{
+	// Desc
+	CPlayer::PLAYER_DESC tDesc = {};
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	tDesc.strModelComTag = wstr;
+
+	// Clone
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
@@ -131,33 +139,33 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 {
-	ifstream fin;
-	fin.open("../Bin/Resources/Data/Map/Map5.dat", ios::in | ios::binary);
+	//ifstream fin;
+	//fin.open("../Bin/Resources/Data/Map/Final2.dat", ios::in | ios::binary);
 
-	// Object Count
-	_uint iNumObjects;
-	fin.read(reinterpret_cast<char*>(&iNumObjects), sizeof(_uint));
-	for (size_t i = 0; i < iNumObjects; ++i)
-	{
-		MAPOBJFILE tMapObjFile = {};
+	//// Object Count
+	//_uint iNumObjects;
+	//fin.read(reinterpret_cast<char*>(&iNumObjects), sizeof(_uint));
+	//for (size_t i = 0; i < iNumObjects; ++i)
+	//{
+	//	MAPOBJFILE tMapObjFile = {};
 
-		// TransformMatrix
-		fin.read(reinterpret_cast<char*>(&tMapObjFile.TransformMatrix), sizeof(_float4x4));
+	//	// TransformMatrix
+	//	fin.read(reinterpret_cast<char*>(&tMapObjFile.TransformMatrix), sizeof(_float4x4));
 
-		// ModelComTag
-		fin.read(reinterpret_cast<char*>(&tMapObjFile.szModelComTag), sizeof(_char) * MAX_PATH);
+	//	// ModelComTag
+	//	fin.read(reinterpret_cast<char*>(&tMapObjFile.szModelComTag), sizeof(_char) * MAX_PATH);
 
-		// Desc
-		CMap_Object::MAPOBJ_DESC tDesc = {};
-		tDesc.TransformMatrix = tMapObjFile.TransformMatrix;
+	//	// Desc
+	//	CMap_Object::MAPOBJ_DESC tDesc = {};
+	//	tDesc.TransformMatrix = tMapObjFile.TransformMatrix;
 
-		wstring wstr(&tMapObjFile.szModelComTag[0], &tMapObjFile.szModelComTag[MAX_PATH]);
-		tDesc.strModelComTag = wstr;
+	//	wstring wstr(&tMapObjFile.szModelComTag[0], &tMapObjFile.szModelComTag[MAX_PATH]);
+	//	tDesc.strModelComTag = wstr;
 
-		// Clone
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
-			return E_FAIL;
-	}
+	//	// Clone
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+	//		return E_FAIL;
+	//}
 
 	return S_OK;
 }

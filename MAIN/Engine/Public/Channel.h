@@ -25,6 +25,9 @@ private:
 	_uint				m_iNumKeyFrames = { 0 };
 	vector<KEYFRAME>	m_KeyFrames;
 
+	// Linear
+	CHANNELSTATE		m_tChannelState = {};
+
 public:
 	static CChannel* Create(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones);
 	virtual void Free() override;

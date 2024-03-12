@@ -11,6 +11,7 @@
 //#include "Sky.h"
 #include "Model.h"
 
+#include "Player.h"
 #include "Map_Object.h"
 #include "Test_Object.h"
 #include <fstream>
@@ -153,7 +154,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 	_matrix		TransformMatrix = XMMatrixIdentity();
 
-	Test_For_Model();
+	/*Test_For_Model();*/
 	///* For.Prototype_Component_Model_Fiona */
 	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
@@ -210,10 +211,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	///* For.Prototype_GameObject_Player */
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
-	//	CPlayer::Create(m_pGraphic_Device))))
-	//	return E_FAIL;
+	/* For.Prototype_GameObject_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_Monster */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster"),
@@ -235,6 +236,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	CSky::Create(m_pGraphic_Device))))
 	//	return E_FAIL;
 	//
+
+	Test_For_Model();
+
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 
 	m_isFinished = true;
@@ -407,7 +411,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 HRESULT CLoader::Test_For_Model()
 {
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Model/Model5.dat", ios::in | ios::binary);
+	fin.open("../Bin/Resources/Data/Model/Model_Map_Beach.dat", ios::in | ios::binary);
 
 	_uint iObjectCount;
 	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
@@ -488,13 +492,35 @@ HRESULT CLoader::Test_For_Model()
 			tModelFile.Meshes.push_back(tMeshFile);
 		}
 
+		//// Material
+		//fin.read(reinterpret_cast<char*>(&tModelFile.iNumMaterials), sizeof(_uint));
+		//for (size_t j = 0; j < tModelFile.iNumMaterials; ++j)
+		//{
+		//	MATERIALFILE tMaterialFile{};
+		//	fin.read(reinterpret_cast<char*>(&tMaterialFile), sizeof(MATERIALFILE));
+		//	tModelFile.Materials.push_back(tMaterialFile);
+		//}
+
 		// Material
 		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMaterials), sizeof(_uint));
+		vector<_uint> NumTextures;
+		vector<vector<MATERIALFILE>> vecMaterials;
 		for (size_t j = 0; j < tModelFile.iNumMaterials; ++j)
 		{
-			MATERIALFILE tMaterialFile{};
-			fin.read(reinterpret_cast<char*>(&tMaterialFile), sizeof(MATERIALFILE));
-			tModelFile.Materials.push_back(tMaterialFile);
+			// NumTextures
+			_uint iNum = 0;
+			fin.read(reinterpret_cast<char*>(&iNum), sizeof(_uint));
+			tModelFile.NumTextures.push_back(iNum);
+
+			// Materials
+			vector<MATERIALFILE> Materials;
+			for (size_t k = 0; k < tModelFile.NumTextures[j]; ++k)
+			{
+				MATERIALFILE tMaterial = {};
+				fin.read(reinterpret_cast<char*>(&tMaterial), sizeof(MATERIALFILE));
+				Materials.push_back(tMaterial);
+			}
+			tModelFile.Materials.push_back(Materials);
 		}
 
 		// Bone
@@ -563,6 +589,199 @@ HRESULT CLoader::Test_For_Model()
 			Safe_Delete_Array(tModelFile.Meshes[j].pIndices);
 
 		int a = 0;
+	}
+
+	fin.close();
+
+	// ==========================================================================================
+
+	//ifstream fin;
+	fin.open("../Bin/Resources/Data/Model/Player.dat", ios::in | ios::binary);
+
+	iObjectCount = 0;
+	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
+	for (size_t i = 0; i < iObjectCount; ++i)
+	{
+		MODELFILE tModelFile = {};
+
+		/*_char szModelTag[MAX_PATH] = {};
+		fin.read(reinterpret_cast<char*>(&szModelTag), sizeof(_char)* MAX_PATH);
+		size_t iLength = strlen(szModelTag) + 1;*/
+
+		//strncpy_s(&tModelFile.szModelComTag[0], sizeof(_char) * iLength, &szModelTag[0], iLength);
+		//strcpy_s(&tModelFile.szModelComTag[0], sizeof(_char)* iLength, szModelTag);
+		fin.read(reinterpret_cast<char*>(&tModelFile.szModelComTag), sizeof(_char) * MAX_PATH);
+
+		// Type
+		fin.read(reinterpret_cast<char*>(&tModelFile.iType), sizeof(_uint));
+
+		// Mesh
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMeshes), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+		{
+			MESHFILE tMeshFile{};
+			fin.read(reinterpret_cast<char*>(&tMeshFile.szName), sizeof(_char) * MAX_PATH);
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iMaterialIndex), sizeof(_uint));
+
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumFaces), sizeof(_uint));
+
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumBones), sizeof(_uint));
+			for (size_t k = 0; k < tMeshFile.iNumBones; ++k)
+			{
+				_uint	iBoneIndex{};
+				fin.read(reinterpret_cast<char*>(&iBoneIndex), sizeof(_uint));
+				tMeshFile.Bones.push_back(iBoneIndex);
+			}
+
+			_uint iNumVertices{};
+			fin.read(reinterpret_cast<char*>(&iNumVertices), sizeof(_uint));
+			tMeshFile.iNumVertices = iNumVertices;
+
+			if (CModel::TYPE_NONANIM == tModelFile.iType)
+			{
+				tMeshFile.pMeshVertices = new VTXMESH[iNumVertices];
+				ZeroMemory(tMeshFile.pMeshVertices, sizeof(VTXMESH) * iNumVertices);
+				for (size_t k = 0; k < iNumVertices; ++k)
+				{
+					VTXMESH tMesh{};
+					fin.read(reinterpret_cast<char*>(&tMesh), sizeof(VTXMESH));
+					memcpy(&tMeshFile.pMeshVertices[k], &tMesh, sizeof(VTXMESH));
+				}
+			}
+			else
+			{
+				tMeshFile.pAnimMeshVertices = new VTXANIMMESH[iNumVertices];
+				ZeroMemory(tMeshFile.pAnimMeshVertices, sizeof(VTXANIMMESH) * iNumVertices);
+				for (size_t k = 0; k < iNumVertices; ++k)
+				{
+					VTXANIMMESH tMesh{};
+					fin.read(reinterpret_cast<char*>(&tMesh), sizeof(VTXANIMMESH));
+					memcpy(&tMeshFile.pAnimMeshVertices[k], &tMesh, sizeof(VTXANIMMESH));
+				}
+			}
+
+			_uint iNumIndices{};
+			fin.read(reinterpret_cast<char*>(&iNumIndices), sizeof(_uint));
+			tMeshFile.iNumIndices = iNumIndices;
+
+			tMeshFile.pIndices = new _uint[iNumIndices];
+			ZeroMemory(tMeshFile.pIndices, sizeof(_uint) * iNumIndices);
+			for (size_t k = 0; k < iNumIndices; ++k)
+			{
+				_uint iIndex{};
+				fin.read(reinterpret_cast<char*>(&iIndex), sizeof(_uint));
+				memcpy(&tMeshFile.pIndices[k], &iIndex, sizeof(_uint));
+			}
+
+			fin.read(reinterpret_cast<char*>(&tMeshFile.iNumOffsetMatrices), sizeof(_uint));
+			for (size_t k = 0; k < tMeshFile.iNumOffsetMatrices; ++k)
+			{
+				_float4x4	OffsetMatrix{};
+				fin.read(reinterpret_cast<char*>(&OffsetMatrix), sizeof(_float4x4));
+				tMeshFile.OffsetMatrices.push_back(OffsetMatrix);
+			}
+			tModelFile.Meshes.push_back(tMeshFile);
+		}
+
+		//// Material
+		//fin.read(reinterpret_cast<char*>(&tModelFile.iNumMaterials), sizeof(_uint));
+		//for (size_t j = 0; j < tModelFile.iNumMaterials; ++j)
+		//{
+		//	MATERIALFILE tMaterialFile{};
+		//	fin.read(reinterpret_cast<char*>(&tMaterialFile), sizeof(MATERIALFILE));
+		//	tModelFile.Materials.push_back(tMaterialFile);
+		//}
+
+		// Material
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumMaterials), sizeof(_uint));
+		vector<_uint> NumTextures;
+		vector<vector<MATERIALFILE>> vecMaterials;
+		for (size_t j = 0; j < tModelFile.iNumMaterials; ++j)
+		{
+			// NumTextures
+			_uint iNum = 0;
+			fin.read(reinterpret_cast<char*>(&iNum), sizeof(_uint));
+			tModelFile.NumTextures.push_back(iNum);
+
+			// Materials
+			vector<MATERIALFILE> Materials;
+			for (size_t k = 0; k < tModelFile.NumTextures[j]; ++k)
+			{
+				MATERIALFILE tMaterial = {};
+				fin.read(reinterpret_cast<char*>(&tMaterial), sizeof(MATERIALFILE));
+				Materials.push_back(tMaterial);
+			}
+			tModelFile.Materials.push_back(Materials);
+		}
+
+		// Bone
+		fin.read(reinterpret_cast<char*>(&tModelFile.TransformMatrix), sizeof(_float4x4));
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumBones), sizeof(_uint));
+		for (size_t j = 0; j < tModelFile.iNumBones; ++j)
+		{
+			BONEFILE tBoneFile = {};
+			fin.read(reinterpret_cast<char*>(&tBoneFile), sizeof(BONEFILE));
+			tModelFile.Bones.push_back(tBoneFile);
+		}
+
+		// Animation
+		fin.read(reinterpret_cast<char*>(&tModelFile.iNumAnimations), sizeof(_uint));
+		fin.read(reinterpret_cast<char*>(&tModelFile.iCurrentAnimIndex), sizeof(_uint));
+		fin.read(reinterpret_cast<char*>(&tModelFile.isLoop), sizeof(_bool));
+		for (size_t j = 0; j < tModelFile.iNumAnimations; ++j)
+		{
+			ANIMFILE tAnimFile{};
+			fin.read(reinterpret_cast<char*>(&tAnimFile.szName), sizeof(_char) * MAX_PATH);
+
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fDuration), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fTicksPerSecond), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&tAnimFile.fTrackPosition), sizeof(_float));
+
+			fin.read(reinterpret_cast<char*>(&tAnimFile.iNumChannels), sizeof(_uint));
+			for (size_t k = 0; k < tAnimFile.iNumChannels; ++k)
+			{
+				CHANNELFILE tChannelFile = {};
+				fin.read(reinterpret_cast<char*>(&tChannelFile.szName), sizeof(_char) * MAX_PATH);
+				fin.read(reinterpret_cast<char*>(&tChannelFile.iBoneIndex), sizeof(_int));
+
+				fin.read(reinterpret_cast<char*>(&tChannelFile.iNumKeyFrames), sizeof(_uint));
+				for (size_t l = 0; l < tChannelFile.iNumKeyFrames; ++l)
+				{
+					KEYFRAME tKeyFrame = {};
+					fin.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(KEYFRAME));
+					tChannelFile.KeyFrames.push_back(tKeyFrame);
+				}
+				tAnimFile.Channels.push_back(tChannelFile);
+			}
+
+			tModelFile.Animations.push_back(tAnimFile);
+		}
+
+		for (size_t j = 0; j < 512; ++j)
+			fin.read(reinterpret_cast<char*>(&tModelFile.MeshBoneMatrices[j]), sizeof(_float4x4));
+
+		// TYPE
+		CModel::TYPE eType = (CModel::TYPE)tModelFile.iType;
+
+		// Model Tag
+		wstring wstr(&tModelFile.szModelComTag[0], &tModelFile.szModelComTag[MAX_PATH]);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, wstr,
+			CModel::Create(m_pDevice, m_pContext, eType, &tModelFile))))
+			return E_FAIL;
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pMeshVertices);
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pAnimMeshVertices);
+
+		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)
+			Safe_Delete_Array(tModelFile.Meshes[j].pIndices);
+
+		int a = 0;
+
+		
 	}
 
 	fin.close();

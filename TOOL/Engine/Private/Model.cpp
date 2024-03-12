@@ -25,6 +25,7 @@ CModel::CModel(const CModel& rhs)
 	, m_TransformMatrix{ rhs.m_TransformMatrix }
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
 	, m_tModelFile{ rhs.m_tModelFile }
+	, m_NumTextures{ rhs.m_NumTextures }
 	, m_MaterialFiles{ rhs.m_MaterialFiles }
 	, m_strModelComTag{ rhs.m_strModelComTag }
 {
@@ -180,6 +181,8 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 		aiMaterial* pAIMaterial = m_pAIScene->mMaterials[i];
 
 		MESH_MATERIAL			MeshMaterial{};
+		vector<MATERIALFILE>	MaterialFiles;
+		_uint					iNumTextures = 0;
 
 		// DIFFUSE, ...
 		for (size_t j = aiTextureType_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; j++)
@@ -216,14 +219,21 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 			if (nullptr == MeshMaterial.MaterialTextures[j])
 				return E_FAIL;
 
+
+			// MATERIAL FILE
 			MATERIALFILE tMaterialFile = {};
 			strcpy_s(tMaterialFile.szTexturePath, szFullPath);
 			tMaterialFile.iTextureIndex = j;
 
-			m_MaterialFiles.push_back(tMaterialFile);			
+			MaterialFiles.push_back(tMaterialFile);
+			++iNumTextures;
 		}
 
 		m_Materials.push_back(MeshMaterial);
+
+		// MATERIAL FILE
+		m_NumTextures.push_back(iNumTextures);
+		m_MaterialFiles.push_back(MaterialFiles);
 	}
 
 	return S_OK;
@@ -266,11 +276,6 @@ HRESULT CModel::Ready_Animations()
 HRESULT CModel::Ready_ModelFile()
 {
 	// ModelTag
-	/*_int size = WideCharToMultiByte(CP_UTF8, 0, m_strModelComTag.c_str(), -1, NULL, 0, NULL, NULL);
-	_char* buffer = new _char[size + 1];
-	WideCharToMultiByte(CP_UTF8, 0, m_strModelComTag.c_str(), -1, buffer, size, NULL, NULL);
-	strcpy_s(m_tModelFile.szModelComTag, buffer);
-	delete[] buffer;*/
 	m_tModelFile.strModelComTag = m_strModelComTag;
 
 	// Type
@@ -283,6 +288,7 @@ HRESULT CModel::Ready_ModelFile()
 
 	// Material
 	m_tModelFile.iNumMaterials = m_iNumMaterials;
+	m_tModelFile.NumTextures = m_NumTextures;
 	m_tModelFile.Materials = m_MaterialFiles;
 
 	// Bone

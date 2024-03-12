@@ -18,27 +18,38 @@ HRESULT CTest_Object::Initialize_Prototype()
 
 HRESULT CTest_Object::Initialize(void* pArg)
 {
-    GAMEOBJECT_DESC		GameObjectDesc{};
+    /*GAMEOBJECT_DESC		GameObjectDesc{};
 
     GameObjectDesc.fSpeedPerSec = 10.f;
     GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
     if (FAILED(__super::Initialize(&GameObjectDesc)))
+        return E_FAIL;*/
+
+    if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
-
-    if (FAILED(Add_Components()))
-        return E_FAIL;
-
-    _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-
-    m_pModelCom->Set_Animation(0, true);
 
     if (nullptr != pArg)
     {
         TEST_DESC* pDesc = (TEST_DESC*)pArg;
-        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+
+        //m_pTransformCom->Set_WorldMatrix(pDesc->TransformMatrix);
+        m_strModelComTag = pDesc->strModelComTag;
     }
+
+    if (FAILED(Add_Components()))
+        return E_FAIL;
+
+    _float4 vPosition = _float4(0.f, 1.f, 0.3f, 1.f);
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+    m_pModelCom->Set_Animation(0, true);
+
+    /*if (nullptr != pArg)
+    {
+        TEST_DESC* pDesc = (TEST_DESC*)pArg;
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+    }*/
 
     return S_OK;
 }
@@ -94,7 +105,7 @@ HRESULT CTest_Object::Add_Components()
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
   
@@ -140,7 +151,7 @@ CGameObject* CTest_Object::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Create : CTest_Object"));
+        MSG_BOX(TEXT("Failed To Clone : CTest_Object"));
 
         Safe_Release(pInstance);
     }

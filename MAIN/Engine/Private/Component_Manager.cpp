@@ -51,6 +51,25 @@ CComponent * CComponent_Manager::Find_Prototype(_uint iLevelIndex, const wstring
 	if (iLevelIndex >= m_iNumLevels)
 		return nullptr;
 
+	/*auto iter = m_pPrototypes[iLevelIndex].begin();
+
+	for (size_t i = 0; i < m_pPrototypes[iLevelIndex].size(); ++i)
+	{		
+		_uint iLength = iter->first.length();
+		_uint iCount = 0;
+		for (size_t j = 0; j < iLength; ++j)
+		{
+			if (iter->first[j] != strPrototypeTag[j])
+				break;
+			else
+				++iCount;
+		}
+		if (iCount == iLength)
+			return iter->second;
+	}
+
+	return nullptr;*/
+
 	auto	iter = m_pPrototypes[iLevelIndex].find(strPrototypeTag);
 
 	if (iter == m_pPrototypes[iLevelIndex].end())

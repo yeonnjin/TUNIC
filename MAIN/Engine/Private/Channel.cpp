@@ -70,6 +70,13 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
 
     // BoneÀÇ TransformationMatrix ¼¼ÆÃ
     Bones[m_iBoneIndex]->Set_TransformationMatrix(TransformationMatrix);
+
+    // Linear
+    m_tChannelState.vScale = vScale;
+    m_tChannelState.vRotation = vRotation;
+    m_tChannelState.vTranslation = vTranslation;
+    m_tChannelState.fTime = tKeyFrame.fTime;
+    m_tChannelState.TransformationMatrix = TransformationMatrix;
 }
 
 CChannel* CChannel::Create(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones)

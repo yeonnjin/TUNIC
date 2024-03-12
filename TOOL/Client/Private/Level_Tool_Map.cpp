@@ -3,6 +3,8 @@
 
 #include "Editor.h"
 #include "Camera_Free.h"
+
+#include "Map.h"
 #include "Map_Object.h"
 
 CLevel_Tool_Map::CLevel_Tool_Map(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -84,8 +86,15 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	CMap_Object::MAPOBJ_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map");
+	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Player");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+		return E_FAIL;
+
+	/*CMap::MAP_DESC */tDesc = {};
+	tDesc.isLoad = false;
+	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Map"), &tDesc)))
 		return E_FAIL;
 
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Test_Object"))))
@@ -97,8 +106,6 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 			return E_FAIL;
 	}*/
 	
-
-	return S_OK;
 
 	return S_OK;
 }

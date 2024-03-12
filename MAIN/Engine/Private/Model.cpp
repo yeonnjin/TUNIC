@@ -18,6 +18,7 @@ CModel::CModel(const CModel& rhs)
 	, m_iNumMeshes{ rhs.m_iNumMeshes }
 	, m_Meshes{ rhs.m_Meshes }
 	, m_iNumMaterials{ rhs.m_iNumMaterials }
+	, m_NumTextures{ rhs.m_NumTextures }
 	, m_Materials{ rhs.m_Materials }
 	, m_TransformMatrix{ rhs.m_TransformMatrix }
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
@@ -58,7 +59,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 		return E_FAIL;
 
 	/* 赣抛府倔 积己 */
-	if (FAILED(Ready_Materials(pModelFile->iNumMaterials, pModelFile->Materials)))
+	if (FAILED(Ready_Materials(pModelFile->iNumMaterials, pModelFile->NumTextures, pModelFile->Materials)))
 		return E_FAIL;
 
 	/* 局聪皋捞记 积己 */
@@ -137,6 +138,15 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	return S_OK;
 }
 
+HRESULT CModel::Linear_Interpolation()
+{
+
+
+
+
+	return E_NOTIMPL;
+}
+
 HRESULT CModel::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile)
 {
 	m_iNumMeshes = iNumMeshes;
@@ -153,7 +163,7 @@ HRESULT CModel::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile)
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Materials(_uint iNumMaterials, vector<MATERIALFILE>& pMaterialFile)
+HRESULT CModel::Ready_Materials(_uint iNumMaterials, vector<_uint>& pNumTextures, vector<vector<MATERIALFILE>>& pMaterialFile)
 {
 	m_iNumMaterials = iNumMaterials;
 
@@ -162,24 +172,70 @@ HRESULT CModel::Ready_Materials(_uint iNumMaterials, vector<MATERIALFILE>& pMate
 	{		
 		MESH_MATERIAL			MeshMaterial{};
 
-		// DIFFUSE, ...
+		//_uint iNumTextures = pNumTextures[i];
+		_uint iCount = 0;
+
 		for (size_t j = TEX_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; j++)
-		{			
-			if (j != pMaterialFile[i].iTextureIndex)
+		{		
+			if (0 != pMaterialFile[i].size() && j == pMaterialFile[i][iCount].iTextureIndex)
+			{
+				_char			szFullPath[MAX_PATH] = { "" };
+				strcpy_s(szFullPath, pMaterialFile[i][iCount].szTexturePath);
+
+				// ..\Bin\Resources\Models\Fiona\ 
+				_tchar			szPerfectPath[MAX_PATH] = { L"" };
+				MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
+
+				MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
+				if (nullptr == MeshMaterial.MaterialTextures[j])
+					return E_FAIL;
+
+				++iCount;
+				if (iCount == pNumTextures[i])
+					break;
+			}
+			else
 				continue;
 
-			_char			szFullPath[MAX_PATH] = { "" };
-			strcpy_s(szFullPath, pMaterialFile[i].szTexturePath);
+			//for (size_t k = 0; k < pNumTextures[i]; ++k)
+			//{
+			//	if (j == pMaterialFile[i][k].iTextureIndex)
+			//	{
+			//		_char			szFullPath[MAX_PATH] = { "" };
+			//		strcpy_s(szFullPath, pMaterialFile[i][j].szTexturePath);
 
-			// ..\Bin\Resources\Models\Fiona\ 
-			_tchar			szPerfectPath[MAX_PATH] = { L"" };
+			//		// ..\Bin\Resources\Models\Fiona\ 
+			//		_tchar			szPerfectPath[MAX_PATH] = { L"" };
+			//		MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
 
-			MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
+			//		MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
+			//		if (nullptr == MeshMaterial.MaterialTextures[j])
+			//			return E_FAIL;
 
-			MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
-			if (nullptr == MeshMaterial.MaterialTextures[j])
-				return E_FAIL;
+			//	}
+			//}
+			
 		}
+
+
+		//// DIFFUSE, ...
+		//for (size_t j = TEX_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; j++)
+		//{			
+		//	if (j != pMaterialFile[i].iTextureIndex)
+		//		continue;
+
+		//	_char			szFullPath[MAX_PATH] = { "" };
+		//	strcpy_s(szFullPath, pMaterialFile[i].szTexturePath);
+
+		//	// ..\Bin\Resources\Models\Fiona\ 
+		//	_tchar			szPerfectPath[MAX_PATH] = { L"" };
+
+		//	MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
+
+		//	MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
+		//	if (nullptr == MeshMaterial.MaterialTextures[j])
+		//		return E_FAIL;
+		//}
 
 		m_Materials.push_back(MeshMaterial);
 	}

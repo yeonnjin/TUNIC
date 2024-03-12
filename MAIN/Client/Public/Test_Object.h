@@ -15,7 +15,8 @@ class CTest_Object final : public CGameObject
 public:
 	typedef struct Test_Desc : public CGameObject::GAMEOBJECT_DESC
 	{
-		_float3 vPosition;
+		_float4x4		TransformMatrix;
+		wstring			strModelComTag;
 	}TEST_DESC;
 
 private:
@@ -29,6 +30,9 @@ public:
 	virtual void	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+private:
+	wstring			m_strModelComTag;
 
 private:
 	CModel* m_pModelCom = { nullptr };

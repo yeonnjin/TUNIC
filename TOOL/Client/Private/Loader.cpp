@@ -226,7 +226,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	///* For.Prototype_Component_Shader_VtxMap */
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMap"),
-	//	CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMap.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
+	//	CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMap.hlsl"), VTXMAP::Elements, VTXMAP::iNumElements))))
 	//	return E_FAIL;
 	
 	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
@@ -305,21 +305,33 @@ HRESULT CLoader::Loading_For_Tool_Map()
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 	_matrix		TransformMatrix = XMMatrixIdentity();
-	/* For.Prototype_Component_Model_Fiona */
-	TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TEXT("Prototype_Component_Model_Fiona"),TransformMatrix))))
+	///* For.Prototype_Component_Model_Fiona */
+	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TEXT("Prototype_Component_Model_Fiona"),TransformMatrix))))
+	//	return E_FAIL;
+
+	/* For.Prototype_Component_Model_Player */
+	TransformMatrix = /*XMMatrixRotationY(XMConvertToRadians(180.0f));*/ XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", TEXT("Prototype_Component_Model_Player"), TransformMatrix))))
 		return E_FAIL;
 
 	/* Prototype_Component_Model_ForkLift */
 	//TransformMatrix = XMMatrixIdentity();
-	TransformMatrix = XMMatrixScaling(0.001f, 0.001f, 0.001f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	TransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_ForkLift"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/ForkLift/ForkLift.fbx", TEXT("Prototype_Component_Model_ForkLift"),TransformMatrix))))
 		return E_FAIL;
 
+	/* Prototype_Component_Model_Flower */
+	TransformMatrix = XMMatrixScaling(0.1f, 0.1f, 0.1f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Flower"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/effigy (merge).fbx", TEXT("Prototype_Component_Model_Flower"), TransformMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_Map */
-	TransformMatrix = /*XMMatrixRotationY(XMConvertToRadians(180.0f));*/ XMMatrixIdentity();
+	TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map"), TransformMatrix))))
 		return E_FAIL;
