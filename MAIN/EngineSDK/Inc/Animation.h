@@ -17,6 +17,8 @@ public:
 		m_isCloned = true;
 	}
 
+	void	Set_AnimationData_Initialize();
+
 	void	Invalidate_Blending(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop);
 
 	// Get
@@ -44,9 +46,6 @@ private:
 
 	_bool						m_isFinished = { false };
 	_bool						m_isCloned = { false };
-
-	// FILE
-	ANIMFILE					m_tAnimFile = {};
 	
 public:
 	static CAnimation* Create(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);

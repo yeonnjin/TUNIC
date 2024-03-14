@@ -5,6 +5,8 @@
 #include "Map_Object.h"
 #include "Player.h"
 
+#include "Editor.h"
+
 #include <fstream>
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -17,9 +19,11 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Lights()))
+	if (FAILED(Ready_Layer_Editor(TEXT("Layer_Editor"))))
 		return E_FAIL;
-	*/
+
+	if (FAILED(Ready_Lights()))
+		return E_FAIL;
 
 	if(FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
@@ -55,10 +59,28 @@ HRESULT CLevel_GamePlay::Render()
 	return S_OK;
 }
 
+
+HRESULT CLevel_GamePlay::Ready_Layer_Editor(const wstring& strLayerTag)
+{
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Editor"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CLevel_GamePlay::Ready_Lights()
 {
-	
+	LIGHT_DESC	tLightDesc{};
 
+	tLightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
+	tLightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+
+	tLightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	tLightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	tLightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(tLightDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -74,7 +96,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.fFar = 1000.0f;
 	CameraDesc.vEye = _float4(0.f, 10.f, -7.f, 1.f);
 	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	CameraDesc.fSpeedPerSec = 10.f;
+	CameraDesc.fSpeedPerSec = 5.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -139,6 +161,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 {
+	// Desc
+	//CMap_Object::MAPOBJ_DESC tDesc = {};
+	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map";
+	//wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	//tDesc.strModelComTag = wstr;
+
+	//// Clone
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+	//	return E_FAIL;
+
 	//ifstream fin;
 	//fin.open("../Bin/Resources/Data/Map/Model_Map_Beach.dat", ios::in | ios::binary);
 

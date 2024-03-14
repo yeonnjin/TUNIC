@@ -25,9 +25,6 @@
     <Filter Include="01. Utility\02. Components">
       <UniqueIdentifier>{48c7c65c-7362-41ea-a460-905ff511629f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Utility\02. Components\Manager">
-      <UniqueIdentifier>{9a25d0bd-b87d-44f6-bfce-fb32c1047b59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utility\02. Components\VIBuffer">
       <UniqueIdentifier>{1940cc1c-6655-4f3c-a49a-2193d5054bb3}</UniqueIdentifier>
     </Filter>
@@ -93,6 +90,24 @@
     </Filter>
     <Filter Include="01. Utility\06. Picking">
       <UniqueIdentifier>{436fa7b3-bcde-48df-bb82-413825d1f6e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\07. Lights">
+      <UniqueIdentifier>{d06cae6d-2bcb-4bd1-a49d-e6d9932d71d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\07. Lights\Manager">
+      <UniqueIdentifier>{89d5801d-debb-41a6-a39c-890311872a66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Manager">
+      <UniqueIdentifier>{9a25d0bd-b87d-44f6-bfce-fb32c1047b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\98. ImGui">
+      <UniqueIdentifier>{6d0c3166-de17-4379-8c19-c127f5e8b512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\98. ImGui\Etc">
+      <UniqueIdentifier>{9611efc0-e984-4b1c-98a8-f97f3f6928da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\98. ImGui\Manager">
+      <UniqueIdentifier>{48fb39a6-f806-4502-ad54-e3b91df827c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +197,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\Picking.cpp">
       <Filter>01. Utility\06. Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light.cpp">
+      <Filter>01. Utility\07. Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light_Manager.cpp">
+      <Filter>01. Utility\07. Lights\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_demo.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_draw.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_impl_dx11.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_impl_win32.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_tables.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\imgui_widgets.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\ImGuizmo.cpp">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ImGui_Manager.cpp">
+      <Filter>01. Utility\98. ImGui\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +331,42 @@
     </ClInclude>
     <ClInclude Include="..\Public\Picking.h">
       <Filter>01. Utility\06. Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light.h">
+      <Filter>01. Utility\07. Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light_Manager.h">
+      <Filter>01. Utility\07. Lights\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imconfig.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui_impl_dx11.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui_impl_win32.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imgui_internal.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\ImGuizmo.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imstb_rectpack.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imstb_textedit.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\imstb_truetype.h">
+      <Filter>01. Utility\98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ImGui_Manager.h">
+      <Filter>01. Utility\98. ImGui\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

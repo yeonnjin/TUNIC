@@ -5,6 +5,8 @@
 #include "Object_Manager.h"
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
+#include "Light_Manager.h"
+#include "ImGui_Manager.h"
 
 #include "Renderer.h"
 #include "Picking.h"
@@ -47,6 +49,10 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pPicking)
 		return E_FAIL;
 
+	m_pLight_Manager = CLight_Manager::Create();
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
 	/* 인풋 디바이스를 초기화 */
 	m_pInput_Device = CInput_Device::Create(hInstance, EngineDesc.hWnd);
 	if (nullptr == m_pInput_Device)
@@ -62,6 +68,11 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	/* 컴포넌트 매니져의 공간 예약 */
 	m_pComponent_Manager = CComponent_Manager::Create(iNumLevels);
 	if (nullptr == m_pComponent_Manager)
+		return E_FAIL;
+
+	/* ImGui 매니져의 공간 예약 */
+	m_pImGui_Manager = CImGui_Manager::Create(EngineDesc.hWnd, *ppDevice, *ppContext);
+	if (nullptr == m_pImGui_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -298,7 +309,45 @@ _float4 CGameInstance::Get_CamPosition_Float4() const
 /* For.Picking */
 void CGameInstance::Transform_Picking_To_LocalSpace(const CTransform* pTransform, _float3* pRayDir, _float3* pRayPos)
 {
+	if (nullptr == m_pPicking)
+		return;
+	
 	m_pPicking->Transform_Picking_To_LocalSpace(pTransform, pRayDir, pRayPos);
+}
+
+const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint iIndex)
+{
+	if (nullptr == m_pLight_Manager)
+		return nullptr;
+
+	return m_pLight_Manager->Get_LightDesc(iIndex);
+}
+
+HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Add_Light(LightDesc);
+}
+
+/* For.ImGui_Manager */
+void CGameInstance::New_Frame()
+{
+	m_pImGui_Manager->New_Frame();
+}
+
+HRESULT CGameInstance::Render()
+{
+	if (nullptr == m_pImGui_Manager)
+		return E_FAIL;
+
+	return m_pImGui_Manager->Render();
+}
+
+void CGameInstance::EditTransform(CTransform* pTransformCom)
+{
+	m_pImGui_Manager->EditTransform(pTransformCom);
 }
 
 void CGameInstance::Release_Engine()
@@ -310,6 +359,8 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {	
+	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);

@@ -59,6 +59,16 @@ public: /* For.PipeLine */
 public: /* For.Picking */
 	void				Transform_Picking_To_LocalSpace(const class CTransform* pTransform, _Out_ _float3* pRayDir, _Out_ _float3* pRayPos);
 
+public: /* For. Light_Manager */
+	const LIGHT_DESC* Get_LightDesc(_uint iIndex);
+	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
+
+public: /* For.ImGui_Manager */
+	void				New_Frame();
+	HRESULT				Render();
+	void				EditTransform(CTransform* pTransformCom);
+
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -69,6 +79,8 @@ private:
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
+	class CLight_Manager*			m_pLight_Manager = { nullptr };
+	class CImGui_Manager*			m_pImGui_Manager = { nullptr };
 
 public:		
 	static void Release_Engine();

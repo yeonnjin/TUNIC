@@ -13,7 +13,7 @@
 [10] "_Fox|_Fox|Fox|CUTSCENE_jumpIntoBed|Base Layer"
 [11] "_Fox|_Fox|Fox|CUTSCENE_resurrection|Base Layer"
 [12] "_Fox|_Fox|Fox|CUTSCENE_sleeping|Base Layer"
-[13] "_Fox|_Fox|Fox|CUTSCENE_take sword|Base Layer"
+[13] "_Fox|_Fox|Fox|CUTSCENE_take sword|Base Layer" // ¹Ð¸²
 [14] "_Fox|_Fox|Fox|CUTSCENE_takeRelic|Base Layer"
 [15] "_Fox|_Fox|Fox|CUTSCENE_wake up|Base Layer"
 [16] "_Fox|_Fox|Fox|dagger_fast recover|Base Layer"

@@ -3,6 +3,8 @@
 #include "Component.h"
 #include "Animation.h"
 
+#include "Bone.h"
+
 BEGIN(Engine)
 
 class ENGINE_DLL CModel final : public CComponent
@@ -19,10 +21,8 @@ private:
 
 public:
 	// Set
-	void	Set_Animation(_uint iAnimIndex, _bool isLoop); /*{
-		m_iCurrentAnimIndex = iAnimIndex;
-		m_isLoop = isLoop;
-	}*/
+	void	Set_Animation(_uint iAnimIndex, _bool isLoop); 
+	void	Set_ObjectTransform(class CTransform* pObjectTransform) { m_pObjectTransform = pObjectTransform; }
 
 	// Get
 	_uint Get_NumMeshes() const {
@@ -57,7 +57,7 @@ private:
 	vector<MESH_MATERIAL>			m_Materials;
 
 	// Bone
-	_float4x4						m_TransformMatrix;
+	_float4x4						m_TransformationMatrix;
 	vector<class CBone*>			m_Bones;
 
 	// Animation
@@ -68,13 +68,17 @@ private:
 
 	_float4x4						m_MeshBoneMatrices[512];
 
-	// Linear
+	// Blending
 	_uint							m_iPrevAnimIndex = {};
 	_bool							m_isBlending = { false };
 
-	// Linea
 	vector<CHANNELSTATE>			m_ChannelStates[STATE_END];
+	vector<_uint>					m_ChannelBoneIndex;
 	_uint							m_iNumBones = {};
+
+	// Root
+	_float3							m_vRootDistance[STATE_END] = {};
+	class CTransform*				m_pObjectTransform;
 
 private:
 	_bool	Animation_Blending(_float fTimeDelta);

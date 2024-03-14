@@ -728,40 +728,42 @@ void CEditor::Tool_Model_List()
 
 void CEditor::Tool_Picking()
 {
-	ImGui::Checkbox("Using Picking", &m_isUsingPicking);
-	ImGui::Text("LBUTTON : Terrain, RBUTTON : Mesh, DIK_L : Delete");
+	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
+	Gizmo(m_pGizmoTransform);
+	//ImGui::Checkbox("Using Picking", &m_isUsingPicking);
+	//ImGui::Text("LBUTTON : Terrain, RBUTTON : Mesh, DIK_L : Delete");
 
-	if (m_isUsingPicking && !m_isUsingGizmo)
-	{
-		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-			Map_Picking();
+	//if (m_isUsingPicking && !m_isUsingGizmo)
+	//{
+	//	if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+	//		Map_Picking();
 
-		else if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
-			Test_Mesh_Picking();
-	}
+	//	else if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
+	//		Test_Mesh_Picking();
+	//}
 
-	ImGui::Checkbox("Using Gizmo", &m_isUsingGizmo);
-	if (m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
-		m_isUsingGizmo = !m_isUsingGizmo;
+	//ImGui::Checkbox("Using Gizmo", &m_isUsingGizmo);
+	//if (m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
+	//	m_isUsingGizmo = !m_isUsingGizmo;
 
-	if(m_isUsingGizmo)
-		m_isUsingPicking = false;
-	else
-		m_isUsingPicking = true;
+	//if(m_isUsingGizmo)
+	//	m_isUsingPicking = false;
+	//else
+	//	m_isUsingPicking = true;
 
-	if (m_isUsingGizmo && nullptr != m_pGizmoTransform)
-		Gizmo(m_pGizmoTransform);
+	//if (m_isUsingGizmo && nullptr != m_pGizmoTransform)
+	//	Gizmo(m_pGizmoTransform);
 
-	// Delete
-	if (m_isUsingGizmo && m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
-	{
-		if (m_pGameInstance->Delete_Object(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), m_iTargetIndex))
-		{
-			m_iTargetIndex = -1;
-			m_pGizmoTransform = nullptr;
-			m_isUsingGizmo = false;
-		}			
-	}
+	//// Delete
+	//if (m_isUsingGizmo && m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
+	//{
+	//	if (m_pGameInstance->Delete_Object(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), m_iTargetIndex))
+	//	{
+	//		m_iTargetIndex = -1;
+	//		m_pGizmoTransform = nullptr;
+	//		m_isUsingGizmo = false;
+	//	}			
+	//}
 }
 
 void CEditor::Tool_Map_File()

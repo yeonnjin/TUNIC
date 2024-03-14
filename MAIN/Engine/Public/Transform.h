@@ -72,6 +72,10 @@ public:
 		return m_WorldMatrix;
 	}
 
+	const _float4x4* Get_WorldFloat4x4_Ptr() const {
+		return &m_WorldMatrix;
+	}
+
 	_matrix Get_WorldMatrix() const {
 		return XMLoadFloat4x4(&m_WorldMatrix);
 	}

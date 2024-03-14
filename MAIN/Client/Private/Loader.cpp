@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "Map_Object.h"
 #include "Test_Object.h"
+#include "Editor.h"
 #include <fstream>
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -200,6 +201,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	
 	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_GameObject_Editor */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Editor"),
+		CEditor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),

@@ -10,6 +10,22 @@ namespace Engine
 		unsigned int	iWinSizeX, iWinSizeY;
 	}ENGINE_DESC;
 
+	/* Light */
+	typedef struct
+	{
+		enum TYPE { TYPE_DIRECTIONAL, TYPE_POINT, TYPE_END };
+
+		TYPE eType;
+
+		XMFLOAT4	vDirection;
+		XMFLOAT4	vPosition;
+		float		fRange;
+
+		XMFLOAT4	vDiffuse;
+		XMFLOAT4	vAmbient;
+		XMFLOAT4	vSpecular;
+	}LIGHT_DESC;
+
 	/* Mesh */
 	typedef struct
 	{
@@ -171,7 +187,7 @@ namespace Engine
 		_char							szModelComTag[MAX_PATH];
 	}MAPOBJFILE;
 
-	/* Linear */
+	/* Blending */
 	typedef struct
 	{
 		// 키프레임
@@ -182,8 +198,5 @@ namespace Engine
 
 		// 최종행렬
 		_matrix			TransformationMatrix;
-
-
-
 	}CHANNELSTATE;
 }

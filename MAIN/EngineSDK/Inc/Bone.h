@@ -14,15 +14,21 @@ private:
 	virtual ~CBone() = default;
 
 public:
+	// Set
 	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	}
+
+	void Set_CombinedTransformationPosition(_fvector vPosition) {
+		memcpy(&m_CombinedTransformationMatrix.m[3], &vPosition, sizeof(_float3));
+	} // Root
+
 	// Get
 	const _float4x4* Get_CombinedTransformationMatrix() const {
 		return &m_CombinedTransformationMatrix;
 	}
 
-	_float4x4 Get_TransformationMatrix() { return m_TransformationMatrix; }
+	_float4x4 Get_TransformationMatrix() { return m_TransformationMatrix; } // Blending
 	
 public:
 	HRESULT Initialize(BONEFILE* pBoneFile);

@@ -20,15 +20,39 @@ public:
 	virtual HRESULT	Render() override;
 
 private:
-	void Test();
+	// TAB
+	void			Frame_Tab();
 
-private:
+	// PICKING
+	
+	void			Gizmo(CTransform* pTransform);
+	void			Tool_Picking();
+
+	// MODEL_LIST
+	
+
+
+
+
+
+	string					WStringToString(wstring& wstr);
+
+private: // GIZMO
+	_bool					m_isUsingPicking = { true };
+	_bool					m_isUsingGizmo = { false };
+	_int					m_iTargetIndex = { -1 };
+	CTransform*				m_pGizmoTransform = { nullptr };
+
+private: // MODEL_LIST
+	vector<wstring>			m_strModels;
+
+private: // FILE
+	_uint					m_iObjectCount = { 0 };
+
+private: // TEST
 	bool show_demo_window = true;
 	bool show_another_window = true;
 	_float4 clear_color = _float4();
-
-public:
-	class CImGui_Manager* m_pImGui_Manager = { nullptr };
 
 public:
 	static CEditor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -7,6 +7,9 @@
 
 #include "Shader.h"
 #include "Texture.h"
+#include "Transform.h"
+
+#define ROOTBONEIDX 3
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CComponent{ pDevice, pContext }
@@ -21,7 +24,7 @@ CModel::CModel(const CModel& rhs)
 	, m_iNumMaterials{ rhs.m_iNumMaterials }
 	, m_NumTextures{ rhs.m_NumTextures }
 	, m_Materials{ rhs.m_Materials }
-	, m_TransformMatrix{ rhs.m_TransformMatrix }
+	, m_TransformationMatrix{ rhs.m_TransformationMatrix }
 	, m_iNumAnimations{ rhs.m_iNumAnimations }
 	, m_iNumBones{ rhs.m_iNumBones }
 {
@@ -34,6 +37,7 @@ CModel::CModel(const CModel& rhs)
 
 	// 얕은 복사
 	for (auto& pMesh : m_Meshes)
+
 		Safe_AddRef(pMesh);
 	
 	for (auto& tMaterial : m_Materials)
@@ -50,7 +54,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 
 	m_eModelType = eType;
 
-	XMStoreFloat4x4(&m_TransformMatrix, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixIdentity());
 
 	/* 전체 뼈 생성 */
 	if (FAILED(Ready_Bones(pModelFile->iNumBones, pModelFile->Bones)))
@@ -81,10 +85,10 @@ HRESULT CModel::Initialize(void* pArg)
 
 void CModel::Set_Animation(_uint iAnimIndex, _bool isLoop)
 {
-	// Linear
+	// Blending
 	m_isBlending = true;
 	m_iPrevAnimIndex = m_iCurrentAnimIndex;
-
+	
 	m_iCurrentAnimIndex = iAnimIndex;
 	m_isLoop = isLoop;
 }
@@ -127,7 +131,9 @@ HRESULT CModel::Bind_ShaderResource(CShader* pShader, const _char* pConstantName
 	// MESH_MATERIAL : class CTexture* MaterialTextures[AI_TEXTURE_TYPE_MAX];
 	CTexture* pTexture = { m_Materials[iMeshMaterialIndex].MaterialTextures[eTextureType] };
 	if(nullptr != pTexture)
-		pTexture->Bind_ShaderResource(pShader, pConstantName);
+		if(FAILED(pTexture->Bind_ShaderResource(pShader, pConstantName)))
+
+			return E_FAIL;
 
 	return S_OK;
 }
@@ -138,16 +144,44 @@ HRESULT CModel::Play_Animation(_float fTimeDelta)
 	if (true == m_isBlending)
 	{
 		if (true == is_Blended(fTimeDelta))
+		{
 			m_isBlending = false;
+		}
 	}
 	else
 	{
 		/* 현재 애니메이션에 맞는 뼈의 상태(m_TransformationMatrix)를 갱신 */
 		m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, m_Bones, m_isLoop);
 
+
 		for (auto& pBone : m_Bones)
-			pBone->Invalidate_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_TransformMatrix));
+			pBone->Invalidate_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_TransformationMatrix));
 	}
+
+	// Root Bone의 현재 로컬 위치
+	memcpy(&m_vRootDistance[STATE_CUR], m_Bones[ROOTBONEIDX]->Get_TransformationMatrix().m[3], sizeof(_float3));
+
+	// 애니메이션이 끝나면 이전 로컬 위치 갱신
+	if (true == isFinished())
+		m_vRootDistance[STATE_PREV] = m_vRootDistance[STATE_CUR];
+
+	// 이동한 거리를 월드로 변환
+	_float3 vPre, vCur;
+	XMStoreFloat3(&vPre, XMVector3TransformCoord(XMLoadFloat3(&m_vRootDistance[STATE_PREV]), XMLoadFloat4x4(m_pObjectTransform->Get_WorldFloat4x4_Ptr())));
+	XMStoreFloat3(&vCur, XMVector3TransformCoord(XMLoadFloat3(&m_vRootDistance[STATE_CUR]), XMLoadFloat4x4(m_pObjectTransform->Get_WorldFloat4x4_Ptr())));
+	_vector vDiffDistance = XMLoadFloat3(&vCur) - XMLoadFloat3(&vPre);
+
+	// 타겟 오브젝트의 월드 위치 값 변경
+	_vector vObjectPosition = m_pObjectTransform->Get_State_Vector(CTransform::STATE_POSITION);
+	vObjectPosition += vDiffDistance;
+	m_pObjectTransform->Set_State(CTransform::STATE_POSITION, vObjectPosition);
+
+	// Root Bone의 이전 로컬 위치
+	m_vRootDistance[STATE_PREV] = m_vRootDistance[STATE_CUR];
+
+	// Root Bone의 CombinedTransformationMatrix 초기화
+	_vector vOriginPosition = { 0.f, 0.f, 0.f };
+	m_Bones[ROOTBONEIDX]->Set_CombinedTransformationPosition(vOriginPosition);
 
 	return S_OK;
 }
@@ -168,12 +202,9 @@ _bool CModel::is_Blended(_float fTimeDelta)
 
 	if (false == isBlending)
 	{
-		//m_ChannelStates[STATE_PREV].clear();
-		//m_ChannelStates[STATE_CUR].clear();
-
 		for (size_t i = 0; i < m_iNumBones; ++i)
 		{
-			// PREV
+			// BONE MATRIX
 			_float4x4 BoneFloat4x4 = m_Bones[i]->Get_TransformationMatrix();
 			_matrix BoneMatrix = XMLoadFloat4x4(&BoneFloat4x4);
 
@@ -192,18 +223,20 @@ _bool CModel::is_Blended(_float fTimeDelta)
 			 XMStoreFloat3(&m_ChannelStates[STATE_CUR][i].vTranslation, vTranslation);
 		}
 
-
 		// PREV
 		_uint iPrevNumChannels = m_Animations[m_iPrevAnimIndex]->Get_NumChannels();
 		for (size_t i = 0; i < iPrevNumChannels; ++i)
 		{
 			CChannel* pChannel = m_Animations[m_iPrevAnimIndex]->Get_Channel(i);
+			_uint iBoneIndex = pChannel->Get_BoneIndex();
+			m_ChannelBoneIndex.push_back(iBoneIndex);
 			m_ChannelStates[STATE_PREV][pChannel->Get_BoneIndex()] = *pChannel->Get_ChannelState();
 		}
 
 		// CUR
 		m_Animations[m_iCurrentAnimIndex]->Invalidate_Blending(fTimeDelta, m_Bones, true);
 		_uint iCurNumChannels = m_Animations[m_iCurrentAnimIndex]->Get_NumChannels();
+
 		for (size_t i = 0; i < iCurNumChannels; ++i)
 		{
 			CChannel* pChannel = m_Animations[m_iCurrentAnimIndex]->Get_Channel(i);
@@ -237,12 +270,15 @@ _bool CModel::Animation_Blending(_float fTimeDelta)
 	if (fTime > fBlendTime)
 	{
 		fTime = 0.f;
+		m_Animations[m_iPrevAnimIndex]->Set_AnimationData_Initialize();
+		m_Animations[m_iCurrentAnimIndex]->Set_AnimationData_Initialize();
+
 		return true;
 	}
 
 	_float fRatio = fTime / fBlendTime;
 
-	// 선형보간
+	// Blending
 	for (size_t i = 0; i < m_iNumBones; ++i)
 	{
 		XMStoreFloat3(&vScale, XMVectorLerp(XMLoadFloat3(&m_ChannelStates[STATE_PREV][i].vScale), XMLoadFloat3(&m_ChannelStates[STATE_CUR][i].vScale), fRatio));
@@ -251,11 +287,13 @@ _bool CModel::Animation_Blending(_float fTimeDelta)
 
 		_matrix     TransformationMatrix = XMMatrixAffineTransformation(XMLoadFloat3(&vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&vRotation), XMVectorSetW(XMLoadFloat3(&vTranslation), 1.f));
 
-		m_Bones[i]->Set_TransformationMatrix(TransformationMatrix);
+		m_Bones[i]->Set_TransformationMatrix(TransformationMatrix); 
+
+		m_vRootDistance[STATE_CUR] = vTranslation;
 	}
 
 	for (auto& pBone : m_Bones)
-		pBone->Invalidate_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_TransformMatrix));
+		pBone->Invalidate_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_TransformationMatrix));
 
 	return false;
 }
@@ -309,46 +347,7 @@ HRESULT CModel::Ready_Materials(_uint iNumMaterials, vector<_uint>& pNumTextures
 			}
 			else
 				continue;
-
-			//for (size_t k = 0; k < pNumTextures[i]; ++k)
-			//{
-			//	if (j == pMaterialFile[i][k].iTextureIndex)
-			//	{
-			//		_char			szFullPath[MAX_PATH] = { "" };
-			//		strcpy_s(szFullPath, pMaterialFile[i][j].szTexturePath);
-
-			//		// ..\Bin\Resources\Models\Fiona\ 
-			//		_tchar			szPerfectPath[MAX_PATH] = { L"" };
-			//		MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
-
-			//		MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
-			//		if (nullptr == MeshMaterial.MaterialTextures[j])
-			//			return E_FAIL;
-
-			//	}
-			//}
-			
 		}
-
-
-		//// DIFFUSE, ...
-		//for (size_t j = TEX_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; j++)
-		//{			
-		//	if (j != pMaterialFile[i].iTextureIndex)
-		//		continue;
-
-		//	_char			szFullPath[MAX_PATH] = { "" };
-		//	strcpy_s(szFullPath, pMaterialFile[i].szTexturePath);
-
-		//	// ..\Bin\Resources\Models\Fiona\ 
-		//	_tchar			szPerfectPath[MAX_PATH] = { L"" };
-
-		//	MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
-
-		//	MeshMaterial.MaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szPerfectPath);
-		//	if (nullptr == MeshMaterial.MaterialTextures[j])
-		//		return E_FAIL;
-		//}
 
 		m_Materials.push_back(MeshMaterial);
 	}
@@ -367,7 +366,7 @@ HRESULT CModel::Ready_Bones(_uint iNumBones, vector<BONEFILE>& pBoneFile)
 		m_Bones.push_back(pBone);
 	}
 
-	// Linear
+	// Blending
 	m_iNumBones = iNumBones;
 
 	return S_OK;

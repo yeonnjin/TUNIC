@@ -15,6 +15,7 @@ private:
 	virtual ~CChannel() = default;
 
 public:
+	// Get
 	_uint			Get_BoneIndex() { return m_iBoneIndex; }
 	CHANNELSTATE*	Get_ChannelState() { return &m_tChannelState; }
 
@@ -29,7 +30,7 @@ private:
 	_uint				m_iNumKeyFrames = { 0 };
 	vector<KEYFRAME>	m_KeyFrames;
 
-	// Linear
+	// Blending
 	CHANNELSTATE		m_tChannelState = {};
 
 public:

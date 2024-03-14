@@ -18,7 +18,12 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
+	GAMEOBJECT_DESC		GameObjectDesc{};
+
+	GameObjectDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
 	if (nullptr != pArg)
@@ -47,8 +52,60 @@ void CPlayer::Tick(_float fTimeDelta)
 		if (iIndex > 60)
 			iIndex = 0;
 
+		if (iIndex == 39)
+		{
+			int a = 0;
+		}
+
 		m_pModelCom->Set_Animation(iIndex, true);
 	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
+	{
+		iIndex--;
+		if (iIndex < 0)
+			iIndex = 60;
+
+		m_pModelCom->Set_Animation(iIndex, true);
+	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
+	{
+		// TODO: 전진
+		m_pTransformCom->Go_Straight(fTimeDelta);
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
+	{
+		_fvector vec = { 0.f, 1.f, 0.f };
+		m_pTransformCom->Go_Left(fTimeDelta);
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
+	{
+		m_pTransformCom->Go_Backward(fTimeDelta);
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_PRESS))
+	{
+		m_pTransformCom->Go_Right(fTimeDelta);
+	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_1, KEY_DOWN))
+	{
+		m_pModelCom->Set_Animation(25, true);	// IDLE
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_2, KEY_DOWN))
+	{
+		m_pModelCom->Set_Animation(23, true);	// HURT
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_3, KEY_DOWN))
+	{
+		m_pModelCom->Set_Animation(37, true);	// sprint
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_4, KEY_DOWN))
+	{
+		m_pModelCom->Set_Animation(28, true);	// open chest
+	}
+
+	// 한 번만 넘기게 수정 필요!!!
+	m_pModelCom->Set_ObjectTransform(m_pTransformCom);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -67,7 +124,7 @@ HRESULT CPlayer::Render()
 
 	for (size_t i = 0; i < iNumMeshes; ++i)
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+		if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
@@ -107,6 +164,25 @@ HRESULT CPlayer::Bind_ShaderResources()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
+	if (nullptr == pLightDesc)
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
+		return E_FAIL;
+
+	if(FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
 		return E_FAIL;
 
 	return S_OK;

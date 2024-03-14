@@ -16,8 +16,12 @@ HRESULT CBone::Initialize(BONEFILE* pBoneFile)
 
 void CBone::Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix TransformationMatrix)
 {
-    if (-1 == m_iParentBoneIndex)
-        XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * TransformationMatrix);
+    // 3 == Root Bone Index
+    if (2 == m_iParentBoneIndex || -1 == m_iParentBoneIndex)
+    {
+        XMStoreFloat4x4(&m_CombinedTransformationMatrix,
+            TransformationMatrix);
+    }      
     else
     {
         XMStoreFloat4x4(&m_CombinedTransformationMatrix,

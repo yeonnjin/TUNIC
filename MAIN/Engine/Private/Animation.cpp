@@ -31,6 +31,14 @@ HRESULT CAnimation::Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& 
     return S_OK;
 }
 
+void CAnimation::Set_AnimationData_Initialize()
+{
+    m_fTrackPosition = 0.f;
+
+    for (auto& iIndex : m_CurrentKeyFrameIndices)
+        iIndex = 0;
+}
+
 void CAnimation::Invalidate_Blending(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
 {
     for (_uint i = 0; i < m_iNumChannels; ++i)
@@ -38,8 +46,9 @@ void CAnimation::Invalidate_Blending(_float fTimeDelta, const vector<class CBone
         /* 이 뼈의 생태 행렬을 만들어서 CBone의 TransformationMatrix를 바꿈 */
         m_Channels[i]->Invalidate_TransformationMatrix(Bones, 0, &m_CurrentKeyFrameIndices[i]);
     }
-}
 
+    // TODO:여기 고치기
+}
 
 void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
 {
@@ -55,9 +64,12 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
             m_isFinished = true;
             return;
         }
-
-        // 반복 상태일 때 초기화
-        m_fTrackPosition = 0.f;
+        else
+        {
+            m_isFinished = true;
+            // 반복 상태일 때 초기화
+            m_fTrackPosition = 0.f;
+        }
     }
 
     for (_uint i = 0; i < m_iNumChannels; ++i)

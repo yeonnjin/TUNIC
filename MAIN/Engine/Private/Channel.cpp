@@ -62,7 +62,7 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
         // 선형보간
         XMStoreFloat3(&vScale, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vScale), XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vScale), fRatio));
         XMStoreFloat4(&vRotation, XMQuaternionSlerp(XMLoadFloat4(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vRotation), XMLoadFloat4(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vRotation), fRatio));
-        XMStoreFloat3(&vTranslation, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vTranslation), XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vTranslation), fRatio));
+        XMStoreFloat3(&vTranslation, XMVectorLerp(XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex)].vTranslation), XMLoadFloat3(&m_KeyFrames[(*pCurrentKeyFrameIndex) + 1].vTranslation), fRatio));       
     }
 
     // 스 * 자 * 이 행렬
@@ -71,9 +71,10 @@ void CChannel::Invalidate_TransformationMatrix(const vector<class CBone*>& Bones
     // Bone의 TransformationMatrix 세팅
     Bones[m_iBoneIndex]->Set_TransformationMatrix(TransformationMatrix);
 
-    // Linear
+    // Blending
     m_tChannelState.vScale = vScale;
     m_tChannelState.vRotation = vRotation;
+
     m_tChannelState.vTranslation = vTranslation;
     m_tChannelState.fTime = tKeyFrame.fTime;
     m_tChannelState.TransformationMatrix = TransformationMatrix;
@@ -92,7 +93,6 @@ CChannel* CChannel::Create(CHANNELFILE* pChannelFile, const vector<class CBone*>
 
     return pInstance;
 }
-
 
 void CChannel::Free()
 {
