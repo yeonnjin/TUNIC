@@ -5,6 +5,8 @@
 
 #include "Bone.h"
 
+/* 모델 파일을 로드해서 그려내는 클래스 */
+
 BEGIN(Engine)
 
 class ENGINE_DLL CModel final : public CComponent

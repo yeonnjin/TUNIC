@@ -2,6 +2,13 @@
 
 #include "Base.h"
 
+/* 
+컨트롤러는 내부에 사용하는 애니메이션 클립에 대한 레퍼런스를 가지고 있으며, 
+	다양한 애니메이션 상태와 상태 간 전환을 소위 상태 머신(State Machine) 을 이용하여 관리
+	애니메이션 클립이 애니메이터 컨트롤러 안에 배치
+	하나의 애니메이터 컨트롤러는 Animator 컴포넌트가 있는 다수의 모델에 의해 참조될 수 있습니다.
+*/
+
 BEGIN(Engine)
 
 class CAnimator_Controller final : public CBase

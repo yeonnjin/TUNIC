@@ -2,6 +2,13 @@
 
 #include "Component.h"
 
+/* 
+애니메이션 클립, 애니메이터 컨트롤러, 아바타는 모두 애니메이터(Animator) 컴포넌트를 통해 게임 오브젝트에서 결합
+애니메이터 컨트롤러와 (필요한 경우) 해당 모델의 아바타에 대한 레퍼런스가 있습니다. 
+애니메이터 컨트롤러에도 컨트롤러가 사용하는 애니메이션 클립에 대한 레퍼런스가 포함
+애니메이션을 제어하는 애니메이터 컨트롤러 에셋에 대한 참조를 포함
+*/
+
 BEGIN(Engine)
 
 class ENGINE_DLL CAnimator final : public CComponent
@@ -15,8 +22,10 @@ public:
 	// void	Set_Animation(_uint iAnimIndex, _bool isLoop); 
 
 public:
-	// HRESULT Play_Animation(_float fTimeDelta);
+	// HRESULT Play_Animation(_float fTimeDelta); 
 	// 
+	// 1. 모델 로드
+
 
 private: /* 프로퍼티 */
 	// 1. Controller : 캐릭터에 부여된 애니메이터 컨트롤러
@@ -33,6 +42,8 @@ private: /* 애니메이션 커브 정보 : Animator 컴포넌트의 하단에 있는 인포메이션 박
 	//									일반적인 휴머노이드 리그에 포함되지 않는 애니메이션화한 오브젝트의 커브를 의미합니다. 
 	//									휴머노이드 아바타를 애니메이션화했을 때 꼬리라든지 흩날리는 천 또는 달랑거리는 펜던트와 같은 추가적인 비근육 뼈대의 개수를 표시합니다. 
 	// 3. Curves Count : 애니메이션 커브의 전체 개수 합계			
+
+
 
 
 public:

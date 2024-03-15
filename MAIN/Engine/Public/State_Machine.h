@@ -2,6 +2,9 @@
 
 #include "Base.h"
 
+/*
+애니메이션 상태의 상호 작용을 제어하는 그래프. 각 상태는 애니메이션 블렌드 트리나 단일 애니메이션 클립을 참조
+*/
 BEGIN(Engine)
 
 class CState_Machine final : public CBase

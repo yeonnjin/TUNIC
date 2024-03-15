@@ -2,6 +2,15 @@
 
 #include "Base.h"
 
+/*
+1. Animation : 애니메이션을 관리하고 애니메이션을 실행
+2. Animation State : 하나의 애니메이션의 상태 정보와 애니메이션 클립 정보를 관리
+3. Animation Clip : 애니메이션 데이터(Idle, Walk) 커브들의 집합
+4. Clip Property : 변화되는 속성 (애니메이션 커브를 가짐)
+5. Animation Curve : 시간에 대한 움직임 정보 (키 프레임들의 집합 (키 프레임 애니메이션))
+6. keyFrame : 위치(시간)
+*/
+
 BEGIN(Engine)
 
 class CAnimation final : public CBase

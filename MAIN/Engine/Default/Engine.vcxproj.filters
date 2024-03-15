@@ -139,6 +139,9 @@
     <Filter Include="01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine">
       <UniqueIdentifier>{055c4c53-7e65-4946-8e5c-3803c9c19169}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. Components\06%29 Animator\Avatar">
+      <UniqueIdentifier>{f5c78a36-89c4-4465-8bff-116fb76491d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
