@@ -47,6 +47,16 @@ private:
 	_bool						m_isFinished = { false };
 	_bool						m_isCloned = { false };
 	
+	/* 프로퍼티 */
+	// 1. Start :	클립의 시작 프레임.
+	// 2. End :	클립의 종료 프레임.
+	// 3. Loop Time : 애니메이션 클립이 재생되다가 끝날 때 다시 시작하도록 설정하려면 이 옵션을 활성화해야 합니다.
+	//		- 1) Loop Pose : 모션 루프를 끊기지 않게 하려면 활성화해야 합니다.
+	//		- 2) Cycle Offset : 루핑 애니메이션의 사이클에 대한 오프셋, 애니메이션을 다른 시간에 시작하고 싶은 경우 설정해야 합니다.
+	// 4. Mask : 현재 애니메이션 클립에 적용된 바디 마스크나 트랜스폼 마스크입니다(아바타 마스크 섹션 참조).
+	// 5. Events : 클립에 새로운 이벤트를 생성할 때 사용합니다(애니메이션 이벤트 사용 참조).
+	// 
+
 public:
 	static CAnimation* Create(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);
 	CAnimation* Clone();
