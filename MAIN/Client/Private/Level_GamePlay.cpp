@@ -161,18 +161,24 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 {
-	// Desc
+	////Desc
 	//CMap_Object::MAPOBJ_DESC tDesc = {};
-	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map";
+	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Object";
 	//wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	//tDesc.strModelComTag = wstr;
+	//_vector vScale = { 1.f, 1.f, 1.f };
+	//_vector vRoation = { 0.f, 0.f, 0.f, 1.f };
+	//_vector vTanslation = { 1.f, 1.f, 1.f, 1.f };
+	//_vector vAxiz = { 0.f, 1.f, 0.f };
+
+	//XMStoreFloat4x4(&tDesc.TransformMatrix, XMMatrixAffineTransformation(vScale, vAxiz, vRoation, vTanslation));
 
 	//// Clone
-	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
 	//	return E_FAIL;
 
 	//ifstream fin;
-	//fin.open("../Bin/Resources/Data/Map/Model_Map_Beach.dat", ios::in | ios::binary);
+	//fin.open("../Bin/Resources/Data/Stick.dat", ios::in | ios::binary);
 
 	//// Object Count
 	//_uint iNumObjects;

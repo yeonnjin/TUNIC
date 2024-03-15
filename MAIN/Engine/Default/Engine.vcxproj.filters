@@ -109,6 +109,27 @@
     <Filter Include="01. Utility\98. ImGui\Manager">
       <UniqueIdentifier>{48fb39a6-f806-4502-ad54-e3b91df827c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\01. GameObjects\PartObject">
+      <UniqueIdentifier>{622c6425-94d3-472a-8125-464a8a84064d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider">
+      <UniqueIdentifier>{5643c18b-ab1e-47f4-bfa0-5142e5b3b36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\DebugDraw">
+      <UniqueIdentifier>{7f84c5f8-b62a-41ba-a7a6-430f31944e51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding">
+      <UniqueIdentifier>{f9a47b1c-9731-47d8-a455-7b4665276b71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding\AABB">
+      <UniqueIdentifier>{c9472037-67f8-4bb3-b730-452574846bd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding\OBB">
+      <UniqueIdentifier>{e99364eb-8c34-4f25-adbf-24d66c2c4b76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding\SPHERE">
+      <UniqueIdentifier>{73196e8d-a939-4e95-9f18-656dd3f25256}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -230,6 +251,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\ImGui_Manager.cpp">
       <Filter>01. Utility\98. ImGui\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PartObject.cpp">
+      <Filter>01. Utility\01. GameObjects\PartObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01. Utility\02. Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DebugDraw.cpp">
+      <Filter>01. Utility\02. Components\Collider\DebugDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_AABB.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_OBB.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_SPHERE.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding\SPHERE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +409,27 @@
     </ClInclude>
     <ClInclude Include="..\Public\ImGui_Manager.h">
       <Filter>01. Utility\98. ImGui\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PartObject.h">
+      <Filter>01. Utility\01. GameObjects\PartObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01. Utility\02. Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DebugDraw.h">
+      <Filter>01. Utility\02. Components\Collider\DebugDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_AABB.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_OBB.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_SPHERE.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding\SPHERE</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

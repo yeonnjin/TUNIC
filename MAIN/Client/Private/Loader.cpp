@@ -15,6 +15,8 @@
 #include "Map_Object.h"
 #include "Test_Object.h"
 #include "Editor.h"
+
+#include "Player_Weapon.h"
 #include <fstream>
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -232,6 +234,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CMap_Object::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Part_Player_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon"),
+		CPlayer_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	///* For.Prototype_GameObject_Effect */
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect"),
 	//	CEffect::Create(m_pGraphic_Device))))
@@ -417,7 +424,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 HRESULT CLoader::Test_For_Model()
 {
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Model/Model_Map_Beach.dat", ios::in | ios::binary);
+	fin.open("../Bin/Resources/Data/Model/Stick.dat", ios::in | ios::binary);
 
 	_uint iObjectCount;
 	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));

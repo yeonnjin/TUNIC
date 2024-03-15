@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CModel;
 class CShader;
+class CPartObject;
 END
 
 /* 귀여운 여우 친구 */
@@ -14,6 +15,13 @@ BEGIN(Client)
 
 class CPlayer final : public CGameObject
 {
+public:
+	enum STATE {
+		STATE_IDLE = 0x01,
+		STATE_RUN = 0x02,
+		STATE_ATTCK = 0x04,
+	};
+
 public: // GAMEOBJECT_DESC 로 올리면 카메라에서 터짐;;
 	typedef struct Player_Desc : public CGameObject::GAMEOBJECT_DESC
 	{
@@ -34,12 +42,17 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	map<const wstring, CPartObject*>	m_PartObjects;
+	_ubyte								m_eState = {};
+
+private:
 	wstring			m_strModelComTag = {};
 	CModel*			m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 
 private:
 	HRESULT			Add_Components();
+	HRESULT			Add_PartObjects();
 	HRESULT			Bind_ShaderResources();
 
 public:

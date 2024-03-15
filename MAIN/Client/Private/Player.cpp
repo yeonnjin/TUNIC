@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Player.h"
 
+#include "Player_Weapon.h"
+
+#define	WEAPONBONEIDX 28
+
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -35,10 +39,14 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	if (FAILED(Add_PartObjects()))
+		return E_FAIL;
+
 	_float4 vPosition = _float4(0.f, 2.f, 0.3f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	m_pModelCom->Set_Animation(0, true);
+	m_pModelCom->Set_ObjectTransform(m_pTransformCom);
 
 	return S_OK;
 }
@@ -70,12 +78,20 @@ void CPlayer::Tick(_float fTimeDelta)
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
 	{
-		// TODO: 전진
 		m_pTransformCom->Go_Straight(fTimeDelta);
+
+		m_eState |= STATE_RUN;
+		if (m_eState & STATE_IDLE)
+			m_eState ^= STATE_IDLE;
+	}
+	else
+	{
+		m_eState |= STATE_IDLE;
+		if (m_eState & STATE_RUN)
+			m_eState ^= STATE_RUN;
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
 	{
-		_fvector vec = { 0.f, 1.f, 0.f };
 		m_pTransformCom->Go_Left(fTimeDelta);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
@@ -86,30 +102,16 @@ void CPlayer::Tick(_float fTimeDelta)
 	{
 		m_pTransformCom->Go_Right(fTimeDelta);
 	}
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_1, KEY_DOWN))
-	{
-		m_pModelCom->Set_Animation(25, true);	// IDLE
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_2, KEY_DOWN))
-	{
-		m_pModelCom->Set_Animation(23, true);	// HURT
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_3, KEY_DOWN))
-	{
-		m_pModelCom->Set_Animation(37, true);	// sprint
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_4, KEY_DOWN))
-	{
-		m_pModelCom->Set_Animation(28, true);	// open chest
-	}
-
-	// 한 번만 넘기게 수정 필요!!!
-	m_pModelCom->Set_ObjectTransform(m_pTransformCom);
+	
+	for (auto& PartObject : m_PartObjects)
+		PartObject.second->Tick(fTimeDelta);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
+	for (auto& PartObject : m_PartObjects)
+		PartObject.second->Late_Tick(fTimeDelta);
+
 	m_pModelCom->Play_Animation(fTimeDelta);
 
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
@@ -150,6 +152,26 @@ HRESULT CPlayer::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Add_PartObjects()
+{
+	/* For. Part_Player_Weapon */
+	CPartObject* pWeaponObject = { nullptr };
+	CPlayer_Weapon::PLAYER_WEAPON_DESC tDesc{};
+
+	CModel* pModel = m_pModelCom;
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = pModel->Get_Bone_Ptr(WEAPONBONEIDX);
+
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon"), pWeaponObject);
 
 	return S_OK;
 }
@@ -219,6 +241,11 @@ CGameObject* CPlayer::Clone(void* pArg)
 void CPlayer::Free()
 {
 	__super::Free();
+
+	for (auto& PartObject : m_PartObjects)
+		Safe_Release(PartObject.second);
+
+	m_PartObjects.clear();
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

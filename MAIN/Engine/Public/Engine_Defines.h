@@ -13,6 +13,15 @@
 #include "Effects11/d3dx11effect.h"
 #include "DirectXTK/DDSTextureLoader.h"
 #include "DirectXTK/WICTextureLoader.h"
+#include "DirectXTK/ScreenGrab.h"
+
+/* For. Collider */
+#include "DirectXTK/PrimitiveBatch.h"	// 정점 생성, 원근
+#include "DirectXTK/VertexTypes.h"
+#include "DirectXTK/Effects.h"
+
+#include "DirectXTK/SpriteBatch.h"		// 정점 생성, 직교
+#include "DirectXTK/SpriteFont.h"
 
 using namespace DirectX;
 

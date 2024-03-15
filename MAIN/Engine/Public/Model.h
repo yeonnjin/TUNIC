@@ -29,6 +29,8 @@ public:
 		return m_iNumMeshes;
 	}
 
+	class CBone* Get_Bone_Ptr(_uint iBoneIndex) const;
+
 	_bool isFinished() {
 		return m_Animations[m_iCurrentAnimIndex]->isFinished();
 	}
@@ -81,8 +83,8 @@ private:
 	class CTransform*				m_pObjectTransform;
 
 private:
-	_bool	Animation_Blending(_float fTimeDelta);
-	_bool	is_Blended(_float fTimeDelta);
+	_bool	Animation_Blending(_float fTimeDelta);	// ¿Ã∏ß πŸ≤„æﬂ∞Ÿ¥Á 1
+	_bool	is_Blended(_float fTimeDelta);			// ¿Ã∏ß πŸ≤„æﬂ∞Ÿ¥Á 2
 
 private:
 	HRESULT Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile);

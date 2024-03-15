@@ -11,8 +11,8 @@
 #include <fstream>
 //#include "Texture.h"
 
-#define DATAPATH "../Bin/Resources/Data/Map/Map_12_1.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Player.dat"
+#define DATAPATH "../Bin/Resources/Data/Map/Etc.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Stick.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

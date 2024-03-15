@@ -47,6 +47,15 @@ CModel::CModel(const CModel& rhs)
 	}
 }
 
+CBone* CModel::Get_Bone_Ptr(_uint iBoneIndex) const
+{
+	auto iter = m_Bones.begin();
+	for (size_t i = 0; i < iBoneIndex; i++)
+		++iter;
+	
+	return *iter;
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 {
 	if (nullptr == pModelFile)

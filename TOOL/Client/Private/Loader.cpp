@@ -311,11 +311,11 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", TEXT("Prototype_Component_Model_Fiona"),TransformMatrix))))
 	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Player */
-	TransformMatrix = /*XMMatrixRotationY(XMConvertToRadians(180.0f));*/ XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", TEXT("Prototype_Component_Model_Player"), TransformMatrix))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Player */
+	//TransformMatrix = /*XMMatrixRotationY(XMConvertToRadians(180.0f));*/ XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", TEXT("Prototype_Component_Model_Player"), TransformMatrix))))
+	//	return E_FAIL;
 
 	/* Prototype_Component_Model_ForkLift */
 	//TransformMatrix = XMMatrixIdentity();
@@ -331,9 +331,16 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Map */
-	TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
+	/*TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/map_beach2.fbx", TEXT("Prototype_Component_Model_Map"), TransformMatrix))))
+		return E_FAIL;*/
+
+	/* For.Prototype_Component_Model_Map_Object */
+	
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Object"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Stick/stick.fbx", TEXT("Prototype_Component_Model_Map_Object"), TransformMatrix))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Fox */

@@ -29,6 +29,9 @@ HRESULT CMap_Object::Initialize(void* pArg)
         m_strModelComTag = pDesc->strModelComTag;
     }
 
+    _float4 vPosition = _float4(0.f, 2.f, 0.3f, 1.f);
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
     if (FAILED(Add_Components()))
         return E_FAIL;
 
