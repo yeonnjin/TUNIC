@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CModel;
 class CShader;
+class CAnimator;
 class CPartObject;
 END
 
@@ -47,7 +48,7 @@ private:
 
 private:
 	wstring			m_strModelComTag = {};
-	CModel*			m_pModelCom = { nullptr };
+	CAnimator*			m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 
 private:

@@ -5,6 +5,8 @@
 
 #include "Bone.h"
 
+/* NONANIM Object */
+
 BEGIN(Engine)
 
 class ENGINE_DLL CModel final : public CComponent

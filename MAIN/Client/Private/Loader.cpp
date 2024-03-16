@@ -17,6 +17,8 @@
 #include "Editor.h"
 
 #include "Player_Weapon.h"
+
+#include "Animator.h"
 #include <fstream>
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -153,6 +155,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
+
+	
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 	_matrix		TransformMatrix = XMMatrixIdentity();
@@ -779,8 +783,13 @@ HRESULT CLoader::Test_For_Model()
 		// Model Tag
 		wstring wstr(&tModelFile.szModelComTag[0], &tModelFile.szModelComTag[MAX_PATH]);
 
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, wstr,
+		/*if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, wstr,
 			CModel::Create(m_pDevice, m_pContext, eType, &tModelFile))))
+			return E_FAIL;*/
+
+		/* Prototype_Component_Animator_Player */
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, wstr,
+			CAnimator::Create(m_pDevice, m_pContext, &tModelFile))))
 			return E_FAIL;
 
 		for (size_t j = 0; j < tModelFile.iNumMeshes; ++j)

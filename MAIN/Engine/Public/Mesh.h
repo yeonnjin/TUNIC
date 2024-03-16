@@ -1,7 +1,7 @@
 #pragma once
 
 #include "VIBuffer.h"
-#include "Model.h"
+#include "Avatar.h"
 
 /* 디자이너 분들이 저장해준 정점과 인덱스의 정보를 바탕으로 정점, 인덱스 버퍼 생성 */
 
@@ -20,7 +20,7 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bones/*, _fmatrix TransformMatrix*/);
+	virtual HRESULT Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bones/*, _fmatrix TransformMatrix*/);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -51,7 +51,7 @@ private:
 	HRESULT Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CBone*>& Bones);
 
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

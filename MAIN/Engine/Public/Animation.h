@@ -22,9 +22,9 @@ private:
 public:
 	
 	// Set
-	void	Set_Cloned() {
-		m_isCloned = true;
-	}
+	void	Set_Cloned() { m_isCloned = true; }
+
+	void	Set_Loop(_bool isLoop) { m_isLoop = isLoop; }
 
 	void	Set_AnimationData_Initialize();
 
@@ -35,12 +35,13 @@ public:
 		return m_isFinished;
 	}
 
+	_bool			Get_isLoop() { return m_isLoop; }
 	_uint			Get_NumChannels() { return m_iNumChannels; }
 	class CChannel* Get_Channel(_uint iChannelIndex) { return m_Channels[iChannelIndex]; }
 
 public:
 	HRESULT Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);
-	void	Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop);
+	void	Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones);
 
 private:
 	_char						m_szName[MAX_PATH] = { "" };
@@ -55,6 +56,7 @@ private:
 
 	_bool						m_isFinished = { false };
 	_bool						m_isCloned = { false };
+	_bool						m_isLoop = { false };
 	
 	/* 프로퍼티 */
 	// 1. Start :	클립의 시작 프레임.

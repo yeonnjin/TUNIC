@@ -142,6 +142,9 @@
     <Filter Include="01. Utility\02. Components\06%29 Animator\Avatar">
       <UniqueIdentifier>{f5c78a36-89c4-4465-8bff-116fb76491d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine\State">
+      <UniqueIdentifier>{a9030476-8070-4734-ba16-4a7fcb5b0472}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -293,6 +296,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Machine.cpp">
       <Filter>01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Avatar.cpp">
+      <Filter>01. Utility\02. Components\06%29 Animator\Avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State.cpp">
+      <Filter>01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +469,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Machine.h">
       <Filter>01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Avatar.h">
+      <Filter>01. Utility\02. Components\06%29 Animator\Avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State.h">
+      <Filter>01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine\State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

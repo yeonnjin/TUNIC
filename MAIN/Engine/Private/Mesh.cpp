@@ -10,10 +10,11 @@ CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CMesh::CMesh(const CMesh& rhs)
     : CVIBuffer{ rhs }
+    , m_pIndices{ rhs.m_pIndices }
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bone)
+HRESULT CMesh::Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bone)
 {
     strcpy_s(m_szName, pMeshFile->szName);
     m_iMaterialIndex = pMeshFile->iMaterialIndex;
@@ -31,7 +32,7 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, MESHFILE* pMeshFile
 
 #pragma region VERTEX_BUFFER
 
-    HRESULT hr = CModel::TYPE_NONANIM == eModelType ? Ready_Vertices_For_NonAnimModel(pMeshFile) : Ready_Vertices_For_AnimModel(pMeshFile, Bone);
+    HRESULT hr = CModel::TYPE_NONANIM == iModelType ? Ready_Vertices_For_NonAnimModel(pMeshFile) : Ready_Vertices_For_AnimModel(pMeshFile, Bone);
     if (FAILED(hr))
         return E_FAIL;
 
@@ -48,21 +49,22 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, MESHFILE* pMeshFile
     m_BufferDesc.MiscFlags = 0;
     m_BufferDesc.StructureByteStride = 0;
 
-    _uint* pIndices = new _uint[m_iNumIndices];
-    ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
+   // _uint* pIndices = new _uint[m_iNumIndices];
+    m_pIndices = new _uint[m_iNumIndices];
+    ZeroMemory(m_pIndices, sizeof(_uint) * m_iNumIndices);
 
     for (size_t i = 0; i < m_iNumIndices; ++i)
     {
-        pIndices[i] = pMeshFile->pIndices[i];
+        m_pIndices[i] = pMeshFile->pIndices[i];
     }
 
     ZeroMemory(&m_InitialData, sizeof m_InitialData);
-    m_InitialData.pSysMem = pIndices;
+    m_InitialData.pSysMem = m_pIndices;
 
     if (FAILED(__super::Create_Buffer(&m_pIB)))
         return E_FAIL;
 
-    Safe_Delete_Array(pIndices);
+   
 
 #pragma endregion
 
@@ -200,11 +202,11 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CB
     return S_OK;;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones)
 {
     CMesh* pInstance = new CMesh(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(eModelType, pMeshFile, Bones)))
+    if (FAILED(pInstance->Initialize_Prototype(iModelType, pMeshFile, Bones)))
     {
         MSG_BOX(TEXT("Failed To Create : CMesh"));
 
@@ -222,4 +224,7 @@ CComponent* CMesh::Clone(void* pArg)
 void CMesh::Free()
 {
     __super::Free();
+
+    Safe_Delete_Array(m_pIndices);
+    Safe_Delete_Array(m_pVerticesPos);
 }

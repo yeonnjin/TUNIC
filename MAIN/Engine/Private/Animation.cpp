@@ -50,7 +50,7 @@ void CAnimation::Invalidate_Blending(_float fTimeDelta, const vector<class CBone
     // TODO:여기 고치기
 }
 
-void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
+void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones)
 {
     m_isFinished = false;
 
@@ -59,7 +59,7 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
     if (m_fDuration <= m_fTrackPosition)
     {
         // 반복 상태가 아닐 때
-        if (false == isLoop)
+        if (false == m_isLoop)
         {
             m_isFinished = true;
             return;

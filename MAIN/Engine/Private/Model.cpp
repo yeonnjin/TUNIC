@@ -37,7 +37,6 @@ CModel::CModel(const CModel& rhs)
 
 	// 얕은 복사
 	for (auto& pMesh : m_Meshes)
-
 		Safe_AddRef(pMesh);
 	
 	for (auto& tMaterial : m_Materials)
@@ -160,7 +159,7 @@ HRESULT CModel::Play_Animation(_float fTimeDelta)
 	else
 	{
 		/* 현재 애니메이션에 맞는 뼈의 상태(m_TransformationMatrix)를 갱신 */
-		m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, m_Bones, m_isLoop);
+		m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, m_Bones/*, m_isLoop*/);
 
 
 		for (auto& pBone : m_Bones)

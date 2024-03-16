@@ -42,11 +42,16 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Add_PartObjects()))
 		return E_FAIL;
 
-	_float4 vPosition = _float4(0.f, 2.f, 0.3f, 1.f);
+	_float4 vPosition = _float4(rand() % 10, 2.f, 0.3f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-	m_pModelCom->Set_Animation(0, true);
-	m_pModelCom->Set_ObjectTransform(m_pTransformCom);
+	m_pModelCom->Set_Animation_Index(0);
+	m_pModelCom->Set_Animation_Transform(m_pTransformCom);
+
+	m_pModelCom->Set_Animation_isLoop(0, true);
+	m_pModelCom->Set_Animation_isLoop(2, true);
+	m_pModelCom->Set_Animation_isLoop(4, true);
+	m_pModelCom->Set_Animation_isLoop(6, true);
 
 	return S_OK;
 }
@@ -65,7 +70,7 @@ void CPlayer::Tick(_float fTimeDelta)
 			int a = 0;
 		}
 
-		m_pModelCom->Set_Animation(iIndex, true);
+		m_pModelCom->Set_Animation_Index(iIndex);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
 	{
@@ -73,7 +78,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		if (iIndex < 0)
 			iIndex = 60;
 
-		m_pModelCom->Set_Animation(iIndex, true);
+		m_pModelCom->Set_Animation_Index(iIndex);
 	}
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
@@ -162,7 +167,7 @@ HRESULT CPlayer::Add_PartObjects()
 	CPartObject* pWeaponObject = { nullptr };
 	CPlayer_Weapon::PLAYER_WEAPON_DESC tDesc{};
 
-	CModel* pModel = m_pModelCom;
+	CAnimator* pModel = m_pModelCom;
 
 	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	tDesc.pSocketBone = pModel->Get_Bone_Ptr(WEAPONBONEIDX);
