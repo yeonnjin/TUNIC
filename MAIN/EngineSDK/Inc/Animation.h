@@ -23,19 +23,23 @@ public:
 	
 	// Set
 	void	Set_Cloned() { m_isCloned = true; }
-
 	void	Set_Loop(_bool isLoop) { m_isLoop = isLoop; }
+	void	Set_Root(_bool isRoot) { m_isRoot = isRoot; }
+	void	Set_BlendTime(_float fBlendTime) { m_fBlendTime = fBlendTime; }
 
 	void	Set_AnimationData_Initialize();
 
-	void	Invalidate_Blending(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop);
+	void	Invalidate_Blending(const vector<class CBone*>& Bones, _bool isLoop);
 
 	// Get
 	_bool	isFinished() const {
 		return m_isFinished;
 	}
 
+	_bool			Get_isRoot() { return m_isRoot; }
 	_bool			Get_isLoop() { return m_isLoop; }
+
+	_float			Get_BlendTime() { return m_fBlendTime; }
 	_uint			Get_NumChannels() { return m_iNumChannels; }
 	class CChannel* Get_Channel(_uint iChannelIndex) { return m_Channels[iChannelIndex]; }
 
@@ -57,6 +61,9 @@ private:
 	_bool						m_isFinished = { false };
 	_bool						m_isCloned = { false };
 	_bool						m_isLoop = { false };
+	_bool						m_isRoot = { false };
+
+	_float						m_fBlendTime = { 0.2f };
 	
 	/* 프로퍼티 */
 	// 1. Start :	클립의 시작 프레임.

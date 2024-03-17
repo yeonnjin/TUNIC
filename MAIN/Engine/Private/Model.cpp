@@ -242,7 +242,7 @@ _bool CModel::is_Blended(_float fTimeDelta)
 		}
 
 		// CUR
-		m_Animations[m_iCurrentAnimIndex]->Invalidate_Blending(fTimeDelta, m_Bones, true);
+		m_Animations[m_iCurrentAnimIndex]->Invalidate_Blending(m_Bones, true);
 		_uint iCurNumChannels = m_Animations[m_iCurrentAnimIndex]->Get_NumChannels();
 
 		for (size_t i = 0; i < iCurNumChannels; ++i)

@@ -52,8 +52,15 @@ public:
 	HRESULT					Play_Animation(_float fTimeDelta);
 	HRESULT					Set_Animation_Index(_uint iAnimIndex);
 	HRESULT					Set_Animation_Transform(CTransform* pObjectTransform);
-	HRESULT					Set_Animation_isBlending(_uint iAnimIndex, _bool isBlend);
+	HRESULT					Blending_Animation(_uint iNextAnimIndex, _float fTimeDelta);
 	HRESULT					Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop);
+	void					Set_TargetTransform(CTransform* pTargetTransform);
+	void					Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot);
+	void					Set_Blend_Time(_uint iAnimIndex, _float fBlendTime);
+
+	// Test
+	_bool					isFinished();
+	_bool					isFinished(_uint iAnimIndex);
 
 public:
 	HRESULT Initialize_Prototype(MODELFILE* pModelFile);
@@ -78,6 +85,9 @@ private:
 
 	// 애니메이션 컨트롤러 (깊은 복사 필요할지도)
 	CAnimator_Controller*		m_pAnimator_Controller = { nullptr };
+
+	// 스테이트 머신
+	CState_Machine*				m_pState_Machine = { nullptr };
 	
 
 private: /* 애니메이션 커브 정보 : Animator 컴포넌트의 하단에 있는 인포메이션 박스에는 애니메이터 컨트롤러가 사용하는 모든 클립의 상세한 데이터가 표시됩니다. 

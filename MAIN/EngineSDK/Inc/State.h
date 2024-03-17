@@ -4,11 +4,14 @@
 
 BEGIN(Engine)
 
-class ENGINE_DLL CState final : public CBase
+class CGameInstance;
+
+class ENGINE_DLL CState abstract : public CBase
 {
-private:
-	CState(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CState(const CState& rhs);
+protected:
+	CState();
+	//CState(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	//CState(const CState& rhs);
 	virtual ~CState() = default;
 
 public:
@@ -25,8 +28,11 @@ public:
 	// 캐릭터의 손이나 발이 특정 지점에 특정 순간에 닿는 방식으로 움직임
 	// https://docs.unity3d.com/kr/560/Manual/TargetMatching.html
 
+protected:
+	CGameInstance* m_pGameInstance = { nullptr };
+
 public:
-	static CState* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	//static CState* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;
 };
 

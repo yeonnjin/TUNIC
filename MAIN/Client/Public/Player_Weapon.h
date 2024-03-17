@@ -25,11 +25,17 @@ private:
 	virtual ~CPlayer_Weapon() = default;
 
 public:
+	void			Set_isRender(_bool isRender) { m_isRender = isRender; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+private:
+	_bool			m_isRender = { true };
 
 private:
 	CModel*			m_pModelCom = { nullptr };

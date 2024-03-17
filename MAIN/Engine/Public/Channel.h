@@ -18,6 +18,7 @@ public:
 	// Get
 	_uint			Get_BoneIndex() { return m_iBoneIndex; }
 	CHANNELSTATE*	Get_ChannelState() { return &m_tChannelState; }
+	CHANNELSTATE*	Get_ChannelState_First() { return &m_tChannelState_First; }
 
 public:
 	HRESULT Initialize(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones);
@@ -32,6 +33,7 @@ private:
 
 	// Blending
 	CHANNELSTATE		m_tChannelState = {};
+	CHANNELSTATE		m_tChannelState_First = {};
 
 public:
 	static CChannel* Create(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones);

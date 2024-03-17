@@ -169,6 +169,12 @@
     <ClInclude Include="..\Public\Map_Object.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\Public\Player_State_Attack.h" />
+    <ClInclude Include="..\Public\Player_State_Damage.h" />
+    <ClInclude Include="..\Public\Player_State_Dodge.h" />
+    <ClInclude Include="..\Public\Player_State_Idle.h" />
+    <ClInclude Include="..\Public\Player_State_Move.h" />
+    <ClInclude Include="..\Public\Player_State_Sleep.h" />
     <ClInclude Include="..\Public\Player_Weapon.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
@@ -192,6 +198,12 @@
     <ClCompile Include="..\Private\Map_Object.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\Private\Player_State_Attack.cpp" />
+    <ClCompile Include="..\Private\Player_State_Damage.cpp" />
+    <ClCompile Include="..\Private\Player_State_Dodge.cpp" />
+    <ClCompile Include="..\Private\Player_State_Idle.cpp" />
+    <ClCompile Include="..\Private\Player_State_Move.cpp" />
+    <ClCompile Include="..\Private\Player_State_Sleep.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Test_Object.cpp" />

@@ -61,6 +61,27 @@
     <Filter Include="02.GameObjects\Player\Weapon">
       <UniqueIdentifier>{ecf585f8-593b-4b94-8226-a7c24e325de0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player\State">
+      <UniqueIdentifier>{97ba3871-4918-465a-bc2b-9fee34ab22e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Idle">
+      <UniqueIdentifier>{f862aafe-68cb-4c6b-9bea-cf5a92a63d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Move">
+      <UniqueIdentifier>{08c5cabe-327f-41ba-b989-43785bbba8cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Attack">
+      <UniqueIdentifier>{46b1727d-d75a-41aa-8521-084da20dab3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Sleep">
+      <UniqueIdentifier>{e2673865-0a01-4fb0-a8b6-76937d8ef0fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Damage">
+      <UniqueIdentifier>{9b82a615-c3d4-4404-96b7-4535ca12895a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Dodge">
+      <UniqueIdentifier>{84fd44fe-f71c-47c2-8943-732d16774163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -123,6 +144,24 @@
     <ClInclude Include="..\Public\Player_Weapon.h">
       <Filter>02.GameObjects\Player\Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Idle.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Move.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Move</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Attack.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Sleep.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Sleep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Damage.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Dodge.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Dodge</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -172,6 +211,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Weapon.cpp">
       <Filter>02.GameObjects\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Idle.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Move.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Move</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Attack.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Sleep.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Sleep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Damage.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Dodge.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Dodge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

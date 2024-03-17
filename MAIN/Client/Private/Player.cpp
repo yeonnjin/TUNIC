@@ -3,7 +3,15 @@
 
 #include "Player_Weapon.h"
 
-#define	WEAPONBONEIDX 28
+// State
+#include "Player_State_Idle.h"
+#include "Player_State_Sleep.h"
+#include "Player_State_Move.h"
+#include "Player_State_Attack.h"
+#include "Player_State_Damage.h"
+#include "Player_State_Dodge.h"
+
+#define	WEAPONBONEIDX 29
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -42,74 +50,107 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Add_PartObjects()))
 		return E_FAIL;
 
+	if (FAILED(Add_States()))
+		return E_FAIL;
+
 	_float4 vPosition = _float4(rand() % 10, 2.f, 0.3f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-	m_pModelCom->Set_Animation_Index(0);
+	m_pModelCom->Set_Animation_Index(ANIM_WALK_LEFT);
 	m_pModelCom->Set_Animation_Transform(m_pTransformCom);
-
-	m_pModelCom->Set_Animation_isLoop(0, true);
-	m_pModelCom->Set_Animation_isLoop(2, true);
-	m_pModelCom->Set_Animation_isLoop(4, true);
-	m_pModelCom->Set_Animation_isLoop(6, true);
+	Set_Animation_Loop();
 
 	return S_OK;
 }
 
 void CPlayer::Tick(_float fTimeDelta)
 {
-	static _uint iIndex = 0;
-	if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
-	{
-		iIndex++;
-		if (iIndex > 60)
-			iIndex = 0;
+	//static _uint iIndex = 0;
+	//if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+	//{
+	//	iIndex++;
+	//	if (iIndex > 60)
+	//		iIndex = 0;
 
-		if (iIndex == 39)
+	//	if (iIndex == 39)
+	//	{
+	//		int a = 0;
+	//	}
+
+	//	//m_pModelCom->Set_Animation_Index(iIndex);
+	//	m_isBlend = true;
+	//}
+	//if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
+	//{
+	//	iIndex--;
+	//	if (iIndex < 0)
+	//		iIndex = 60;
+
+	//	//m_pModelCom->Set_Animation_Index(iIndex);
+	//	m_isBlend = true;
+	//}
+
+	//if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
+	//{
+	//	m_pTransformCom->Go_Straight(fTimeDelta);
+	//}
+	//if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
+	//{
+	//	m_pTransformCom->Go_Left(fTimeDelta);
+	//}
+	//if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
+	//{
+	//	m_pTransformCom->Go_Backward(fTimeDelta);
+	//}
+	//if (m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_PRESS))
+	//{
+	//	m_pTransformCom->Go_Right(fTimeDelta);
+	//}
+
+	//// Test
+	////m_isBlend = false;
+	//if (true == m_pModelCom->isFinished())
+	//{
+	//	m_isBlend = true;
+	//}
+
+	//if (true == m_isBlend)
+	//{
+	//	if (S_OK == m_pModelCom->Blending_Animation(iIndex, fTimeDelta))
+	//	{
+	//		m_isBlend = false;
+	//		m_pModelCom->Set_Animation_Index(iIndex);
+	//	}
+	//}
+	
+	// PartObject
+	for (auto& PartObject : m_PartObjects)
+		PartObject.second->Tick(fTimeDelta);
+
+	// State_Machine
+	m_pModelCom->Update_State(fTimeDelta);
+	Update_State();
+
+
+	// Blending
+	if (true == m_isBlend)
+	{
+		if (m_eAnimationIndex == ANIM_WALK_LEFT && m_eBlendAnimIndex == ANIM_WALK_LEFT)
 		{
 			int a = 0;
 		}
 
-		m_pModelCom->Set_Animation_Index(iIndex);
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
-	{
-		iIndex--;
-		if (iIndex < 0)
-			iIndex = 60;
+		if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+		{
+			m_isBlend = false;
+			m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
+			m_eAnimationIndex = m_eBlendAnimIndex;
+		}
+	}	
+	/*else
+		m_pModelCom->Play_Animation(fTimeDelta);*/
 
-		m_pModelCom->Set_Animation_Index(iIndex);
-	}
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
-	{
-		m_pTransformCom->Go_Straight(fTimeDelta);
-
-		m_eState |= STATE_RUN;
-		if (m_eState & STATE_IDLE)
-			m_eState ^= STATE_IDLE;
-	}
-	else
-	{
-		m_eState |= STATE_IDLE;
-		if (m_eState & STATE_RUN)
-			m_eState ^= STATE_RUN;
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
-	{
-		m_pTransformCom->Go_Left(fTimeDelta);
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
-	{
-		m_pTransformCom->Go_Backward(fTimeDelta);
-	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_PRESS))
-	{
-		m_pTransformCom->Go_Right(fTimeDelta);
-	}
-	
-	for (auto& PartObject : m_PartObjects)
-		PartObject.second->Tick(fTimeDelta);
+		
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -117,7 +158,8 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Late_Tick(fTimeDelta);
 
-	m_pModelCom->Play_Animation(fTimeDelta);
+	if (false == m_isBlend)
+		m_pModelCom->Play_Animation(fTimeDelta);
 
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
@@ -144,6 +186,82 @@ HRESULT CPlayer::Render()
 	}
 
 	return S_OK;
+}
+
+void CPlayer::Update_State()
+{
+	static _bool isTurn = false;
+
+	switch (m_eState)
+	{
+	case STATE_IDLE:
+		// IDLE -> MOVE
+		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+		{
+			m_eDir = DIR_FORWARD;			
+			Change_State(STATE_MOVE);
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+		{
+			m_eDir = DIR_BACKWARD;
+			Change_State(STATE_MOVE);
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		{
+			m_eDir = DIR_LEFT;
+			Change_State(STATE_MOVE);
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		{
+			m_eDir = DIR_RIGHT;
+			Change_State(STATE_MOVE);
+		}
+
+		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+			Change_State(STATE_ATTACK);
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_O, KEY_DOWN))
+			Change_State(STATE_SLEEP);
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN))
+			Change_State(STATE_DAMAGE);
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+			Change_State(STATE_DODGE);
+
+		break;
+
+	case STATE_MOVE:
+		if (!m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) &&
+			!m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) &&
+			!m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) &&
+			!m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		{
+			//m_eDir = DIR_FORWARD;
+			Change_State(STATE_IDLE);
+		}
+		isTurn = false;
+		break;
+	case STATE_END:
+		break;
+	default:
+		break;
+	}
+}
+
+void CPlayer::Change_State(STATE eState)
+{
+	m_pModelCom->Change_State(eState);
+	m_eState = eState;
+}
+
+void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
+{
+	CPartObject* pWeapon = m_PartObjects.find(strWeaponTag)->second;
+	if (nullptr == pWeapon)
+		return;
+
+	dynamic_cast<CPlayer_Weapon*>(pWeapon)->Set_isRender(isRender);
 }
 
 HRESULT CPlayer::Add_Components()
@@ -181,6 +299,21 @@ HRESULT CPlayer::Add_PartObjects()
 	return S_OK;
 }
 
+HRESULT CPlayer::Add_States()
+{
+	m_pModelCom->Add_State(STATE_IDLE, CPlayer_State_Idle::Create(this));
+	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
+	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
+	m_pModelCom->Add_State(STATE_ATTACK, CPlayer_State_Attack::Create(this));
+	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
+	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
+
+	m_pModelCom->Change_State(STATE_IDLE);
+	m_eState = STATE_IDLE;
+
+	return S_OK;
+}
+
 HRESULT CPlayer::Bind_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
@@ -213,6 +346,27 @@ HRESULT CPlayer::Bind_ShaderResources()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CPlayer::Set_Animation_Loop()
+{
+	m_pModelCom->Set_Animation_isLoop(ANIM_IDLE, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_SLEEPING, true);
+	//m_pModelCom->Set_Animation_isLoop(ANIM_GETUP, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_FORWARD, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_BACKWARD, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_LEFT, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_RIGHT, true);
+	//m_pModelCom->Set_Animation_isLoop(ANIM_SWING_STICK1, true);
+	//m_pModelCom->Set_Animation_isLoop(ANIM_SWING_STICK2, true);
+
+	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK1, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK2, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_HURT, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_STAGGER, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE, true);
+
+	m_pModelCom->Set_Blend_Time(ANIM_STAGGER, 0.4f);
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -37,9 +37,11 @@ void CAnimation::Set_AnimationData_Initialize()
 
     for (auto& iIndex : m_CurrentKeyFrameIndices)
         iIndex = 0;
+
+    m_isFinished = false;
 }
 
-void CAnimation::Invalidate_Blending(_float fTimeDelta, const vector<class CBone*>& Bones, _bool isLoop)
+void CAnimation::Invalidate_Blending(const vector<class CBone*>& Bones, _bool isLoop)
 {
     for (_uint i = 0; i < m_iNumChannels; ++i)
     {

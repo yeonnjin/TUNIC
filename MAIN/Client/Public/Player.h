@@ -17,11 +17,32 @@ BEGIN(Client)
 class CPlayer final : public CGameObject
 {
 public:
-	enum STATE {
+	enum ANIMATION {
+		ANIM_STONESWITCH, ANIM_BLINK, ANIM_CLIMB_OFF, ANIM_CLIMB_ON, ANIM_CLIMB,
+		ANIM_COIN_FLIP, ANIM_COIN_TOSS, ANIM_DANCE, ANIM_DOOR_APPROACH, ANIM_FOXGOD_APPROACH,
+		ANIM_JUMPINTOBED, ANIM_RESURRECTION, ANIM_SLEEPING, ANIM_TAKE_SWORD, ANIM_TAKE_RELIC,
+		ANIM_WAKEUP, ANIM_DAGGER, ANIM_DIE, ANIM_DODGE_GARBAGE, ANIM_DODGE,
+		ANIM_EAT, ANIM_FALLING, ANIM_GETUP, ANIM_HURT, ANIM_HYPERDASH,
+		ANIM_IDLE, ANIM_KNEEL, ANIM_OFFERING, ANIM_OPEN_CHEST, ANIM_PARRY,
+		ANIM_PIGGY_SMASH_FAST, ANIM_PIGGY_SMASH, ANIM_SHIELD, ANIM_READY_ARROW, ANIM_SHOOT_ARROW,
+		ANIM_SHOTGUN, ANIM_SPEAR_FIRE, ANIM_SPRINT, ANIM_STAGGER, ANIM_SWIG_FLASK,
+		ANIM_SWIG_TAKE, ANIM_SWIG, ANIM_SWING_STICK1, ANIM_SWING_STICK2, ANIM_SWING_SWORD1,
+		ANIM_SWING_SWORD2, ANIM_SWORD_BOUNCE, ANIM_SWING_SWORD3, ANIM_THUNDER_SUMMON, ANIM_TOSS_ITEM_WINDUP,
+		ANIM_TOSS_ITEM, ANIM_USE_KEY, ANIM_USE_WANDBOW, ANIM_WALK_BACKWARD, ANIM_WALK_FORWARD_WATER,
+		ANIM_WALK_FORWARD, ANIM_WALK_RIGHT, ANIM_WALK_LEFT, ANIM_WAND_RETRACT, ANIM_WAND_THROW,
+		ANIM_WAVE, ANIM_END
+	};
+
+	enum STATE { STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK, STATE_DAMAGE, STATE_DODGE, STATE_END };
+
+	enum DIR { DIR_FORWARD, DIR_BACKWARD, DIR_LEFT, DIR_RIGHT, DIR_END };
+
+	enum STATUS { STATUS_HURT, STATUS_STAGGER, STATUS_END };
+	/*enum STATE {
 		STATE_IDLE = 0x01,
 		STATE_RUN = 0x02,
 		STATE_ATTCK = 0x04,
-	};
+	};*/
 
 public: // GAMEOBJECT_DESC 로 올리면 카메라에서 터짐;;
 	typedef struct Player_Desc : public CGameObject::GAMEOBJECT_DESC
@@ -36,6 +57,20 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
+	// Set
+	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
+	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
+	void			Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender);
+
+	// Get
+	DIR				Get_Dir() { return m_eDir; }
+	STATUS			Get_Status() { return m_eStatus; }
+	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
+
+	// State
+	void			Change_State(STATE eState);
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Tick(_float fTimeDelta) override;
@@ -44,17 +79,32 @@ public:
 
 private:
 	map<const wstring, CPartObject*>	m_PartObjects;
-	_ubyte								m_eState = {};
+	
+	_bool								m_isBlend = { false };
+private:
+	ANIMATION							m_eAnimationIndex = { ANIM_END };
+	ANIMATION							m_eBlendAnimIndex = { ANIM_END };
+
+	STATE								m_eState = { STATE_END };
+	DIR									m_eDir = { DIR_END };
+	// 바이트 써보기
+	STATUS								m_eStatus = { STATUS_HURT };
 
 private:
-	wstring			m_strModelComTag = {};
-	CAnimator*			m_pModelCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
+	wstring								m_strModelComTag = {};
+	CAnimator*							m_pModelCom = { nullptr };
+	CShader*							m_pShaderCom = { nullptr };
+
+private:
+	void			Update_State();
+	
 
 private:
 	HRESULT			Add_Components();
 	HRESULT			Add_PartObjects();
+	HRESULT			Add_States();
 	HRESULT			Bind_ShaderResources();
+	void			Set_Animation_Loop();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

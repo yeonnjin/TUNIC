@@ -20,27 +20,32 @@ class CTransform;
 
 class CAnimator_Controller final : public CBase
 {
+public:
+	enum STATE { STATE_PREV, STATE_CUR, STATE_END };
+
 private:
 	CAnimator_Controller(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	//CAnimator_Controller(const CAnimator_Controller& rhs);
 	virtual ~CAnimator_Controller() = default;
 
 public:
-	// State_Machine
-	void					Add_State(_uint iState, CState* pAddState);
-	void					Update_State(_float fTimeDelta);
-	void					Change_State(_uint iState);
-
 	// Animation (블렌딩 속도, 프레임 속도 등등 제어)
 	HRESULT					Play_Animation(_float fTimeDelta);
 	HRESULT					Set_Animation_Index(_uint iAnimIndex);
 	HRESULT					Set_Animation_Transform(CTransform* pObjectTransform);
 
 	// 공통 적용
-	HRESULT					Set_Animation_isBlending(_uint iAnimIndex, _bool isBlend);	// 애니메이션 마다 지정X, 상태(State) 바뀔 때, 루프 돌 때 마다 자동 블렌딩
+	HRESULT					Blending_Animation(_uint iNextAnimIndex, _float fTimeDelta);	// 애니메이션 마다 지정X, 상태(State) 바뀔 때, 루프 돌 때 마다 자동 블렌딩
 	HRESULT					Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop);
+	void					Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot);
+	void					Set_Blend_Time(_uint iAnimIndex, _float fBlendTime);
 
 	// 블렌딩 - 시간 스케일(Time Scale)
+	
+	// Test
+	_bool					isFinished();
+	_bool					isFinished(_uint iAnimIndex);
+
 public:				
 	HRESULT					Set_Avatar(CAvatar* pAvatar);
 
@@ -49,17 +54,39 @@ public:
 	HRESULT					Initialize(void* pArg);
 
 private:
-	CState_Machine*			m_pState_Machine = { nullptr };
 	CAvatar*				m_pAvatar = { nullptr };
 
 private:
+	_uint					m_iNumAnimations = { 0 };
 	vector<CAnimation*>*	m_pAnimations = { nullptr };
+	_uint					m_iNumBones = { 0 };
 	vector<CBone*>*			m_pBones = { nullptr };
-	CTransform*				m_pTargetTransform = { nullptr };
+	
 
 private:
-	_uint					m_iNumAnimations = { 0 };
+	
 	_uint					m_iCurrentAnimIndex = { 0 };
+
+	// Blending
+	_bool					m_isBlending = { false };
+	_uint					m_iPrevAnimIndex = {};
+	vector<CHANNELSTATE>	m_ChannelStates[STATE_END];
+	vector<_uint>			m_ChannelBoneIndex;
+
+	// Root
+	_float3					m_vRootDistance[STATE_END] = {};
+	CTransform*				m_pTargetTransform = { nullptr };
+
+	// Test
+	_bool					m_isFinished = { false };
+	_bool					m_isChanged = { false };
+	_bool					m_isNeedRoot = { false };
+
+private:
+	// 블렌딩
+	HRESULT					Set_Blending_Info();
+	HRESULT					Update_Blending(_float fTimeDelta);
+	void					Update_RootMotion(_float fTimeDelta);
 
 public:
 	static CAnimator_Controller* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

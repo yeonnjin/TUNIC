@@ -53,7 +53,8 @@ void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
     // 본인의 월드 행렬 * 소켓 본의 최종 행렬 * 부모 본의 행렬
     XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+    if(true == m_isRender)
+        m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 
 HRESULT CPlayer_Weapon::Render()

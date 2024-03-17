@@ -7,6 +7,8 @@
 */
 BEGIN(Engine)
 
+class CState;
+
 class CState_Machine final : public CBase
 {
 private:
@@ -15,19 +17,24 @@ private:
 	virtual ~CState_Machine() = default;
 
 public:
-	void					Add_State(_uint iState, class CState* pAddState);
-	void					Update_State(_float fTimeDelta);
-	void					Change_State(_uint iState);
+	void							Add_State(_uint iState, class CState* pAddState);
+	void							Update_State(_float fTimeDelta);
+	void							Change_State(_uint iState);
+
+public:
+	HRESULT							Initialize_Prototype();
+	HRESULT							Initialize(void* pArg);
 
 private:
-	void					Find_State(_uint iState);
+	CState*							Find_State(_uint iState);
 
 private:
-	CState* pCurrent_State = { nullptr };
+	CState*							pCurrent_State = { nullptr };
 	unordered_map<_uint, CState*>	m_States;
 
 public:
 	static CState_Machine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CState_Machine* Clone(void* pArg);
 	virtual void Free() override;
 };
 

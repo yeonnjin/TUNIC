@@ -1,63 +1,76 @@
 #pragma once
 
+// ==========================================================================
 [0]  "_Fox|_Fox|Fox|activate stone switch|Base Layer"
 [1]  "_Fox|_Fox|Fox|blink|Base Layer"
 [2]  "_Fox|_Fox|Fox|climb off|Base Layer"
 [3]  "_Fox|_Fox|Fox|climb on|Base Layer"
 [4]  "_Fox|_Fox|Fox|climb|Base Layer"
+// ==========================================================================
 [5]  "_Fox|_Fox|Fox|coin_flip|Base Layer"
 [6]  "_Fox|_Fox|Fox|coin_toss_into_well|Base Layer"
 [7]  "_Fox|_Fox|Fox|CUTSCENE_dance2|Base Layer"
 [8]  "_Fox|_Fox|Fox|CUTSCENE_doorApproach|Base Layer"
 [9]  "_Fox|_Fox|Fox|CUTSCENE_foxgodArena_approach|Base Layer"
+// ==========================================================================
 [10] "_Fox|_Fox|Fox|CUTSCENE_jumpIntoBed|Base Layer"
 [11] "_Fox|_Fox|Fox|CUTSCENE_resurrection|Base Layer"
 [12] "_Fox|_Fox|Fox|CUTSCENE_sleeping|Base Layer"
 [13] "_Fox|_Fox|Fox|CUTSCENE_take sword|Base Layer" // 밀림
 [14] "_Fox|_Fox|Fox|CUTSCENE_takeRelic|Base Layer"
+// ==========================================================================
 [15] "_Fox|_Fox|Fox|CUTSCENE_wake up|Base Layer"
 [16] "_Fox|_Fox|Fox|dagger_fast recover|Base Layer"
 [17] "_Fox|_Fox|Fox|die|Base Layer"
 [18] "_Fox|_Fox|Fox|dodge forward_garbage_hop_sameCurve|Base Layer"
 [19] "_Fox|_Fox|Fox|dodge forward|Base Layer"
+// ==========================================================================
 [20] "_Fox|_Fox|Fox|eat|Base Layer"
 [21] "_Fox|_Fox|Fox|falling|Base Layer"
 [22] "_Fox|_Fox|Fox|get up|Base Layer"
 [23] "_Fox|_Fox|Fox|hurt|Base Layer"
 [24] "_Fox|_Fox|Fox|hyperdash|Base Layer" (X)
+// ==========================================================================
 [25] "_Fox|_Fox|Fox|idle|Base Layer"
 [26] "_Fox|_Fox|Fox|kneel|Base Layer"
 [27] "_Fox|_Fox|Fox|offering|Base Layer"
 [28] "_Fox|_Fox|Fox|open chest|Base Layer"
 [29] "_Fox|_Fox|Fox|parry|Base Layer"
+// ==========================================================================
 [30] "_Fox|_Fox|Fox|piggybank_smash_fast|Base Layer"
 [31] "_Fox|_Fox|Fox|piggybank_smash|Base Layer"
 [32] "_Fox|_Fox|Fox|raise shield|Base Layer"
 [33] "_Fox|_Fox|Fox|ready arrow|Base Layer"
 [34] "_Fox|_Fox|Fox|shoot arrow|Base Layer"
+// ==========================================================================
 [35] "_Fox|_Fox|Fox|shotgun|Base Layer"
 [36] "_Fox|_Fox|Fox|spear fire|Base Layer"
 [37] "_Fox|_Fox|Fox|sprint|Base Layer"
 [38] "_Fox|_Fox|Fox|stagger|Base Layer"
 [39] "_Fox|_Fox|Fox|swig (lift flask)|Base Layer"
+// ==========================================================================
 [40] "_Fox|_Fox|Fox|swig (take swig)|Base Layer"
 [41] "_Fox|_Fox|Fox|swig|Base Layer"
 [42] "_Fox|_Fox|Fox|swing stick 1|Base Layer"
 [43] "_Fox|_Fox|Fox|swing stick 2|Base Layer"
 [44] "_Fox|_Fox|Fox|Swing Sword New 1|Base Layer"
+// ==========================================================================
 [45] "_Fox|_Fox|Fox|Swing Sword New 2|Base Layer"
 [46] "_Fox|_Fox|Fox|sword bounce|Base Layer"
 [47] "_Fox|_Fox|Fox|Sword Swing New 3|Base Layer"
 [48] "_Fox|_Fox|Fox|thundersummon|Base Layer"
 [49] "_Fox|_Fox|Fox|toss item windup|Base Layer"
+// ==========================================================================
 [50] "_Fox|_Fox|Fox|toss item|Base Layer"
 [51] "_Fox|_Fox|Fox|use key|Base Layer"
 [52] "_Fox|_Fox|Fox|use_wandbow|Base Layer"
 [53] "_Fox|_Fox|Fox|walk backward|Base Layer"
 [54] "_Fox|_Fox|Fox|walk forward_water|Base Layer"
+// ==========================================================================
 [55] "_Fox|_Fox|Fox|walk forward|Base Layer"
-[56] "_Fox|_Fox|Fox|walk left|Base Layer"
+[56] "_Fox|_Fox|Fox|walk left|Base Layer"		// 순서 바꿈
 [57] "_Fox|_Fox|Fox|walk right|Base Layer"
 [58] "_Fox|_Fox|Fox|wand_retract|Base Layer"
 [59] "_Fox|_Fox|Fox|wand_throw|Base Layer"
+// ==========================================================================
 [60] "_Fox|_Fox|Fox|wave|Base Layer"

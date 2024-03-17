@@ -34,19 +34,19 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 void CCamera_Free::Tick(_float fTimeDelta)
 {
 	// Keyboard
-	if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+	if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
 	{
 		m_pTransformCom->Go_Left(fTimeDelta);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+	if (m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_PRESS))
 	{
 		m_pTransformCom->Go_Right(fTimeDelta);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+	if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
 	{
 		m_pTransformCom->Go_Straight(fTimeDelta);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+	if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
 	{
 		m_pTransformCom->Go_Backward(fTimeDelta);
 	}

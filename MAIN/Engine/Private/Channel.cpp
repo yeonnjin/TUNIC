@@ -27,6 +27,11 @@ HRESULT CChannel::Initialize(CHANNELFILE* pChannelFile, const vector<class CBone
     for (size_t i = 0; i < m_iNumKeyFrames; ++i)
         m_KeyFrames.push_back(pChannelFile->KeyFrames[i]);
 
+    // Blending
+    m_tChannelState_First.vScale = m_KeyFrames.front().vScale;
+    m_tChannelState_First.vRotation = m_KeyFrames.front().vRotation;
+    m_tChannelState_First.vTranslation = m_KeyFrames.front().vTranslation;
+
     return S_OK;
 }
 

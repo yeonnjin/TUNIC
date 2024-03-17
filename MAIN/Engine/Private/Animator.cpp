@@ -17,11 +17,13 @@ CAnimator::CAnimator(const CAnimator& rhs)
 	, m_pAnimations{ rhs.m_pAnimations }*/
 	/*, m_pAvatar{ rhs.m_pAvatar }*/
 	/*, m_pAnimator_Controller{ rhs.m_pAnimator_Controller }*/
+	, m_pState_Machine{ rhs.m_pState_Machine }
 {
 	m_pAvatar = rhs.m_pAvatar->Clone();
 	m_pAnimator_Controller = rhs.m_pAnimator_Controller->Clone();
 	//Safe_AddRef(m_pAvatar);
 	//Safe_AddRef(m_pAnimator_Controller);
+	Safe_AddRef(m_pState_Machine);
 
 	m_isCloned = true;
 }
@@ -40,6 +42,10 @@ HRESULT CAnimator::Initialize_Prototype(MODELFILE* pModelFile)
 
 	m_pAnimator_Controller = CAnimator_Controller::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pAnimator_Controller)
+		return E_FAIL;
+
+	m_pState_Machine = CState_Machine::Create(m_pDevice, m_pContext);
+	if (nullptr == m_pState_Machine)
 		return E_FAIL;
 
 	return S_OK;
@@ -94,13 +100,13 @@ HRESULT CAnimator::Render(_uint iMeshIndex)
 	return m_pAvatar->Render(iMeshIndex);
 }
 
-// Animator_Controller : State_Machine
+// State_Machine
 void CAnimator::Add_State(_uint iState, CState* pAddState)
 {
 	if (nullptr == m_pAnimator_Controller)
 		return;
 
-	m_pAnimator_Controller->Add_State(iState, pAddState);
+	m_pState_Machine->Add_State(iState, pAddState);
 }
 
 void CAnimator::Update_State(_float fTimeDelta)
@@ -108,7 +114,7 @@ void CAnimator::Update_State(_float fTimeDelta)
 	if (nullptr == m_pAnimator_Controller)
 		return;
 
-	m_pAnimator_Controller->Update_State(fTimeDelta);
+	m_pState_Machine->Update_State(fTimeDelta);
 }
 
 void CAnimator::Change_State(_uint iState)
@@ -116,10 +122,10 @@ void CAnimator::Change_State(_uint iState)
 	if (nullptr == m_pAnimator_Controller)
 		return;
 
-	m_pAnimator_Controller->Change_State(iState);
+	m_pState_Machine->Change_State(iState);
 }
 
-// Animator_Controller : Animation
+// Animator_Controller
 HRESULT CAnimator::Play_Animation(_float fTimeDelta)
 {
 	if (nullptr == m_pAnimator_Controller)
@@ -144,12 +150,12 @@ HRESULT CAnimator::Set_Animation_Transform(CTransform* pObjectTransform)
 	return m_pAnimator_Controller->Set_Animation_Transform(pObjectTransform);
 }
 
-HRESULT CAnimator::Set_Animation_isBlending(_uint iAnimIndex, _bool isBlend)
+HRESULT CAnimator::Blending_Animation(_uint iNextAnimIndex, _float fTimeDelta)
 {
 	if (nullptr == m_pAnimator_Controller)
 		return E_FAIL;
 
-	return m_pAnimator_Controller->Set_Animation_isBlending(iAnimIndex, isBlend);
+	return m_pAnimator_Controller->Blending_Animation(iNextAnimIndex, fTimeDelta);
 }
 
 HRESULT CAnimator::Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop)
@@ -158,6 +164,46 @@ HRESULT CAnimator::Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop)
 		return E_FAIL;
 
 	return m_pAnimator_Controller->Set_Animation_isLoop(iAnimIndex, isLoop);
+}
+
+void CAnimator::Set_TargetTransform(CTransform* pTargetTransform)
+{
+	if (nullptr == m_pAnimator_Controller)
+		return;
+
+	m_pAnimator_Controller->Set_Animation_Transform(pTargetTransform);
+}
+
+void CAnimator::Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot)
+{
+	if (nullptr == m_pAnimator_Controller)
+		return;
+
+	return m_pAnimator_Controller->Set_Animation_isRoot(iAnimIndex, isRoot);
+}
+
+void CAnimator::Set_Blend_Time(_uint iAnimIndex, _float fBlendTime)
+{
+	if (nullptr == m_pAnimator_Controller)
+		return;
+
+	m_pAnimator_Controller->Set_Blend_Time(iAnimIndex, fBlendTime);
+}
+
+_bool CAnimator::isFinished()
+{
+	if (nullptr == m_pAnimator_Controller)
+		return E_FAIL;
+
+	return m_pAnimator_Controller->isFinished();
+}
+
+_bool CAnimator::isFinished(_uint iAnimIndex)
+{
+	if (nullptr == m_pAnimator_Controller)
+		return E_FAIL;
+
+	return m_pAnimator_Controller->isFinished(iAnimIndex);
 }
 
 CAnimator* CAnimator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODELFILE* pModelFile)
@@ -193,6 +239,7 @@ void CAnimator::Free()
 	m_pAvatar->Free();
 	Safe_Release(m_pAvatar);
 	Safe_Release(m_pAnimator_Controller);
+	Safe_Release(m_pState_Machine);
 
 	/*for (auto& pAnimation : *m_pAnimations)
 		Safe_Release(pAnimation);
