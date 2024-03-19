@@ -6,12 +6,20 @@
 BEGIN(Engine)
 class CModel;
 class CShader;
+class CCollider;
 END
 
 BEGIN(Client)
 
 class CMonster final : public CGameObject
 {
+public: 
+	typedef struct Monster_Desc : public CGameObject::GAMEOBJECT_DESC
+	{
+		_float4x4		TransformMatrix;
+		wstring			strModelComTag;
+	}MONSTER_DESC;
+
 private:
 	CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster(const CMonster& rhs);
@@ -25,8 +33,10 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	wstring			m_strModelComTag = {};
 	CModel*			m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
+	CCollider*		m_pColliderCom = { nullptr };
 
 private:
 	HRESULT Add_Components();

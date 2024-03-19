@@ -82,6 +82,15 @@
     <Filter Include="02.GameObjects\Player\State\Player_State_Dodge">
       <UniqueIdentifier>{84fd44fe-f71c-47c2-8943-732d16774163}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Stick">
+      <UniqueIdentifier>{16d58367-551c-4b05-9df5-921f5069d320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map">
+      <UniqueIdentifier>{031b1b17-3377-48aa-b869-1d96871225aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Defense">
+      <UniqueIdentifier>{849e987d-a147-47ac-9820-33da4485cbda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -162,6 +171,18 @@
     <ClInclude Include="..\Public\Player_State_Dodge.h">
       <Filter>02.GameObjects\Player\State\Player_State_Dodge</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Attack_Stick.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Stick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Map.h">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Bone_List.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Defense.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Defense</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -229,6 +250,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Dodge.cpp">
       <Filter>02.GameObjects\Player\State\Player_State_Dodge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Attack_Stick.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Stick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Map.cpp">
+      <Filter>02.GameObjects\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Defense.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Defense</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,10 @@
 #include "Collider.h"
-#include "Bounding.h"
+
+#include "Bounding_AABB.h"
+#include "Bounding_OBB.h"
+#include "Bounding_SPHERE.h"
+
+#include "GameInstance.h"
 
 CCollider::CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CComponent{ pDevice, pContext }
@@ -45,11 +50,58 @@ HRESULT CCollider::Initialize_Prototype(TYPE eType)
 
 HRESULT CCollider::Initialize(void* pArg)
 {
+	CBounding::BOUNDING_DESC* pDesc = (CBounding::BOUNDING_DESC*)pArg;
+
+	switch (m_eType)
+	{
+	case TYPE_AABB:
+		m_pBounding = CBounding_AABB::Create(m_pDevice, m_pContext, pDesc);
+		break;
+	case TYPE_OBB:
+		m_pBounding = CBounding_OBB::Create(m_pDevice, m_pContext, pDesc);
+		break;
+	case TYPE_SPHERE:
+		m_pBounding = CBounding_SPHERE::Create(m_pDevice, m_pContext, pDesc);
+		break;
+	case TYPE_END:
+		break;
+	default:
+		break;
+	}
+
     return S_OK;
+}
+
+void CCollider::Tick(_fmatrix WorldMatrix)
+{
+	m_pBounding->Tick(WorldMatrix);
+}
+
+_bool CCollider::Check_Collision(CCollider* pTargetCollider)
+{
+	if (nullptr == pTargetCollider)
+		return false;
+
+	return m_pBounding->Check_Collision(pTargetCollider->m_eType, pTargetCollider->m_pBounding);
 }
 
 HRESULT CCollider::Render()
 {
+	// 매트릭스 세팅
+	m_pEffect->SetWorld(XMMatrixIdentity());
+	m_pEffect->SetView(m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW));
+	m_pEffect->SetProjection(m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ));
+
+	m_pContext->IASetInputLayout(m_pInputLayout);
+
+	m_pEffect->Apply(m_pContext);
+
+	m_pBatch->Begin();
+
+	m_pBounding->Render(m_pBatch);
+
+	m_pBatch->End();
+
     return S_OK;
 }
 

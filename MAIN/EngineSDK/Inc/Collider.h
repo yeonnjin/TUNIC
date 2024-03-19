@@ -17,6 +17,8 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType);
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual void	Tick(_fmatrix WorldMatrix);
+	_bool			Check_Collision(CCollider* pTargetCollider);
 
 #ifdef _DEBUG
 public:

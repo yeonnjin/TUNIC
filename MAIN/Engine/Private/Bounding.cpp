@@ -8,12 +8,12 @@ CBounding::CBounding(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     Safe_AddRef(m_pContext);
 }
 
-HRESULT CBounding::Initialize()
+HRESULT CBounding::Initialize(CBounding::BOUNDING_DESC* pBoundingDesc)
 {
     return S_OK;
 }
 
-HRESULT CBounding::Render(PrimitiveBatch<VertexPositionColor*> pBatch)
+HRESULT CBounding::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 {
     return S_OK;
 }

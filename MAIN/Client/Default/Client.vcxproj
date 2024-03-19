@@ -166,11 +166,14 @@
     <ClInclude Include="..\Public\Level_Logo.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\Public\Map.h" />
     <ClInclude Include="..\Public\Map_Object.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_State_Attack.h" />
+    <ClInclude Include="..\Public\Player_State_Attack_Stick.h" />
     <ClInclude Include="..\Public\Player_State_Damage.h" />
+    <ClInclude Include="..\Public\Player_State_Defense.h" />
     <ClInclude Include="..\Public\Player_State_Dodge.h" />
     <ClInclude Include="..\Public\Player_State_Idle.h" />
     <ClInclude Include="..\Public\Player_State_Move.h" />
@@ -179,6 +182,9 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
     <ClInclude Include="Anim_List.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Bone_List.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Client.h" />
@@ -195,11 +201,14 @@
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\Private\Map.cpp" />
     <ClCompile Include="..\Private\Map_Object.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack.cpp" />
+    <ClCompile Include="..\Private\Player_State_Attack_Stick.cpp" />
     <ClCompile Include="..\Private\Player_State_Damage.cpp" />
+    <ClCompile Include="..\Private\Player_State_Defense.cpp" />
     <ClCompile Include="..\Private\Player_State_Dodge.cpp" />
     <ClCompile Include="..\Private\Player_State_Idle.cpp" />
     <ClCompile Include="..\Private\Player_State_Move.cpp" />

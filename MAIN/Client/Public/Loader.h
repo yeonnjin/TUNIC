@@ -43,7 +43,8 @@ private:
 	HRESULT Loading_For_GamePlay();
 
 private:
-	HRESULT Test_For_Model();
+	HRESULT Test_For_Model(const string& strDataPath);
+	HRESULT Test_For_Player();
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID);

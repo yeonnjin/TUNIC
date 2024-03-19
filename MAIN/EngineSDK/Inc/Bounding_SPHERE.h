@@ -4,12 +4,12 @@
 
 BEGIN(Engine)
 
-class CBounding_SPHERE : public CBounding
+class CBounding_SPHERE final : public CBounding
 {
 public:
 	typedef struct Bounding_SPHERE_Desc : public CBounding::BOUNDING_DESC
 	{
-		_float3	vSize;
+		_float	fRadius;
 	}BOUNDING_SPHERE_DESC;
 
 private:
@@ -17,7 +17,12 @@ private:
 	virtual ~CBounding_SPHERE() = default;
 
 public:
-	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc);
+	virtual void*	Get_BoundingDesc() { return m_pBoundingDesc; }
+
+public:
+	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc) override;
+	virtual void	Tick(_fmatrix WorldMatrix) override;
+	virtual _bool	Check_Collision(CCollider::TYPE eType, CBounding* pBounding) override;
 
 #ifdef _DEBUG
 public:
@@ -25,7 +30,8 @@ public:
 #endif // _DEBUG
 
 private:
-	BoundingBox*	m_pBoundingDesc = { nullptr };
+	BoundingSphere* m_pBoundingDesc_Origin = { nullptr };
+	BoundingSphere*	m_pBoundingDesc = { nullptr };
 
 public:
 	static CBounding_SPHERE* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CBounding::BOUNDING_DESC* pBoundingDesc);

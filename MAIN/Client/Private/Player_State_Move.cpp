@@ -38,26 +38,45 @@ void CPlayer_State_Move::OnStateEnter()
 
 void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
 {
-    switch (m_eDir)
+    //switch (m_eDir)
+    //{
+    //case CPlayer::DIR_FORWARD:
+    //    ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
+    //    break;
+    //case CPlayer::DIR_BACKWARD:
+    //    ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Straight(fTimeDelta);
+    //    break;
+    //case CPlayer::DIR_LEFT:
+    //    ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn(_vector{ 0.f, 1.f, 0.f }, -1 * fTimeDelta);
+    //    //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Left(fTimeDelta);
+    //    //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
+    //    break;
+    //case CPlayer::DIR_RIGHT:
+    //    ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn(_vector{ 0.f, 1.f, 0.f },fTimeDelta);
+    //    //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Right(fTimeDelta);
+    //    //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
+    //    break;
+    //case CPlayer::DIR_END:
+    //    break;
+    //default:
+    //    break;
+    //}
+
+    if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
     {
-    case CPlayer::DIR_FORWARD:
-        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Straight(fTimeDelta);
-        break;
-    case CPlayer::DIR_BACKWARD:
         ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
-        break;
-    case CPlayer::DIR_LEFT:
-        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Left(fTimeDelta);
-        //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
-        break;
-    case CPlayer::DIR_RIGHT:
-        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Right(fTimeDelta);
-        //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
-        break;
-    case CPlayer::DIR_END:
-        break;
-    default:
-        break;
+    }
+   if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+    {
+        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Straight(fTimeDelta);
+    }
+    if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+    {
+        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn(_vector{ 0.f, 1.f, 0.f }, -1 * fTimeDelta);
+    }
+    if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+    {
+        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn(_vector{ 0.f, 1.f, 0.f }, fTimeDelta);
     }
 }
 

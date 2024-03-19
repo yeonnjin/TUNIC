@@ -5,28 +5,28 @@
 
 BEGIN(Client)
 
-class CPlayer_State_Attack final : public CState
+class CPlayer_State_Attack abstract : public CState
 {
-private:
-	CPlayer_State_Attack(class CPlayer* pPlayer);
+protected:
+	CPlayer_State_Attack();
 	virtual ~CPlayer_State_Attack() = default;
 
 public:
 	// 상태 진입 시 최초에 한 번만 호출
-	virtual void OnStateEnter() override;
+	virtual void OnStateEnter() = 0;
 	// 상태 진입 상태에서 매 tick 마다 호출
-	virtual void OnStateUpdate(_float fTimeDelta) override;
+	virtual void OnStateUpdate(_float fTimeDelta) = 0;
 	// 상태 변경 시 호출
-	virtual void OnStateExit() override;
+	virtual void OnStateExit() = 0;
 
-private:
+protected:
 	class CPlayer*	m_pPlayer = { nullptr };
 	_uint			m_iCombo = { 0 };
+	_uint			m_iMaxCombo = { 0 };
 
 	//CPlayer::DIR	m_eDir = {};
 
 public:
-	static CPlayer_State_Attack* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

@@ -4,12 +4,13 @@
 
 BEGIN(Engine)
 
-class CBounding_OBB : public CBounding
+class CBounding_OBB final : public CBounding
 {
 public:
 	typedef struct Bounding_OBB_Desc : public CBounding::BOUNDING_DESC
 	{
 		_float3	vSize;
+		_float3 vRotation;
 	}BOUNDING_OBB_DESC;
 
 private:
@@ -17,7 +18,12 @@ private:
 	virtual ~CBounding_OBB() = default;
 
 public:
-	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc);
+	virtual void*	Get_BoundingDesc() { return m_pBoundingDesc; }
+
+public:
+	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc) override;
+	virtual void	Tick(_fmatrix WorldMatrix) override;
+	virtual _bool	Check_Collision(CCollider::TYPE eType, CBounding* pBounding) override;
 
 #ifdef _DEBUG
 public:
@@ -25,7 +31,8 @@ public:
 #endif // _DEBUG
 
 private:
-	BoundingBox*	m_pBoundingDesc = { nullptr };
+	BoundingOrientedBox*	m_pBoundingDesc_Origin = { nullptr };
+	BoundingOrientedBox*	m_pBoundingDesc = { nullptr };
 
 public:
 	static CBounding_OBB* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CBounding::BOUNDING_DESC* pBoundingDesc);

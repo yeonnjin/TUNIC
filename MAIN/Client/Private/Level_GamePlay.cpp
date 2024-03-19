@@ -4,8 +4,10 @@
 #include "Camera_Free.h"
 #include "Map_Object.h"
 #include "Player.h"
+#include "Monster.h"
 
 #include "Editor.h"
+#include "Map.h"
 
 #include <fstream>
 
@@ -94,9 +96,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	CameraDesc.fNear = 0.1f;
 	CameraDesc.fFar = 1000.0f;
-	CameraDesc.vEye = _float4(0.f, 10.f, -7.f, 1.f);
+	CameraDesc.vEye = _float4(0.f, 15.f, -15.f, 1.f);
 	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	CameraDesc.fSpeedPerSec = 5.f;
+	CameraDesc.fSpeedPerSec = 7.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -135,8 +137,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
 		return E_FAIL;
 
-	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
-		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -144,8 +144,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
-	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster"))))
-		return E_FAIL;*/
+	// Desc
+	CMonster::Monster_Desc tDesc = {};
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	tDesc.strModelComTag = wstr;
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster"), &tDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -164,6 +170,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 {
+	CMap::MAP_DESC tDesc = {};
+	tDesc.isLoad = false;
+	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_FOXGOD";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	tDesc.strModelComTag = wstr;
+	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Map"), &tDesc)))
+		return E_FAIL;
+
 	////Desc
 	//CMap_Object::MAPOBJ_DESC tDesc = {};
 	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Object";

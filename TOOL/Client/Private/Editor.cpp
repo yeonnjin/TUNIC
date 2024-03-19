@@ -12,7 +12,7 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Etc.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Stick.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Weapon_Shield.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -419,7 +419,7 @@ HRESULT CEditor::Save_Model_File(const wstring& strLayerTag)
 	ofstream fout;
 	fout.open(MODELPATH, ios::out | ios::binary);
 
-	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, /*strLayerTag*/TEXT("Layer_Map_Object"));
+	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, strLayerTag/*TEXT("Layer_Map_Object")*/);
 	if (0 == iNumObjects)
 		return E_FAIL;
 
@@ -428,7 +428,7 @@ HRESULT CEditor::Save_Model_File(const wstring& strLayerTag)
 	vector<_uint> ObjectIndex;
 	for (size_t i = 0; i < iNumObjects; ++i)
 	{
-		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, /*strLayerTag*/TEXT("Layer_Map_Object"), TEXT("Com_Model"), i));
+		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, strLayerTag/*TEXT("Layer_Map_Object")*/, TEXT("Com_Model"), i));
 		if (nullptr == pObjectModel)
 			return E_FAIL;
 
@@ -451,7 +451,7 @@ HRESULT CEditor::Save_Model_File(const wstring& strLayerTag)
 
 	for (size_t i = 0; i < iNumModels; ++i)
 	{
-		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Model"), ObjectIndex[i]));
+		CModel* pObjectModel = (CModel*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, strLayerTag, TEXT("Com_Model"), ObjectIndex[i]));
 		if (nullptr == pObjectModel)
 			return E_FAIL;
 
@@ -817,9 +817,9 @@ void CEditor::Tool_Model_File()
 	ImGui::Text("<MODEL FILE>");
 	ImGui::Text("<OBEJCT>");
 
-	if (ImGui::Button("SAVE_MODEL", ImVec2(100.f, 30.f)))
+	if (ImGui::Button("SAVE_OBJECT_MODEL", ImVec2(100.f, 30.f)))
 	{
-		if (S_OK == Save_Model_File(TEXT("Layer_Model_Object")))
+		if (S_OK == Save_Model_File(TEXT("Layer_Map_Object")))
 		{
 			ImGui::SameLine();
 			ImGui::Text("Success To Save : Model_Object");
@@ -838,7 +838,7 @@ void CEditor::Tool_Model_File()
 	ImGui::Separator();
 
 	ImGui::Text("<MAP>");
-	if (ImGui::Button("SAVE_MAP", ImVec2(100.f, 30.f)))
+	if (ImGui::Button("SAVE_MAP_MODEL", ImVec2(100.f, 30.f)))
 	{
 		if (S_OK == Save_Model_File(TEXT("Layer_Map")))
 		{

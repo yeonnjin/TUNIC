@@ -9,6 +9,10 @@
 //#include "VIBuffer_Cube.h"
 #include "VIBuffer_Terrain.h"
 
+#include "Bounding_AABB.h"
+#include "Bounding_OBB.h"
+#include "Bounding_SPHERE.h"
+
 #include "Component.h"
 
 /* 1. 컴포넌트들의 원형을 레벨 별로 보관 */

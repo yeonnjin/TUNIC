@@ -10,8 +10,10 @@
 //#include "Effect.h"
 //#include "Sky.h"
 #include "Model.h"
+#include "Collider.h"
 
 #include "Player.h"
+#include "Map.h"
 #include "Map_Object.h"
 #include "Test_Object.h"
 #include "Editor.h"
@@ -156,10 +158,22 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
-	
+	m_strLoadingText = TEXT("콜라이더를(을) 로딩 중 입니다.");
+	/* Prototype_Component_Collider_AABB */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+		return E_FAIL;
 
-	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
-	_matrix		TransformMatrix = XMMatrixIdentity();
+	/* Prototype_Component_Collider_OBB */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
+		return E_FAIL;
+
+	/* Prototype_Component_Collider_SPHERE */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
+		return E_FAIL;
+	
 
 	/*Test_For_Model();*/
 	///* For.Prototype_Component_Model_Fiona */
@@ -238,6 +252,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CMap_Object::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Map */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map"),
+		CMap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Part_Player_Weapon */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon"),
 		CPlayer_Weapon::Create(m_pDevice, m_pContext))))
@@ -254,7 +273,12 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	return E_FAIL;
 	//
 
-	Test_For_Model();
+	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
+
+	//Test_For_Model("../Bin/Resources/Data/Model/Stick.dat.dat");
+	Test_For_Model("../Bin/Resources/Data/Model/Weapon_Shield.dat");
+	Test_For_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
+	Test_For_Player();
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 
@@ -425,10 +449,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 //		return E_FAIL;*/
 //}
 
-HRESULT CLoader::Test_For_Model()
+HRESULT CLoader::Test_For_Model(const string& strDataPath)
 {
 	ifstream fin;
-	fin.open("../Bin/Resources/Data/Model/Stick.dat", ios::in | ios::binary);
+	//const string temp = "../Bin/Resources/Data/Model/Stick.dat";
+	fin.open(strDataPath.c_str(), ios::in | ios::binary);
 
 	_uint iObjectCount;
 	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
@@ -612,10 +637,21 @@ HRESULT CLoader::Test_For_Model()
 
 	// ==========================================================================================
 
-	//ifstream fin;
+	
+
+	/*TransformMatrix = XMMatrixIdentity();
+  TYPE eType = tModelFile.iType;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fox"),
+		CModel::Create(m_pDevice, m_pContext, eType, &tModelFile))))
+		return E_FAIL;*/
+}
+
+HRESULT CLoader::Test_For_Player()
+{
+	ifstream fin;
 	fin.open("../Bin/Resources/Data/Model/Player.dat", ios::in | ios::binary);
 
-	iObjectCount = 0;
+	_uint iObjectCount = 0;
 	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(_uint));
 	for (size_t i = 0; i < iObjectCount; ++i)
 	{
@@ -787,7 +823,7 @@ HRESULT CLoader::Test_For_Model()
 			CModel::Create(m_pDevice, m_pContext, eType, &tModelFile))))
 			return E_FAIL;*/
 
-		/* Prototype_Component_Animator_Player */
+			/* Prototype_Component_Animator_Player */
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, wstr,
 			CAnimator::Create(m_pDevice, m_pContext, &tModelFile))))
 			return E_FAIL;
@@ -803,18 +839,12 @@ HRESULT CLoader::Test_For_Model()
 
 		int a = 0;
 
-		
+
 	}
 
 	fin.close();
 
 	return S_OK;
-
-	/*TransformMatrix = XMMatrixIdentity();
-  TYPE eType = tModelFile.iType;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fox"),
-		CModel::Create(m_pDevice, m_pContext, eType, &tModelFile))))
-		return E_FAIL;*/
 }
 
 CLoader * CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID)

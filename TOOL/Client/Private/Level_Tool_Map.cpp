@@ -90,19 +90,19 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
 		return E_FAIL;*/
 
-	///*CMap::MAP_DESC */tDesc = {};
-	//tDesc.isLoad = false;
-	//tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map");
-	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Map"), &tDesc)))
-	//	return E_FAIL;
-
 	/*CMap::MAP_DESC */tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_Object");
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
+	tDesc.strModelComTag = /*TEXT("Prototype_Component_Model_Map_FOXGOD");*/ TEXT("Prototype_Component_Model_Weapon_Shield");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
 		return E_FAIL;
+
+	/*CMap::MAP_DESC */tDesc = {};
+	/*tDesc.isLoad = false;
+	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Weapon_Sword");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_Component_Model_Weapon_Sword"), &tDesc)))
+		return E_FAIL;*/
 
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, strLayerTag, TEXT("Prototype_GameObject_Test_Object"))))
 		return E_FAIL;*/

@@ -7,11 +7,13 @@
 #include "Player_State_Idle.h"
 #include "Player_State_Sleep.h"
 #include "Player_State_Move.h"
-#include "Player_State_Attack.h"
+#include "Player_State_Attack_Stick.h"
 #include "Player_State_Damage.h"
 #include "Player_State_Dodge.h"
+#include "Player_State_Defense.h"
 
-#define	WEAPONBONEIDX 29
+#define	WEAPONBONEIDX 24
+// stick - 29 / sword - 45 / shield - 24
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -53,7 +55,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Add_States()))
 		return E_FAIL;
 
-	_float4 vPosition = _float4(rand() % 10, 2.f, 0.3f, 1.f);
+	_float4 vPosition = _float4(0.f, 0.5f, 0.f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	m_pModelCom->Set_Animation_Index(ANIM_WALK_LEFT);
@@ -150,7 +152,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	/*else
 		m_pModelCom->Play_Animation(fTimeDelta);*/
 
-		
+	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -185,6 +187,11 @@ HRESULT CPlayer::Render()
 		m_pModelCom->Render(i);
 	}
 
+#ifdef _DEBUG
+	m_pColliderCom->Render();
+#endif // _DEBUG
+
+
 	return S_OK;
 }
 
@@ -218,7 +225,7 @@ void CPlayer::Update_State()
 		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-			Change_State(STATE_ATTACK);
+			Change_State(STATE_ATTACK_STICK);
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_O, KEY_DOWN))
 			Change_State(STATE_SLEEP);
@@ -228,6 +235,9 @@ void CPlayer::Update_State()
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 			Change_State(STATE_DODGE);
+
+		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
+			Change_State(STATE_DEFENSE);
 
 		break;
 
@@ -240,7 +250,16 @@ void CPlayer::Update_State()
 			//m_eDir = DIR_FORWARD;
 			Change_State(STATE_IDLE);
 		}
-		isTurn = false;
+	
+		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+			Change_State(STATE_DODGE);
+
+		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+			Change_State(STATE_ATTACK_STICK);
+
+		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
+			Change_State(STATE_DEFENSE);
+
 		break;
 	case STATE_END:
 		break;
@@ -276,6 +295,16 @@ HRESULT CPlayer::Add_Components()
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
+	/* For. Com_Collider */
+	CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
+	
+	ColliderDesc.fRadius = 0.8f;
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius + 0.6f , 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -304,9 +333,10 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_IDLE, CPlayer_State_Idle::Create(this));
 	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
 	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
-	m_pModelCom->Add_State(STATE_ATTACK, CPlayer_State_Attack::Create(this));
+	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
+	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
 
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
@@ -357,6 +387,7 @@ void CPlayer::Set_Animation_Loop()
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_BACKWARD, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_LEFT, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_RIGHT, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_SHIELD, true);
 	//m_pModelCom->Set_Animation_isLoop(ANIM_SWING_STICK1, true);
 	//m_pModelCom->Set_Animation_isLoop(ANIM_SWING_STICK2, true);
 
@@ -366,6 +397,9 @@ void CPlayer::Set_Animation_Loop()
 	m_pModelCom->Set_Animation_isRoot(ANIM_STAGGER, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE, true);
 
+	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK1, 0.1f);
+	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK2, 0.1f);
+	m_pModelCom->Set_Blend_Time(ANIM_DODGE, 0.3f);
 	m_pModelCom->Set_Blend_Time(ANIM_STAGGER, 0.4f);
 }
 
@@ -408,4 +442,5 @@ void CPlayer::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pColliderCom);
 }

@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CModel;
 class CShader;
 class CAnimator;
+class CCollider;
 class CPartObject;
 END
 
@@ -33,7 +34,7 @@ public:
 		ANIM_WAVE, ANIM_END
 	};
 
-	enum STATE { STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK, STATE_DAMAGE, STATE_DODGE, STATE_END };
+	enum STATE { STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, STATE_END };
 
 	enum DIR { DIR_FORWARD, DIR_BACKWARD, DIR_LEFT, DIR_RIGHT, DIR_END };
 
@@ -94,11 +95,11 @@ private:
 	wstring								m_strModelComTag = {};
 	CAnimator*							m_pModelCom = { nullptr };
 	CShader*							m_pShaderCom = { nullptr };
+	CCollider*							m_pColliderCom = { nullptr };
 
 private:
 	void			Update_State();
 	
-
 private:
 	HRESULT			Add_Components();
 	HRESULT			Add_PartObjects();
