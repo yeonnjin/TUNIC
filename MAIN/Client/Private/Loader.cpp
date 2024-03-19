@@ -276,7 +276,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
 	//Test_For_Model("../Bin/Resources/Data/Model/Stick.dat.dat");
-	Test_For_Model("../Bin/Resources/Data/Model/Weapon_Shield.dat");
+	Test_For_Model("../Bin/Resources/Data/Model/Weapon_Shotgun.dat");
 	Test_For_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	Test_For_Player();
 

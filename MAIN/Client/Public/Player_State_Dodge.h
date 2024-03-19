@@ -21,6 +21,8 @@ public:
 
 private:
 	class CPlayer* m_pPlayer = { nullptr };
+	CPlayer::DODGE	m_eDodge = { CPlayer::DODGE_END };
+	CPlayer::ANIMATION m_eAnim = { CPlayer::ANIM_END };
 
 public:
 	static CPlayer_State_Dodge* Create(class CPlayer* pPlayer);

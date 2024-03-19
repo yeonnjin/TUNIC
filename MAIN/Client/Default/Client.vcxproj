@@ -171,6 +171,7 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_State_Attack.h" />
+    <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Stick.h" />
     <ClInclude Include="..\Public\Player_State_Damage.h" />
     <ClInclude Include="..\Public\Player_State_Defense.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack.cpp" />
+    <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Stick.cpp" />
     <ClCompile Include="..\Private\Player_State_Damage.cpp" />
     <ClCompile Include="..\Private\Player_State_Defense.cpp" />

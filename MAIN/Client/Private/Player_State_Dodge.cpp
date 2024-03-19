@@ -10,12 +10,32 @@ CPlayer_State_Dodge::CPlayer_State_Dodge(CPlayer* pPlayer)
 
 void CPlayer_State_Dodge::OnStateEnter()
 {
-    m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
+    m_eDodge = m_pPlayer->Get_Dodge();
+
+    switch (m_eDodge)
+    {
+    case CPlayer::DODGE_ROLL:
+        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
+        m_eAnim = CPlayer::ANIM_DODGE;
+        break;
+    case CPlayer::DODGE_FAST:
+        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
+        m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+        break;
+    case CPlayer::DODGE_DASH:
+        m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
+        m_eAnim = CPlayer::ANIM_HYPERDASH;
+        break;
+    case Client::CPlayer::DODGE_END:
+        break;
+    default:
+        break;
+    }
 }
 
 void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
-    if (true == m_pPlayer->Get_isFinished(CPlayer::ANIM_DODGE))
+    if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }

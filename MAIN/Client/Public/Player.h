@@ -34,11 +34,12 @@ public:
 		ANIM_WAVE, ANIM_END
 	};
 
-	enum STATE { STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, STATE_END };
-
+	enum STATE { STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SHOTGUN, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, STATE_END };
+	enum WEAPON { WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_END };
 	enum DIR { DIR_FORWARD, DIR_BACKWARD, DIR_LEFT, DIR_RIGHT, DIR_END };
+	enum STATUS { STATUS_HURT, STATUS_STAGGER, STATUS_PARRY, STATUS_END };
+	enum DODGE { DODGE_ROLL, DODGE_FAST, DODGE_DASH, DODGE_END };
 
-	enum STATUS { STATUS_HURT, STATUS_STAGGER, STATUS_END };
 	/*enum STATE {
 		STATE_IDLE = 0x01,
 		STATE_RUN = 0x02,
@@ -66,6 +67,7 @@ public:
 	// Get
 	DIR				Get_Dir() { return m_eDir; }
 	STATUS			Get_Status() { return m_eStatus; }
+	DODGE			Get_Dodge() { return m_eDodge; }
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
 
 	// State
@@ -88,8 +90,9 @@ private:
 
 	STATE								m_eState = { STATE_END };
 	DIR									m_eDir = { DIR_END };
-	// 바이트 써보기
-	STATUS								m_eStatus = { STATUS_HURT };
+	STATUS								m_eStatus = { STATUS_HURT };	// 바이트?
+	DODGE								m_eDodge = { DODGE_END };
+	WEAPON								m_eWeapon = { WEAPON_END };
 
 private:
 	wstring								m_strModelComTag = {};

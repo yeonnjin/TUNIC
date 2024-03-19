@@ -10,13 +10,15 @@ CPlayer_State_Defense::CPlayer_State_Defense(CPlayer* pPlayer)
 
 void CPlayer_State_Defense::OnStateEnter()
 {
-    m_pPlayer->Set_Blending(true, CPlayer::ANIM_SHIELD);
+    m_pPlayer->Set_Blending(true, CPlayer::ANIM_SHIELD);   
 }
 
 void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
 {
     if (true == m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_UP))
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+
+    // 들고 있을 때 피격 시 -> ANIM_PARRY
 }
 
 void CPlayer_State_Defense::OnStateExit()

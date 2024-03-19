@@ -91,6 +91,9 @@
     <Filter Include="02.GameObjects\Player\State\Player_State_Defense">
       <UniqueIdentifier>{849e987d-a147-47ac-9820-33da4485cbda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Shotgun">
+      <UniqueIdentifier>{c17feb25-b230-46c8-9a93-0473acef2c24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -183,6 +186,9 @@
     <ClInclude Include="..\Public\Player_State_Defense.h">
       <Filter>02.GameObjects\Player\State\Player_State_Defense</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Shotgun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -259,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Defense.cpp">
       <Filter>02.GameObjects\Player\State\Player_State_Defense</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Shotgun</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,7 +35,10 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
     // Shield
     //m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 
+    // Shotgun?
+    m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 
+    //m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
     //m_pTransformCom->Set_Scaled(0.1f, 0.1f, 0.1f);   
     //m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
     //m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(0.0f, 0.f, 0.f, 1.f));
@@ -96,7 +99,9 @@ HRESULT CPlayer_Weapon::Add_Components()
     // "Prototype_Component_Model_Map_Object"
     // "Prototype_Component_Model_Weapon_Sword"
     // "Prototype_Component_Model_Weapon_Shield"
-    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Weapon_Shield";
+    //  "Prototype_Component_Model_Weapon_Shield"
+    // 
+    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Weapon_Shotgun";
     wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,

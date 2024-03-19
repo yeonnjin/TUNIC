@@ -343,9 +343,14 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Sword/Sword.fbx", TEXT("Prototype_Component_Model_Map_Object"), TransformMatrix))))
 		return E_FAIL;*/
 
-	TransformMatrix = XMMatrixIdentity();
+	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Weapon_Shield"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/shield/shield.fbx", TEXT("Prototype_Component_Model_Weapon_Shield"), TransformMatrix))))
+		return E_FAIL;*/
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Weapon_Shotgun"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/shotgun/shotgun.fbx", TEXT("Prototype_Component_Model_Weapon_Shotgun"), TransformMatrix))))
 		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Fox */

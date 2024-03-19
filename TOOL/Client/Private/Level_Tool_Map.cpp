@@ -93,7 +93,7 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	/*CMap::MAP_DESC */tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	tDesc.strModelComTag = /*TEXT("Prototype_Component_Model_Map_FOXGOD");*/ TEXT("Prototype_Component_Model_Weapon_Shield");
+	tDesc.strModelComTag = /*TEXT("Prototype_Component_Model_Map_FOXGOD");*/ TEXT("Prototype_Component_Model_Weapon_Shotgun");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tDesc)))
 		return E_FAIL;
 

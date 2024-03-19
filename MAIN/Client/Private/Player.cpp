@@ -8,12 +8,13 @@
 #include "Player_State_Sleep.h"
 #include "Player_State_Move.h"
 #include "Player_State_Attack_Stick.h"
+#include "Player_State_Attack_Shotgun.h"
 #include "Player_State_Damage.h"
 #include "Player_State_Dodge.h"
 #include "Player_State_Defense.h"
 
-#define	WEAPONBONEIDX 24
-// stick - 29 / sword - 45 / shield - 24
+#define	WEAPONBONEIDX 45
+// stick - 29 / sword - 45 / shield - 24 / Shotgun - 45?
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -124,6 +125,11 @@ void CPlayer::Tick(_float fTimeDelta)
 	//		m_pModelCom->Set_Animation_Index(iIndex);
 	//	}
 	//}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+		m_eWeapon = WEAPON_STICK;
+	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
+		m_eWeapon = WEAPON_SHOTGUN;
 	
 	// PartObject
 	for (auto& PartObject : m_PartObjects)
@@ -225,7 +231,24 @@ void CPlayer::Update_State()
 		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-			Change_State(STATE_ATTACK_STICK);
+		{
+			switch (m_eWeapon)
+			{
+			case WEAPON_STICK:
+				Change_State(STATE_ATTACK_STICK);
+				break;
+			case WEAPON_SWORD:
+				Change_State(STATE_ATTACK_STICK);
+				break;
+			case WEAPON_SHOTGUN:
+				Change_State(STATE_ATTACK_SHOTGUN);
+				break;
+			case WEAPON_END:
+				break;
+			default:
+				break;
+			}
+		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_O, KEY_DOWN))
 			Change_State(STATE_SLEEP);
@@ -234,7 +257,20 @@ void CPlayer::Update_State()
 			Change_State(STATE_DAMAGE);
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+		{
+			m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
+		}
+		if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_DOWN))
+		{
+			m_eDodge = DODGE_FAST;
+			Change_State(STATE_DODGE);
+		}
+		/*if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
+		{
+			m_eDodge = DODGE_DASH;
+			Change_State(STATE_DODGE);
+		}*/
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
@@ -250,15 +286,28 @@ void CPlayer::Update_State()
 			//m_eDir = DIR_FORWARD;
 			Change_State(STATE_IDLE);
 		}
-	
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
-			Change_State(STATE_DODGE);
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
 			Change_State(STATE_ATTACK_STICK);
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+		{
+			m_eDodge = DODGE_ROLL;
+			Change_State(STATE_DODGE);
+		}
+		if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_DOWN))
+		{
+			m_eDodge = DODGE_FAST;
+			Change_State(STATE_DODGE);
+		}
+		/*if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
+		{
+			m_eDodge = DODGE_DASH;
+			Change_State(STATE_DODGE);
+		}*/
 
 		break;
 	case STATE_END:
@@ -334,10 +383,10 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
 	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this));
+	m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
 	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
-
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
 
@@ -393,9 +442,11 @@ void CPlayer::Set_Animation_Loop()
 
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK1, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK2, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_SHOTGUN, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_HURT, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_STAGGER, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE_GARBAGE, true);
 
 	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK1, 0.1f);
 	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK2, 0.1f);
