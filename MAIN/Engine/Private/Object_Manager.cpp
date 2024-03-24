@@ -89,6 +89,15 @@ CGameObject* CObject_Manager::Get_GameObject_Clone(const wstring& strPrototypeTa
 	return pGameObject;
 }
 
+CGameObject* CObject_Manager::Get_GameObject(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+	if (nullptr == pLayer)
+		return nullptr;
+
+	return pLayer->Get_GameObject(iIndex);
+}
+
 void CObject_Manager::Tick(_float fTimeDelta)
 {
 	for (size_t i = 0; i < m_iNumLevels; i++)

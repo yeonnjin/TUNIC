@@ -44,6 +44,7 @@ HRESULT CMap::Initialize(void* pArg)
 
 void CMap::Tick(_float fTimeDelta)
 {
+    m_pNavigationCom->Tick(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CMap::Late_Tick(_float fTimeDelta)
@@ -69,7 +70,9 @@ HRESULT CMap::Render()
         m_pModelCom->Render(i);
     }
 
-    return S_OK;
+#ifdef _DEBUG
+    m_pNavigationCom->Render();
+#endif // _DEBUG
 
     return S_OK;
 }
@@ -96,6 +99,11 @@ HRESULT CMap::Add_Components()
     if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
+
+    /* For.Com_Navigation */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
+        return E_FAIL;
     
     return S_OK;
 }
@@ -121,6 +129,7 @@ HRESULT CMap::Bind_ShaderResources()
 }
 
 HRESULT CMap::Ready_MapObj_File()
+
 {
     // TransformMatrix
     m_tMapObjFile.TransformMatrix = m_pTransformCom->Get_WorldFloat4x4();
@@ -168,6 +177,7 @@ void CMap::Free()
 {
     __super::Free();
 
+    Safe_Release(m_pNavigationCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

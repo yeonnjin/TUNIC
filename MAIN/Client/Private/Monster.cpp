@@ -35,7 +35,15 @@ HRESULT CMonster::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    //m_pModelCom->Set_Animation(0, true);
+    m_pModelCom->Set_Animation_Index(0);
+    m_pModelCom->Set_Animation_Transform(m_pTransformCom);
+    m_pModelCom->Set_Animation_isLoop(0, true);
+    m_pModelCom->Set_Animation_isLoop(1, true);
+    m_pModelCom->Set_Animation_isLoop(2, true);
+    m_pModelCom->Set_Animation_isLoop(3, true);
+    m_pModelCom->Set_Animation_isLoop(4, true);
+    m_pModelCom->Set_Animation_isLoop(5, true);
+    m_pModelCom->Set_Animation_isLoop(6, true);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(0.f, 1.f, 0.f, 1.f)/* XMVectorSet(rand() % 20, 2.f, rand() % 20, 1.f)*/);
 
     return S_OK;
@@ -43,19 +51,21 @@ HRESULT CMonster::Initialize(void* pArg)
 
 void CMonster::Tick(_float fTimeDelta)
 {
-    /*static _uint iIndex = 0;
-    if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+    static _uint iIndex = 0;
+    if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {
         iIndex++;
-        m_pModelCom->Set_Animation(iIndex, true);
-    }*/
+        if (iIndex > 6)
+            iIndex = 0;
+        m_pModelCom->Set_Animation_Index(iIndex);
+    }
 
     m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)
 {
-    //m_pModelCom->Play_Animation(fTimeDelta);
+    m_pModelCom->Play_Animation(fTimeDelta);
 
     m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider")));
 
@@ -67,11 +77,11 @@ HRESULT CMonster::Render()
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
 
-    /*_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+    _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
-        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
@@ -81,7 +91,7 @@ HRESULT CMonster::Render()
             return E_FAIL;
 
         m_pModelCom->Render(i);
-    }*/
+    }
 
 #ifdef _DEBUG
     m_pColliderCom->Render();
@@ -98,15 +108,15 @@ HRESULT CMonster::Add_Components()
         return E_FAIL;
 
     /* For.Com_Model */
-    /*if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-        return E_FAIL;*/
+        return E_FAIL;
 
     /* For. Com_Collider */
     CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
 
-    ColliderDesc.fRadius = 0.8f;
-    ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius + 0.6f, 0.f);
+    ColliderDesc.fRadius = 1.2f;
+    ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius , 0.f);
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))

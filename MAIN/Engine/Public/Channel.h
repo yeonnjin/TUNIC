@@ -19,6 +19,7 @@ public:
 	_uint			Get_BoneIndex() { return m_iBoneIndex; }
 	CHANNELSTATE*	Get_ChannelState() { return &m_tChannelState; }
 	CHANNELSTATE*	Get_ChannelState_First() { return &m_tChannelState_First; }
+	_uint			Get_NumKeyFrame() { return m_iNumKeyFrames; }
 
 public:
 	HRESULT Initialize(CHANNELFILE* pChannelFile, const vector<class CBone*>& Bones);

@@ -94,6 +94,39 @@
     <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Shotgun">
       <UniqueIdentifier>{c17feb25-b230-46c8-9a93-0473acef2c24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Camera\Free">
+      <UniqueIdentifier>{f623cb06-2a97-447a-857d-2f4f0432355f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Focus">
+      <UniqueIdentifier>{24d0de29-702a-4f20-8473-8ed3583fb9df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Sword">
+      <UniqueIdentifier>{3f29a8fb-128a-46a5-bed6-9af3013f52b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Blob">
+      <UniqueIdentifier>{73f9cadf-21c1-4bd4-b899-239acb2ce1a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner">
+      <UniqueIdentifier>{eb03094e-9d00-48b5-ae70-27d8ccc5b380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Bat">
+      <UniqueIdentifier>{7545205d-c41f-4b60-9e91-5cd5082c105a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Hidden">
+      <UniqueIdentifier>{73c99384-5e55-471c-8c30-d36b535dbfc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Idle">
+      <UniqueIdentifier>{9685b98d-856f-4d7d-83e6-d4a4a427c9b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Explode">
+      <UniqueIdentifier>{bbd423ae-c951-4e3c-9084-04393851b7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Attack">
+      <UniqueIdentifier>{7c3668d4-5049-4d76-9703-7f620e1711b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Damage">
+      <UniqueIdentifier>{8ce45d75-e715-4b45-8471-92c9de3d7b65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -128,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02.GameObjects\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Camera_Free.h">
-      <Filter>02.GameObjects\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObjects\Monster</Filter>
@@ -189,6 +219,18 @@
     <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h">
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Shotgun</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Camera_Free.h">
+      <Filter>02.GameObjects\Camera\Free</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Focus.h">
+      <Filter>02.GameObjects\Camera\Focus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Attack_Sword.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster_Anim_List.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -217,9 +259,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02.GameObjects\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Camera_Free.cpp">
-      <Filter>02.GameObjects\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObjects\Monster</Filter>
@@ -268,6 +307,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp">
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Shotgun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Free.cpp">
+      <Filter>02.GameObjects\Camera\Free</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Focus.cpp">
+      <Filter>02.GameObjects\Camera\Focus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Attack_Sword.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -65,19 +65,17 @@ HRESULT CAnimator_Controller::Blending_Animation(_uint iNextAnimIndex, _float fT
 		m_iPrevAnimIndex = m_iCurrentAnimIndex;
 		m_iCurrentAnimIndex = iNextAnimIndex;
 		Set_Blending_Info();
-		isSetInfo = true;
-		
+		isSetInfo = true;	
 	}
 
 	if(true == isSetInfo)
 	{
+		if (true == (*m_pAnimations)[m_iPrevAnimIndex]->Get_isRoot())
+			m_isNeedRoot = true;
+
 		if (S_OK == Update_Blending(fTimeDelta))
 		{
 			isSetInfo = false;	
-
-			if (true == (*m_pAnimations)[m_iPrevAnimIndex]->Get_isRoot())
-				m_isNeedRoot = true;
-
 			m_isChanged = false;
 			return S_OK;
 		}		
@@ -109,6 +107,22 @@ void CAnimator_Controller::Set_Blend_Time(_uint iAnimIndex, _float Set_BlendTime
 		return;
 
 	(*m_pAnimations)[iAnimIndex]->Set_BlendTime(Set_BlendTime);
+}
+
+void CAnimator_Controller::Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight)
+{
+	if (m_iNumAnimations <= iAnimIndex)
+		return;
+
+	(*m_pAnimations)[iAnimIndex]->Set_Frame_Tick(iStartFrame, iEndFrame, fTickWeight);
+}
+
+void CAnimator_Controller::Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime)
+{
+	if (m_iNumAnimations <= iAnimIndex)
+		return;
+
+	(*m_pAnimations)[iAnimIndex]->Set_SlowMotion(iStartFrame, iEndFrame, fSlowTime);
 }
 
 _bool CAnimator_Controller::isFinished()

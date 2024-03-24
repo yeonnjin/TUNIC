@@ -14,6 +14,7 @@
 //#include "Texture.h"
 
 #include "Model.h"
+#include "Player.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_12_1.dat"
 #define MODELPATH "../Bin/Resources/Data/Model/Player.dat"
@@ -38,6 +39,8 @@ HRESULT CEditor::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
+	m_pTargetObject = (CPlayer*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0);
 
 	return S_OK;
 }
@@ -106,6 +109,11 @@ void CEditor::Gizmo(CTransform* pTransform)
 	}
 
 	m_pGameInstance->EditTransform(pTransform);
+
+	ImGui::Separator();
+
+	CPlayer::DIR eDir = m_pTargetObject->Get_Dir();
+	ImGui::Text("Dir : %d", (_uint)eDir);
 }
 #pragma endregion
 

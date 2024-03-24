@@ -18,11 +18,11 @@ void CPlayer_State_Dodge::OnStateEnter()
         m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
         m_eAnim = CPlayer::ANIM_DODGE;
         break;
-    case CPlayer::DODGE_FAST:
+    case CPlayer::DODGE_FAST:   // 마나 없을 때 나가는거
         m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
         m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
         break;
-    case CPlayer::DODGE_DASH:
+    case CPlayer::DODGE_DASH:   // 애니메이션 변경 X, 텔포 느낌
         m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
         m_eAnim = CPlayer::ANIM_HYPERDASH;
         break;
@@ -37,7 +37,10 @@ void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
     if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+        if(m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        else
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 }
 

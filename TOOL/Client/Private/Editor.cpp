@@ -12,7 +12,7 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Etc.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Weapon_Shotgun.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Monster.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -42,6 +42,7 @@ private: // GIZMO
 	_bool					m_isUsingGizmo = { false };
 	_int					m_iTargetIndex = { -1 };
 	CTransform*				m_pGizmoTransform = { nullptr };
+	class CPlayer*			m_pTargetObject = { nullptr };
 
 private: // MODEL_LIST
 	vector<wstring>			m_strModels;

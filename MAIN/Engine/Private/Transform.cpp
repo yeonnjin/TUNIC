@@ -44,6 +44,15 @@ HRESULT CTransform::Bind_ShaderResource(CShader* pShader, const _char* pConstant
     return pShader->Bind_Matrix(pConstantName, &m_WorldMatrix);
 }
 
+void CTransform::Go_Look(_float fTimeDelta, _fvector vLook)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+
+    vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta * -1.f;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
 void CTransform::Go_Straight(_float fTimeDelta)
 {
     _vector vPosition = Get_State_Vector(STATE_POSITION);
@@ -113,14 +122,20 @@ void CTransform::Look_At_For_LandOject(_fvector vAt)
     Set_State(STATE_LOOK,   XMVector3Normalize(vLook) * vScaled.z);
 }
 
-void CTransform::Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance)
+_bool CTransform::Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance)
 {
     _vector vPosition = Get_State_Vector(STATE_POSITION);
     _vector vLook = vTargetPos - vPosition;
 
     // XMVector3Length() 하면 길이가 { 5.f, 5.f, 5.f, 5.f } 이런 식으로 채워짐 => 128을 32로 나눈 것 중 0번째
     if (fMinDistance <= XMVector3Length(vLook).m128_f32[0])
+    {
         vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+        Set_State(STATE_POSITION, vPosition);
+        return false;
+    }
+
+    return true;
 }
 
 // 현재 각도에서 회전
@@ -132,6 +147,101 @@ void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
     {
         Set_State(STATE(i), XMVector4Transform(Get_State_Vector((STATE)i), RotationMatrix));
     }
+}
+
+_bool CTransform::Turn_Look(_Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta)
+{
+    _bool isFinish = false;
+    static _bool isFirst = true;
+  
+    static _vector vLook, vFinishLook, vUp;
+
+    if (isFirst == true)
+    {
+        vLook = XMVector3Normalize(Get_State_Vector(STATE_LOOK));
+        vLook.m128_f32[1] = 0.f;
+        vFinishLook = XMVector3Normalize(vTargetLook);
+        vFinishLook.m128_f32[1] = 0.f;
+        isFirst = false;
+    }
+
+    static _float fTime = 0.f;
+    fTime += fTimeDelta;
+    _float  fRatio = fTime / 0.2f;
+    if (fRatio >= 1.f)
+    {
+        fTime = 0.f;
+        fRatio = 1.f;
+        isFinish = true;
+        isFirst = true;
+    }
+
+    vUp = { 0.f, 1.f, 0.f };
+    //_vector vUp = Get_State_Vector(STATE_UP);
+   /* if (false == XMVector3Equal(vUp, _vector{ 0.f, 1.f, 0.f }))
+    {
+        int a = 0;
+    }*/
+
+     _vector vLerp = XMVectorLerp(vLook, vFinishLook, fRatio);
+    vLerp.m128_f32[1] = 0.f;
+    //_vector vLerpLook = vLerp - Get_State_Vector(STATE_POSITION);
+    _vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLerp);
+    //vLerp = XMVector3Cross(vRight, XMVectorSet(0.f, 1.f, 0.f, 0.f));
+
+    _float3 vScaled = Get_Scaled();
+    Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScaled.x);
+    Set_State(STATE_LOOK, XMVector3Normalize(vLerp) * vScaled.z);
+    Set_State(STATE_UP, XMVector3Normalize(vUp) * vScaled.y);
+
+    XMStoreFloat3(vLerpLook, Get_State_Vector(STATE_LOOK));
+
+    return isFinish;
+}
+
+_bool CTransform::Turn_Angle(_fvector vAxis, _float fAngle, _float fTimeDelta)
+{
+    static _bool isFinished = false;
+    static _float fRadian = 0.f;
+    _matrix RotationMatrix;
+
+    if (0 > fAngle)
+    {
+        fRadian += m_fRotationPerSec * fTimeDelta * -1.f;
+
+        if (fRadian < XMConvertToRadians(fAngle))
+        {
+            fRadian = XMConvertToRadians(fAngle);
+            isFinished = true;
+            fRadian = 0.f;
+        }
+        else
+            isFinished = false;
+
+        RotationMatrix = XMMatrixRotationAxis(vAxis, m_fRotationPerSec * fTimeDelta * -1.f);
+    }
+    else
+    {
+        fRadian += m_fRotationPerSec * fTimeDelta;
+
+        if (fRadian > XMConvertToRadians(fAngle))
+        {
+            fRadian = XMConvertToRadians(fAngle);
+            isFinished = true;
+            fRadian = 0.f;
+        }
+        else
+            isFinished = false;
+
+        RotationMatrix = XMMatrixRotationAxis(vAxis, m_fRotationPerSec * fTimeDelta);
+    }
+  
+    for (size_t i = 0; i < STATE_POSITION; ++i)
+    {
+        Set_State(STATE(i), XMVector4Transform(Get_State_Vector((STATE)i), RotationMatrix));
+    }
+
+    return isFinished;
 }
 
 // 원점으로부터 회전

@@ -15,7 +15,8 @@ class CTest_Object final : public CGameObject
 public:
 	typedef struct Test_Desc : public CGameObject::GAMEOBJECT_DESC
 	{
-		_float3 vPosition;
+		_float3		vPosition;
+		wstring		strModelComTag;
 	}TEST_DESC;
 
 private:
@@ -31,8 +32,12 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CModel*		m_pModelCom = { nullptr };
-	CShader*	m_pShaderCom = { nullptr };
+	wstring			m_strModelComTag;
+
+private:
+	CModel*			m_pModelCom = { nullptr };
+	CShader*		m_pShaderCom = { nullptr };
+	CNavigation*	m_pNavigationCom = { nullptr };
 
 private:
 	HRESULT Add_Components();

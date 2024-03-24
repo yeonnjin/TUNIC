@@ -17,7 +17,7 @@ protected:
 	virtual ~CGameObject() = default;
 
 public:
-	class CComponent* Get_Component(const wstring& strComTag);
+	class CComponent*	Get_Component(const wstring& strComTag);
 
 public:
 	virtual HRESULT Initialize_Prototype();

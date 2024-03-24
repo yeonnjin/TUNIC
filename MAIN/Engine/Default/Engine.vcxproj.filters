@@ -100,15 +100,6 @@
     <Filter Include="01. Utility\02. Components\01%29 Transform">
       <UniqueIdentifier>{1b4d404f-9eb2-4a6b-b031-814c255ad16d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Utility\02. Components\02 VIBuffer">
-      <UniqueIdentifier>{1940cc1c-6655-4f3c-a49a-2193d5054bb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Utility\02. Components\02 VIBuffer\Rect">
-      <UniqueIdentifier>{6dde1500-565b-4a82-a05d-b8d03aba94d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Utility\02. Components\02 VIBuffer\Terrain">
-      <UniqueIdentifier>{a5e39be6-2f27-479e-bf4f-a2b170666172}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Utility\02. Components\03%29 Texture">
       <UniqueIdentifier>{9a7d099b-7bc0-40c7-9801-363e3750feb7}</UniqueIdentifier>
     </Filter>
@@ -144,6 +135,30 @@
     </Filter>
     <Filter Include="01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine\State">
       <UniqueIdentifier>{a9030476-8070-4734-ba16-4a7fcb5b0472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\08%29 Navigation">
+      <UniqueIdentifier>{448d9c30-c7d9-47a3-a0e2-7e0e95d2ebd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\08%29 Navigation\Cell">
+      <UniqueIdentifier>{282d9637-0a8c-4005-8268-93de670e1254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\97. ShaderFiles">
+      <UniqueIdentifier>{7e86d066-5b2a-4daf-ad5b-4efaed0d382c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\02%29 VIBuffer">
+      <UniqueIdentifier>{1940cc1c-6655-4f3c-a49a-2193d5054bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\02%29 VIBuffer\Rect">
+      <UniqueIdentifier>{6dde1500-565b-4a82-a05d-b8d03aba94d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\02%29 VIBuffer\Terrain">
+      <UniqueIdentifier>{a5e39be6-2f27-479e-bf4f-a2b170666172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\02%29 VIBuffer\Cell">
+      <UniqueIdentifier>{032ced3e-ca8a-44dd-bd2f-c8ca75d7e016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\07%29 Collider\Manager">
+      <UniqueIdentifier>{8f67371e-8838-482c-ad8b-8bddb637b4ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -190,10 +205,10 @@
       <Filter>00. Device\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer.cpp">
-      <Filter>01. Utility\02. Components\02 VIBuffer</Filter>
+      <Filter>01. Utility\02. Components\02%29 VIBuffer</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Rect.cpp">
-      <Filter>01. Utility\02. Components\02 VIBuffer\Rect</Filter>
+      <Filter>01. Utility\02. Components\02%29 VIBuffer\Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Shader.cpp">
       <Filter>01. Utility\02. Components\04%29 Shader</Filter>
@@ -208,7 +223,7 @@
       <Filter>01. Utility\02. Components\01%29 Transform</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Terrain.cpp">
-      <Filter>01. Utility\02. Components\02 VIBuffer\Terrain</Filter>
+      <Filter>01. Utility\02. Components\02%29 VIBuffer\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PipeLine.cpp">
       <Filter>01. Utility\05. PipeLine</Filter>
@@ -303,6 +318,15 @@
     <ClCompile Include="..\Private\State.cpp">
       <Filter>01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine\State</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Navigation.cpp">
+      <Filter>01. Utility\02. Components\08%29 Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Cell.cpp">
+      <Filter>01. Utility\02. Components\08%29 Navigation\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
+      <Filter>01. Utility\02. Components\02%29 VIBuffer\Cell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h">
@@ -363,10 +387,10 @@
       <Filter>00. Device\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer.h">
-      <Filter>01. Utility\02. Components\02 VIBuffer</Filter>
+      <Filter>01. Utility\02. Components\02%29 VIBuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Rect.h">
-      <Filter>01. Utility\02. Components\02 VIBuffer\Rect</Filter>
+      <Filter>01. Utility\02. Components\02%29 VIBuffer\Rect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Shader.h">
       <Filter>01. Utility\02. Components\04%29 Shader</Filter>
@@ -378,7 +402,7 @@
       <Filter>01. Utility\02. Components\01%29 Transform</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Terrain.h">
-      <Filter>01. Utility\02. Components\02 VIBuffer\Terrain</Filter>
+      <Filter>01. Utility\02. Components\02%29 VIBuffer\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PipeLine.h">
       <Filter>01. Utility\05. PipeLine</Filter>
@@ -476,5 +500,19 @@
     <ClInclude Include="..\Public\State.h">
       <Filter>01. Utility\02. Components\06%29 Animator\Animator_Controller\State_Machine\State</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Navigation.h">
+      <Filter>01. Utility\02. Components\08%29 Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Cell.h">
+      <Filter>01. Utility\02. Components\08%29 Navigation\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Cell.h">
+      <Filter>01. Utility\02. Components\02%29 VIBuffer\Cell</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
+      <Filter>01. Utility\97. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

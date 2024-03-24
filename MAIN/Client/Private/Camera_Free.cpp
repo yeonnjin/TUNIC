@@ -98,7 +98,7 @@ CGameObject* CCamera_Free::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed To Create : CCamera_Free"));
+		MSG_BOX(TEXT("Failed To Clone : CCamera_Free"));
 
 		Safe_Release(pInstance);
 	}

@@ -98,14 +98,17 @@ public:
 	HRESULT	Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 
 public:
+	void Go_Look(_float fTimeDelta, _fvector vLook);
 	void Go_Straight(_float fTimeDelta);
 	void Go_Backward(_float fTimeDelta);
 	void Go_Left(_float fTimeDelta);
 	void Go_Right(_float fTimeDelta);
 	void Look_At(_fvector vAt);
 	void Look_At_For_LandOject(_fvector vAt);
-	void Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance = 0.f);
+	_bool Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance = 0.f);
 	void Turn(_fvector vAxis, _float fTimeDelta);
+	_bool Turn_Look(_Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta);
+	_bool Turn_Angle(_fvector vAxis, _float fAngle, _float fTimeDelta);
 	void Rotation(_fvector vAxis, _float fRadian);
 
 private:

@@ -2,11 +2,13 @@
 
 #include "Client_Defines.h"
 #include "PartObject.h"
+#include "Player.h"
 
 BEGIN(Engine)
 class CBone;
 class CModel;
 class CShader;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -16,7 +18,9 @@ class CPlayer_Weapon final : public CPartObject
 public:
 	typedef struct Player_Weapon_Desc : public CPartObject::PARTOBJECT_DESC
 	{
-		CBone* pSocketBone = { nullptr };
+		CBone*				pSocketBone = { nullptr };
+		wstring				strModelComTag;
+		CPlayer::WEAPON		eWeapon;
 	}PLAYER_WEAPON_DESC;
 
 private:
@@ -35,12 +39,15 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_bool			m_isRender = { true };
+	wstring				m_strModelComTag = {};
+	CPlayer::WEAPON		m_eWeapon = {};
+	_bool				m_isRender = { false };
 
 private:
 	CModel*			m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CBone*			m_pSocketBone = { nullptr };
+	CCollider*		m_pColliderCom = { nullptr };
 
 private:
 	HRESULT Add_Components();

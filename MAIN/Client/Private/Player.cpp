@@ -8,12 +8,17 @@
 #include "Player_State_Sleep.h"
 #include "Player_State_Move.h"
 #include "Player_State_Attack_Stick.h"
+#include "Player_State_Attack_Sword.h"
 #include "Player_State_Attack_Shotgun.h"
 #include "Player_State_Damage.h"
 #include "Player_State_Dodge.h"
 #include "Player_State_Defense.h"
 
 #define	WEAPONBONEIDX 45
+#define SHIELDBONE 24
+#define STICKBONE 45
+#define SWORDBONE 28
+#define SHOTGUNBONE 45
 // stick - 29 / sword - 45 / shield - 24 / Shotgun - 45?
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -59,9 +64,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 	_float4 vPosition = _float4(0.f, 0.5f, 0.f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-	m_pModelCom->Set_Animation_Index(ANIM_WALK_LEFT);
+	m_pModelCom->Set_Animation_Index(ANIM_IDLE);
 	m_pModelCom->Set_Animation_Transform(m_pTransformCom);
-	Set_Animation_Loop();
+	Set_Animation();
 
 	return S_OK;
 }
@@ -125,11 +130,9 @@ void CPlayer::Tick(_float fTimeDelta)
 	//		m_pModelCom->Set_Animation_Index(iIndex);
 	//	}
 	//}
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
-		m_eWeapon = WEAPON_STICK;
-	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
-		m_eWeapon = WEAPON_SHOTGUN;
+	Set_Dir();
+	Set_Weapon();
+	
 	
 	// PartObject
 	for (auto& PartObject : m_PartObjects)
@@ -155,8 +158,8 @@ void CPlayer::Tick(_float fTimeDelta)
 			m_eAnimationIndex = m_eBlendAnimIndex;
 		}
 	}	
-	/*else
-		m_pModelCom->Play_Animation(fTimeDelta);*/
+	else
+		m_pModelCom->Play_Animation(fTimeDelta);
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 }
@@ -166,8 +169,15 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Late_Tick(fTimeDelta);
 
-	if (false == m_isBlend)
-		m_pModelCom->Play_Animation(fTimeDelta);
+	/*if (false == m_isBlend)
+		m_pModelCom->Play_Animation(fTimeDelta);*/
+
+	/*if (true == m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Com_Collider"))))
+	{
+		m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.2f);
+	}
+	else
+		m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.f);*/
 
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
@@ -209,14 +219,14 @@ void CPlayer::Update_State()
 	{
 	case STATE_IDLE:
 		// IDLE -> MOVE
-		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+		/*if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
 		{
-			m_eDir = DIR_FORWARD;			
+			m_eDir = DIR_FRONT;			
 			Change_State(STATE_MOVE);
 		}
 		else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
 		{
-			m_eDir = DIR_BACKWARD;
+			m_eDir = DIR_BACK;
 			Change_State(STATE_MOVE);
 		}
 		else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
@@ -228,6 +238,14 @@ void CPlayer::Update_State()
 		{
 			m_eDir = DIR_RIGHT;
 			Change_State(STATE_MOVE);
+		}*/
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) ||
+			m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) ||
+			m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) ||
+			m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		{
+			Change_State(STATE_MOVE);
 		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
@@ -238,7 +256,7 @@ void CPlayer::Update_State()
 				Change_State(STATE_ATTACK_STICK);
 				break;
 			case WEAPON_SWORD:
-				Change_State(STATE_ATTACK_STICK);
+				Change_State(STATE_ATTACK_SWORD);
 				break;
 			case WEAPON_SHOTGUN:
 				Change_State(STATE_ATTACK_SHOTGUN);
@@ -255,22 +273,6 @@ void CPlayer::Update_State()
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN))
 			Change_State(STATE_DAMAGE);
-
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
-		{
-			m_eDodge = DODGE_ROLL;
-			Change_State(STATE_DODGE);
-		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_DOWN))
-		{
-			m_eDodge = DODGE_FAST;
-			Change_State(STATE_DODGE);
-		}
-		/*if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
-		{
-			m_eDodge = DODGE_DASH;
-			Change_State(STATE_DODGE);
-		}*/
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
@@ -298,7 +300,7 @@ void CPlayer::Update_State()
 			m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
 		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_DOWN))
+		if (m_pGameInstance->Get_DIKeyState(DIK_LCONTROL, KEY_DOWN))
 		{
 			m_eDodge = DODGE_FAST;
 			Change_State(STATE_DODGE);
@@ -359,20 +361,73 @@ HRESULT CPlayer::Add_Components()
 
 HRESULT CPlayer::Add_PartObjects()
 {
-	/* For. Part_Player_Weapon */
+	/* For. Part_Player_Weapon_Stick */
 	CPartObject* pWeaponObject = { nullptr };
 	CPlayer_Weapon::PLAYER_WEAPON_DESC tDesc{};
 
-	CAnimator* pModel = m_pModelCom;
-
 	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
-	tDesc.pSocketBone = pModel->Get_Bone_Ptr(WEAPONBONEIDX);
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(STICKBONE);
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Object";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	tDesc.strModelComTag = wstr;
+	tDesc.eWeapon = WEAPON_STICK;
 
 	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
 	if (nullptr == pWeaponObject)
 		return E_FAIL;
 
-	m_PartObjects.emplace(TEXT("Part_Player_Weapon"), pWeaponObject);
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Stick"), pWeaponObject);
+
+	/* For. Part_Player_Weapon_Sword */
+	pWeaponObject = { nullptr };
+	tDesc = {};
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SWORDBONE);
+	_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Weapon_Sword";
+	wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+	tDesc.strModelComTag = wstr1;
+	tDesc.eWeapon = WEAPON_SWORD;
+
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Sword"), pWeaponObject);
+
+	/* For. Part_Player_Weapon_Shotgun */
+	pWeaponObject = { nullptr };
+	tDesc = {};
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHOTGUNBONE);
+	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Weapon_Shotgun";
+	wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
+	tDesc.strModelComTag = wstr2;
+	tDesc.eWeapon = WEAPON_SHOTGUN;
+
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shotgun"), pWeaponObject);
+
+	/* For. Part_Player_Weapon_Shield */
+	pWeaponObject = { nullptr };
+	tDesc = {};
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHIELDBONE);
+	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Weapon_Shield";
+	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	tDesc.strModelComTag = wstr3;
+	tDesc.eWeapon = WEAPON_SHIELD;
+
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shield"), pWeaponObject);
 
 	return S_OK;
 }
@@ -383,6 +438,7 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
 	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this));
+	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
@@ -427,31 +483,135 @@ HRESULT CPlayer::Bind_ShaderResources()
 	return S_OK;
 }
 
-void CPlayer::Set_Animation_Loop()
+void CPlayer::Set_Animation()
 {
+	// LOOP
 	m_pModelCom->Set_Animation_isLoop(ANIM_IDLE, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_SLEEPING, true);
-	//m_pModelCom->Set_Animation_isLoop(ANIM_GETUP, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_FORWARD, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_BACKWARD, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_LEFT, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_RIGHT, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_SHIELD, true);
-	//m_pModelCom->Set_Animation_isLoop(ANIM_SWING_STICK1, true);
-	//m_pModelCom->Set_Animation_isLoop(ANIM_SWING_STICK2, true);
 
+	// ROOT
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK1, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK2, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_SWORD1, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_SWORD2, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_SWORD3, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_SHOTGUN, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_HURT, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_STAGGER, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE_GARBAGE, true);
 
-	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK1, 0.1f);
+	// BLEND TIME
+	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK1, 0.2f);
 	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK2, 0.1f);
-	m_pModelCom->Set_Blend_Time(ANIM_DODGE, 0.3f);
+	m_pModelCom->Set_Blend_Time(ANIM_SWING_SWORD1, 0.1f);
+	m_pModelCom->Set_Blend_Time(ANIM_SWING_SWORD2, 0.1f);
+	m_pModelCom->Set_Blend_Time(ANIM_SWING_SWORD3, 0.1f);
+	m_pModelCom->Set_Blend_Time(ANIM_DODGE, 0.1f);
 	m_pModelCom->Set_Blend_Time(ANIM_STAGGER, 0.4f);
+
+	// TICK WEIGHT
+	m_pModelCom->Set_Frame_Tick(ANIM_DODGE, 0, 15, 1.4f);
+	m_pModelCom->Set_Frame_Tick(ANIM_DODGE, 35, 51, 60.f);
+	m_pModelCom->Set_Frame_Tick(ANIM_DODGE_GARBAGE, 31, 37, 50.f);
+	m_pModelCom->Set_Frame_Tick(ANIM_SWING_STICK2, 36, 39, 80.f);
+	m_pModelCom->Set_Frame_Tick(ANIM_SWING_SWORD3, 60, 67, 50.f);
+
+	// SLOWMOTION
+	//m_pModelCom->Set_SlowMotion(ANIM_DODGE, 16, 26, 0.2f);
+	//m_pModelCom->Set_SlowMotion(ANIM_DODGE_GARBAGE, 3, 15, 0.2f);
+}
+
+void CPlayer::Set_Dir()
+{
+	// 8¹æÇâ
+	/*if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		m_eDir = DIR_FL;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		m_eDir = DIR_FR;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		m_eDir = DIR_BL;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		m_eDir = DIR_BR;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+		m_eDir = DIR_FRONT;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+		m_eDir = DIR_BACK;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		m_eDir = DIR_LEFT;
+	else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		m_eDir = DIR_RIGHT;*/
+
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+		m_eDir = DIR_FRONT;
+	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+		m_eDir = DIR_BACK;
+	if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		m_eDir = DIR_LEFT;
+	if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		m_eDir = DIR_RIGHT;
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		m_eDir = DIR_FL;
+	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		m_eDir = DIR_FR;
+	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		m_eDir = DIR_BL;
+	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		m_eDir = DIR_BR;
+	
+}
+
+void CPlayer::Set_Weapon()
+{
+	if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+	{
+		m_eWeapon = WEAPON_STICK;
+		static _bool isStick = false;
+		isStick = !isStick;
+		if (true == isStick)
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), true);
+		else
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), false);
+	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
+	{
+		m_eWeapon = WEAPON_SWORD;
+		static _bool isSword = false;
+		isSword = !isSword;
+		if (true == isSword)
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Sword"), true);
+		else
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Sword"), false);
+	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
+	{
+		m_eWeapon = WEAPON_SHOTGUN;
+		static _bool isShotgun = false;
+		isShotgun = !isShotgun;
+		if (true == isShotgun)
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), true);
+		else
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), false);
+	}
+	
+	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
+	{
+		static _bool isShield = false;
+		isShield = !isShield;
+		if (true == isShield)
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shield"), true);
+		else
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shield"), false);
+	}
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

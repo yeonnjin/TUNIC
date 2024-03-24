@@ -50,13 +50,17 @@ public:
 
 	// Animator_Controller : Animation
 	HRESULT					Play_Animation(_float fTimeDelta);
+	HRESULT					Blending_Animation(_uint iNextAnimIndex, _float fTimeDelta);
+
 	HRESULT					Set_Animation_Index(_uint iAnimIndex);
 	HRESULT					Set_Animation_Transform(CTransform* pObjectTransform);
-	HRESULT					Blending_Animation(_uint iNextAnimIndex, _float fTimeDelta);
 	HRESULT					Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop);
-	void					Set_TargetTransform(CTransform* pTargetTransform);
 	void					Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot);
+	void					Set_TargetTransform(CTransform* pTargetTransform);
+		
 	void					Set_Blend_Time(_uint iAnimIndex, _float fBlendTime);
+	void					Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight);
+	void					Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime);
 
 	// Test
 	_bool					isFinished();

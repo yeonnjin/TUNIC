@@ -26,6 +26,8 @@ public:
 	void	Set_Loop(_bool isLoop) { m_isLoop = isLoop; }
 	void	Set_Root(_bool isRoot) { m_isRoot = isRoot; }
 	void	Set_BlendTime(_float fBlendTime) { m_fBlendTime = fBlendTime; }
+	void	Set_Frame_Tick(_uint iStartFrame, _uint iEndFrame, _float fTickWeight);
+	void	Set_SlowMotion(_uint iStartFrame, _uint iEndFrame, _float fSlowTime);
 
 	void	Set_AnimationData_Initialize();
 
@@ -51,12 +53,16 @@ private:
 	_char						m_szName[MAX_PATH] = { "" };
 
 	_float						m_fDuration = { 0.f };			// 전체 재생 길이
+	_float						m_fOriginDuration = { 0.f };		// 원래 전체 재생 길이
 	_float						m_fTicksPerSecond = { 0.f };	// 초당 얼마나 재생하는지 (속도)
+	_uint						m_MaxKeyFrameChannel = { 0 };
+	vector<_float>				m_KeyFrameTickWeights = { 1.f };
 	_float						m_fTrackPosition = { 0.f };		// 현재 애니메이션이 어디까지 재생되었는지
 
 	_uint						m_iNumChannels = { 0 };
 	vector<class CChannel*>		m_Channels;
 	vector<_uint>				m_CurrentKeyFrameIndices;
+
 
 	_bool						m_isFinished = { false };
 	_bool						m_isCloned = { false };

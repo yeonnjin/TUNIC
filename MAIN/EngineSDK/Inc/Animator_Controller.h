@@ -39,9 +39,9 @@ public:
 	HRESULT					Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop);
 	void					Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot);
 	void					Set_Blend_Time(_uint iAnimIndex, _float fBlendTime);
+	void					Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight);
+	void					Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime);
 
-	// 블렌딩 - 시간 스케일(Time Scale)
-	
 	// Test
 	_bool					isFinished();
 	_bool					isFinished(_uint iAnimIndex);

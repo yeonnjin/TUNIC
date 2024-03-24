@@ -4,7 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
-class CModel;
+class CAnimator;
 class CShader;
 class CCollider;
 END
@@ -34,7 +34,7 @@ public:
 
 private:
 	wstring			m_strModelComTag = {};
-	CModel*			m_pModelCom = { nullptr };
+	CAnimator*		m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };
 

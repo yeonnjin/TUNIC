@@ -74,3 +74,18 @@
 [59] "_Fox|_Fox|Fox|wand_throw|Base Layer"
 // ==========================================================================
 [60] "_Fox|_Fox|Fox|wave|Base Layer"
+
+
+
+_float CCamera_Focus::EaseInOutQuad(float start, float end, float value)
+{
+    value /= .5f;
+    end -= start;
+
+    if (value < 1)
+        return end * 0.5f * value * value + start;
+
+    value--;
+
+    return -end * 0.5f * (value * (value - 2) - 1) + start;
+}

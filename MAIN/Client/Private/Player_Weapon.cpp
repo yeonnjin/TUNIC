@@ -22,7 +22,10 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
 {
     PLAYER_WEAPON_DESC* pDesc = (PLAYER_WEAPON_DESC*)pArg;
 
+    m_strModelComTag = pDesc->strModelComTag;
     m_pSocketBone = pDesc->pSocketBone;
+    m_eWeapon = pDesc->eWeapon;
+
     Safe_AddRef(m_pSocketBone);
 
     if (FAILED(__super::Initialize(pArg)))
@@ -32,11 +35,11 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
         return E_FAIL;
 
 
-    // Shield
-    //m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 
-    // Shotgun?
-    m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+    if(CPlayer::WEAPON_SHOTGUN  == m_eWeapon || CPlayer::WEAPON_SHIELD == m_eWeapon || CPlayer::WEAPON_SWORD == m_eWeapon)
+        m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+    else if(CPlayer::WEAPON_STICK == m_eWeapon )
+        m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
 
     //m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
     //m_pTransformCom->Set_Scaled(0.1f, 0.1f, 0.1f);   
@@ -48,6 +51,7 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
 
 void CPlayer_Weapon::Tick(_float fTimeDelta)
 {
+    m_pColliderCom->Tick(XMLoadFloat4x4(&m_WorldMatrix));
 }
 
 void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
@@ -63,6 +67,8 @@ void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
 
     if(true == m_isRender)
         m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
+    m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Com_Collider")));
 }
 
 HRESULT CPlayer_Weapon::Render()
@@ -85,6 +91,10 @@ HRESULT CPlayer_Weapon::Render()
         m_pModelCom->Render(i);
     }
 
+#ifdef _DEBUG
+    m_pColliderCom->Render();
+#endif
+
     return S_OK;
 }
 
@@ -96,16 +106,33 @@ HRESULT CPlayer_Weapon::Add_Components()
         return E_FAIL;
 
     /* For.Com_Model */
-    // "Prototype_Component_Model_Map_Object"
-    // "Prototype_Component_Model_Weapon_Sword"
-    // "Prototype_Component_Model_Weapon_Shield"
-    //  "Prototype_Component_Model_Weapon_Shield"
-    // 
-    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Weapon_Shotgun";
-    wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;
+
+    /* Com_Collider */
+    CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
+
+    /* 로컬상의 정보를 셋팅한다. */
+
+    if(CPlayer::WEAPON_STICK == m_eWeapon)
+    {
+        ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
+        ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+    }
+    else if (CPlayer::WEAPON_SWORD == m_eWeapon)
+    {
+        ColliderDesc.vSize = _float3(0.2f, 1.2f, 0.2f);
+        ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+    }
+    else if (CPlayer::WEAPON_SHIELD == m_eWeapon)
+    {
+        ColliderDesc.vSize = _float3(1.2f, 1.2f, 0.4f);
+        ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+    }
+
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 
     return S_OK;
@@ -192,4 +219,5 @@ void CPlayer_Weapon::Free()
     Safe_Release(m_pSocketBone);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
+    Safe_Release(m_pColliderCom);
 }

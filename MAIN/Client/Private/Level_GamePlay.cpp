@@ -2,6 +2,8 @@
 #include "Level_GamePlay.h"
 
 #include "Camera_Free.h"
+#include "Camera_Focus.h"
+
 #include "Map_Object.h"
 #include "Player.h"
 #include "Monster.h"
@@ -21,13 +23,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Editor(TEXT("Layer_Editor"))))
-		return E_FAIL;
-
 	if (FAILED(Ready_Lights()))
-		return E_FAIL;
-
-	if(FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
@@ -39,6 +35,11 @@ HRESULT CLevel_GamePlay::Initialize()
 	if(FAILED(Ready_Layer_MapObj(TEXT("Layer_MapObject"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Editor(TEXT("Layer_Editor"))))
+		return E_FAIL;
 	/*
 	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 		return E_FAIL;*/
@@ -89,7 +90,7 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 
 HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 {
-	CCamera_Free::CAMERA_FREE_DESC		CameraDesc{};
+	/*CCamera_Free::CAMERA_FREE_DESC		CameraDesc{};
 
 	CameraDesc.fMouseSensor = 0.1f;
 	CameraDesc.fFovy = XMConvertToRadians(60.0f);
@@ -102,6 +103,21 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
+		return E_FAIL;*/
+
+	CCamera_Focus::CAMERA_FOCUS_DESC		CameraDesc{};
+
+	CameraDesc.pTargetTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag, 0));
+	CameraDesc.fFovy = XMConvertToRadians(60.0f);
+	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	CameraDesc.fNear = 0.1f;
+	CameraDesc.fFar = 1000.0f;
+	CameraDesc.vEye = _float4(0.f, 18.f, -18.f, 1.f);
+	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	CameraDesc.fSpeedPerSec = 1.f;
+	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Focus"), &CameraDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -146,12 +162,20 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
 	// Desc
 	CMonster::Monster_Desc tDesc = {};
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster"), &tDesc)))
 		return E_FAIL;
+
+	// "Prototype_Component_Model_Monster_Bat"
+	// "Prototype_Component_Model_Monster_Blob"
+	// "Prototype_Component_Model_Monster_Blob_Normal"
+	// "Prototype_Component_Model_Monster_CowBot"
+	// "Prototype_Component_Model_Monster_CowBot_Shield"
+	// "Prototype_Component_Model_Monster_CowBot_Sword"
+	// "Prototype_Component_Model_Monster_Spinner"
 
 	return S_OK;
 }

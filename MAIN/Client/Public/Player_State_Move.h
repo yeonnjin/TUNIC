@@ -21,7 +21,14 @@ public:
 
 private:
 	class CPlayer*	m_pPlayer = { nullptr };
-	CPlayer::DIR	m_eDir = {};
+	CPlayer::DIR	m_eCurDir = { CPlayer::DIR_FRONT };
+	CPlayer::DIR	m_ePreDir = { CPlayer::DIR_FRONT };
+
+	_bool			m_isTurn = { false };
+	_int			m_iAngle = { 0 };
+
+	_vector			m_vLook = {};
+	_float3			m_vLerpLook = {};
 
 public:
 	static CPlayer_State_Move* Create(class CPlayer* pPlayer);

@@ -10,15 +10,16 @@ HRESULT CAnimation::Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& 
 {
     strcpy_s(m_szName, pAnimFile->szName);
 
-    m_fDuration = pAnimFile->fDuration;
+    m_fDuration = m_fOriginDuration = pAnimFile->fDuration;
     m_fTicksPerSecond = pAnimFile->fTicksPerSecond;
 
     /* 이 애니메이션은 몇 개의 뼈를 컨트롤 해야하는지 */
     m_iNumChannels = pAnimFile->iNumChannels;
 
     /* 각 채널의 CurrentKeyFrame을 0으로 초기화 */
-    m_CurrentKeyFrameIndices.resize(m_iNumChannels);
+    m_CurrentKeyFrameIndices.resize(m_iNumChannels);  
 
+    _uint iMaxKeyFrame = { 0 };
     for (size_t i = 0; i < m_iNumChannels; ++i)
     {
         CChannel* pChannel = CChannel::Create(&pAnimFile->Channels[i], Bones);
@@ -26,9 +27,47 @@ HRESULT CAnimation::Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& 
             return E_FAIL;
 
         m_Channels.push_back(pChannel);
+
+        if (iMaxKeyFrame < pChannel->Get_NumKeyFrame())
+        {
+            iMaxKeyFrame = pChannel->Get_NumKeyFrame();
+            m_MaxKeyFrameChannel = i;
+        }
     }
 
+    for (size_t i = 0; i < iMaxKeyFrame; ++i)
+        m_KeyFrameTickWeights.push_back(1.f);
+
     return S_OK;
+}
+
+void CAnimation::Set_Frame_Tick(_uint iStartFrame, _uint iEndFrame, _float fTickWeight)
+{
+    if (0 > iStartFrame || m_KeyFrameTickWeights.size() <= iEndFrame)
+        return;
+
+    for (size_t i = iStartFrame; i <= iEndFrame; ++i)
+        m_KeyFrameTickWeights[i] = fTickWeight;
+}
+
+void CAnimation::Set_SlowMotion(_uint iStartFrame, _uint iEndFrame, _float fSlowTime)
+{
+    if (0.f == fSlowTime)
+    {
+        for (size_t i = iStartFrame; i <= iEndFrame; ++i)
+            m_KeyFrameTickWeights[i] = 1.f;
+        
+        m_fDuration = m_fOriginDuration;
+    }
+    else
+    {
+        for (size_t i = iStartFrame; i <= iEndFrame; ++i)
+            m_KeyFrameTickWeights[i] = fSlowTime;
+
+        _uint iNumFrame = iEndFrame - iStartFrame + 1;
+
+        m_fDuration += (1.f - fSlowTime) * iNumFrame ;
+    }
 }
 
 void CAnimation::Set_AnimationData_Initialize()
@@ -56,7 +95,7 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
 {
     m_isFinished = false;
 
-    m_fTrackPosition += m_fTicksPerSecond * fTimeDelta;
+    m_fTrackPosition += m_fTicksPerSecond * m_KeyFrameTickWeights[m_CurrentKeyFrameIndices[m_MaxKeyFrameChannel]] * fTimeDelta;
 
     if (m_fDuration <= m_fTrackPosition)
     {

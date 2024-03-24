@@ -11,6 +11,7 @@ CPlayer_State_Attack_Shotgun::CPlayer_State_Attack_Shotgun(CPlayer* pPlayer)
 void CPlayer_State_Attack_Shotgun::OnStateEnter()
 {
     m_pPlayer->Set_Blending(true, CPlayer::ANIM_SHOTGUN);
+	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), true);
 }
 
 void CPlayer_State_Attack_Shotgun::OnStateUpdate(_float fTimeDelta)
@@ -23,6 +24,7 @@ void CPlayer_State_Attack_Shotgun::OnStateUpdate(_float fTimeDelta)
 
 void CPlayer_State_Attack_Shotgun::OnStateExit()
 {
+	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), false);
 }
 
 CPlayer_State_Attack_Shotgun* CPlayer_State_Attack_Shotgun::Create(CPlayer* pPlayer)
@@ -41,5 +43,6 @@ CPlayer_State_Attack_Shotgun* CPlayer_State_Attack_Shotgun::Create(CPlayer* pPla
 void CPlayer_State_Attack_Shotgun::Free()
 {
 	__super::Free();
+
 }
 

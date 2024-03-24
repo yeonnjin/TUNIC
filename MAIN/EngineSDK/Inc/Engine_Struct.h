@@ -45,6 +45,14 @@ namespace Engine
 	typedef struct ENGINE_DLL
 	{
 		XMFLOAT3		vPosition;
+
+		static const unsigned int	iNumElements = { 1 };
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[1];
+	}VTXPOS;
+
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT3		vPosition;
 		XMFLOAT2		vTexcoord;
 
 		static const unsigned int	iNumElements = { 2 };

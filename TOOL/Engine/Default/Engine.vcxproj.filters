@@ -103,6 +103,15 @@
     <Filter Include="01. Utility\06. Picking">
       <UniqueIdentifier>{5e0d7fcb-ac97-430e-86c7-a6ae6d3eee5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. Components\Navigation">
+      <UniqueIdentifier>{ab9d6e28-921d-44a8-859a-85b933895aac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Navigation\Cell">
+      <UniqueIdentifier>{a535878d-038a-4b44-840d-5d6c937547d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\VIBuffer\Cell">
+      <UniqueIdentifier>{430b21cf-5d2c-4302-a1ff-96ec8c220bdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -218,6 +227,15 @@
     </ClCompile>
     <ClCompile Include="..\ImGui\imgui_tables.cpp">
       <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Cell.cpp">
+      <Filter>01. Utility\02. Components\Navigation\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Navigation.cpp">
+      <Filter>01. Utility\02. Components\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
+      <Filter>01. Utility\02. Components\VIBuffer\Cell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\Picking.h">
       <Filter>01. Utility\06. Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Navigation.h">
+      <Filter>01. Utility\02. Components\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Cell.h">
+      <Filter>01. Utility\02. Components\Navigation\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Cell.h">
+      <Filter>01. Utility\02. Components\VIBuffer\Cell</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

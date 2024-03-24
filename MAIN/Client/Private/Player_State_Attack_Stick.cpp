@@ -11,7 +11,7 @@ CPlayer_State_Attack_Stick::CPlayer_State_Attack_Stick(CPlayer* pPlayer)
 void CPlayer_State_Attack_Stick::OnStateEnter()
 {
 	m_pPlayer->Set_Blending(true, CPlayer::ANIM_SWING_STICK1);
-	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon"), true);
+	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), true);
 }
 
 void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
@@ -39,7 +39,7 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
 
 void CPlayer_State_Attack_Stick::OnStateExit()
 {
-    //m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon"), false);
+    //m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), false);
 }
 
 CPlayer_State_Attack_Stick* CPlayer_State_Attack_Stick::Create(CPlayer* pPlayer)

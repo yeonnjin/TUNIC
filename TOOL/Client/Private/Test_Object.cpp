@@ -26,13 +26,18 @@ HRESULT CTest_Object::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&GameObjectDesc)))
         return E_FAIL;
 
+    TEST_DESC* pDesc = (TEST_DESC*)pArg;
+
+    m_strModelComTag = pDesc->strModelComTag;
+    
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    _float4 vPosition = { 1.f, 2.f, 1.f, 1.f };
+    _float4 vPosition = { 1.f, 0.f, 1.f, 1.f };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation(0, true);
+
 
     if (nullptr != pArg)
     {
@@ -53,6 +58,15 @@ void CTest_Object::Tick(_float fTimeDelta)
         iIndex++;
         m_pModelCom->Set_Animation(iIndex, true);
     }
+
+    if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
+        m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);
+    if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
+        m_pTransformCom->Go_Backward(fTimeDelta);
+    if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
+        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f }, fTimeDelta);
+    if (m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_PRESS))
+        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f }, -1.f * fTimeDelta);
 }
 
 void CTest_Object::Late_Tick(_float fTimeDelta)
@@ -94,9 +108,18 @@ HRESULT CTest_Object::Add_Components()
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fiona"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
+
+    // TEXT("Prototype_Component_Model_Object_Chest")
+    /* For.Com_Navigation */
+    CNavigation::NAVIGATION_DESC			NavigationDesc{};
+    NavigationDesc.iCurrentIndex = 0;
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+        return E_FAIL;
+
     /*if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Fox"),
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;*/
@@ -159,6 +182,7 @@ void CTest_Object::Free()
 {
     __super::Free();
 
+    Safe_Release(m_pNavigationCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

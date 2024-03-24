@@ -44,6 +44,7 @@ HRESULT CMap_Object::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+
     return S_OK;
 }
 
@@ -53,7 +54,6 @@ void CMap_Object::Tick(_float fTimeDelta)
 
 void CMap_Object::Late_Tick(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 
 HRESULT CMap_Object::Render()

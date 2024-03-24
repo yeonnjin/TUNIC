@@ -190,6 +190,22 @@ void CAnimator::Set_Blend_Time(_uint iAnimIndex, _float fBlendTime)
 	m_pAnimator_Controller->Set_Blend_Time(iAnimIndex, fBlendTime);
 }
 
+void CAnimator::Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight)
+{
+	if (nullptr == m_pAnimator_Controller)
+		return;
+
+	m_pAnimator_Controller->Set_Frame_Tick(iAnimIndex, iStartFrame, iEndFrame, fTickWeight);
+}
+
+void CAnimator::Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime)
+{
+	if (nullptr == m_pAnimator_Controller)
+		return;
+
+	m_pAnimator_Controller->Set_SlowMotion(iAnimIndex, iStartFrame, iEndFrame, fSlowTime);
+}
+
 _bool CAnimator::isFinished()
 {
 	if (nullptr == m_pAnimator_Controller)

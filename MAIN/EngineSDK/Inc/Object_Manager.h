@@ -16,6 +16,8 @@ private:
 	virtual ~CObject_Manager() = default;
 
 public:
+	class CGameObject*		Get_GameObject_Clone(const wstring& strPrototypeTag, void* pArg);
+	class CGameObject*		Get_GameObject(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex = 0);
 	const class CComponent* Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex);
 	_uint					Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 
@@ -23,7 +25,6 @@ public:
 	HRESULT				Initialize(_uint iNumLevels);
 	HRESULT				Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
 	HRESULT				Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg);
-	class CGameObject*	Get_GameObject_Clone(const wstring& strPrototypeTag, void* pArg);
 	void				Tick(_float fTimeDelta);
 	void				Late_Tick(_float fTimeDelta);
 	void				Clear(_uint iLevelIndex);

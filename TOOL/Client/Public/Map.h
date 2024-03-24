@@ -44,8 +44,9 @@ private:
 	wstring			m_strModelComTag;
 
 private:
-	CModel*		m_pModelCom = { nullptr };
-	CShader*	m_pShaderCom = { nullptr };
+	CModel*			m_pModelCom = { nullptr };
+	CShader*		m_pShaderCom = { nullptr };
+	CNavigation*	m_pNavigationCom = { nullptr };
 
 	// FILE
 	MAPOBJFILE		m_tMapObjFile;
