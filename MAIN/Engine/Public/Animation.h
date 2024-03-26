@@ -43,6 +43,7 @@ public:
 
 	_float			Get_BlendTime() { return m_fBlendTime; }
 	_uint			Get_NumChannels() { return m_iNumChannels; }
+	_uint			Get_Current_Frame() { return m_CurrentKeyFrameIndices[m_MaxKeyFrameChannel]; }
 	class CChannel* Get_Channel(_uint iChannelIndex) { return m_Channels[iChannelIndex]; }
 
 public:

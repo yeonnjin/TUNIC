@@ -20,6 +20,11 @@ private:
 	virtual ~CAvatar() = default;
 
 public:
+	// Set
+	void						Set_ParentBoneIndex(_int iIndex);
+	void						Set_isUseTransformaion(_bool isUse);
+
+	// Get
 	vector<CAnimation*>*		Get_Animations_Ptr() { return &m_Animations; }
 	vector<CBone*>*				Get_Bones_Ptr() { return &m_Bones; }
 	CBone*						Get_Bone_Ptr(_uint iBoneIndex) const;

@@ -38,8 +38,11 @@ HRESULT CMap_Object::Initialize(void* pArg)
     return S_OK;
 }
 
-void CMap_Object::Tick(_float fTimeDelta)
+HRESULT CMap_Object::Tick(_float fTimeDelta)
 {
+    __super::Tick(fTimeDelta);
+
+    return S_OK;
 }
 
 void CMap_Object::Late_Tick(_float fTimeDelta)

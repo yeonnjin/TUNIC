@@ -50,6 +50,18 @@ CAvatar::CAvatar(const CAvatar& rhs)
 	}
 }
 
+void CAvatar::Set_ParentBoneIndex(_int iIndex)
+{
+	for (auto& pBone : m_Bones)
+		pBone->Set_ParentBoneIndex(iIndex);
+}
+
+void CAvatar::Set_isUseTransformaion(_bool isUse)
+{
+	for (auto& pBone : m_Bones)
+		pBone->Set_isUseTransformaion(isUse);
+}
+
 CBone* CAvatar::Get_Bone_Ptr(_uint iBoneIndex) const
 {
 	auto iter = m_Bones.begin();

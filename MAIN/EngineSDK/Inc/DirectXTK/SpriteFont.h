@@ -63,7 +63,7 @@ namespace DirectX
 
         bool __cdecl ContainsCharacter(wchar_t character) const;
 
-        // Custom layout/rendering
+        // Custom layout/rendering  
         Glyph const* __cdecl FindGlyph(wchar_t character) const;
         void __cdecl GetSpriteSheet(ID3D11ShaderResourceView** texture) const;
 

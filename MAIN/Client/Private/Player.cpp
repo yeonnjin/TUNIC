@@ -40,7 +40,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC		GameObjectDesc{};
 
-	GameObjectDesc.fSpeedPerSec = 3.f;
+	GameObjectDesc.fSpeedPerSec = 5.f;
 	GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -61,6 +61,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Add_States()))
 		return E_FAIL;
 
+	m_eType = OBJ_PLAYER;
+
 	_float4 vPosition = _float4(0.f, 0.5f, 0.f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -71,8 +73,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CPlayer::Tick(_float fTimeDelta)
+HRESULT CPlayer::Tick(_float fTimeDelta)
 {
+	__super::Tick(fTimeDelta);
 	//static _uint iIndex = 0;
 	//if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
 	//{
@@ -139,6 +142,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		PartObject.second->Tick(fTimeDelta);
 
 	// State_Machine
+	m_fDamageCoolTime += fTimeDelta;
 	m_pModelCom->Update_State(fTimeDelta);
 	Update_State();
 
@@ -146,11 +150,6 @@ void CPlayer::Tick(_float fTimeDelta)
 	// Blending
 	if (true == m_isBlend)
 	{
-		if (m_eAnimationIndex == ANIM_WALK_LEFT && m_eBlendAnimIndex == ANIM_WALK_LEFT)
-		{
-			int a = 0;
-		}
-
 		if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
 		{
 			m_isBlend = false;
@@ -162,6 +161,10 @@ void CPlayer::Tick(_float fTimeDelta)
 		m_pModelCom->Play_Animation(fTimeDelta);
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
+
+	return S_OK;
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -213,33 +216,10 @@ HRESULT CPlayer::Render()
 
 void CPlayer::Update_State()
 {
-	static _bool isTurn = false;
-
 	switch (m_eState)
 	{
 	case STATE_IDLE:
 		// IDLE -> MOVE
-		/*if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
-		{
-			m_eDir = DIR_FRONT;			
-			Change_State(STATE_MOVE);
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
-		{
-			m_eDir = DIR_BACK;
-			Change_State(STATE_MOVE);
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		{
-			m_eDir = DIR_LEFT;
-			Change_State(STATE_MOVE);
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		{
-			m_eDir = DIR_RIGHT;
-			Change_State(STATE_MOVE);
-		}*/
-
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) ||
 			m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) ||
 			m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) ||
@@ -333,6 +313,31 @@ void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 
 	dynamic_cast<CPlayer_Weapon*>(pWeapon)->Set_isRender(isRender);
 }
+
+//_bool CPlayer::isAttack()
+//{
+//	if (m_eAnimationIndex == ANIM_SWING_SWORD1)
+//	{
+//		_uint iIndex = m_pModelCom->Get_Current_Frame(ANIM_SWING_SWORD1);
+//		if (15 <= iIndex && 40 >= iIndex)
+//			return true;
+//	}
+//	else if(m_eAnimationIndex == ANIM_SWING_SWORD2)
+//	{
+//		_uint iIndex = m_pModelCom->Get_Current_Frame(ANIM_SWING_SWORD2);
+//		if (5 <= iIndex && 25 >= iIndex)
+//			return true;
+//	}
+//	else if (m_eAnimationIndex == ANIM_SWING_SWORD3)
+//	{
+//		_uint iIndex = m_pModelCom->Get_Current_Frame(ANIM_SWING_SWORD3);
+//		if (15 <= iIndex && 55 >= iIndex)
+//			return true;
+//	}
+//
+//
+//	return false;
+//}
 
 HRESULT CPlayer::Add_Components()
 {
@@ -437,9 +442,9 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_IDLE, CPlayer_State_Idle::Create(this));
 	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
 	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
-	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this));
-	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this));
-	m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this));
+	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second)));
+	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second)));
+	m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second)));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
 	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
@@ -547,6 +552,7 @@ void CPlayer::Set_Dir()
 	else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 		m_eDir = DIR_RIGHT;*/
 
+	m_eDir = DIR_END;
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
 		m_eDir = DIR_FRONT;
@@ -603,15 +609,25 @@ void CPlayer::Set_Weapon()
 			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), false);
 	}
 	
+	static _bool isShield = false;
 	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
-	{
-		static _bool isShield = false;
+	{		
 		isShield = !isShield;
 		if (true == isShield)
 			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shield"), true);
 		else
 			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shield"), false);
 	}
+
+	if(WEAPON_STICK == m_eWeapon)
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second);
+	else if(WEAPON_SWORD == m_eWeapon)
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second);
+	else if (WEAPON_SHOTGUN == m_eWeapon)
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second);
+
+	if(true == isShield)
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Shield"))->second);
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -654,4 +670,20 @@ void CPlayer::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pColliderCom);
+}
+
+void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
+{
+	if (OBJ_MONSTER == pGameObject->Get_ObjectType() && 0.7f < m_fDamageCoolTime)
+	{
+		if (m_eState == STATE_DEFENSE)
+			m_isParrying = true;
+		else
+		{
+			--m_iHP;
+			//Change_State(STATE_DAMAGE);
+		}
+
+		m_fDamageCoolTime = 0.f;
+	}
 }

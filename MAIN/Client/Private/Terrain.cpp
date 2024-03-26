@@ -32,8 +32,11 @@ HRESULT CTerrain::Initialize(void* pArg)
     return S_OK;
 }
 
-void CTerrain::Tick(_float fTimeDelta)
+HRESULT CTerrain::Tick(_float fTimeDelta)
 {
+    __super::Tick(fTimeDelta);
+
+    return S_OK;
 }
 
 void CTerrain::Late_Tick(_float fTimeDelta)

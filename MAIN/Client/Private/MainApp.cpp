@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 
+#include "Monster_Spinner.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
@@ -28,6 +30,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_Prototype_Component_For_Static()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Fonts()))
+		return E_FAIL;
+
 	if (FAILED(Open_Level(LEVEL_GAMEPLAY)))
 		return E_FAIL;
 	
@@ -37,6 +42,11 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Tick(_float fTimeDelta)
 {
 	m_pGameInstance->Tick_Engine(fTimeDelta);
+
+	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER_WEAPON, CCollision_Manager::GROUP_MONSTER);
+	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER);
+
+	m_pGameInstance->Late_Tick_Engine(fTimeDelta);	
 }
 
 HRESULT CMainApp::Render()
@@ -44,9 +54,30 @@ HRESULT CMainApp::Render()
 	if (nullptr == m_pGameInstance)
 		return E_FAIL;
 
+#ifdef _DEBUG
+	//wsprintf(m_szFont, TEXT("ЦЉДа"));
+#endif // _DEBUG
+
+	m_pGameInstance->Begin_Draw(_float4(0.f, 0.f, 1.f, 1.f));
+
 	m_pGameInstance->Draw();	
 
-	return	S_OK;
+#ifdef _DEBUG
+	//m_pGameInstance->Render_Font(TEXT("Font_Default"), m_szFont, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f), 0.f);
+#endif // _DEBUG
+
+	m_pGameInstance->End_Draw();
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Ready_Fonts()
+{
+	// MakeSpriteFont "Odin Rounded" /FontSize:30 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 140.spritefont
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Default"), TEXT("../Bin/Resources/Fonts/141ex.spritefont"))))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CMainApp::Open_Level(LEVEL eLevelID)

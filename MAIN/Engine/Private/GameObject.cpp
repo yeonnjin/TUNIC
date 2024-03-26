@@ -59,8 +59,12 @@ HRESULT CGameObject::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CGameObject::Tick(_float fTimeDelta)
+HRESULT CGameObject::Tick(_float fTimeDelta)
 {
+	if (true == m_isDead)
+		return E_FAIL;
+
+	return S_OK;
 }
 
 void CGameObject::Late_Tick(_float fTimeDelta)

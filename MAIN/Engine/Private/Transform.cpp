@@ -106,13 +106,18 @@ void CTransform::Look_At(_fvector vAt)
     Set_State(STATE_LOOK,   XMVector3Normalize(vLook) * vScaled.z);
 }
 
-void CTransform::Look_At_For_LandOject(_fvector vAt)
+void CTransform::Look_At_For_LandOject(_fvector vAt, _bool isReverse)
 {
     // XMMatrixDecompose();
     // : Transform 이 들고 있는 WorldMatrix 로 부터 값을 뽑아옴 (회전 정보 들고 오기 가능(쿼터니언))
 
     _vector vUp = Get_State_Vector(STATE_UP);
-    _vector vLook = vAt - Get_State_Vector(STATE_POSITION);
+    _vector vLook;
+    if (false == isReverse)
+        vLook = vAt - Get_State_Vector(STATE_POSITION);
+    else
+        vLook = Get_State_Vector(STATE_POSITION) - vAt;
+
     _vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
     vLook = XMVector3Cross(vRight, vUp);
 

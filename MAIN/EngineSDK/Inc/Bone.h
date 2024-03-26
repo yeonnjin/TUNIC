@@ -23,6 +23,9 @@ public:
 		memcpy(&m_CombinedTransformationMatrix.m[3], &vPosition, sizeof(_float3));
 	} // Root
 
+	void Set_ParentBoneIndex(_int iIndex) { m_iCustomBoneIndex = iIndex; }
+	void Set_isUseTransformaion(_bool isUse) { m_isUse = isUse; }
+
 	// Get
 	const _float4x4* Get_CombinedTransformationMatrix() const {
 		return &m_CombinedTransformationMatrix;
@@ -44,6 +47,9 @@ private:
 	_float4x4		m_CombinedTransformationMatrix;		// 최종 상태 행렬
 
 	_int			m_iParentBoneIndex = { -1 };
+	_int			m_iCustomBoneIndex = { 2 };
+
+	_bool			m_isUse = { false };
 
 public:
 	static CBone* Create(BONEFILE* pBoneFile);

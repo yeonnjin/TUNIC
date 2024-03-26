@@ -357,12 +357,12 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Bat/Bat.fbx", TEXT("Prototype_Component_Model_Monster_Bat"), TransformMatrix))))
 		return E_FAIL;
 
-	TransformMatrix = XMMatrixIdentity();
+	TransformMatrix = /*XMMatrixRotationY(XMConvertToRadians(180.0f));*/XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Monster_Blob"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Blob/Blob.fbx", TEXT("Prototype_Component_Model_Monster_Blob"), TransformMatrix))))
 		return E_FAIL;
 
-	TransformMatrix = XMMatrixIdentity();
+	TransformMatrix = /*XMMatrixRotationY(XMConvertToRadians(180.0f));*/XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Monster_Blob_Normal"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Blob_Normal/Blob_Normal.fbx", TEXT("Prototype_Component_Model_Monster_Blob_Normal"), TransformMatrix))))
 		return E_FAIL;

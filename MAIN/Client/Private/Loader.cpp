@@ -4,7 +4,11 @@
 #include "GameInstance.h"
 #include "BackGround.h"
 #include "Terrain.h"
+
 #include "Monster.h"
+#include "Monster_Spinner.h"
+#include "Monster_Blob.h"
+#include "Monster_Bat.h"
 //#include "Player.h"
 //#include "Effect.h"
 //#include "Sky.h"
@@ -203,9 +207,19 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Monster */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster"),
-		CMonster::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_Monster_Spinner */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Spinner"),
+		CMonster_Spinner::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Monster_Blob */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Blob"),
+		CMonster_Blob::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Monster_Blob */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Bat"),
+		CMonster_Bat::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Map_Object */

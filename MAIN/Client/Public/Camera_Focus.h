@@ -3,6 +3,10 @@
 #include "Client_Defines.h"
 #include "Camera.h"
 
+BEGIN(Engine)
+class CEasing;
+END
+
 BEGIN(Client)
 
 class CCamera_Focus final : public CCamera
@@ -22,34 +26,21 @@ private:
 	virtual ~CCamera_Focus() = default;
 
 public:
-	//void	Set_Target_Transform(class CTransform* pTagetTransform) { m_pTargetTransform = pTagetTransform; Safe_AddRef(m_pTargetTransform); }
-
-public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void	Tick(_float fTimeDelta) override;
+	virtual HRESULT	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 private:
-	_vector				m_PrePosition = {};
-	_vector				m_CurPosition = {};
 	_vector				m_CamDistance = {};
-
-	STATE				m_ePreState = { STATE_END };
-	STATE				m_eState = { STATE_END };
-	_float				m_fEaseTime[STATE_END] = {};
 	_float				m_fCurTime = {};
-	//_float				m_fSpeed = { 5.f };
+	_bool				m_isFirst = { true };
 
 private:
+	class CEasing*		m_pEasing;
 	class CTransform*	m_pTargetTransform;
 	class CPlayer*		m_pPlayer;
-
-private:
-	_float			EaseInOutQuad(_float fStart, _float fEnd, _float fValue);
-	_float			EaseInQuart(_float fStart, _float fEnd, _float fValue);
-	_float			EaseOutQuart(_float fStart, _float fEnd, _float fValue);
 
 public:
 	static CCamera_Focus* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -55,9 +55,7 @@ HRESULT CAnimator_Controller::Blending_Animation(_uint iNextAnimIndex, _float fT
 	if (m_iNumAnimations <= iNextAnimIndex)
 		return E_FAIL;
 
-	static _bool isSetInfo = false;
-
-	if (false == isSetInfo)
+	if (false == m_isSetInfo)
 	{
 		if (m_iCurrentAnimIndex != iNextAnimIndex)
 			m_isChanged = true;
@@ -65,17 +63,17 @@ HRESULT CAnimator_Controller::Blending_Animation(_uint iNextAnimIndex, _float fT
 		m_iPrevAnimIndex = m_iCurrentAnimIndex;
 		m_iCurrentAnimIndex = iNextAnimIndex;
 		Set_Blending_Info();
-		isSetInfo = true;	
+		m_isSetInfo = true;
 	}
 
-	if(true == isSetInfo)
+	if(true == m_isSetInfo)
 	{
 		if (true == (*m_pAnimations)[m_iPrevAnimIndex]->Get_isRoot())
 			m_isNeedRoot = true;
 
 		if (S_OK == Update_Blending(fTimeDelta))
 		{
-			isSetInfo = false;	
+			m_isSetInfo = false;
 			m_isChanged = false;
 			return S_OK;
 		}		
@@ -123,6 +121,14 @@ void CAnimator_Controller::Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _
 		return;
 
 	(*m_pAnimations)[iAnimIndex]->Set_SlowMotion(iStartFrame, iEndFrame, fSlowTime);
+}
+
+_uint CAnimator_Controller::Get_Current_Frame(_uint iAnimIndex)
+{
+	if (m_iNumAnimations <= iAnimIndex)
+		return 0;
+
+	return (*m_pAnimations)[iAnimIndex]->Get_Current_Frame();
 }
 
 _bool CAnimator_Controller::isFinished()
@@ -210,25 +216,23 @@ HRESULT CAnimator_Controller::Set_Blending_Info()
 
 HRESULT CAnimator_Controller::Update_Blending(_float fTimeDelta)
 {
-	static _float fTime = 0.f;
-	//static _float fBlendTime = 0.2f;
 	_float fBlendTime = (*m_pAnimations)[m_iPrevAnimIndex]->Get_BlendTime();
 
 	_float3     vScale;
 	_float4     vRotation;
 	_float3     vTranslation;
 
-	fTime += fTimeDelta;
-	if (fTime > fBlendTime)
+	m_fTime += fTimeDelta;
+	if (m_fTime > fBlendTime)
 	{
-		fTime = 0.f;
+		m_fTime = 0.f;
 		(*m_pAnimations)[m_iPrevAnimIndex]->Set_AnimationData_Initialize();
 		(*m_pAnimations)[m_iCurrentAnimIndex]->Set_AnimationData_Initialize();
 
 		return S_OK;
 	}
 
-	_float fRatio = fTime / fBlendTime;
+	_float fRatio = m_fTime / fBlendTime;
 
 	// Blending
 	for (size_t i = 0; i < m_iNumBones; ++i)

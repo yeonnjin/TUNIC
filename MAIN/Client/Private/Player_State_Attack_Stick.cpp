@@ -1,11 +1,13 @@
 #include "stdafx.h"
 
 #include "Player.h"
+#include "Player_Weapon.h"
 #include "Player_State_Attack_Stick.h"
 
-CPlayer_State_Attack_Stick::CPlayer_State_Attack_Stick(CPlayer* pPlayer)
+CPlayer_State_Attack_Stick::CPlayer_State_Attack_Stick(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)
 {
 	m_pPlayer = pPlayer;
+    m_pWeapon = pWeapon;
 }
 
 void CPlayer_State_Attack_Stick::OnStateEnter()
@@ -16,16 +18,20 @@ void CPlayer_State_Attack_Stick::OnStateEnter()
 
 void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
 {
+    m_fComboTime += fTimeDelta;
+
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 다음 콤보
-    if (0 == m_iCombo && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
     {
         ++m_iCombo;
+        m_fComboTime = 0.f;
         m_pPlayer->Set_Blending(true, CPlayer::ANIM_SWING_STICK2);
     }
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
     if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1))
     {
+        m_fComboTime = 0.f;
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 
@@ -33,18 +39,21 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     if (1 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK2))
     {
         m_iCombo = 0;
+        m_fComboTime = 0.f;
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 }
 
 void CPlayer_State_Attack_Stick::OnStateExit()
 {
+    m_iCombo = 0;
+    m_fComboTime = 0.f;
     //m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), false);
 }
 
-CPlayer_State_Attack_Stick* CPlayer_State_Attack_Stick::Create(CPlayer* pPlayer)
+CPlayer_State_Attack_Stick* CPlayer_State_Attack_Stick::Create(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)
 {
-    CPlayer_State_Attack_Stick* pInstance = new CPlayer_State_Attack_Stick(pPlayer);
+    CPlayer_State_Attack_Stick* pInstance = new CPlayer_State_Attack_Stick(pPlayer, pWeapon);
 
     if (nullptr == pInstance)
     {

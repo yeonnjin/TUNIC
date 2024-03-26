@@ -15,6 +15,7 @@
 
 #include "Model.h"
 #include "Player.h"
+#include "Monster_Spinner.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_12_1.dat"
 #define MODELPATH "../Bin/Resources/Data/Model/Player.dat"
@@ -40,16 +41,29 @@ HRESULT CEditor::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	m_pTargetObject = (CPlayer*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0);
+	/*m_pTargetObject = (CPlayer*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0);*/
+	//m_pTargetObject = (CMonster_Spinner*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), 0);
 
 	return S_OK;
 }
 
 #pragma endregion
 
-void CEditor::Tick(_float fTimeDelta)
+HRESULT CEditor::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	m_fTime += fTimeDelta;
+	++m_iCount;
+
+	if (1.f <= m_fTime)
+	{
+		m_iFPS = m_iCount;
+		m_iCount = 0;
+		m_fTime = 0.f;
+	}
+
+	return S_OK;
 }
 
 void CEditor::Late_Tick(_float fTimeDelta)
@@ -91,6 +105,8 @@ void CEditor::Frame_Tab()
 
 void CEditor::Gizmo(CTransform* pTransform)
 {
+	ImGui::Text("FPS : %d", m_iFPS);
+
 	ImGui::Separator();
 
 	if (ImGuizmo::IsUsing())
@@ -112,8 +128,10 @@ void CEditor::Gizmo(CTransform* pTransform)
 
 	ImGui::Separator();
 
-	CPlayer::DIR eDir = m_pTargetObject->Get_Dir();
-	ImGui::Text("Dir : %d", (_uint)eDir);
+	
+
+	/*CPlayer::DIR eDir = m_pTargetObject->Get_Dir();
+	ImGui::Text("Dir : %d", (_uint)eDir);*/
 }
 #pragma endregion
 

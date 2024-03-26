@@ -23,7 +23,7 @@ public:
 
 public:
 	HRESULT							Initialize_Prototype();
-	HRESULT							Initialize(void* pArg);
+	HRESULT							Initialize();
 
 private:
 	CState*							Find_State(_uint iState);
@@ -34,7 +34,7 @@ private:
 
 public:
 	static CState_Machine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CState_Machine* Clone(void* pArg);
+	CState_Machine* Clone();
 	virtual void Free() override;
 };
 

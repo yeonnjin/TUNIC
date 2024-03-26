@@ -34,9 +34,20 @@ public:
 		ANIM_WAVE, ANIM_END
 	};
 
-	enum STATE { STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, STATE_ATTACK_SHOTGUN, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, STATE_END };
-	enum WEAPON { WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_SHIELD, WEAPON_END };
-	enum DIR { DIR_FRONT = 0, DIR_FL, DIR_LEFT, DIR_BL, DIR_BACK, DIR_BR, DIR_RIGHT, DIR_FR, DIR_END };
+	enum STATE { 
+		STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, 
+		STATE_ATTACK_SHOTGUN, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, STATE_END 
+	};
+
+	enum WEAPON { 
+		WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_SHIELD, WEAPON_END 
+	};
+
+	enum DIR { 
+		DIR_FRONT = 0, DIR_FL, DIR_LEFT, DIR_BL, DIR_BACK, 
+		DIR_BR, DIR_RIGHT, DIR_FR, DIR_END 
+	};
+
 	enum STATUS { STATUS_HURT, STATUS_STAGGER, STATUS_PARRY, STATUS_END };
 	enum DODGE { DODGE_ROLL, DODGE_FAST, DODGE_DASH, DODGE_END };
 
@@ -63,10 +74,13 @@ public:
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
 	void			Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender);
+	void			Set_Parrying(_bool isParrying) { m_isParrying = isParrying; }
 
 	// Get
 	//STATE			Get_State() { return m_eState; }
 	_bool			isMove() { return m_eState == STATE_IDLE ? false : true; }
+	_bool			isAttack() { return m_eState == STATE_ATTACK_STICK || m_eState == STATE_ATTACK_SWORD || m_eState == STATE_ATTACK_SHOTGUN ? true : false; }
+	_bool			isParrying() { return m_isParrying; }
 	DIR				Get_Dir() { return m_eDir; }
 	STATUS			Get_Status() { return m_eStatus; }
 	DODGE			Get_Dodge() { return m_eDodge; }
@@ -78,7 +92,7 @@ public:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void	Tick(_float fTimeDelta) override;
+	virtual HRESULT	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
@@ -86,6 +100,8 @@ private:
 	map<const wstring, CPartObject*>	m_PartObjects;
 	
 	_bool								m_isBlend = { false };
+	_bool								m_isParrying = { false };
+
 private:
 	ANIMATION							m_eAnimationIndex = { ANIM_END };
 	ANIMATION							m_eBlendAnimIndex = { ANIM_END };
@@ -118,6 +134,9 @@ public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
+
+	// CGameObject을(를) 통해 상속됨
+	void Collision_Event(Engine::CGameObject* pGameObject) override;
 };
 
 END

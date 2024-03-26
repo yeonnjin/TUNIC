@@ -17,13 +17,14 @@ CAnimator::CAnimator(const CAnimator& rhs)
 	, m_pAnimations{ rhs.m_pAnimations }*/
 	/*, m_pAvatar{ rhs.m_pAvatar }*/
 	/*, m_pAnimator_Controller{ rhs.m_pAnimator_Controller }*/
-	, m_pState_Machine{ rhs.m_pState_Machine }
+	//, m_pState_Machine{ rhs.m_pState_Machine }
 {
 	m_pAvatar = rhs.m_pAvatar->Clone();
 	m_pAnimator_Controller = rhs.m_pAnimator_Controller->Clone();
+	m_pState_Machine = rhs.m_pState_Machine->Clone();
 	//Safe_AddRef(m_pAvatar);
 	//Safe_AddRef(m_pAnimator_Controller);
-	Safe_AddRef(m_pState_Machine);
+	//Safe_AddRef(m_pState_Machine);
 
 	m_isCloned = true;
 }
@@ -98,6 +99,22 @@ HRESULT CAnimator::Render(_uint iMeshIndex)
 		return E_FAIL;
 
 	return m_pAvatar->Render(iMeshIndex);
+}
+
+void CAnimator::Set_ParentBoneIndex(_int iIndex)
+{
+	if (nullptr == m_pAvatar)
+		return;
+
+	return m_pAvatar->Set_ParentBoneIndex(iIndex);
+}
+
+void CAnimator::Set_isUseTransformaion(_bool isUse)
+{
+	if (nullptr == m_pAvatar)
+		return;
+
+	return m_pAvatar->Set_isUseTransformaion(isUse);
 }
 
 // State_Machine
@@ -204,6 +221,14 @@ void CAnimator::Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFr
 		return;
 
 	m_pAnimator_Controller->Set_SlowMotion(iAnimIndex, iStartFrame, iEndFrame, fSlowTime);
+}
+
+_uint CAnimator::Get_Current_Frame(_uint iAnimIndex)
+{
+	if (nullptr == m_pAnimator_Controller)
+	 	return 0 ;
+
+	return m_pAnimator_Controller->Get_Current_Frame(iAnimIndex);
 }
 
 _bool CAnimator::isFinished()

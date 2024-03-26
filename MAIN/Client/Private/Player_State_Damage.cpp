@@ -31,24 +31,29 @@ void CPlayer_State_Damage::OnStateUpdate(_float fTimeDelta)
 {
 	if (CPlayer::STATUS_HURT == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_HURT))
 	{
-		m_eStatus = CPlayer::STATUS_STAGGER;
-		m_pPlayer->Set_Blending(true, CPlayer::ANIM_STAGGER);
-	}
-	// TODO:애니메이션 끝나기 전에 전환하면 루트 안됨
-	else if (CPlayer::STATUS_STAGGER == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_STAGGER))
-	{
-		m_pPlayer->Set_Blending(true, CPlayer::ANIM_GETUP);
-	}
-	else if (CPlayer::STATUS_STAGGER == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_GETUP))
-	{
-		/*m_eStatus = CPlayer::STATUS_HURT;
-		m_pPlayer->Set_Blending(true, CPlayer::ANIM_HURT);*/
-		m_eStatus = CPlayer::STATUS_HURT;
 		m_pPlayer->Change_State(CPlayer::STATE_IDLE);
 	}
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
-		m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+	//if (CPlayer::STATUS_HURT == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_HURT))
+	//{
+	//	m_eStatus = CPlayer::STATUS_STAGGER;
+	//	m_pPlayer->Set_Blending(true, CPlayer::ANIM_STAGGER);
+	//}
+	//// TODO:애니메이션 끝나기 전에 전환하면 루트 안됨
+	//else if (CPlayer::STATUS_STAGGER == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_STAGGER))
+	//{
+	//	m_pPlayer->Set_Blending(true, CPlayer::ANIM_GETUP);
+	//}
+	//else if (CPlayer::STATUS_STAGGER == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_GETUP))
+	//{
+	//	/*m_eStatus = CPlayer::STATUS_HURT;
+	//	m_pPlayer->Set_Blending(true, CPlayer::ANIM_HURT);*/
+	//	m_eStatus = CPlayer::STATUS_HURT;
+	//	m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+	//}
+
+	//if (m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
+	//	m_pPlayer->Change_State(CPlayer::STATE_IDLE);
 }
 
 void CPlayer_State_Damage::OnStateExit()

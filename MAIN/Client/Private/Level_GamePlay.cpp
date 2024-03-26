@@ -6,6 +6,7 @@
 
 #include "Map_Object.h"
 #include "Player.h"
+
 #include "Monster.h"
 
 #include "Editor.h"
@@ -50,6 +51,27 @@ HRESULT CLevel_GamePlay::Initialize()
 void CLevel_GamePlay::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	if (0 == m_pGameInstance->Get_Object_Count(LEVEL_GAMEPLAY, TEXT("Layer_Monster")))
+	{
+		CMonster::Monster_Desc tDesc = {};
+		_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
+		wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+		tDesc.strModelComTag = wstr;
+
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
+			return;
+
+		tDesc = {};
+		_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
+		wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+		tDesc.strModelComTag = wstr1;
+
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
+			return;
+	}
+
+	
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -112,7 +134,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	CameraDesc.fNear = 0.1f;
 	CameraDesc.fFar = 1000.0f;
-	CameraDesc.vEye = _float4(0.f, 18.f, -18.f, 1.f);
+	CameraDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
 	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	CameraDesc.fSpeedPerSec = 1.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
@@ -166,8 +188,36 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster"), &tDesc)))
-		return E_FAIL;
+	for (size_t i = 0; i < 2; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
+			return E_FAIL;
+	}
+	
+
+	// Desc
+	/*CMonster::Monster_Desc*/ tDesc = {};
+	_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
+	wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+	tDesc.strModelComTag = wstr1;
+
+	for (size_t i = 0; i < 2; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
+			return E_FAIL;
+	}
+
+	/*tDesc = {};
+	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob";
+	wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
+	tDesc.strModelComTag = wstr2;
+
+	for (size_t i = 0; i < 3; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
+			return E_FAIL;
+	}*/
+	
 
 	// "Prototype_Component_Model_Monster_Bat"
 	// "Prototype_Component_Model_Monster_Blob"

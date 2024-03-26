@@ -42,9 +42,13 @@ HRESULT CMap::Initialize(void* pArg)
     return S_OK;
 }
 
-void CMap::Tick(_float fTimeDelta)
+HRESULT CMap::Tick(_float fTimeDelta)
 {
+    __super::Tick(fTimeDelta);
+
     m_pNavigationCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+    return S_OK;
 }
 
 void CMap::Late_Tick(_float fTimeDelta)

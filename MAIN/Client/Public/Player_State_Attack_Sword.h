@@ -7,7 +7,7 @@ BEGIN(Client)
 class CPlayer_State_Attack_Sword final : public CPlayer_State_Attack
 {
 private:
-	CPlayer_State_Attack_Sword(class CPlayer* pPlayer);
+	CPlayer_State_Attack_Sword(class CPlayer* pPlayer, class CPlayer_Weapon* pWeapon);
 	virtual ~CPlayer_State_Attack_Sword() = default;
 
 public:
@@ -18,13 +18,8 @@ public:
 	// 상태 변경 시 호출
 	virtual void OnStateExit() override;
 
-private:
-	class CPlayer* m_pPlayer = { nullptr };
-	_uint			m_iCombo = { 0 };
-	_uint			m_iMaxCombo = { 0 };
-
 public:
-	static CPlayer_State_Attack_Sword* Create(class CPlayer* pPlayer);
+	static CPlayer_State_Attack_Sword* Create(class CPlayer* pPlayer, class CPlayer_Weapon* pWeapon);
 	virtual void Free() override;
 };
 

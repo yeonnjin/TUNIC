@@ -26,7 +26,10 @@ private:
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 
 private:
-	HRESULT Ready_Default_Setting();
+	_tchar					m_szFont[MAX_PATH] = TEXT("");
+
+private:
+	HRESULT Ready_Fonts();
 	HRESULT Open_Level(LEVEL eLevelID);
 	HRESULT Ready_Prototype_Component_For_Static();
 

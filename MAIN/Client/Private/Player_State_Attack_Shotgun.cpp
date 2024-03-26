@@ -1,11 +1,13 @@
 #include "stdafx.h"
 
 #include "Player.h"
+#include "Player_Weapon.h"
 #include "Player_State_Attack_Shotgun.h"
 
-CPlayer_State_Attack_Shotgun::CPlayer_State_Attack_Shotgun(CPlayer* pPlayer)
+CPlayer_State_Attack_Shotgun::CPlayer_State_Attack_Shotgun(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)
 {
     m_pPlayer = pPlayer;
+	m_pWeapon = pWeapon;
 }
 
 void CPlayer_State_Attack_Shotgun::OnStateEnter()
@@ -24,12 +26,14 @@ void CPlayer_State_Attack_Shotgun::OnStateUpdate(_float fTimeDelta)
 
 void CPlayer_State_Attack_Shotgun::OnStateExit()
 {
+	m_iCombo = 0;
+	m_fComboTime = 0.f;
 	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), false);
 }
 
-CPlayer_State_Attack_Shotgun* CPlayer_State_Attack_Shotgun::Create(CPlayer* pPlayer)
+CPlayer_State_Attack_Shotgun* CPlayer_State_Attack_Shotgun::Create(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)
 {
-	CPlayer_State_Attack_Shotgun* pInstance = new CPlayer_State_Attack_Shotgun(pPlayer);
+	CPlayer_State_Attack_Shotgun* pInstance = new CPlayer_State_Attack_Shotgun(pPlayer, pWeapon);
 
 	if (nullptr == pInstance)
 	{

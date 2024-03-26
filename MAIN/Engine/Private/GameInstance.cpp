@@ -6,6 +6,7 @@
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
 #include "Light_Manager.h"
+#include "Font_Manager.h"
 #include "ImGui_Manager.h"
 
 #include "Renderer.h"
@@ -53,6 +54,14 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pLight_Manager)
 		return E_FAIL;
 
+	m_pCollision_Manager = CCollision_Manager::Create();
+	if (nullptr == m_pCollision_Manager)
+		return E_FAIL;
+
+	m_pFont_Manager = CFont_Manager::Create();
+	if (nullptr == m_pFont_Manager)
+		return E_FAIL;
+
 	/* 인풋 디바이스를 초기화 */
 	m_pInput_Device = CInput_Device::Create(hInstance, EngineDesc.hWnd);
 	if (nullptr == m_pInput_Device)
@@ -85,6 +94,8 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 		nullptr == m_pPipeLine)
 		return;
 
+	/* 반복적인 갱신이 필요한 객체들의 Tick함수를 호출 */
+
 	m_pInput_Device->Tick();
 
 	m_pObject_Manager->Tick(fTimeDelta);
@@ -92,22 +103,37 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pPipeLine->Tick();
 
 	m_pPicking->Update();
-
-	m_pObject_Manager->Late_Tick(fTimeDelta);
 	
-	/* 반복적인 갱신이 필요한 객체들의 Tick함수를 호출 */
 	m_pLevel_Manager->Tick(fTimeDelta);
-
 }
 
-HRESULT CGameInstance::Draw(const _float4& vClearColor)
+void CGameInstance::Late_Tick_Engine(_float fTimeDelta)
 {
-	if (nullptr == m_pGraphic_Device || 
-		nullptr == m_pLevel_Manager)
+	if ( nullptr == m_pObject_Manager ||
+		nullptr == m_pCollision_Manager)
+		return;
+
+	m_pObject_Manager->Late_Tick(fTimeDelta);
+
+	m_pCollision_Manager->Clear_Group();
+}
+
+HRESULT CGameInstance::Begin_Draw(const _float4& vClearColor)
+{
+	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
 	m_pGraphic_Device->Clear_BackBuffer_View(vClearColor);
 	m_pGraphic_Device->Clear_DepthStencil_View();
+
+	return S_OK;
+}
+
+HRESULT CGameInstance::Draw()
+{
+	if (nullptr == m_pRenderer ||
+		nullptr == m_pLevel_Manager)
+		return E_FAIL;
 
 	/* 화면에 그려져야할 객체들을 그림 => 오브젝트 매니져에 속함 */
 	/* 오브젝트 매니져에 렌더함수를 만들어서 호출하면 객체들을 모두 그림 */
@@ -117,9 +143,12 @@ HRESULT CGameInstance::Draw(const _float4& vClearColor)
 
 	m_pLevel_Manager->Render();	
 
-	m_pGraphic_Device->Present();
-
 	return S_OK;
+}
+
+HRESULT CGameInstance::End_Draw()
+{
+	return m_pGraphic_Device->Present();;
 }
 
 HRESULT CGameInstance::Clear(_uint iClearLevelIndex)
@@ -347,6 +376,38 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 	return m_pLight_Manager->Add_Light(LightDesc);
 }
 
+HRESULT CGameInstance::Add_Group(CCollision_Manager::GROUP eCollisionGroup, CGameObject* pGameObject)
+{
+	if (nullptr == m_pCollision_Manager)
+		return E_FAIL;
+
+	return m_pCollision_Manager->Add_Group(eCollisionGroup, pGameObject);
+}
+
+void CGameInstance::Check_Collision_Groups(CCollision_Manager::GROUP eCollisionGroupA, CCollision_Manager::GROUP eCollisionGroupB)
+{
+	if (nullptr == m_pCollision_Manager)
+		return;
+
+	m_pCollision_Manager->Check_Collision_Groups(eCollisionGroupA, eCollisionGroupB);
+}
+
+HRESULT CGameInstance::Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strFontTag, const wstring& strFontFilePath)
+{
+	if (nullptr == m_pFont_Manager)
+		return E_FAIL;
+
+	return m_pFont_Manager->Add_Font(pDevice, pContext, strFontTag, strFontFilePath);
+}
+
+HRESULT CGameInstance::Render_Font(const wstring& strFontTag, const wstring& strOutputText, const _float2& vPosition, _fvector vColor, _float fRadian)
+{
+	if (nullptr == m_pFont_Manager)
+		return E_FAIL;
+
+	return m_pFont_Manager->Render_Font(strFontTag, strOutputText, vPosition, vColor, fRadian);
+}
+
 /* For.ImGui_Manager */
 void CGameInstance::New_Frame()
 {
@@ -376,6 +437,8 @@ void CGameInstance::Release_Engine()
 void CGameInstance::Free()
 {	
 	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pFont_Manager);
+	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pPipeLine);

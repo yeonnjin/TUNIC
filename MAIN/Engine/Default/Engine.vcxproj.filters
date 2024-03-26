@@ -160,6 +160,15 @@
     <Filter Include="01. Utility\02. Components\07%29 Collider\Manager">
       <UniqueIdentifier>{8f67371e-8838-482c-ad8b-8bddb637b4ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\08. Fonts">
+      <UniqueIdentifier>{630233ee-f6ab-4e3b-bffd-c15be7300ca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\08. Fonts\Manager">
+      <UniqueIdentifier>{22c94462-96f2-4c6c-bf3b-36748c12ee2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\96. Easing">
+      <UniqueIdentifier>{d09cca2b-020d-4914-8cd5-81e209c4c872}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -326,6 +335,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
       <Filter>01. Utility\02. Components\02%29 VIBuffer\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collision_Manager.cpp">
+      <Filter>01. Utility\02. Components\07%29 Collider\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MyFont.cpp">
+      <Filter>01. Utility\08. Fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Font_Manager.cpp">
+      <Filter>01. Utility\08. Fonts\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Easing.cpp">
+      <Filter>01. Utility\96. Easing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -508,6 +529,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Cell.h">
       <Filter>01. Utility\02. Components\02%29 VIBuffer\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collision_Manager.h">
+      <Filter>01. Utility\02. Components\07%29 Collider\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyFont.h">
+      <Filter>01. Utility\08. Fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Font_Manager.h">
+      <Filter>01. Utility\08. Fonts\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Easing.h">
+      <Filter>01. Utility\96. Easing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

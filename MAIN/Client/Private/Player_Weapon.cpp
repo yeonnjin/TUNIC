@@ -34,7 +34,7 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-
+    m_eType = OBJ_PLAYER_WEAPON;
 
     if(CPlayer::WEAPON_SHOTGUN  == m_eWeapon || CPlayer::WEAPON_SHIELD == m_eWeapon || CPlayer::WEAPON_SWORD == m_eWeapon)
         m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
@@ -49,9 +49,13 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
     return S_OK;
 }
 
-void CPlayer_Weapon::Tick(_float fTimeDelta)
+HRESULT CPlayer_Weapon::Tick(_float fTimeDelta)
 {
+    __super::Tick(fTimeDelta);
+
     m_pColliderCom->Tick(XMLoadFloat4x4(&m_WorldMatrix));
+
+    return S_OK;
 }
 
 void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
@@ -67,8 +71,6 @@ void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
 
     if(true == m_isRender)
         m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
-
-    m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Com_Collider")));
 }
 
 HRESULT CPlayer_Weapon::Render()
@@ -122,7 +124,7 @@ HRESULT CPlayer_Weapon::Add_Components()
     }
     else if (CPlayer::WEAPON_SWORD == m_eWeapon)
     {
-        ColliderDesc.vSize = _float3(0.2f, 1.2f, 0.2f);
+        ColliderDesc.vSize = _float3(0.4f, 1.8f, 0.4f);
         ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
     }
     else if (CPlayer::WEAPON_SHIELD == m_eWeapon)
@@ -220,4 +222,10 @@ void CPlayer_Weapon::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
     Safe_Release(m_pColliderCom);
+}
+
+void CPlayer_Weapon::Collision_Event(Engine::CGameObject* pGameObject)
+{
+    if (OBJ_MONSTER == pGameObject->Get_ObjectType())
+        pGameObject->Set_isDamage(true);
 }

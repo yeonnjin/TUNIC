@@ -112,20 +112,50 @@
     <Filter Include="02.GameObjects\Monster\Bat">
       <UniqueIdentifier>{7545205d-c41f-4b60-9e91-5cd5082c105a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Hidden">
-      <UniqueIdentifier>{73c99384-5e55-471c-8c30-d36b535dbfc0}</UniqueIdentifier>
+    <Filter Include="02.GameObjects\Monster\Spinner\State">
+      <UniqueIdentifier>{f7832c3d-7170-467c-a044-e9a7b3a2ba88}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Idle">
-      <UniqueIdentifier>{9685b98d-856f-4d7d-83e6-d4a4a427c9b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Explode">
-      <UniqueIdentifier>{bbd423ae-c951-4e3c-9084-04393851b7ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Attack">
+    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Attack">
       <UniqueIdentifier>{7c3668d4-5049-4d76-9703-7f620e1711b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\Spinner_State_Damage">
+    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Damage">
       <UniqueIdentifier>{8ce45d75-e715-4b45-8471-92c9de3d7b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Explode">
+      <UniqueIdentifier>{bbd423ae-c951-4e3c-9084-04393851b7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden">
+      <UniqueIdentifier>{73c99384-5e55-471c-8c30-d36b535dbfc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Idle">
+      <UniqueIdentifier>{9685b98d-856f-4d7d-83e6-d4a4a427c9b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Blob\State">
+      <UniqueIdentifier>{d63cca31-b662-43f5-8895-ee1cb8373517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Blob\State\Blob_State_Idle">
+      <UniqueIdentifier>{f9d53d45-a0aa-4e11-8e38-15bce175f515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Blob\State\Blob_State_Attack">
+      <UniqueIdentifier>{f9380d26-1d03-4ef4-88b6-9b8d56d5e2a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Blob\State\Blob_State_Jump">
+      <UniqueIdentifier>{a9c9c287-1f6c-436c-b0af-9c34a46f5ffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Bat\State">
+      <UniqueIdentifier>{ec30c5e1-d106-4174-adc0-0f535f6b40ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Attack">
+      <UniqueIdentifier>{3153a07f-6baa-4fbd-a076-1d18c259c7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Idle">
+      <UniqueIdentifier>{dd566aa8-f3c2-4fa0-8d99-6ab57fde7562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Damage">
+      <UniqueIdentifier>{a59f6cd3-3e9d-498e-b1ad-e3852c971c69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Sleep">
+      <UniqueIdentifier>{cf91c7c5-9ef7-4ed3-9722-15f4602b7c17}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -228,8 +258,53 @@
     <ClInclude Include="..\Public\Player_State_Attack_Sword.h">
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_Spinner.h">
+      <Filter>02.GameObjects\Monster\Spinner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spinner_State_Idle.h">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Idle</Filter>
+    </ClInclude>
     <ClInclude Include="Monster_Anim_List.h">
       <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spinner_State_Hidden.h">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spinner_State_Explode.h">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Explode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spinner_State_Damage.h">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Spinner_State_Attack.h">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Blob.h">
+      <Filter>02.GameObjects\Monster\Blob</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Blob_State_Idle.h">
+      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Blob_State_Attack.h">
+      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Blob_State_Jump.h">
+      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Bat.h">
+      <Filter>02.GameObjects\Monster\Bat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bat_State_Sleep.h">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Sleep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bat_State_Damage.h">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bat_State_Idle.h">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bat_State_Attack.h">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +391,51 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Attack_Sword.cpp">
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Spinner.cpp">
+      <Filter>02.GameObjects\Monster\Spinner</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spinner_State_Idle.cpp">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spinner_State_Hidden.cpp">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spinner_State_Explode.cpp">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Explode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spinner_State_Damage.cpp">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Spinner_State_Attack.cpp">
+      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Blob.cpp">
+      <Filter>02.GameObjects\Monster\Blob</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Blob_State_Idle.cpp">
+      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Blob_State_Attack.cpp">
+      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Blob_State_Jump.cpp">
+      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Bat.cpp">
+      <Filter>02.GameObjects\Monster\Bat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bat_State_Sleep.cpp">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Sleep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bat_State_Damage.cpp">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bat_State_Idle.cpp">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bat_State_Attack.cpp">
+      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

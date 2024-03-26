@@ -54,8 +54,10 @@ HRESULT CTest_Object::Initialize(void* pArg)
     return S_OK;
 }
 
-void CTest_Object::Tick(_float fTimeDelta)
+HRESULT CTest_Object::Tick(_float fTimeDelta)
 {
+    __super::Tick(fTimeDelta);
+
     /*if (true == m_pModelCom->isFinished())
         int a = 10;*/
     static _uint iIndex = 0;
@@ -64,6 +66,8 @@ void CTest_Object::Tick(_float fTimeDelta)
         iIndex++;
         m_pModelCom->Set_Animation(iIndex, true);
     }
+
+    return S_OK;
 }
 
 void CTest_Object::Late_Tick(_float fTimeDelta)

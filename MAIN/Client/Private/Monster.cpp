@@ -35,39 +35,33 @@ HRESULT CMonster::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_pModelCom->Set_Animation_Index(0);
-    m_pModelCom->Set_Animation_Transform(m_pTransformCom);
-    m_pModelCom->Set_Animation_isLoop(0, true);
-    m_pModelCom->Set_Animation_isLoop(1, true);
-    m_pModelCom->Set_Animation_isLoop(2, true);
-    m_pModelCom->Set_Animation_isLoop(3, true);
-    m_pModelCom->Set_Animation_isLoop(4, true);
-    m_pModelCom->Set_Animation_isLoop(5, true);
-    m_pModelCom->Set_Animation_isLoop(6, true);
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(0.f, 1.f, 0.f, 1.f)/* XMVectorSet(rand() % 20, 2.f, rand() % 20, 1.f)*/);
+    m_eType = OBJ_MONSTER;
 
     return S_OK;
 }
 
-void CMonster::Tick(_float fTimeDelta)
+HRESULT CMonster::Tick(_float fTimeDelta)
 {
-    static _uint iIndex = 0;
+    if(FAILED(__super::Tick(fTimeDelta)))
+        return E_FAIL;
+
+    /*static _uint iIndex = 0;
     if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {
         iIndex++;
         if (iIndex > 6)
             iIndex = 0;
         m_pModelCom->Set_Animation_Index(iIndex);
-    }
+    }*/
 
     m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+    return S_OK;
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)
 {
-    m_pModelCom->Play_Animation(fTimeDelta);
-
-    m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider")));
+   // m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider")));
 
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
@@ -112,16 +106,6 @@ HRESULT CMonster::Add_Components()
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
-    /* For. Com_Collider */
-    CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
-
-    ColliderDesc.fRadius = 1.2f;
-    ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius , 0.f);
-
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
-        TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
-        return E_FAIL;
-
     return S_OK;
 }
 
@@ -139,34 +123,6 @@ HRESULT CMonster::Bind_ShaderResources()
         return E_FAIL;
 
     return S_OK;
-}
-
-CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-{
-    CMonster* pInstance = new CMonster(pDevice, pContext);
-
-    if (FAILED(pInstance->Initialize_Prototype()))
-    {
-        MSG_BOX(TEXT("Failed To Create : CMonster"));
-
-        Safe_Release(pInstance);
-    }
-
-    return pInstance;
-}
-
-CGameObject* CMonster::Clone(void* pArg)
-{
-    CMonster* pInstance = new CMonster(*this);
-
-    if (FAILED(pInstance->Initialize(pArg)))
-    {
-        MSG_BOX(TEXT("Failed To Create : CMonster"));
-
-        Safe_Release(pInstance);
-    }
-
-    return pInstance;
 }
 
 void CMonster::Free()

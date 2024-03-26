@@ -43,6 +43,9 @@ public:
 	HRESULT					Bind_ShaderResource(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, AITEXTURETYPE eTextureType);
 	HRESULT					Render(_uint iMeshIndex);
 
+	void					Set_ParentBoneIndex(_int iIndex);
+	void					Set_isUseTransformaion(_bool isUse);
+
 	// Animator_Controller : State_Machine
 	void					Add_State(_uint iState, CState* pAddState);
 	void					Update_State(_float fTimeDelta);
@@ -61,6 +64,8 @@ public:
 	void					Set_Blend_Time(_uint iAnimIndex, _float fBlendTime);
 	void					Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight);
 	void					Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime);
+
+	_uint					Get_Current_Frame(_uint iAnimIndex);
 
 	// Test
 	_bool					isFinished();

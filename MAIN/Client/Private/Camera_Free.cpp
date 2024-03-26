@@ -31,8 +31,10 @@ HRESULT CCamera_Free::Initialize(void* pArg)
     return S_OK;
 }
 
-void CCamera_Free::Tick(_float fTimeDelta)
+HRESULT CCamera_Free::Tick(_float fTimeDelta)
 {
+	__super::Tick(fTimeDelta);
+
 	// Keyboard
 	if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
 	{
@@ -67,6 +69,8 @@ void CCamera_Free::Tick(_float fTimeDelta)
 	}
 
 	__super::Bind_PipeLines();
+
+	return S_OK;
 }
 
 void CCamera_Free::Late_Tick(_float fTimeDelta)

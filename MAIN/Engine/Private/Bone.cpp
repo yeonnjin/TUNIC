@@ -10,23 +10,39 @@ HRESULT CBone::Initialize(BONEFILE* pBoneFile)
     strcpy_s(m_szName, pBoneFile->szName);
     memcpy(&m_TransformationMatrix, &pBoneFile->TransformationMatrix, sizeof(_float4x4));
     XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
-
+  
     return S_OK;
 }
 
 void CBone::Invalidate_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix TransformationMatrix)
 {
     // 3 == Root Bone Index
-    if (2 == m_iParentBoneIndex || -1 == m_iParentBoneIndex)
+    if (false == m_isUse)
     {
-        XMStoreFloat4x4(&m_CombinedTransformationMatrix,
-            TransformationMatrix);
-    }      
+        if (m_iCustomBoneIndex == m_iParentBoneIndex || -1 == m_iParentBoneIndex)
+        {
+            XMStoreFloat4x4(&m_CombinedTransformationMatrix,
+                TransformationMatrix);
+        }
+        else
+        {
+            XMStoreFloat4x4(&m_CombinedTransformationMatrix,
+                XMLoadFloat4x4(&m_TransformationMatrix) * XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombinedTransformationMatrix));
+        }
+    }
     else
     {
-        XMStoreFloat4x4(&m_CombinedTransformationMatrix,
-            XMLoadFloat4x4(&m_TransformationMatrix) * XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombinedTransformationMatrix));
-    }
+        if (-1 == m_iParentBoneIndex)
+        {
+            XMStoreFloat4x4(&m_CombinedTransformationMatrix,
+                TransformationMatrix);
+        }
+        else
+        {
+            XMStoreFloat4x4(&m_CombinedTransformationMatrix,
+                XMLoadFloat4x4(&m_TransformationMatrix) * XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombinedTransformationMatrix));
+        }
+    } 
 }
 
 CBone* CBone::Create(BONEFILE* pBoneFile)

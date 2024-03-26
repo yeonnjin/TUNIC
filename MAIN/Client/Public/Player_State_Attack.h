@@ -20,11 +20,11 @@ public:
 	virtual void OnStateExit() = 0;
 
 protected:
-	class CPlayer*	m_pPlayer = { nullptr };
-	_uint			m_iCombo = { 0 };
-	_uint			m_iMaxCombo = { 0 };
-
-	//CPlayer::DIR	m_eDir = {};
+	class CPlayer*			m_pPlayer = { nullptr };
+	class CPlayer_Weapon*	m_pWeapon = { nullptr };
+	_uint					m_iCombo = { 0 };
+	_uint					m_iMaxCombo = { 0 };
+	_float					m_fComboTime = { 0.f };
 
 public:
 	virtual void Free() override;

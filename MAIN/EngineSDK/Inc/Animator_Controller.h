@@ -42,6 +42,8 @@ public:
 	void					Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight);
 	void					Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime);
 
+	_uint					Get_Current_Frame(_uint iAnimIndex);
+
 	// Test
 	_bool					isFinished();
 	_bool					isFinished(_uint iAnimIndex);
@@ -81,6 +83,9 @@ private:
 	_bool					m_isFinished = { false };
 	_bool					m_isChanged = { false };
 	_bool					m_isNeedRoot = { false };
+
+	_bool					m_isSetInfo = { false };
+	_float					m_fTime = { 0.f };
 
 private:
 	// ºí·»µù

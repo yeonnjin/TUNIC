@@ -52,7 +52,7 @@ HRESULT CState_Machine::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CState_Machine::Initialize(void* pArg)
+HRESULT CState_Machine::Initialize()
 {
 	return S_OK;
 }
@@ -80,11 +80,11 @@ CState_Machine* CState_Machine::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 	return pInstance;
 }
 
-CState_Machine* CState_Machine::Clone(void* pArg)
+CState_Machine* CState_Machine::Clone()
 {
 	CState_Machine* pInstance = new CState_Machine(*this);
 
-	if (FAILED(pInstance->Initialize(pArg)))
+	if (FAILED(pInstance->Initialize()))
 	{
 		MSG_BOX(TEXT("Failed To Clone : CState_Machine"));
 
