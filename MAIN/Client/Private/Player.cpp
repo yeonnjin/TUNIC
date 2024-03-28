@@ -133,6 +133,9 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	//		m_pModelCom->Set_Animation_Index(iIndex);
 	//	}
 	//}
+
+	
+
 	Set_Dir();
 	Set_Weapon();
 	
@@ -171,9 +174,6 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Late_Tick(fTimeDelta);
-
-	/*if (false == m_isBlend)
-		m_pModelCom->Play_Animation(fTimeDelta);*/
 
 	/*if (true == m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Com_Collider"))))
 	{
@@ -528,7 +528,7 @@ void CPlayer::Set_Animation()
 	m_pModelCom->Set_Frame_Tick(ANIM_SWING_SWORD3, 60, 67, 50.f);
 
 	// SLOWMOTION
-	//m_pModelCom->Set_SlowMotion(ANIM_DODGE, 16, 26, 0.2f);
+	//m_pModelCom->Set_Frame_Tick(ANIM_SWING_SWORD1, 16, 26, 0.2f);
 	//m_pModelCom->Set_SlowMotion(ANIM_DODGE_GARBAGE, 3, 15, 0.2f);
 }
 
@@ -680,7 +680,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 			m_isParrying = true;
 		else
 		{
-			--m_iHP;
+			--m_iHP;				
 			//Change_State(STATE_DAMAGE);
 		}
 

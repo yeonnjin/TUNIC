@@ -27,7 +27,6 @@ public:
 	void	Set_Root(_bool isRoot) { m_isRoot = isRoot; }
 	void	Set_BlendTime(_float fBlendTime) { m_fBlendTime = fBlendTime; }
 	void	Set_Frame_Tick(_uint iStartFrame, _uint iEndFrame, _float fTickWeight);
-	void	Set_SlowMotion(_uint iStartFrame, _uint iEndFrame, _float fSlowTime);
 
 	void	Set_AnimationData_Initialize();
 

@@ -59,6 +59,10 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
         m_fComboTime = 0.f;
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
+
+
+    //m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.f);
+    //m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.2f);
 }
 
 void CPlayer_State_Attack_Sword::OnStateExit()

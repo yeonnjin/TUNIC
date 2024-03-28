@@ -90,7 +90,12 @@ _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
 
     _float3 vOut = { 0.f, 0.f, 0.f };
 
-    for (size_t i = 0; i < m_iNumFaces; ++i)
+    _float fDistance = 10000.f;
+    _vector vCamPosition = m_pGameInstance->Get_CamPosition_Vector();
+
+    _float vHeight = -10000.f;
+
+    for (size_t i = 0; i < m_iNumIndices / 3; ++i)
     {
         _uint   iIndex = i * 3;
         _uint   iIndices[3] = {
@@ -108,14 +113,59 @@ _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
         XMStoreFloat3(&vRayDir, XMVector3Normalize(XMLoadFloat3(&vRayDir)));
         _fvector vDirection = XMLoadFloat3(&vRayDir);
 
-        // 삼각형 충돌
-        if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[0]]]), 1.f), 
-                                                                            XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]), 1.f), 
-                                                                            XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[2]]]), 1.f), fDist))
+        // 방향 설정
+        _vector v0, v1, v2;
+
+        // 외적
+        _vector vDir1 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]) - XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[0]]]);
+        _vector vDir2 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[2]]]) - XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]);
+        _vector vCross = XMVector3Normalize(XMVector3Cross(vDir1, vDir2));
+
+        // 내적
+        _vector vNor = { 0.f, 1.f, 0.f };
+        _vector vDot = XMVector3Dot(vCross, vNor);
+        _float fAngle = acosf(vDot.m128_f32[0]);
+
+        if (fAngle > 0.f && fAngle < 1.f)
         {
-            vOut = _float3(vRayPos.x + vRayDir.x * fDist, vRayPos.y + vRayDir.y * fDist, vRayPos.z + vRayDir.z * fDist);
+            v0 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[0]]]);
+            v1 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]);
+            v2 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[2]]]);
+        }
+        else
+        {
+            v0 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[0]]]);
+            v1 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[2]]]);
+            v2 = XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]);
+        }
+
+        // 삼각형 충돌
+        /*if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[0]]]), 1.f), 
+                                                                            XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[1]]]), 1.f), 
+                                                                            XMVectorSetW(XMLoadFloat3(&m_pVerticesPos[m_pIndices[iIndices[2]]]), 1.f), fDist))*/
+        if (true == DirectX::TriangleTests::Intersects(vOrigin, vDirection, XMVectorSetW(v0, 1.f), XMVectorSetW(v1, 1.f), XMVectorSetW(v2, 1.f), fDist))
+        {
+            _float3 vPickingPos = _float3(vRayPos.x + vRayDir.x * fDist, vRayPos.y + vRayDir.y * fDist, vRayPos.z + vRayDir.z * fDist);
+            XMStoreFloat3(&vPickingPos, XMVector3TransformCoord(XMLoadFloat3(&vPickingPos), pTransform->Get_WorldMatrix()));
+            _vector vecPickingPos = XMLoadFloat3(&vPickingPos);
+            _vector vDistance = vecPickingPos - vCamPosition;
+            _float fLength = XMVector3Length(vDistance).m128_f32[0];
+
+            if (vHeight < vPickingPos.y)
+            {
+                vHeight = vPickingPos.y;
+                vOut = vPickingPos;
+            }
+
+            /*if (fLength < fDistance)
+            {
+                fDistance = fLength;
+                vOut = vPickingPos;
+            }*/
+
+            /*vOut = _float3(vRayPos.x + vRayDir.x * fDist, vRayPos.y + vRayDir.y * fDist, vRayPos.z + vRayDir.z * fDist);
             XMStoreFloat3(&vOut, XMVector3TransformCoord(XMLoadFloat3(&vOut), pTransform->Get_WorldMatrix()));
-            return vOut;
+            return vOut;*/
         }
     }
 

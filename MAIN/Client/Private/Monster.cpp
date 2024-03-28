@@ -20,7 +20,7 @@ HRESULT CMonster::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC		GameObjectDesc{};
 
-    GameObjectDesc.fSpeedPerSec = 10.f;
+    GameObjectDesc.fSpeedPerSec = 6.f;
     GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
     if (FAILED(__super::Initialize(&GameObjectDesc)))

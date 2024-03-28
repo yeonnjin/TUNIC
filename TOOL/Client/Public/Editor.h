@@ -31,6 +31,8 @@ private:
 	void			Gizmo(CTransform* pTransform);
 	void			Tool_Picking();
 
+	
+
 	// MODEL_LIST
 	HRESULT			Load_Model();
 	void			Tool_Model_List();

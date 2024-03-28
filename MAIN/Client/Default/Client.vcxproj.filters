@@ -157,6 +157,9 @@
     <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Sleep">
       <UniqueIdentifier>{cf91c7c5-9ef7-4ed3-9722-15f4602b7c17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Sky">
+      <UniqueIdentifier>{50e3b214-d4eb-4390-9b63-84bd7952fa88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -306,6 +309,9 @@
     <ClInclude Include="..\Public\Bat_State_Attack.h">
       <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Attack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sky.h">
+      <Filter>02.GameObjects\Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -437,6 +443,9 @@
     <ClCompile Include="..\Private\Bat_State_Attack.cpp">
       <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Sky.cpp">
+      <Filter>02.GameObjects\Sky</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -462,6 +471,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

@@ -12,7 +12,7 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Etc.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Monster.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Map_Beach.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -176,17 +176,17 @@ HRESULT CEditor::Test_Mesh_Picking()
 
 HRESULT CEditor::Map_Picking()
 {
-	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"));
+	_uint iNumObjects = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Map"));
 	if (0 == iNumObjects)
 		return E_FAIL;
 
 	for (size_t i = 0; i < iNumObjects; ++i)
 	{
-		const CModel* pObjectModel = dynamic_cast<const CModel*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Model"), i));
+		const CModel* pObjectModel = dynamic_cast<const CModel*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Model"), i));
 		if (nullptr == pObjectModel)
 			return E_FAIL;
 
-		const CTransform* pObjectTransform = dynamic_cast<const CTransform*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Com_Transform"), i));
+		const CTransform* pObjectTransform = dynamic_cast<const CTransform*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Transform"), i));
 		if (nullptr == pObjectTransform)
 			return E_FAIL;
 
@@ -728,42 +728,45 @@ void CEditor::Tool_Model_List()
 
 void CEditor::Tool_Picking()
 {
-	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
-	Gizmo(m_pGizmoTransform);
-	//ImGui::Checkbox("Using Picking", &m_isUsingPicking);
-	//ImGui::Text("LBUTTON : Terrain, RBUTTON : Mesh, DIK_L : Delete");
+	//m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
 
-	//if (m_isUsingPicking && !m_isUsingGizmo)
-	//{
-	//	if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-	//		Map_Picking();
+	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Monster"), g_strTransformTag);
 
-	//	else if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
-	//		Test_Mesh_Picking();
-	//}
+	//Gizmo(m_pGizmoTransform);
+	ImGui::Checkbox("Using Picking", &m_isUsingPicking);
+	ImGui::Text("LBUTTON : Terrain, RBUTTON : Mesh, DIK_L : Delete");
 
-	//ImGui::Checkbox("Using Gizmo", &m_isUsingGizmo);
-	//if (m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
-	//	m_isUsingGizmo = !m_isUsingGizmo;
+	if (m_isUsingPicking && !m_isUsingGizmo)
+	{
+		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+			Map_Picking();
 
-	//if(m_isUsingGizmo)
-	//	m_isUsingPicking = false;
-	//else
-	//	m_isUsingPicking = true;
+		else if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
+			Test_Mesh_Picking();
+	}
 
-	//if (m_isUsingGizmo && nullptr != m_pGizmoTransform)
-	//	Gizmo(m_pGizmoTransform);
+	ImGui::Checkbox("Using Gizmo", &m_isUsingGizmo);
+	if (m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
+		m_isUsingGizmo = !m_isUsingGizmo;
 
-	//// Delete
-	//if (m_isUsingGizmo && m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
-	//{
-	//	if (m_pGameInstance->Delete_Object(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), m_iTargetIndex))
-	//	{
-	//		m_iTargetIndex = -1;
-	//		m_pGizmoTransform = nullptr;
-	//		m_isUsingGizmo = false;
-	//	}			
-	//}
+	if(m_isUsingGizmo)
+		m_isUsingPicking = false;
+	else
+		m_isUsingPicking = true;
+
+	if (m_isUsingGizmo && nullptr != m_pGizmoTransform)
+		Gizmo(m_pGizmoTransform);
+
+	// Delete
+	if (m_isUsingGizmo && m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
+	{
+		if (m_pGameInstance->Delete_Object(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), m_iTargetIndex))
+		{
+			m_iTargetIndex = -1;
+			m_pGizmoTransform = nullptr;
+			m_isUsingGizmo = false;
+		}			
+	}
 }
 
 void CEditor::Tool_Map_File()

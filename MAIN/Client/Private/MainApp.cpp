@@ -55,7 +55,7 @@ HRESULT CMainApp::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	//wsprintf(m_szFont, TEXT("Æ©´Ð"));
+	wsprintf(m_szFont, TEXT("Æ©´Ð"));
 #endif // _DEBUG
 
 	m_pGameInstance->Begin_Draw(_float4(0.f, 0.f, 1.f, 1.f));
@@ -63,7 +63,7 @@ HRESULT CMainApp::Render()
 	m_pGameInstance->Draw();	
 
 #ifdef _DEBUG
-	//m_pGameInstance->Render_Font(TEXT("Font_Default"), m_szFont, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f), 0.f);
+	m_pGameInstance->Render_Font(TEXT("Font_Default"), m_szFont, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f), 0.f);
 #endif // _DEBUG
 
 	m_pGameInstance->End_Draw();
@@ -73,8 +73,8 @@ HRESULT CMainApp::Render()
 
 HRESULT CMainApp::Ready_Fonts()
 {
-	// MakeSpriteFont "Odin Rounded" /FontSize:30 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 140.spritefont
-	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Default"), TEXT("../Bin/Resources/Fonts/141ex.spritefont"))))
+	// MakeSpriteFont "HY±Ã¼­B" /FontSize:30 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 140.spritefont
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Default"), TEXT("../Bin/Resources/Fonts/140.spritefont"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -92,14 +92,32 @@ HRESULT CMainApp::Open_Level(LEVEL eLevelID)
 
 HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 {
+	// VIBuffer ===========================================================================================
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
+	/* Prototype_Component_VIBuffer_Cube */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	// Shader =============================================================================================
 	/* For.Prototype_Component_Shader_VtxPosTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPosTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxCube */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxCube"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCube.hlsl"), VTXCUBE::Elements, VTXCUBE::iNumElements))))
+		return E_FAIL;
+
+	// Texture ============================================================================================
+	/* Prototype_Component_Texture_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
 	return	S_OK;

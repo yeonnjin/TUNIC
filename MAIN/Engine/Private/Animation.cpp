@@ -50,26 +50,6 @@ void CAnimation::Set_Frame_Tick(_uint iStartFrame, _uint iEndFrame, _float fTick
         m_KeyFrameTickWeights[i] = fTickWeight;
 }
 
-void CAnimation::Set_SlowMotion(_uint iStartFrame, _uint iEndFrame, _float fSlowTime)
-{
-    if (0.f == fSlowTime)
-    {
-        for (size_t i = iStartFrame; i <= iEndFrame; ++i)
-            m_KeyFrameTickWeights[i] = 1.f;
-        
-        m_fDuration = m_fOriginDuration;
-    }
-    else
-    {
-        for (size_t i = iStartFrame; i <= iEndFrame; ++i)
-            m_KeyFrameTickWeights[i] = fSlowTime;
-
-        _uint iNumFrame = iEndFrame - iStartFrame + 1;
-
-        m_fDuration += (1.f - fSlowTime) * iNumFrame ;
-    }
-}
-
 void CAnimation::Set_AnimationData_Initialize()
 {
     m_fTrackPosition = 0.f;

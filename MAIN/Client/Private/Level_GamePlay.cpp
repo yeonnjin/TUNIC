@@ -136,10 +136,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.fFar = 1000.0f;
 	CameraDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
 	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	CameraDesc.fSpeedPerSec = 1.f;
+	/*CameraDesc.fSpeedPerSec = 1.f;*/
+	CameraDesc.fSpeedPerSec = 7.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Focus"), &CameraDesc)))
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Focus"), &CameraDesc)))
+		return E_FAIL;*/
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -207,8 +211,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 			return E_FAIL;
 	}
 
-	/*tDesc = {};
-	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob";
+	tDesc = {};
+	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
 	wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
 	tDesc.strModelComTag = wstr2;
 
@@ -216,7 +220,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	{
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
 			return E_FAIL;
-	}*/
+	}
 	
 
 	// "Prototype_Component_Model_Monster_Bat"
@@ -247,7 +251,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 	CMap::MAP_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_FOXGOD";
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Beach";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
@@ -306,10 +310,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const wstring & strLayerTag)
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Terrain"))))
 		return E_FAIL;*/
 
-	/*
+	
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
-	*/
+	
 	return S_OK;
 }
 

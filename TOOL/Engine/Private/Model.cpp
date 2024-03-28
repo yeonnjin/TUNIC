@@ -7,6 +7,8 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "GameInstance.h"
+
 #include <fstream>
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strModelComTag)
@@ -141,18 +143,59 @@ HRESULT CModel::Render(_uint iMeshIndex)
 
 _bool CModel::Check_Picking(const class CTransform* pTransform, _Out_ _float3& vPickingPosition) const
 {
-	for (size_t i = 0; i < m_iNumMeshes; ++i)
-	{
-		_float3 vPickingPos = m_Meshes[i]->Compute_Picking(pTransform);
+	_float fDistance = 10000.f;
+	_int iMeshIndex = -1;
+	_vector vCamPosition = m_pGameInstance->Get_CamPosition_Vector();
+	_float vHeight = -10000.f;
 
-		if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
+	_float3 vPickingPos = m_Meshes[0]->Compute_Picking(pTransform);
+
+	if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
+	{
+		_vector vecPickingPos = XMLoadFloat3(&vPickingPos);
+		_vector vDistance = vecPickingPos - vCamPosition;
+		_float fLength = XMVector3Length(vDistance).m128_f32[0];
+
+		if (vHeight < vPickingPos.y)
 		{
+			vHeight = vPickingPos.y;
 			vPickingPosition = vPickingPos;
-			return true;
-		}			
+		}
 	}
 
-	return false;
+	//for (size_t i = 0; i < m_iNumMeshes; ++i)
+	//{
+	//	_float3 vPickingPos = m_Meshes[i]->Compute_Picking(pTransform);
+
+	//	if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
+	//	{
+	//		_vector vecPickingPos = XMLoadFloat3(&vPickingPos);
+	//		_vector vDistance = vecPickingPos - vCamPosition;
+	//		_float fLength = XMVector3Length(vDistance).m128_f32[0];
+
+	//		if (vHeight < vPickingPos.y)
+	//		{
+	//			vHeight = vPickingPos.y;
+	//			iMeshIndex = i;
+	//			vPickingPosition = vPickingPos;
+	//		}
+
+	//		/*if (fLength < fDistance)
+	//		{
+	//			fDistance = fLength;
+	//			iMeshIndex = i;
+	//			vPickingPosition = vPickingPos;
+	//		}*/
+	//		//XMVector3Length()
+	//		/*vPickingPosition = vPickingPos;
+	//		return true;*/
+	//	}			
+	//}
+
+	/*if (-1 == iMeshIndex)
+		return false;*/
+
+	return true;
 }
 
 HRESULT CModel::Ready_Meshes()

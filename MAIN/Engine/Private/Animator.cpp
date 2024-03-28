@@ -215,14 +215,6 @@ void CAnimator::Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFr
 	m_pAnimator_Controller->Set_Frame_Tick(iAnimIndex, iStartFrame, iEndFrame, fTickWeight);
 }
 
-void CAnimator::Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime)
-{
-	if (nullptr == m_pAnimator_Controller)
-		return;
-
-	m_pAnimator_Controller->Set_SlowMotion(iAnimIndex, iStartFrame, iEndFrame, fSlowTime);
-}
-
 _uint CAnimator::Get_Current_Frame(_uint iAnimIndex)
 {
 	if (nullptr == m_pAnimator_Controller)

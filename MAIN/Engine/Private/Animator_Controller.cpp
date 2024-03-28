@@ -115,14 +115,6 @@ void CAnimator_Controller::Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _
 	(*m_pAnimations)[iAnimIndex]->Set_Frame_Tick(iStartFrame, iEndFrame, fTickWeight);
 }
 
-void CAnimator_Controller::Set_SlowMotion(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fSlowTime)
-{
-	if (m_iNumAnimations <= iAnimIndex)
-		return;
-
-	(*m_pAnimations)[iAnimIndex]->Set_SlowMotion(iStartFrame, iEndFrame, fSlowTime);
-}
-
 _uint CAnimator_Controller::Get_Current_Frame(_uint iAnimIndex)
 {
 	if (m_iNumAnimations <= iAnimIndex)
