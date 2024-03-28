@@ -84,7 +84,7 @@ void CEditor::Frame_Tab()
 			ImGui::EndTabItem();
 		}
 
-		if (ImGui::BeginTabItem("[FILE]")) 
+		if (ImGui::BeginTabItem("[FILE]z")) 
 		{
 			Tool_Map_File();
 			Tool_Model_File();

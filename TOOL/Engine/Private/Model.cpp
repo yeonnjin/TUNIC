@@ -148,7 +148,7 @@ _bool CModel::Check_Picking(const class CTransform* pTransform, _Out_ _float3& v
 	_vector vCamPosition = m_pGameInstance->Get_CamPosition_Vector();
 	_float vHeight = -10000.f;
 
-	_float3 vPickingPos = m_Meshes[0]->Compute_Picking(pTransform);
+	/*_float3 vPickingPos = m_Meshes[0]->Compute_Picking(pTransform);
 
 	if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
 	{
@@ -161,39 +161,39 @@ _bool CModel::Check_Picking(const class CTransform* pTransform, _Out_ _float3& v
 			vHeight = vPickingPos.y;
 			vPickingPosition = vPickingPos;
 		}
+	}*/
+
+	for (size_t i = 0; i < m_iNumMeshes; ++i)
+	{
+		_float3 vPickingPos = m_Meshes[i]->Compute_Picking(pTransform);
+
+		if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
+		{
+			_vector vecPickingPos = XMLoadFloat3(&vPickingPos);
+			_vector vDistance = vecPickingPos - vCamPosition;
+			_float fLength = XMVector3Length(vDistance).m128_f32[0];
+
+			if (vHeight < vPickingPos.y)
+			{
+				vHeight = vPickingPos.y;
+				iMeshIndex = i;
+				vPickingPosition = vPickingPos;
+			}
+
+			/*if (fLength < fDistance)
+			{
+				fDistance = fLength;
+				iMeshIndex = i;
+				vPickingPosition = vPickingPos;
+			}*/
+			//XMVector3Length()
+			/*vPickingPosition = vPickingPos;
+			return true;*/
+		}			
 	}
 
-	//for (size_t i = 0; i < m_iNumMeshes; ++i)
-	//{
-	//	_float3 vPickingPos = m_Meshes[i]->Compute_Picking(pTransform);
-
-	//	if (!(0.f == vPickingPos.x && 0.f == vPickingPos.y && 0.f == vPickingPos.z))
-	//	{
-	//		_vector vecPickingPos = XMLoadFloat3(&vPickingPos);
-	//		_vector vDistance = vecPickingPos - vCamPosition;
-	//		_float fLength = XMVector3Length(vDistance).m128_f32[0];
-
-	//		if (vHeight < vPickingPos.y)
-	//		{
-	//			vHeight = vPickingPos.y;
-	//			iMeshIndex = i;
-	//			vPickingPosition = vPickingPos;
-	//		}
-
-	//		/*if (fLength < fDistance)
-	//		{
-	//			fDistance = fLength;
-	//			iMeshIndex = i;
-	//			vPickingPosition = vPickingPos;
-	//		}*/
-	//		//XMVector3Length()
-	//		/*vPickingPosition = vPickingPos;
-	//		return true;*/
-	//	}			
-	//}
-
-	/*if (-1 == iMeshIndex)
-		return false;*/
+	if (-1 == iMeshIndex)
+		return false;
 
 	return true;
 }

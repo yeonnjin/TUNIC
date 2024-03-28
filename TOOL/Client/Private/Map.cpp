@@ -39,6 +39,12 @@ HRESULT CMap::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    /*D3D11_RASTERIZER_DESC RSDesc;
+    ZeroMemory(&RSDesc, sizeof(D3D11_RASTERIZER_DESC));
+    RSDesc.FillMode = D3D11_FILL_WIREFRAME;
+    RSDesc.CullMode = D3D11_CULL_NONE;
+    m_pDevice->CreateRasterizerState(&RSDesc, &m_pRState);*/
+
     return S_OK;
 }
 
@@ -54,6 +60,8 @@ void CMap::Late_Tick(_float fTimeDelta)
 
 HRESULT CMap::Render()
 {
+    //m_pContext->RSSetState(m_pRState);
+
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
 
@@ -73,6 +81,8 @@ HRESULT CMap::Render()
 #ifdef _DEBUG
     m_pNavigationCom->Render();
 #endif // _DEBUG
+
+    //m_pContext->RSSetState(nullptr);
 
     return S_OK;
 }

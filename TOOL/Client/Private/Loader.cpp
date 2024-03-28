@@ -347,9 +347,9 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	return E_FAIL;
 
 	/* For.Prototype_Component_Model_Map_FOXGOD */
-	TransformMatrix = XMMatrixScaling(0.1f, 0.1f, 0.1f);
+	TransformMatrix = XMMatrixScaling(100.f, 100.f, 100.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/map_beach2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
 		return E_FAIL;
 
 	/*TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);

@@ -50,6 +50,7 @@ private:
 
 	// FILE
 	MAPOBJFILE		m_tMapObjFile;
+	ID3D11RasterizerState* m_pRState = { nullptr };
 
 private:
 	HRESULT Add_Components();
