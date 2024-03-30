@@ -12,6 +12,24 @@ CCell::CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	Safe_AddRef(m_pContext);
 }
 
+void CCell::Set_NeighborIndex(_int* pNeighborindex)
+{
+	for (size_t i = 0; i < 3; i++)
+		m_iNeighborIndices[i] = pNeighborindex[i];
+}
+
+void CCell::Reset_Neighbor(_int iNeighborIndex)
+{
+	for (size_t i = 0; i < 3; i++)
+	{
+		if (iNeighborIndex == m_iNeighborIndices[i])
+		{
+			m_iNeighborIndices[i] = -1;
+			break;
+		}
+	}
+}
+
 _bool CCell::isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex)
 {
 	_vector	vPoints[3];

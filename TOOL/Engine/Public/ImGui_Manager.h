@@ -21,6 +21,9 @@ public:
 	// GIZMO
 	void	EditTransform(class CTransform* pTransformCom);
 
+	// FILEDIALOG
+	void	Open_FileDialog();
+
 	// PROTOTYPE
 	HRESULT					Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
 	_uint					Get_Model_List_Size(CModel::TYPE eType) { return m_strModels[eType].size(); }

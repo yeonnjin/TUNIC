@@ -160,6 +160,12 @@
     <Filter Include="02.GameObjects\Sky">
       <UniqueIdentifier>{50e3b214-d4eb-4390-9b63-84bd7952fa88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Particle">
+      <UniqueIdentifier>{ec4dc272-b385-436c-8e1d-f2da5d591754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Particle\Particle_Blue">
+      <UniqueIdentifier>{e2c74caa-9c9c-4229-9a34-d204834642a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -312,6 +318,9 @@
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\Sky</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Particle_Blue.h">
+      <Filter>02.GameObjects\Particle\Particle_Blue</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -446,6 +455,9 @@
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\Sky</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Particle_Blue.cpp">
+      <Filter>02.GameObjects\Particle\Particle_Blue</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -474,6 +486,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

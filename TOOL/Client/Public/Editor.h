@@ -31,7 +31,14 @@ private:
 	void			Gizmo(CTransform* pTransform);
 	void			Tool_Picking();
 
-	
+	// NAVMESH
+	HRESULT			Make_Nav_Mesh();
+	void			Delete_Nav_Mesh();
+	void			Show_Nav_Info();
+	HRESULT			Save_Nav_Mesh();
+	HRESULT			Clear_Nav_Mesh();
+	HRESULT			Load_Nav_Mesh();
+	void			Tool_Nav_Mesh();
 
 	// MODEL_LIST
 	HRESULT			Load_Model();
@@ -48,16 +55,20 @@ private:
 	void			Tool_Model_File();
 
 
-
-
-
-	string					WStringToString(wstring& wstr);
+private:
+	string			WStringToString(wstring& wstr);
 
 private: // GIZMO
 	_bool					m_isUsingPicking = { true };
 	_bool					m_isUsingGizmo = { false };
 	_int					m_iTargetIndex = { -1 };
 	CTransform*				m_pGizmoTransform = { nullptr };
+
+private: // NAVMESH
+	vector<_float3>			m_DotPositions;
+	_uint					m_iNumDot = { 0 };
+	_uint					m_iNumCell = { 0 };
+	_bool					m_isStart = { false };
 
 private: // MODEL_LIST
 	vector<wstring>			m_strModels;

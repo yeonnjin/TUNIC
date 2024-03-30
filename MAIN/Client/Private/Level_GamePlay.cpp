@@ -41,9 +41,9 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_Editor(TEXT("Layer_Editor"))))
 		return E_FAIL;
-	/*
+	
 	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -137,13 +137,24 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
 	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	/*CameraDesc.fSpeedPerSec = 1.f;*/
-	CameraDesc.fSpeedPerSec = 7.f;
+	CameraDesc.fSpeedPerSec = 3.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Focus"), &CameraDesc)))
 		return E_FAIL;*/
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
+	CCamera_Free::CAMERA_FREE_DESC tCameraFreeDesc{};
+	tCameraFreeDesc.fMouseSensor = 1.f;
+	tCameraFreeDesc.fFovy = XMConvertToRadians(60.0f);
+	tCameraFreeDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	tCameraFreeDesc.fNear = 0.1f;
+	tCameraFreeDesc.fFar = 1000.0f;
+	tCameraFreeDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	tCameraFreeDesc.fSpeedPerSec = 3.f;
+	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -163,6 +174,7 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 	/* 구한정보들을 각 랜드오브젝트르 생성할 때 던진다. */
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -236,12 +248,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 {
-	/*for (size_t i = 0; i < 20; i++)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Effect"))))
-			return E_FAIL;
-	}
-*/
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Particle_Blue"))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -251,7 +259,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
 	CMap::MAP_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Beach";
+	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*/"Prototype_Component_Model_Map_FOXGOD";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");

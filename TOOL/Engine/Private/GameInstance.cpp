@@ -194,6 +194,14 @@ HRESULT CGameInstance::Add_Clone(_uint iLevelIndex, const wstring & strLayerTag,
 	return m_pObject_Manager->Add_Clone(iLevelIndex, strLayerTag, strPrototypeTag, pArg);
 }
 
+CGameObject* CGameInstance::Get_GameObject_Clone(const wstring& strPrototypeTag, void* pArg)
+{
+	if (nullptr == m_pObject_Manager)
+		return nullptr;
+
+	return m_pObject_Manager->Get_GameObject_Clone(strPrototypeTag, pArg);
+}
+
 const CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring & strLayerTag, const wstring & strComTag, _uint iIndex)
 {
 	if (nullptr == m_pObject_Manager)
@@ -347,7 +355,18 @@ HRESULT CGameInstance::Render()
 
 void CGameInstance::EditTransform(CTransform* pTransformCom)
 {
+	if (nullptr == m_pImGui_Manager)
+		return;
+
 	m_pImGui_Manager->EditTransform(pTransformCom);
+}
+
+void CGameInstance::Open_FileDialog()
+{
+	if (nullptr == m_pImGui_Manager)
+		return;
+
+	m_pImGui_Manager->Open_FileDialog();
 }
 
 HRESULT CGameInstance::Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath)

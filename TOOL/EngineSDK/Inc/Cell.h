@@ -4,7 +4,7 @@
 
 BEGIN(Engine)
 
-class CCell final : public CBase
+class ENGINE_DLL CCell final : public CBase
 {
 public:
 	enum POINT { POINT_A, POINT_B, POINT_C, POINT_END };
@@ -19,9 +19,15 @@ public:
 		return XMLoadFloat3(&m_vPoints[ePoint]);
 	}
 
+	_int	Get_Index() { return m_iIndex; }
+	_int*	Get_Neighbor_Index() { return m_iNeighborIndices; }
+
 	void	SetUp_Neighbor(LINE eLine, CCell* pNeighbor) {
 		m_iNeighborIndices[eLine] = pNeighbor->m_iIndex;
 	}
+
+	void	Set_NeighborIndex(_int* pNeighborindex);
+	void	Reset_Neighbor(_int iNeighborIndex);
 
 public:
 	_bool	isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex);

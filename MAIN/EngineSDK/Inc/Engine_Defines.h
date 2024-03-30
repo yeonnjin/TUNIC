@@ -9,6 +9,7 @@
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include <random>
 
 #include "Effects11/d3dx11effect.h"
 #include "DirectXTK/DDSTextureLoader.h"

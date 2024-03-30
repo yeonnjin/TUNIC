@@ -18,6 +18,15 @@ private:
 	virtual ~CNavigation() = default;
 
 public:
+	HRESULT			Add_Cell(class CCell* pCell);
+	void			Delete_Cell();
+	void			Clear_Cell();
+
+	_int*			Get_Neighbor_Index(_uint iCellIndex);
+	void			Set_Neighbor_Index(_uint iCellIndex, _int* pNeighborindex);
+
+public:
+	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize_Prototype(const wstring& strDataFile);
 	virtual HRESULT Initialize(void* pArg) override;
 	void			Tick(_fmatrix WorldMatrix);
@@ -38,10 +47,11 @@ private:
 	class CShader*			m_pShader = { nullptr };
 #endif
 
-private:
-	HRESULT			SetUp_Neighbors();
+public:
+	HRESULT					SetUp_Neighbors();
 
 public:
+	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strDataFile);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;

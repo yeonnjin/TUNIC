@@ -4,6 +4,7 @@
 #include "Camera.h"
 
 #include "ImGuizmo.h"
+#include "ImGuiFileDialog.h"
 
 CImGui_Manager::CImGui_Manager()
     : m_pGameInstance(CGameInstance::Get_Instance())
@@ -121,6 +122,26 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     _float4x4 identityMatrix;
     XMStoreFloat4x4(&identityMatrix, XMMatrixIdentity());
     ImGuizmo::DrawGrid(ViewMatrix.m[0], ProjMatrix.m[0], identityMatrix.m[0], 100.f);
+}
+
+void CImGui_Manager::Open_FileDialog()
+{
+    if (ImGui::Button("Open File Dialog")) {
+        IGFD::FileDialogConfig config;
+        config.path = ".";
+        ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", config);
+    }
+    // display
+    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+        if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+            std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+            std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+            // action
+        }
+
+        // close
+        ImGuiFileDialog::Instance()->Close();
+    }
 }
 
 HRESULT CImGui_Manager::Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath)

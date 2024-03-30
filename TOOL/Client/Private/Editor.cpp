@@ -3,6 +3,9 @@
 
 #include "Test_Object.h"
 #include "Map_Object.h"
+#include "Dot.h"
+#include "Map.h"
+
 #include "ImGuizmo.h"
 
 #include <locale>
@@ -13,6 +16,7 @@
 
 #define DATAPATH "../Bin/Resources/Data/Map/Etc.dat"
 #define MODELPATH "../Bin/Resources/Data/Model/Map_Beach.dat"
+#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -84,7 +88,13 @@ void CEditor::Frame_Tab()
 			ImGui::EndTabItem();
 		}
 
-		if (ImGui::BeginTabItem("[FILE]z")) 
+		if (ImGui::BeginTabItem("[NAVMESH]"))
+		{
+			Tool_Nav_Mesh();
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("[FILE]")) 
 		{
 			Tool_Map_File();
 			Tool_Model_File();
@@ -229,6 +239,246 @@ void CEditor::Gizmo(CTransform* pTransform)
 #pragma endregion
 
 // ============================================================================================
+// NAV MESH ===================================================================================
+
+HRESULT CEditor::Make_Nav_Mesh()
+{
+	// 피킹이 되면 정점 위치 저장
+	// - 피킹 시 근처에 주면 점이 있으면 해당 점 위치로 저장
+
+	const CModel* pObjectModel = dynamic_cast<const CModel*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Model")));
+	if (nullptr == pObjectModel)
+		return E_FAIL;
+
+	const CTransform* pObjectTransform = dynamic_cast<const CTransform*>(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Transform")));
+	if (nullptr == pObjectTransform)
+		return E_FAIL;
+
+	_float3 vPickingPosition;
+	// 피킹이 성공 했을 때,
+	if (true == pObjectModel->Check_Picking(pObjectTransform, vPickingPosition))
+	{
+		// 피킹 시 근처에 기존 점이 있으면 해당 점 위치로 저장
+		auto iter = find_if(m_DotPositions.begin(), m_DotPositions.end(), 
+			[&](_float3 vPosition) -> bool
+			{
+				if (vPosition.x - 0.7f <= vPickingPosition.x && vPosition.x + 0.7f >= vPickingPosition.x
+					&& vPosition.y - 0.7f <= vPickingPosition.y && vPosition.y + 0.7f >= vPickingPosition.y
+					&& vPosition.z - 0.7f <= vPickingPosition.z && vPosition.z + 0.7f >= vPickingPosition.z)
+				{
+					return true;
+				}
+				else
+					return false;
+			});
+
+		if (iter != m_DotPositions.end())
+		{
+			m_DotPositions.push_back(*iter);
+		}
+		else
+			m_DotPositions.push_back(vPickingPosition);
+
+		// 테스트용 닷 클론
+		CDot::DOT_DESC tDesc{};
+		tDesc.vPosition = m_DotPositions.back();
+		if(FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return E_FAIL;
+
+		++m_iNumDot;
+	}
+
+	// 점 3개 모이면 셀 생성
+	if (3 == m_iNumDot)
+	{
+		_float3	vPoints[3] = { m_DotPositions[m_iNumCell * 3 + 0], m_DotPositions[m_iNumCell * 3 + 1], m_DotPositions[m_iNumCell * 3 + 2] };
+
+		// 방향 설정
+		_float3 vDirPoints[3];
+
+		// 외적
+		_vector vDir1 = XMLoadFloat3(&vPoints[1]) - XMLoadFloat3(&vPoints[0]);
+		_vector vDir2 = XMLoadFloat3(&vPoints[2]) - XMLoadFloat3(&vPoints[1]);
+		_vector vCross = XMVector3Normalize(XMVector3Cross(vDir1, vDir2));
+
+		// 내적
+		_vector vNor = { 0.f, 1.f, 0.f };
+		_vector vDot = XMVector3Dot(vCross, vNor);
+
+		if (vDot.m128_f32[0] >= 0.f && vDot.m128_f32[0] <= 1.f)
+		{
+			vDirPoints[0] = vPoints[0];
+			vDirPoints[1] = vPoints[1];
+			vDirPoints[2] = vPoints[2];
+		}
+		else
+		{
+			vDirPoints[0] = vPoints[0];
+			vDirPoints[1] = vPoints[2];
+			vDirPoints[2] = vPoints[1];
+		}
+
+		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vDirPoints, m_iNumCell);
+		if (nullptr == pCell)
+			return E_FAIL;
+
+		CNavigation* pNav = (CNavigation*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Navigation")));
+		if (nullptr == pNav)
+			return E_FAIL;
+
+		pNav->Add_Cell(pCell);
+
+		++m_iNumCell;
+		m_iNumDot = 0;
+	}
+
+	// 3개 모이면 삼각형 하나
+	// - 시계 방향 검사하기
+	// - (Test) 반대로 찍히면 바꿨다고 뜨기! (다음 클릭 전까지)
+	// - 완성 되면 카운트 증가 시키기
+	// 셀 삭제!! 3개씩
+}
+
+void CEditor::Delete_Nav_Mesh()
+{
+	CNavigation* pNav = (CNavigation*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Navigation")));
+	if (nullptr == pNav)
+		return;
+
+	pNav->Delete_Cell();
+
+	m_iNumCell -= 1;
+	m_iNumDot = 0;
+
+	_uint iNumDot = m_pGameInstance->Get_Object_Count(LEVEL_TOOL_MAP, TEXT("Layer_Dot"));
+	for (size_t i = 0; i < 3; i++)
+	{
+		--iNumDot;
+		m_pGameInstance->Delete_Object(LEVEL_TOOL_MAP, TEXT("Layer_Dot"), iNumDot);
+
+		m_DotPositions.pop_back();
+	}
+}
+
+void CEditor::Show_Nav_Info()
+{
+	ImGui::Text("Make_Nav : %d", (_int)m_isStart);
+	ImGui::Text("All Dot Num : %d", m_DotPositions.size());
+	ImGui::Text("Dot Num : %d", m_iNumDot);
+	ImGui::Text("Cell Num : %d", m_iNumCell);
+
+	ImGui::Separator();
+}
+
+HRESULT CEditor::Save_Nav_Mesh()
+{
+	CNavigation* pNav = (CNavigation*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Navigation")));
+	if (nullptr == pNav)
+		return E_FAIL;
+
+	pNav->SetUp_Neighbors();
+
+	ofstream fout;
+	fout.open(NAVPATH, ios::out | ios::binary);
+
+	_uint iNumDots = m_DotPositions.size();
+	if (0 == iNumDots)
+		return E_FAIL;
+
+	// 점 개수 저장
+	fout.write(reinterpret_cast<char*>(&iNumDots), sizeof(_uint));
+
+	// 점 위치 저장
+	for(size_t i = 0; i < iNumDots; i++)
+		fout.write(reinterpret_cast<char*>(&m_DotPositions[i]), sizeof(_float3));
+
+	// 셀 개수 저장 (점 개수 x 3)
+	fout.write(reinterpret_cast<char*>(&m_iNumCell), sizeof(_uint));
+
+	// 각 점들의 이웃 인덱스 저장
+	for (size_t i = 0; i < m_iNumCell; i++)
+	{
+		_int* pInt = pNav->Get_Neighbor_Index(i);
+		fout.write(reinterpret_cast<char*>(pNav->Get_Neighbor_Index(i)), sizeof(_int) * 3);
+	}
+		
+	return S_OK;
+}
+
+HRESULT CEditor::Clear_Nav_Mesh()
+{
+	CNavigation* pNav = (CNavigation*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Navigation")));
+	if (nullptr == pNav)
+		return E_FAIL;
+
+	pNav->Clear_Cell();
+
+	m_iNumCell = 0;
+	m_iNumDot = 0;
+
+	m_pGameInstance->Clear_Layer(LEVEL_TOOL_MAP, TEXT("Layer_Dot"));
+
+	m_DotPositions.clear();
+
+	return S_OK;
+}
+
+HRESULT CEditor::Load_Nav_Mesh()
+{
+	ifstream fin;
+	fin.open(NAVPATH, ios::in | ios::binary);
+
+	// 점 개수 저장
+	_uint iNumDot{};
+	fin.read(reinterpret_cast<char*>(&iNumDot), sizeof(_uint));
+
+	// 점 위치 저장
+	for (size_t i = 0; i < iNumDot; i++)
+	{
+		_float3 vDotPosition{};
+		fin.read(reinterpret_cast<char*>(&vDotPosition), sizeof(_float3));
+		m_DotPositions.push_back(vDotPosition);
+
+		// 테스트용 닷 클론
+		CDot::DOT_DESC tDesc{};
+		tDesc.vPosition = m_DotPositions.back();
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return E_FAIL;
+	}
+
+	// 셀 개수 저장 (점 개수 x 3)
+	fin.read(reinterpret_cast<char*>(&m_iNumCell), sizeof(_uint));
+
+	CNavigation* pNav = (CNavigation*)(m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map"), TEXT("Com_Navigation")));
+	if (nullptr == pNav)
+		return E_FAIL;
+
+	// 셀 생성
+	for (size_t i = 0; i < m_iNumCell; i++)
+	{
+		_float3	vPositions[3] = {};
+		for (size_t j = 0; j < 3; j++)
+		{
+			vPositions[j] = m_DotPositions[i * 3 + j];
+		}
+
+		// 각 점들의 이웃 인덱스 저장
+		_int vNeighborIndex[3] = {};
+		fin.read(reinterpret_cast<char*>(&vNeighborIndex), sizeof(_int) * 3);
+
+		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPositions, i);
+		if (nullptr == pCell)
+			return E_FAIL;
+
+		pCell->Set_NeighborIndex(vNeighborIndex);
+
+		pNav->Add_Cell(pCell);
+	}
+
+	return S_OK;
+}
+
+// ============================================================================================
 // MODEL LIST =================================================================================
 
 #pragma region MODEL LIST
@@ -320,8 +570,6 @@ HRESULT CEditor::Load_Object_File(const wstring& strLayerTag)
 
 	return S_OK;
 }
-
-
 
 //HRESULT CEditor::Save_Model_File()
 //{
@@ -769,8 +1017,99 @@ void CEditor::Tool_Picking()
 	}
 }
 
+void CEditor::Tool_Nav_Mesh()
+{
+	//Delete_Nav_Mes	
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
+	{
+		// 테스트용 닷 클론
+		CDot::DOT_DESC tDesc{};
+		tDesc.vPosition = { 0.f, 0.f, 0.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+	}
+
+	if (true == m_isStart)
+	{
+		if (true == m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+			Make_Nav_Mesh();
+	}
+	
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
+	{
+		m_isStart = !m_isStart;
+	}
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN) && true == m_pGameInstance->Get_DIKeyState(DIK_LCONTROL, KEY_PRESS)
+		&& 0 != m_iNumCell)
+	{
+		Delete_Nav_Mesh();
+	}
+
+	Show_Nav_Info();
+
+	static _uint iText = 0;
+	if (true == ImGui::Button("Save_NavMesh"))
+	{
+		if (S_OK == Save_Nav_Mesh())
+		{
+			iText = 1;
+		}
+	}
+
+	if (true == ImGui::Button("Clear_NavMesh"))
+	{
+		if (S_OK == Clear_Nav_Mesh())
+		{
+			iText = 2;
+			
+		}
+	}
+
+	if (true == ImGui::Button("Load_NavMesh") && 0 == m_DotPositions.size())
+	{
+		if (S_OK == Load_Nav_Mesh())
+		{
+			iText = 3;
+			
+		}
+	}
+
+	switch (iText)
+	{
+	case 0:
+		ImGui::Text("Ready");
+		break;
+
+	case 1:
+		ImGui::Text("Success To Save : Nav Mesh");
+		break;
+
+	case 2:
+		ImGui::Text("Success To Clear : Nav Mesh");
+		break;
+
+	case 3:
+		ImGui::Text("Success To Load : Nav Mesh");
+		break;
+	default:
+		break;
+	}
+	
+
+	// save nav mesh
+	// load nav mesh
+
+	// delete, clear
+
+	// sliding
+}
+
 void CEditor::Tool_Map_File()
 {
+	m_pGameInstance->Open_FileDialog();
+
 	ImGui::Text("<OBJECT FILE>");
 	ImGui::Text("<OBJECT>");
 	if (ImGui::Button("SAVE_OBJECT", ImVec2(100.f, 30.f)))

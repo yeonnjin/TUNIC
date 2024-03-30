@@ -7,10 +7,12 @@
 #include "Terrain.h"
 #include "Monster.h"
 #include "Map_Object.h"
+#include "Dot.h"
 //#include "Player.h"
 //#include "Effect.h"
 //#include "Sky.h"
 #include "Model.h"
+#include "Collider.h"
 
 #include "Editor.h"
 #include "Test_Object.h"
@@ -277,6 +279,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//	return E_FAIL;
 	//
 
+	
+
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 
 	m_isFinished = true;
@@ -310,7 +314,12 @@ HRESULT CLoader::Loading_For_Tool_Map()
 
 	/* Prototype_Component_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Navigation.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_Component_Navigation_Load */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation_Load"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat")))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
@@ -347,9 +356,9 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	return E_FAIL;
 
 	/* For.Prototype_Component_Model_Map_FOXGOD */
-	TransformMatrix = XMMatrixScaling(100.f, 100.f, 100.f);
+	TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/ XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/map_beach2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
 		return E_FAIL;
 
 	/*TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
@@ -460,6 +469,17 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	/* For.Prototype_GameObject_Map */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map"),
 		CMap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Dot */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dot"),
+		CDot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	m_strLoadingText = TEXT("콜라이더를(을) 로딩 중 입니다.");
+	/* Prototype_Component_Collider_AABB */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Collider_AABB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");

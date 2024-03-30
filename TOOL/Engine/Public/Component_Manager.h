@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cell.h"
 #include "Channel.h"
 #include "Animation.h"
 #include "Bone.h"
@@ -10,8 +11,12 @@
 #include "Transform.h"
 #include "Navigation.h"
 #include "VIBuffer_Rect.h"
-//#include "VIBuffer_Cube.h"
+#include "VIBuffer_Cube.h"
 #include "VIBuffer_Terrain.h"
+
+#include "Bounding_AABB.h"
+#include "Bounding_OBB.h"
+#include "Bounding_SPHERE.h"
 
 #include "Component.h"
 

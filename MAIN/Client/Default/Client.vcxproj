@@ -180,6 +180,7 @@
     <ClInclude Include="..\Public\Monster_Bat.h" />
     <ClInclude Include="..\Public\Monster_Blob.h" />
     <ClInclude Include="..\Public\Monster_Spinner.h" />
+    <ClInclude Include="..\Public\Particle_Blue.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_State_Attack.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="..\Private\Monster_Bat.cpp" />
     <ClCompile Include="..\Private\Monster_Blob.cpp" />
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
+    <ClCompile Include="..\Private\Particle_Blue.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp" />
@@ -277,6 +279,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">

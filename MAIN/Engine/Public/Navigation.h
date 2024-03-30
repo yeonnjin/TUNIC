@@ -6,6 +6,12 @@ BEGIN(Engine)
 
 class ENGINE_DLL CNavigation final : public CComponent
 {
+public:
+	typedef struct Navigation_Desc
+	{
+		_int	iCurrentIndex = { 0 };
+	}NAVIGATION_DESC;
+
 private:
 	CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CNavigation(const CNavigation& rhs);
@@ -15,7 +21,7 @@ public:
 	virtual HRESULT Initialize_Prototype(const wstring& strDataFile);
 	virtual HRESULT Initialize(void* pArg) override;
 	void			Tick(_fmatrix WorldMatrix);
-
+	_bool			isMove(_fvector vPosition);
 #ifdef _DEBUG
 public:
 	virtual HRESULT Render();
@@ -30,6 +36,9 @@ private:
 private:
 	class CShader*			m_pShader = { nullptr };
 #endif
+
+private:
+	HRESULT					SetUp_Neighbors();
 
 public:
 	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strDataFile);

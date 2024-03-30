@@ -10,9 +10,9 @@ CVIBuffer_Instance_Rect::CVIBuffer_Instance_Rect(const CVIBuffer_Instance_Rect& 
 {
 }
 
-HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(_uint iNumInstance)
+HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::INSTANCE_DESC& tInstanceDesc)
 {
-    m_iNumInstance = iNumInstance;
+    m_iNumInstance = tInstanceDesc.iNumInstance;
     m_iInstanceStride = sizeof(VTXMATRIX);
     m_iIndexCountPerInstance = 6;
 
@@ -102,6 +102,17 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(_uint iNumInstance)
 
 	ZeroMemory(&m_InstanceBufferDesc, sizeof(m_InstanceBufferDesc));
 
+	/* 랜덤 설정 */
+	uniform_real_distribution<_float>	RangePosX(tInstanceDesc.vPivot.x - tInstanceDesc.vRange.x * 0.5f, tInstanceDesc.vPivot.x + tInstanceDesc.vRange.x * 0.5f);
+	uniform_real_distribution<_float>	RangePosY(tInstanceDesc.vPivot.y - tInstanceDesc.vRange.y * 0.5f, tInstanceDesc.vPivot.y + tInstanceDesc.vRange.y * 0.5f);
+	uniform_real_distribution<_float>	RangePosZ(tInstanceDesc.vPivot.z - tInstanceDesc.vRange.z * 0.5f, tInstanceDesc.vPivot.z + tInstanceDesc.vRange.z * 0.5f);
+
+	uniform_real_distribution<_float>	ScaleX(tInstanceDesc.vMinScale.x, tInstanceDesc.vMaxScale.x);
+	uniform_real_distribution<_float>	ScaleY(tInstanceDesc.vMinScale.y, tInstanceDesc.vMaxScale.y);
+	uniform_real_distribution<_float>	ScaleZ(tInstanceDesc.vMinScale.z, tInstanceDesc.vMaxScale.z);
+
+	uniform_real_distribution<_float>	LifeTime(tInstanceDesc.vLifeTime.x, tInstanceDesc.vLifeTime.y);
+
 	/* 인스턴스 버퍼의 byte 크기 */
 	m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;
 	m_InstanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;	// 동적
@@ -110,22 +121,27 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(_uint iNumInstance)
 	m_InstanceBufferDesc.MiscFlags = 0;
 	m_InstanceBufferDesc.StructureByteStride = m_iInstanceStride;
 
-	m_iInstanceVertices = new VTXMATRIX[m_iNumInstance];
-	ZeroMemory(m_iInstanceVertices, sizeof(VTXMATRIX) * m_iNumInstance);
+	m_pInstanceVertices = new VTXMATRIX[m_iNumInstance];
+	ZeroMemory(m_pInstanceVertices, sizeof(VTXMATRIX) * m_iNumInstance);
+
+	m_pLifeTimes = new _float2[m_iNumInstance];
+	ZeroMemory(m_pLifeTimes, sizeof(_float2) * m_iNumInstance);
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		m_iInstanceVertices[i].vRight = _float4(1.f, 0.f, 0.f, 0.f);
-		m_iInstanceVertices[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
-		m_iInstanceVertices[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
-		m_iInstanceVertices[i].vPosition = _float4(rand() % 10, 0.f, rand() % 10, 1.f);
+		XMStoreFloat4(&m_pInstanceVertices[i].vRight, XMVectorSet(1.f, 0.f, 0.f, 0.f) * ScaleX(m_RandomNumber));
+		XMStoreFloat4(&m_pInstanceVertices[i].vUp, XMVectorSet(0.f, 1.f, 0.f, 0.f) * ScaleY(m_RandomNumber));
+		XMStoreFloat4(&m_pInstanceVertices[i].vLook, XMVectorSet(0.f, 0.f, 1.f, 0.f) * ScaleZ(m_RandomNumber));
+		m_pInstanceVertices[i].vPosition = _float4(RangePosX(m_RandomNumber), RangePosY(m_RandomNumber), RangePosZ(m_RandomNumber), 1.f);
+	
+		m_pInstanceVertices[i].isLived = true;
+
+		/* 인스턴스마다 랜덤하게 설정된 각각의 라이프 타임 */
+		m_pLifeTimes[i] = _float2(0.f, LifeTime(m_RandomNumber));
 	}
 
 	ZeroMemory(&m_InstanceSubResourceData, sizeof(m_InstanceSubResourceData));
-	m_InstanceSubResourceData.pSysMem = m_iInstanceVertices;
-
-	/*if (FAILED(__super::Create_Buffer(&m_pVBInstance)))
-		return E_FAIL;*/
+	m_InstanceSubResourceData.pSysMem = m_pInstanceVertices;
 
 #pragma endregion
 
@@ -134,14 +150,17 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(_uint iNumInstance)
 
 HRESULT CVIBuffer_Instance_Rect::Initialize(void* pArg)
 {
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
     return S_OK;
 }
 
-CVIBuffer_Instance_Rect* CVIBuffer_Instance_Rect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iNumInstance)
+CVIBuffer_Instance_Rect* CVIBuffer_Instance_Rect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instance::INSTANCE_DESC& tInstanceDesc)
 {
 	CVIBuffer_Instance_Rect* pInstance = new CVIBuffer_Instance_Rect(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(iNumInstance)))
+	if (FAILED(pInstance->Initialize_Prototype(tInstanceDesc)))
 	{
 		MSG_BOX(TEXT("Failed To Create : CVIBuffer_Instance_Rect"));
 

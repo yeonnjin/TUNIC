@@ -6,6 +6,20 @@ CObject_Manager::CObject_Manager()
 {
 }
 
+CGameObject* CObject_Manager::Get_GameObject_Clone(const wstring& strPrototypeTag, void* pArg)
+{
+	/* 복제 해야할 원형 객체를 검색 */
+	CGameObject* pPrototype = Find_Prototype(strPrototypeTag);
+	if (nullptr == pPrototype)
+		return nullptr;
+
+	CGameObject* pGameObject = pPrototype->Clone(pArg);
+	if (nullptr == pGameObject)
+		return nullptr;
+
+	return pGameObject;
+}
+
 const CComponent * CObject_Manager::Get_Component(_uint iLevelIndex, const wstring & strLayerTag, const wstring & strComTag, _uint iIndex)
 {
 	CLayer*		pLayer = Find_Layer(iLevelIndex, strLayerTag);

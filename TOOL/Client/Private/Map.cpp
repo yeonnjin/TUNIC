@@ -111,7 +111,7 @@ HRESULT CMap::Add_Components()
         return E_FAIL;
 
     /* For.Com_Navigation */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation_Load"),
         TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
         return E_FAIL;
     
@@ -175,7 +175,7 @@ CGameObject* CMap::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Create : CMap"));
+        MSG_BOX(TEXT("Failed To Clone : CMap"));
 
         Safe_Release(pInstance);
     }

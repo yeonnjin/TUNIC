@@ -23,6 +23,7 @@ HRESULT CSky::Initialize(void* pArg)
     tDesc.fSpeedPerSec = 10.f;
     tDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
+
     if (FAILED(__super::Initialize(&tDesc)))
         return E_FAIL;
 

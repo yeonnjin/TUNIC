@@ -36,6 +36,7 @@ public: /* For.Level_Manager */
 public: /* For.Object_Manager */
 	HRESULT				Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
 	HRESULT				Add_Clone(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strPrototypeTag, void* pArg = nullptr);
+	class CGameObject*	Get_GameObject_Clone(const wstring& strPrototypeTag, void* pArg = nullptr);
 	const CComponent*	Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex = 0);
 	_uint				Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 	const CGameObject*	Get_Object(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex = 0);
@@ -66,6 +67,7 @@ public: /* For.ImGui_Manager */
 	void				New_Frame();
 	HRESULT				Render();
 	void				EditTransform(CTransform* pTransformCom);
+	void				Open_FileDialog();
 	HRESULT				Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath);
 	//_uint				Get_Model_List_Size(CModel::TYPE eType);
 	vector<wstring>*	Get_Model_List(CModel::TYPE eType);

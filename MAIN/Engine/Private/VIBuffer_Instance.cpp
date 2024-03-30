@@ -11,15 +11,18 @@ CVIBuffer_Instance::CVIBuffer_Instance(const CVIBuffer_Instance& rhs)
     , m_iInstanceStride{ rhs.m_iInstanceStride }
     , m_iNumInstance{ rhs.m_iNumInstance }
     , m_iIndexCountPerInstance{ rhs.m_iIndexCountPerInstance }
-    , m_iInstanceVertices{ rhs.m_iInstanceVertices }
+    , m_pInstanceVertices{ rhs.m_pInstanceVertices }
     , m_InstanceBufferDesc{ rhs.m_InstanceBufferDesc }
     , m_InstanceSubResourceData{ rhs.m_InstanceSubResourceData }
+    , m_pLifeTimes{ rhs.m_pLifeTimes }
 {
     Safe_AddRef(m_pVBInstance);
 }
 
 HRESULT CVIBuffer_Instance::Initialize_Prototype()
 {
+    m_RandomNumber = mt19937_64(m_RandomDevice());
+
     return S_OK;
 }
 
@@ -71,9 +74,34 @@ HRESULT CVIBuffer_Instance::Render()
     return S_OK;
 }
 
+void CVIBuffer_Instance::Update(_float fTimeDelta)
+{
+    D3D11_MAPPED_SUBRESOURCE    tSubResource{};
+
+    m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &tSubResource);
+
+    for (size_t i = 0; i < m_iNumInstance; i++)
+    {
+        m_pLifeTimes[i].x += fTimeDelta;
+
+        if (m_pLifeTimes[i].x > m_pLifeTimes[i].y)
+        {
+            ((VTXMATRIX*)tSubResource.pData)[i].isLived = false;
+        }
+    }
+
+    m_pContext->Unmap(m_pVBInstance, 0);
+}
+
 void CVIBuffer_Instance::Free()
 {
     __super::Free();
+
+    if (false == m_isCloned)
+    {
+        Safe_Delete_Array(m_pLifeTimes);
+        Safe_Delete_Array(m_pInstanceVertices);
+    }
 
     Safe_Release(m_pVBInstance);
 }

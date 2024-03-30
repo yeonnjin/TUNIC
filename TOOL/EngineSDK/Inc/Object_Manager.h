@@ -16,6 +16,7 @@ private:
 	virtual ~CObject_Manager() = default;
 
 public:
+	class CGameObject*			Get_GameObject_Clone(const wstring& strPrototypeTag, void* pArg);
 	const class CComponent*		Get_Component(_uint iLevelIndex, const wstring& strLayerTag, const wstring& strComTag, _uint iIndex);
 	_uint						Get_Object_Count(_uint iLevelIndex, const wstring& strLayerTag);
 	const class CGameObject*	Get_Object(_uint iLevelIndex, const wstring& strLayerTag, _uint iIndex);

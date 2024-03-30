@@ -162,6 +162,15 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
     }
 }
 
+_fvector CTransform::Sliding(_fvector vTargetLook)
+{
+
+
+
+
+    return _fvector();
+}
+
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CTransform* pInstance = new CTransform(pDevice, pContext);

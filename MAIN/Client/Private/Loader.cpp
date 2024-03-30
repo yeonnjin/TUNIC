@@ -22,6 +22,7 @@
 #include "Editor.h"
 #include "Player_Weapon.h"
 #include "Animator.h"
+#include "Particle_Blue.h"
 
 #include "Camera_Free.h"
 #include "Camera_Focus.h"
@@ -135,11 +136,29 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Brush.png"), 1))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_Snow */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Snow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
+		return E_FAIL;
+
 
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+
+	/* Prototype_Component_VIBuffer_Instance_Rect */
+	CVIBuffer_Instance::INSTANCE_DESC		InstanceDesc{};
+
+	InstanceDesc.vPivot = _float3(0.f, 0.f, 0.f);
+	InstanceDesc.vRange = _float3(20.f, 20.f, 20.f);
+	InstanceDesc.vMinScale = _float3(1.f, 1.f, 1.f);
+	InstanceDesc.vMaxScale = _float3(4.f, 4.f, 4.f);
+	InstanceDesc.iNumInstance = 100;
+	InstanceDesc.vLifeTime = _float2(0.f, 10.0f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Instance_Rect"),
+		CVIBuffer_Instance_Rect::Create(m_pDevice, m_pContext, InstanceDesc))))
 		return E_FAIL;
 
 	/* Prototype_Component_Navigation */
@@ -179,8 +198,18 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Shader_VtxInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxInstance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxInstance.hlsl"), VTXINSTANCE::Elements, VTXINSTANCE::iNumElements))))
+		return E_FAIL;
+
 	
 	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_GameObject_Particle_Blue */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Blue"),
+		CParticle_Blue::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_Editor */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Editor"),
@@ -248,7 +277,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shield.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Sword.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shotgun.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 

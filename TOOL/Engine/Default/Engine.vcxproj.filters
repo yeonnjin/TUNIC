@@ -112,6 +112,33 @@
     <Filter Include="01. Utility\02. Components\VIBuffer\Cell">
       <UniqueIdentifier>{430b21cf-5d2c-4302-a1ff-96ec8c220bdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98. ImGui\Etc\dirent">
+      <UniqueIdentifier>{f25c824f-8f67-4675-b0b2-e1e6c3c07483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Navigation\Dot">
+      <UniqueIdentifier>{3087b690-64dd-424b-bf82-64cafe3c0b96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Navigation\Dot\DebugDraw">
+      <UniqueIdentifier>{843225e7-17af-482d-9055-9d98c257ef09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider">
+      <UniqueIdentifier>{86f4cf96-c58a-4672-9e02-871e9aa4312c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding">
+      <UniqueIdentifier>{3d577312-2a5b-49db-ace7-1452a86ac83c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding\AABB">
+      <UniqueIdentifier>{cfc5b3a2-4ca4-430c-adc1-e609a2715a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding\OBB">
+      <UniqueIdentifier>{f5c9c528-8d0a-4741-b401-b1946fdd4a5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\02. Components\Collider\Bounding\SPHERE">
+      <UniqueIdentifier>{032c4e4b-6a24-4a5c-9582-39870344a73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97. ShaderFiles">
+      <UniqueIdentifier>{bf7e5d3d-b355-49f1-94d4-53bef8a641c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -236,6 +263,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Cell.cpp">
       <Filter>01. Utility\02. Components\VIBuffer\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGui\ImGuiFileDialog.cpp">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DebugDraw.cpp">
+      <Filter>01. Utility\02. Components\Navigation\Dot\DebugDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_AABB.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_OBB.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bounding_SPHERE.cpp">
+      <Filter>01. Utility\02. Components\Collider\Bounding\SPHERE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01. Utility\02. Components\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -377,5 +425,42 @@
     <ClInclude Include="..\Public\VIBuffer_Cell.h">
       <Filter>01. Utility\02. Components\VIBuffer\Cell</Filter>
     </ClInclude>
+    <ClInclude Include="..\ImGui\ImGuiFileDialog.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGui\ImGuiFileDialogConfig.h">
+      <Filter>98. ImGui\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Client\ImGui\dirent\dirent.h">
+      <Filter>98. ImGui\Etc\dirent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DebugDraw.h">
+      <Filter>01. Utility\02. Components\Navigation\Dot\DebugDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01. Utility\02. Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_AABB.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_OBB.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding_SPHERE.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding\SPHERE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bounding.h">
+      <Filter>01. Utility\02. Components\Collider\Bounding</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Bin\ShaderFiles\Engine_Shader_Defines.hlsli">
+      <Filter>97. ShaderFiles</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
