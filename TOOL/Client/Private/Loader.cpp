@@ -349,17 +349,23 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/effigy (merge).fbx", TEXT("Prototype_Component_Model_Flower"), TransformMatrix))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Model_Map_Beach */
+	///* For.Prototype_Component_Model_Map_Beach */
 	//TransformMatrix = XMMatrixScaling(100.f, 100.f, 100.f);/*XMMatrixIdentity();*/
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/map_beach2.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
 	//	return E_FAIL;
 
 	/* For.Prototype_Component_Model_Map_FOXGOD */
-	TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/ XMMatrixIdentity();
+	TransformMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f);/* XMMatrixIdentity();*/
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Map_FOXGOD */
+	/*TransformMatrix =  XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Librarian"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map4/Map_Librarian.fbx", TEXT("Prototype_Component_Model_Map_Librarian"), TransformMatrix))))
+		return E_FAIL;*/
 
 	/*TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Object_Chest"),

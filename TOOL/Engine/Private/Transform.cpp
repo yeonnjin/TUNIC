@@ -162,13 +162,14 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
     }
 }
 
-_fvector CTransform::Sliding(_fvector vTargetLook)
+void CTransform::Go_Sliding(_float fTimeDelta, _fvector vTargetLook, CNavigation* pNavigation)
 {
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vLook = Get_State_Vector(STATE_LOOK);
 
+    _vector vSrcPosition = vPosition + XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
 
-
-
-    return _fvector();
+    Set_State(STATE_POSITION, pNavigation->Get_Sliding(vSrcPosition, vPosition, vTargetLook, m_fSpeedPerSec, fTimeDelta));
 }
 
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

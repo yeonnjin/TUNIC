@@ -165,7 +165,7 @@
     <ClInclude Include="..\Public\Blob_State_Attack.h" />
     <ClInclude Include="..\Public\Blob_State_Idle.h" />
     <ClInclude Include="..\Public\Blob_State_Jump.h" />
-    <ClInclude Include="..\Public\Camera_Focus.h" />
+    <ClInclude Include="..\Public\Camera_Follow.h" />
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Editor.h" />
@@ -224,7 +224,7 @@
     <ClCompile Include="..\Private\Blob_State_Attack.cpp" />
     <ClCompile Include="..\Private\Blob_State_Idle.cpp" />
     <ClCompile Include="..\Private\Blob_State_Jump.cpp" />
-    <ClCompile Include="..\Private\Camera_Focus.cpp" />
+    <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Editor.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />

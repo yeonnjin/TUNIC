@@ -25,7 +25,7 @@
 #include "Particle_Blue.h"
 
 #include "Camera_Free.h"
-#include "Camera_Focus.h"
+#include "Camera_Follow.h"
 #include <fstream>
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -231,9 +231,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Camera_Focus */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Focus"),
-		CCamera_Focus::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_
+	*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Follow"),
+		CCamera_Follow::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Player */

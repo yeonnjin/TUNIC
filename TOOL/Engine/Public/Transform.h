@@ -104,6 +104,8 @@ public:
 	void Turn(_fvector vAxis, _float fTimeDelta);
 	void Rotation(_fvector vAxis, _float fRadian);
 
+	void Go_Sliding(_float fTimeDelta, _fvector vTargetLook, class CNavigation* pNavigation);
+
 private:
 	_float4x4		m_WorldMatrix;
 	_float			m_fSpeedPerSec = { 0.f };

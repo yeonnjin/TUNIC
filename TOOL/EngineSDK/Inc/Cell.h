@@ -31,6 +31,8 @@ public:
 
 public:
 	_bool	isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex);
+	_vector	isIn_Sliding(_fvector vPosition, _float fSpeed, _float fTimeDelta, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex);
+	_vector	Get_Sliding(_fvector vPosition, _fvector vOriginPosition, _fvector vLook, _float fSpeed, _float fTimeDelta, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex);
 	_bool	Compare_Points(_fvector vSrcPoint, _fvector vDstPoint);
 
 public:
@@ -55,6 +57,9 @@ private:
 private:
 	class CVIBuffer_Cell*	m_pVIBufferCom = { nullptr };
 #endif
+
+private:
+	_vector			Calculate_Sliding(_fvector vLook, _fvector vNormal);
 
 public:
 	static CCell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _float3* pPoints, _uint iIndex);

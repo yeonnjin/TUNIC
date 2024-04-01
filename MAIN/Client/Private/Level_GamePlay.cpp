@@ -2,7 +2,7 @@
 #include "Level_GamePlay.h"
 
 #include "Camera_Free.h"
-#include "Camera_Focus.h"
+#include "Camera_Follow.h"
 
 #include "Map_Object.h"
 #include "Player.h"
@@ -127,7 +127,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
 		return E_FAIL;*/
 
-	CCamera_Focus::CAMERA_FOCUS_DESC		CameraDesc{};
+	CCamera_Follow::CAMERA_FOLLOW_DESC		CameraDesc{};
 
 	CameraDesc.pTargetTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag, 0));
 	CameraDesc.fFovy = XMConvertToRadians(60.0f);
@@ -140,7 +140,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	CameraDesc.fSpeedPerSec = 3.f;
 	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
-	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Focus"), &CameraDesc)))
+	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Follow"), &CameraDesc)))
 		return E_FAIL;*/
 
 	CCamera_Free::CAMERA_FREE_DESC tCameraFreeDesc{};

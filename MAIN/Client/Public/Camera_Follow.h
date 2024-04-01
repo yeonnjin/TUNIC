@@ -9,21 +9,21 @@ END
 
 BEGIN(Client)
 
-class CCamera_Focus final : public CCamera
+class CCamera_Follow final : public CCamera
 {
 public:
 	enum STATE { START, UPDATE, _END, NONE, STATE_END };
 
 public:
-	typedef struct Camera_Focus_Desc : public CCamera::CAMERA_DESC
+	typedef struct Camera_Follow_Desc : public CCamera::CAMERA_DESC
 	{
 		class CTransform* pTargetTransform;
-	}CAMERA_FOCUS_DESC;
+	}CAMERA_FOLLOW_DESC;
 
 private:
-	CCamera_Focus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCamera_Focus(const CCamera_Focus& rhs);
-	virtual ~CCamera_Focus() = default;
+	CCamera_Follow(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CCamera_Follow(const CCamera_Follow& rhs);
+	virtual ~CCamera_Follow() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -43,7 +43,7 @@ private:
 	class CPlayer*		m_pPlayer;
 
 public:
-	static CCamera_Focus* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CCamera_Follow* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

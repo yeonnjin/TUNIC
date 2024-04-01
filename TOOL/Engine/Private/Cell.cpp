@@ -45,8 +45,8 @@ _bool CCell::isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighb
 
 		// 첫 번째 점 - 두 번째 점
 		_vector	vTargetDir = vPoints[(i + 1) % 3] - vPoints[i];
-		// 수직 벡터 (정규화)
 
+		// 수직 벡터 (정규화)
 		_vector vDstDir = XMVector3Normalize(XMVectorSet(XMVectorGetZ(vTargetDir) * -1, 0.f, XMVectorGetX(vTargetDir), 0.f));
 
 		// 외적 : 해당 방향으로 나갔으면 이웃 인덱스 갱신 (이동한 인덱스)
@@ -60,9 +60,86 @@ _bool CCell::isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighb
 	return true;
 }
 
+_vector CCell::isIn_Sliding(_fvector vPosition, _float fSpeed, _float fTimeDelta, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex)
+{
+	_vector	vPoints[3];
+
+	// 월드 위치 변환
+	for (size_t i = 0; i < POINT_END; i++)
+		vPoints[i] = XMVector3TransformCoord(XMLoadFloat3(&m_vPoints[i]), TerrainWorldMatrix);
+
+	for (size_t i = 0; i < LINE_END; i++)
+	{
+		// 첫 번째 점 - 오브젝트 위치 (정규화)
+		_vector	vSrcDir = XMVector3Normalize(vPosition - vPoints[i]);
+
+		// 첫 번째 점 - 두 번째 점
+		_vector	vTargetDir = vPoints[(i + 1) % 3] - vPoints[i];
+
+		// 수직 벡터 (정규화)
+		_vector vDstDir = XMVector3Normalize(XMVectorSet(XMVectorGetZ(vTargetDir) * -1, 0.f, XMVectorGetX(vTargetDir), 0.f));
+
+		// 외적 : 해당 방향으로 나갔으면 이웃 인덱스 갱신 && -1 이라면 슬라이딩 벡터 구한 후 다시 셀 안에 있는지 계산
+		if (0 < XMVectorGetX(XMVector3Dot(vSrcDir, vDstDir)))
+		{
+			*pNeighborIndex = m_iNeighborIndices[i];
+
+			if (-1 == m_iNeighborIndices[i])
+			{
+				_vector	vNextDir = vPoints[(i + 2) % 3] - vPoints[(i + 1) % 3];
+				return  XMVector3Normalize(vNextDir) * fSpeed * fTimeDelta;
+			}
+		}
+	}
+
+	return vPosition;
+}
+
+_vector CCell::Calculate_Sliding(_fvector vLook, _fvector vNormal)
+{
+	_vector vNorLook = vLook;
+	vNorLook.m128_f32[1] = 0.f;
+	XMVector3Normalize(vNorLook);
+	return XMVector3Normalize(vNorLook - vNormal * XMVector3Dot(vNorLook, vNormal));
+}
+
+_vector CCell::Get_Sliding(_fvector vPosition, _fvector vOriginPosition, _fvector vLook, _float fSpeed, _float fTimeDelta, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex)
+{
+	_vector	vPoints[3];
+
+	// 월드 위치 변환
+	for (size_t i = 0; i < POINT_END; i++)
+		vPoints[i] = XMVector3TransformCoord(XMLoadFloat3(&m_vPoints[i]), TerrainWorldMatrix);
+
+	for (size_t i = 0; i < LINE_END; i++)
+	{
+		// 첫 번째 점 - 오브젝트 위치 (정규화)
+		_vector	vSrcDir = XMVector3Normalize(vPosition - vPoints[i]);
+
+		// 첫 번째 점 - 두 번째 점
+		_vector	vTargetDir = vPoints[(i + 1) % 3] - vPoints[i];
+
+		// 수직 벡터 (정규화)
+		_vector vDstDir = XMVector3Normalize(XMVectorSet(XMVectorGetZ(vTargetDir) * -1, 0.f, XMVectorGetX(vTargetDir), 0.f));
+
+		// 외적 : 해당 방향으로 나갔으면 이웃 인덱스 갱신 (이동한 인덱스)
+		if (0 < XMVectorGetX(XMVector3Dot(vSrcDir, vDstDir)))
+		{
+			*pNeighborIndex = m_iNeighborIndices[i];
+
+			if (-1 == m_iNeighborIndices[i])
+			{
+				return  vOriginPosition + XMVector3Normalize(vTargetDir) * fSpeed * fTimeDelta;
+			}
+		}
+	}
+
+	return vPosition;
+}
+
 _bool CCell::Compare_Points(_fvector vSrcPoint, _fvector vDstPoint)
 {
-	for (size_t i = 0; i < POINT_END; ++i)
+	/*for (size_t i = 0; i < POINT_END; ++i)
 	{
 		if (true == XMVector3Equal(vSrcPoint, XMLoadFloat3(&m_vPoints[i])))
 		{
@@ -72,8 +149,35 @@ _bool CCell::Compare_Points(_fvector vSrcPoint, _fvector vDstPoint)
 			if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[(i + 2) % 3])))
 				return true;
 		}
-	}
+	}*/
 	
+	if (true == XMVector3Equal(vSrcPoint, XMLoadFloat3(&m_vPoints[POINT_A])))
+	{
+		if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[POINT_B])))
+			return true;
+
+		if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[POINT_C])))
+			return true;
+	}
+
+	if (true == XMVector3Equal(vSrcPoint, XMLoadFloat3(&m_vPoints[POINT_B])))
+	{
+		if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[POINT_C])))
+			return true;
+
+		if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[POINT_A])))
+			return true;
+	}
+
+	if (true == XMVector3Equal(vSrcPoint, XMLoadFloat3(&m_vPoints[POINT_C])))
+	{
+		if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[POINT_A])))
+			return true;
+
+		if (true == XMVector3Equal(vDstPoint, XMLoadFloat3(&m_vPoints[POINT_B])))
+			return true;
+	}
+
 	return false;
 }
 

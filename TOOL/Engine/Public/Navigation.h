@@ -25,12 +25,16 @@ public:
 	_int*			Get_Neighbor_Index(_uint iCellIndex);
 	void			Set_Neighbor_Index(_uint iCellIndex, _int* pNeighborindex);
 
+	HRESULT			SetUp_Neighbors();
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize_Prototype(const wstring& strDataFile);
 	virtual HRESULT Initialize(void* pArg) override;
 	void			Tick(_fmatrix WorldMatrix);
 	_bool			isMove(_fvector vPosition);
+	//_vector			Go_Sliding(_fvector vPosition, _fvector vLook);
+	_vector			Get_Sliding(_fvector vPosition, _fvector vOriginPosition, _fvector vTargetLook, _float fSpeed, _float fTimeDelta);
 
 #ifdef _DEBUG
 public:
@@ -47,8 +51,8 @@ private:
 	class CShader*			m_pShader = { nullptr };
 #endif
 
-public:
-	HRESULT					SetUp_Neighbors();
+private:
+	//_vector			Calculate_Sliding(_fvector vLook);
 
 public:
 	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

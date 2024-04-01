@@ -261,7 +261,7 @@
     <ClInclude Include="..\Public\Camera_Free.h">
       <Filter>02.GameObjects\Camera\Free</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Camera_Focus.h">
+    <ClInclude Include="..\Public\Camera_Follow.h">
       <Filter>02.GameObjects\Camera\Focus</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_State_Attack_Sword.h">
@@ -401,7 +401,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp">
       <Filter>02.GameObjects\Camera\Free</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Camera_Focus.cpp">
+    <ClCompile Include="..\Private\Camera_Follow.cpp">
       <Filter>02.GameObjects\Camera\Focus</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Attack_Sword.cpp">

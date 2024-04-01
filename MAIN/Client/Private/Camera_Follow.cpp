@@ -1,33 +1,33 @@
 #include "stdafx.h"
-#include "Camera_Focus.h"
+#include "Camera_Follow.h"
 
 #include "Player.h"
 #include "Easing.h"
 
-CCamera_Focus::CCamera_Focus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CCamera_Follow::CCamera_Follow(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CCamera{ pDevice, pContext }
     , m_pEasing{ CEasing::Get_Instance() }
 {
 }
 
-CCamera_Focus::CCamera_Focus(const CCamera_Focus& rhs)
+CCamera_Follow::CCamera_Follow(const CCamera_Follow& rhs)
     : CCamera{ rhs }
     , m_pEasing{ rhs.m_pEasing }
 {
     Safe_AddRef(m_pEasing);
 }
 
-HRESULT CCamera_Focus::Initialize_Prototype()
+HRESULT CCamera_Follow::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CCamera_Focus::Initialize(void* pArg)
+HRESULT CCamera_Follow::Initialize(void* pArg)
 {
     if (nullptr == pArg)
         return E_FAIL;
 
-    CAMERA_FOCUS_DESC* pDesc = (CAMERA_FOCUS_DESC*)pArg;
+    CAMERA_FOLLOW_DESC* pDesc = (CAMERA_FOLLOW_DESC*)pArg;
 
     m_pTargetTransform = pDesc->pTargetTransform;
 
@@ -41,7 +41,7 @@ HRESULT CCamera_Focus::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CCamera_Focus::Tick(_float fTimeDelta)
+HRESULT CCamera_Follow::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
 
@@ -60,7 +60,7 @@ HRESULT CCamera_Focus::Tick(_float fTimeDelta)
     return S_OK;
 }
 
-void CCamera_Focus::Late_Tick(_float fTimeDelta)
+void CCamera_Follow::Late_Tick(_float fTimeDelta)
 {
     _vector vCamPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
     _vector vTargetPosition = m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION) + m_CamDistance;
@@ -96,18 +96,18 @@ void CCamera_Focus::Late_Tick(_float fTimeDelta)
     __super::Bind_PipeLines();
 }
 
-HRESULT CCamera_Focus::Render()
+HRESULT CCamera_Follow::Render()
 {
     return S_OK;
 }
 
-CCamera_Focus* CCamera_Focus::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CCamera_Follow* CCamera_Follow::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CCamera_Focus* pInstance = new CCamera_Focus(pDevice, pContext);
+    CCamera_Follow* pInstance = new CCamera_Follow(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed To Create : CCamera_Focus"));
+        MSG_BOX(TEXT("Failed To Create : CCamera_Follow"));
 
         Safe_Release(pInstance);
     }
@@ -115,13 +115,13 @@ CCamera_Focus* CCamera_Focus::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
     return pInstance;
 }
 
-CGameObject* CCamera_Focus::Clone(void* pArg)
+CGameObject* CCamera_Follow::Clone(void* pArg)
 {
-    CCamera_Focus* pInstance = new CCamera_Focus(*this);
+    CCamera_Follow* pInstance = new CCamera_Follow(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Clone : CCamera_Focus"));
+        MSG_BOX(TEXT("Failed To Clone : CCamera_Follow"));
 
         Safe_Release(pInstance);
     }
@@ -129,7 +129,7 @@ CGameObject* CCamera_Focus::Clone(void* pArg)
     return pInstance;
 }
 
-void CCamera_Focus::Free()
+void CCamera_Follow::Free()
 {
     __super::Free();
 

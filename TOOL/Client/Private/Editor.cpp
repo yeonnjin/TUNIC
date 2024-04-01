@@ -14,8 +14,8 @@
 #include <fstream>
 //#include "Texture.h"
 
-#define DATAPATH "../Bin/Resources/Data/Map/Etc.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Map_Beach.dat"
+#define DATAPATH "../Bin/Resources/Data/Map/Map_Librarian.dat"
+#define MODELPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
 #define NAVPATH "../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat"
 #pragma region Initial
 
@@ -316,6 +316,9 @@ HRESULT CEditor::Make_Nav_Mesh()
 			vDirPoints[0] = vPoints[0];
 			vDirPoints[1] = vPoints[2];
 			vDirPoints[2] = vPoints[1];
+
+			m_DotPositions[m_iNumCell * 3 + 1] = vDirPoints[1];
+			m_DotPositions[m_iNumCell * 3 + 2] = vDirPoints[2];
 		}
 
 		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vDirPoints, m_iNumCell);
@@ -978,9 +981,9 @@ void CEditor::Tool_Picking()
 {
 	//m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
 
-	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Monster"), g_strTransformTag);
+	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Player"), g_strTransformTag);
 
-	//Gizmo(m_pGizmoTransform);
+	Gizmo(m_pGizmoTransform);
 	ImGui::Checkbox("Using Picking", &m_isUsingPicking);
 	ImGui::Text("LBUTTON : Terrain, RBUTTON : Mesh, DIK_L : Delete");
 

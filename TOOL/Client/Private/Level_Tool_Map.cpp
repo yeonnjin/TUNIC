@@ -94,9 +94,9 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 
 	// MAP OBJECT ============================================================================================================================================
 	CTest_Object::TEST_DESC tDesc = {};
-	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	tDesc.vPosition = /*{ -76.f, 0.f, 60.f };*/_float3(0.f, 0.f, 0.f);
 	tDesc.strModelComTag =  TEXT("Prototype_Component_Model_Player");
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Player"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
 		return E_FAIL;
  
 	//tDesc.vPosition = _float3(0.f, 0.f, 0.f);
@@ -154,7 +154,7 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Test_Object"), TEXT("Prototype_GameObject_Test_Object"))))
 		return E_FAIL;*/
 
-	/*CMap::MAP_DESC */tDesc = {};
+	/*CMap::MAP_DESC tDesc = {}; */
 	/*tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
 	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Weapon_Sword");

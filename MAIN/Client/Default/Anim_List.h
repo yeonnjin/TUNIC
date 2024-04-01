@@ -77,7 +77,7 @@
 
 
 
-_float CCamera_Focus::EaseInOutQuad(float start, float end, float value)
+_float CCamera_Follow::EaseInOutQuad(float start, float end, float value)
 {
     value /= .5f;
     end -= start;

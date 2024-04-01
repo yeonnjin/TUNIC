@@ -61,6 +61,7 @@ void CTest_Object::Tick(_float fTimeDelta)
 
     if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
         m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);
+       // m_pTransformCom->Go_Sliding(fTimeDelta, m_pTransformCom->Get_State_Vector(CTransform::STATE_LOOK), m_pNavigationCom);
     if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
         m_pTransformCom->Go_Backward(fTimeDelta);
     if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))

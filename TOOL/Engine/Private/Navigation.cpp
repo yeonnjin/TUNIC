@@ -165,6 +165,88 @@ _bool CNavigation::isMove(_fvector vPosition)
 	}
 }
 
+_vector CNavigation::Get_Sliding(_fvector vPosition, _fvector vOriginPosition, _fvector vTargetLook, _float fSpeed, _float fTimeDelta)
+{
+	if (-1 == m_iCurrentIndex)
+		return _vector{ 0.f, 0.f, 0.f };
+
+	_int	iNeighborIndex = { -1 };
+
+	_int	iSlidingIndex = m_iCurrentIndex;
+	_vector vSlidingPosition{};
+
+	// 현재 셀에 그대로 있을 때
+	if (true == m_Cells[m_iCurrentIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
+		return vPosition;
+
+	// 밖에 나갔을 때
+	else
+	{
+		while (true)
+		{
+			if (-1 == iNeighborIndex) // 슬라이딩
+				vSlidingPosition = m_Cells[iSlidingIndex]->Get_Sliding(vPosition, vOriginPosition, vTargetLook, fSpeed, fTimeDelta, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex);
+			else
+			{
+				m_iCurrentIndex = iNeighborIndex;
+				return vSlidingPosition;
+			}
+
+			/*if (-1 != iNeighborIndex && true == m_Cells[iNeighborIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
+			{
+				m_iCurrentIndex = iNeighborIndex;
+				return vPosition;
+			}*/
+		
+			if (true == m_Cells[iSlidingIndex]->isIn(vSlidingPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
+			{
+				m_iCurrentIndex = iSlidingIndex;
+				return vSlidingPosition;
+			}
+			else
+			{
+				vSlidingPosition = vOriginPosition + m_Cells[iSlidingIndex]->isIn_Sliding(vPosition, fSpeed, fTimeDelta, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex);
+				return vSlidingPosition;
+			}
+		}	
+	}
+}
+
+//_vector CNavigation::Go_Sliding(_fvector vPosition, _fvector vLook)
+//{
+//	if (-1 == m_iCurrentIndex)
+//		return _vector{ 0.f, 0.f, 0.f };
+//
+//	_int	iNeighborIndex = { -1 };
+//
+//	_int	iSlidingIndex = m_iCurrentIndex;
+//	_vector vSlidingPosition{};
+//
+//	// 현재 셀에 그대로 있을 때
+//	if (true == m_Cells[m_iCurrentIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
+//		return vPosition;
+//	// 밖에 나갔을 때
+//	else
+//	{
+//		while (true)
+//		{
+//			if (-1 == iNeighborIndex) // 슬라이딩
+//				vSlidingPosition = m_Cells[iSlidingIndex]->isIn_Sliding(vPosition, vLook, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex);
+//			else
+//			{
+//				m_iCurrentIndex = iNeighborIndex;
+//				return vPosition;
+//			}
+//
+//			if (true == m_Cells[iSlidingIndex]->isIn(vSlidingPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
+//			{
+//				m_iCurrentIndex = iSlidingIndex;
+//				return vSlidingPosition;
+//			}
+//		}	
+//	}
+//}
+
 HRESULT CNavigation::Add_Cell(CCell* pCell)
 {
 	if (nullptr == pCell)
