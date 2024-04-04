@@ -20,7 +20,7 @@ HRESULT CMonster::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC		GameObjectDesc{};
 
-    GameObjectDesc.fSpeedPerSec = 6.f;
+    GameObjectDesc.fSpeedPerSec = 3.f;
     GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
     if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -54,15 +54,33 @@ HRESULT CMonster::Tick(_float fTimeDelta)
         m_pModelCom->Set_Animation_Index(iIndex);
     }*/
 
+    // State_Machine
+    m_pModelCom->Update_State(fTimeDelta);
+    Update_State();
+
+    // Blending
+    if (true == m_isBlend)
+    {
+        if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+        {
+            m_isBlend = false;
+            m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
+            m_eAnimationIndex = m_eBlendAnimIndex;
+
+        }
+    }
+    else
+        m_pModelCom->Play_Animation(fTimeDelta);
+
     m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
 
     return S_OK;
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)
 {
-   // m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider")));
-
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 

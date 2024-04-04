@@ -59,7 +59,7 @@ HRESULT CMonster_Blob::Tick(_float fTimeDelta)
     m_fDamageCoolTime += fTimeDelta;
     if (true == m_isDamage && 0.5f < m_fDamageCoolTime)
     {
-        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0))->isAttack())
+        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0))->isAttack())
         {
             --m_iHP;
 
@@ -71,24 +71,24 @@ HRESULT CMonster_Blob::Tick(_float fTimeDelta)
         m_fDamageCoolTime = 0.f;
     }
 
-    // State_Machine
-    m_pModelCom->Update_State(fTimeDelta);
-    Update_State();
+    //// State_Machine
+    //m_pModelCom->Update_State(fTimeDelta);
+    //Update_State();
 
-    // Blending
-    if (true == m_isBlend)
-    {
-        if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
-        {
-            m_isBlend = false;
-            m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
-            m_eAnimationIndex = m_eBlendAnimIndex;
-        }
-    }
-    else
-        m_pModelCom->Play_Animation(fTimeDelta);
+    //// Blending
+    //if (true == m_isBlend)
+    //{
+    //    if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+    //    {
+    //        m_isBlend = false;
+    //        m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
+    //        m_eAnimationIndex = m_eBlendAnimIndex;
+    //    }
+    //}
+    //else
+    //    m_pModelCom->Play_Animation(fTimeDelta);
 
-    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
+    //m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
 
     return S_OK;
 }
@@ -134,7 +134,7 @@ HRESULT CMonster_Blob::Bind_ShaderResources()
 
 HRESULT CMonster_Blob::Add_States()
 {
-    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0));
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0));
     m_pModelCom->Add_State(STATE_IDLE, CBlob_State_Idle::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_ATTACK, CBlob_State_Attack::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_JUMP, CBlob_State_Jump::Create(this, pPlayer));

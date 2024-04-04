@@ -3,6 +3,7 @@
 
 #include "Camera_Free.h"
 #include "Camera_Follow.h"
+#include "Camera_LockOn.h"
 
 #include "Map_Object.h"
 #include "Player.h"
@@ -11,6 +12,7 @@
 
 #include "Editor.h"
 #include "Map.h"
+#include "Cell.h"
 
 #include <fstream>
 
@@ -33,7 +35,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_LandObject()))
 		return E_FAIL;
 
-	if(FAILED(Ready_Layer_MapObj(TEXT("Layer_MapObject"))))
+	if(FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -112,37 +114,10 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 
 HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 {
-	/*CCamera_Free::CAMERA_FREE_DESC		CameraDesc{};
+	// 1. 로딩부분에서 카메라 다 넣어주기
+	// 2. 각 레벨 마다 카메라 매니저에 레벨 세팅해주기
 
-	CameraDesc.fMouseSensor = 0.1f;
-	CameraDesc.fFovy = XMConvertToRadians(60.0f);
-	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
-	CameraDesc.fNear = 0.1f;
-	CameraDesc.fFar = 1000.0f;
-	CameraDesc.vEye = _float4(0.f, 15.f, -15.f, 1.f);
-	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	CameraDesc.fSpeedPerSec = 7.f;
-	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
-		return E_FAIL;*/
-
-	CCamera_Follow::CAMERA_FOLLOW_DESC		CameraDesc{};
-
-	CameraDesc.pTargetTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag, 0));
-	CameraDesc.fFovy = XMConvertToRadians(60.0f);
-	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
-	CameraDesc.fNear = 0.1f;
-	CameraDesc.fFar = 1000.0f;
-	CameraDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
-	CameraDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	/*CameraDesc.fSpeedPerSec = 1.f;*/
-	CameraDesc.fSpeedPerSec = 3.f;
-	CameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-
-	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Follow"), &CameraDesc)))
-		return E_FAIL;*/
-
+	// Camera_Free
 	CCamera_Free::CAMERA_FREE_DESC tCameraFreeDesc{};
 	tCameraFreeDesc.fMouseSensor = 1.f;
 	tCameraFreeDesc.fFovy = XMConvertToRadians(60.0f);
@@ -154,8 +129,50 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFreeDesc.fSpeedPerSec = 3.f;
 	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc)))
+	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc));
+	if (nullptr == pCamera)
 		return E_FAIL;
+
+	m_pGameInstance->Add_Camera(TEXT("Camera_Free"), pCamera);
+
+	// Camera_Follow
+	CCamera_Follow::CAMERA_FOLLOW_DESC		tCameraFollowDesc{};
+	tCameraFollowDesc.fFovy = XMConvertToRadians(60.0f);
+	tCameraFollowDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	tCameraFollowDesc.fNear = 0.1f;
+	tCameraFollowDesc.fFar = 1000.0f;
+	tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	tCameraFollowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	tCameraFollowDesc.fSpeedPerSec = 3.f;
+	tCameraFollowDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+	pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Follow"), &tCameraFollowDesc));
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	m_pGameInstance->Add_Camera(TEXT("Camera_Follow"), pCamera);
+
+	// Camera_LockOn
+	CCamera_LockOn::CAMERA_LOCKON_DESC		tCameraLockOnDesc{};
+	tCameraLockOnDesc.fFovy = XMConvertToRadians(60.0f);
+	tCameraLockOnDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	tCameraLockOnDesc.fNear = 0.1f;
+	tCameraLockOnDesc.fFar = 1000.0f;
+	tCameraLockOnDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	tCameraLockOnDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	tCameraLockOnDesc.fSpeedPerSec = 3.f;
+	tCameraLockOnDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+	pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_LockOn"), &tCameraLockOnDesc));
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	m_pGameInstance->Add_Camera(TEXT("Camera_LockOn"), pCamera);
+
+
+	m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
+
+	m_pGameInstance->Set_Camera_Level(LEVEL_GAMEPLAY);
 
 	return S_OK;
 }
@@ -181,6 +198,16 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 
 HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
 {
+	//// Desc
+	//CPlayer::PLAYER_DESC tDesc = {};
+	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
+	//wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	//tDesc.strModelComTag = wstr;
+
+	//// Clone
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
+	//	return E_FAIL;
+
 	// Desc
 	CPlayer::PLAYER_DESC tDesc = {};
 	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
@@ -188,9 +215,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
 	tDesc.strModelComTag = wstr;
 
 	// Clone
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
 		return E_FAIL;
 
+	dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")))->Set_Level(LEVEL_GAMEPLAY);
 
 	return S_OK;
 }
@@ -233,6 +261,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
 			return E_FAIL;
 	}
+
+	tDesc = {};
+	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
+	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	tDesc.strModelComTag = wstr3;
+
+	for (size_t i = 0; i < 1; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
+			return E_FAIL;
+	}
 	
 
 	// "Prototype_Component_Model_Monster_Bat"
@@ -254,16 +293,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_MapObj(const wstring& strLayerTag)
+HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 {
+	// TODO:맵 생성시 네비 태그 같이 전달
 	CMap::MAP_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*/"Prototype_Component_Model_Map_FOXGOD";
+	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*/"Prototype_Component_Model_Map_FOXGOD";/*"Prototype_Component_Model_Map_Librarian";*/
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Map"), &tDesc)))
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Map"), &tDesc)))
 		return E_FAIL;
 
 	////Desc

@@ -17,7 +17,8 @@ public:
 public:
 	typedef struct Camera_Follow_Desc : public CCamera::CAMERA_DESC
 	{
-		class CTransform* pTargetTransform;
+		_bool	isLockOn;
+		_vector vLookAt;
 	}CAMERA_FOLLOW_DESC;
 
 private:
@@ -26,16 +27,25 @@ private:
 	virtual ~CCamera_Follow() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual HRESULT		Tick(_float fTimeDelta) override;
+	virtual void		Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT		Render() override;
+	virtual void		Set_Level(_uint iLevel);
+
+	virtual void		OnEnter(void* pArg);
+	virtual void		OnExit();
 
 private:
-	_vector				m_CamDistance = {};
-	_float				m_fCurTime = {};
-	_bool				m_isFirst = { true };
+	_vector				m_vCamDistance = {};
+	_float				m_fMoveTime = { 0.f };
+	_float				m_fIdleTime = { 0.f };
+	_float				m_fLookTime = { 0.f };
+
+	_vector				m_vLookAt = {};
+
+	_bool				m_isLockOn = { false };
 
 private:
 	class CEasing*		m_pEasing;

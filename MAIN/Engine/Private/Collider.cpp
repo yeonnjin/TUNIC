@@ -85,6 +85,7 @@ _bool CCollider::Check_Collision(CCollider* pTargetCollider)
 	return m_pBounding->Check_Collision(pTargetCollider->m_eType, pTargetCollider->m_pBounding);
 }
 
+#ifdef _DEBUG
 HRESULT CCollider::Render()
 {
 	// 매트릭스 세팅
@@ -104,6 +105,7 @@ HRESULT CCollider::Render()
 
     return S_OK;
 }
+#endif // DEBUG
 
 CCollider* CCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType)
 {

@@ -12,7 +12,7 @@ public:
 	}GAMEOBJECT_DESC;
 
 public:
-	enum OBJECT { OBJ_PLAYER, OBJ_PLAYER_WEAPON, OBJ_MONSTER, OBJ_END };
+	enum OBJECT { OBJ_PLAYER, OBJ_PLAYER_WEAPON, OBJ_MONSTER, OBJ_MONSTER_WEAPON, OBJ_END };
 
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -22,7 +22,7 @@ protected:
 public:
 	// Set
 	void				Set_HP(_int iHP) { m_iHP += iHP; /*if (0 > m_iHP) m_iHP = 0;*/ }
-	void				Set_Dead(_bool isDead) { m_isDead = isDead; }
+	void				Set_Dead(_bool isDead);
 	void				Set_isDamage(_bool isDamage) { m_isDamage = isDamage; }
 
 	// Get

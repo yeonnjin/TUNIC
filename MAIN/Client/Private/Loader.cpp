@@ -9,11 +9,14 @@
 #include "Monster_Spinner.h"
 #include "Monster_Blob.h"
 #include "Monster_Bat.h"
+#include "Monster_CowBot.h"
+#include "CowBot_Weapon.h"
 
 //#include "Effect.h"
 #include "Sky.h"
 #include "Model.h"
 #include "Collider.h"
+#include "Navigation.h"
 
 #include "Player.h"
 #include "Map.h"
@@ -26,6 +29,8 @@
 
 #include "Camera_Free.h"
 #include "Camera_Follow.h"
+#include "Camera_LockOn.h"
+
 #include <fstream>
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -148,6 +153,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
+	/* Prototype_Component_Navigation_Load */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat")))))
+		return E_FAIL;
+
 	/* Prototype_Component_VIBuffer_Instance_Rect */
 	CVIBuffer_Instance::INSTANCE_DESC		InstanceDesc{};
 
@@ -159,11 +169,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 	InstanceDesc.vLifeTime = _float2(0.f, 10.0f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Instance_Rect"),
 		CVIBuffer_Instance_Rect::Create(m_pDevice, m_pContext, InstanceDesc))))
-		return E_FAIL;
-
-	/* Prototype_Component_Navigation */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Navigation.dat")))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("콜라이더를(을) 로딩 중 입니다.");
@@ -231,10 +236,14 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_
-	*/
+	/* For.Prototype_GameObject_Camera_Follow */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Follow"),
 		CCamera_Follow::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_LockOn */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_LockOn"),
+		CCamera_LockOn::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Player */
@@ -257,6 +266,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CMonster_Bat::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Monster_CowBot */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_CowBot"),
+		CMonster_CowBot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Map_Object */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Object"),
 		CMap_Object::Create(m_pDevice, m_pContext))))
@@ -272,14 +286,21 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CPlayer_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Part_CowBot_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_CowBot_Weapon"),
+		CCowBot_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Stick.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shield.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Sword.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shotgun.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 

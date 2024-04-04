@@ -24,6 +24,10 @@ public:
 	virtual HRESULT	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual void	Set_Level(_uint iLevel);
+
+	virtual void		OnEnter(void* pArg);
+	virtual void		OnExit();
 
 private:
 	_float	m_fMouseSensor = { 0.f };

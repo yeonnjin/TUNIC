@@ -23,6 +23,8 @@ public:
 		m_iNeighborIndices[eLine] = pNeighbor->m_iIndex;
 	}
 
+	void	Set_NeighborIndex(_int* pNeighborindex);
+
 public:
 	_bool	isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex);
 	_bool	Compare_Points(_fvector vSrcPoint, _fvector vDstPoint);

@@ -8,7 +8,9 @@ class CModel;
 class CShader;
 class CAnimator;
 class CCollider;
+class CTransform;
 class CPartObject;
+class CNavigation;
 END
 
 /* 귀여운 여우 친구 */
@@ -50,6 +52,7 @@ public:
 
 	enum STATUS { STATUS_HURT, STATUS_STAGGER, STATUS_PARRY, STATUS_END };
 	enum DODGE { DODGE_ROLL, DODGE_FAST, DODGE_DASH, DODGE_END };
+	enum LOCKON { LOCK_ON_FIND, LOCK_ON_NONE, LOCK_OFF, LOCK_END };
 
 	/*enum STATE {
 		STATE_IDLE = 0x01,
@@ -71,20 +74,25 @@ private:
 
 public:
 	// Set
+	void			Set_Level(_uint iLevel) { m_iLevel = iLevel; }
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
 	void			Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender);
 	void			Set_Parrying(_bool isParrying) { m_isParrying = isParrying; }
+	void			Set_LockOn(LOCKON eLockOn) { m_eLockOn = eLockOn; }
 
 	// Get
 	//STATE			Get_State() { return m_eState; }
 	_bool			isMove() { return m_eState == STATE_IDLE ? false : true; }
 	_bool			isAttack() { return m_eState == STATE_ATTACK_STICK || m_eState == STATE_ATTACK_SWORD || m_eState == STATE_ATTACK_SHOTGUN ? true : false; }
 	_bool			isParrying() { return m_isParrying; }
+
 	DIR				Get_Dir() { return m_eDir; }
 	STATUS			Get_Status() { return m_eStatus; }
 	DODGE			Get_Dodge() { return m_eDodge; }
+	LOCKON			Get_LockOn() { return m_eLockOn; }
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
+	CTransform*		Get_LockOn_Transform() { return m_pLookOnTransform; }
 
 	// State
 	void			Change_State(STATE eState);
@@ -98,9 +106,12 @@ public:
 
 private:
 	map<const wstring, CPartObject*>	m_PartObjects;
+	_uint								m_iLevel = { LEVEL_END };
 	
 	_bool								m_isBlend = { false };
 	_bool								m_isParrying = { false };
+
+	_vector								m_vPrePosition = {};
 
 private:
 	ANIMATION							m_eAnimationIndex = { ANIM_END };
@@ -111,15 +122,19 @@ private:
 	STATUS								m_eStatus = { STATUS_HURT };	// 바이트?
 	DODGE								m_eDodge = { DODGE_END };
 	WEAPON								m_eWeapon = { WEAPON_END };
+	LOCKON								m_eLockOn = { LOCK_END };
 
 private:
 	wstring								m_strModelComTag = {};
 	CAnimator*							m_pModelCom = { nullptr };
 	CShader*							m_pShaderCom = { nullptr };
 	CCollider*							m_pColliderCom = { nullptr };
+	CNavigation*						m_pNavigationCom = { nullptr };
+	CTransform*							m_pLookOnTransform = { nullptr };
 
 private:
 	void			Update_State();
+	void			Update_Camera();
 	
 private:
 	HRESULT			Add_Components();
@@ -129,6 +144,7 @@ private:
 	void			Set_Animation();
 	void			Set_Dir();
 	void			Set_Weapon();
+	CTransform*		Set_LockOn_Target();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

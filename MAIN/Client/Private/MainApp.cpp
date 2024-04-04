@@ -6,6 +6,12 @@
 
 #include "Monster_Spinner.h"
 
+#include "Player.h"
+
+#include "Camera.h"
+#include "Camera_Free.h"
+#include "Camera_Follow.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
@@ -36,6 +42,12 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Open_Level(LEVEL_GAMEPLAY)))
 		return E_FAIL;
 	
+	if (FAILED(Ready_Player()))
+		return E_FAIL;
+
+	/*if (FAILED(Ready_Camera()))
+		return E_FAIL;*/
+
 	return S_OK;
 }
 
@@ -45,6 +57,14 @@ void CMainApp::Tick(_float fTimeDelta)
 
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER_WEAPON, CCollision_Manager::GROUP_MONSTER);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER);
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
+		m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
+	else if (true == m_pGameInstance->Get_DIKeyState(DIK_H, KEY_DOWN))
+		m_pGameInstance->Change_Camera(TEXT("Camera_Follow"));
+	else if (true == m_pGameInstance->Get_DIKeyState(DIK_J, KEY_DOWN))
+		m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"));
+
 
 	m_pGameInstance->Late_Tick_Engine(fTimeDelta);	
 }
@@ -91,7 +111,7 @@ HRESULT CMainApp::Open_Level(LEVEL eLevelID)
 }
 
 HRESULT CMainApp::Ready_Prototype_Component_For_Static()
-{
+{	
 	// VIBuffer ===========================================================================================
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -121,6 +141,62 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	return	S_OK;
+}
+
+HRESULT CMainApp::Ready_Player()
+{
+	//// Desc
+	//CPlayer::PLAYER_DESC tDesc = {};
+	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
+	//wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	//tDesc.strModelComTag = wstr;
+
+	//// Clone
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
+	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Ready_Camera()
+{
+	//// Camera_Free
+	//CCamera_Free::CAMERA_FREE_DESC tCameraFreeDesc{};
+	//tCameraFreeDesc.fMouseSensor = 1.f;
+	//tCameraFreeDesc.fFovy = XMConvertToRadians(60.0f);
+	//tCameraFreeDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	//tCameraFreeDesc.fNear = 0.1f;
+	//tCameraFreeDesc.fFar = 1000.0f;
+	//tCameraFreeDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	//tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	//tCameraFreeDesc.fSpeedPerSec = 3.f;
+	//tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+	//CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc));
+	//if (nullptr == pCamera)
+	//	return E_FAIL;
+
+	//m_pGameInstance->Add_Camera(TEXT("Camera_Free"), pCamera);
+
+	//// Camera_Follow
+	//CCamera_Follow::CAMERA_FOLLOW_DESC		tCameraFollowDesc{};
+	//tCameraFollowDesc.pTargetTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag, 0));
+	//tCameraFollowDesc.fFovy = XMConvertToRadians(60.0f);
+	//tCameraFollowDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	//tCameraFollowDesc.fNear = 0.1f;
+	//tCameraFollowDesc.fFar = 1000.0f;
+	//tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	//tCameraFollowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	//tCameraFollowDesc.fSpeedPerSec = 3.f;
+	//tCameraFollowDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+	//pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Follow"), &tCameraFollowDesc));
+	//if (nullptr == pCamera)
+	//	return E_FAIL;
+
+	//m_pGameInstance->Add_Camera(TEXT("Camera_Follow"), pCamera);
+
+	return S_OK;
 }
 
 CMainApp * CMainApp::Create()

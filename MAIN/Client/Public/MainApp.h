@@ -32,6 +32,8 @@ private:
 	HRESULT Ready_Fonts();
 	HRESULT Open_Level(LEVEL eLevelID);
 	HRESULT Ready_Prototype_Component_For_Static();
+	HRESULT Ready_Player();
+	HRESULT Ready_Camera();
 
 public:	
 	static CMainApp* Create();

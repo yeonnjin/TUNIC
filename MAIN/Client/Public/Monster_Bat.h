@@ -39,12 +39,6 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	_bool			m_isBlend = { false };
-	ANIMATION		m_eAnimationIndex = { ANIM_END };
-	ANIMATION		m_eBlendAnimIndex = { ANIM_END };
-	STATE			m_eState = { STATE_END };
-
-private:
 	HRESULT			Add_Components();
 	HRESULT			Bind_ShaderResources();
 

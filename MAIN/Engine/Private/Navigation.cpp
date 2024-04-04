@@ -4,6 +4,8 @@
 #include "Shader.h"
 #include "GameInstance.h"
 
+#include <fstream>
+
 _float4x4   CNavigation::m_WorldMatrix{};
 
 CNavigation::CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -28,25 +30,45 @@ CNavigation::CNavigation(const CNavigation& rhs)
 
 HRESULT CNavigation::Initialize_Prototype(const wstring& strDataFile)
 {
-	_ulong		dwByte = { 0 };
-	HANDLE		hFile = CreateFile(strDataFile.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
+	ifstream fin;
+	fin.open(strDataFile.c_str(), ios::in | ios::binary);
 
-	while (true)
+	// 점 개수 저장
+	_uint iNumDot{};
+	fin.read(reinterpret_cast<char*>(&iNumDot), sizeof(_uint));
+
+	// 점 위치 저장
+	vector<_float3> vSavePositions;
+	for (size_t i = 0; i < iNumDot; i++)
 	{
-		_float3		vPoints[3];
+		_float3 vDotPosition{};
+		fin.read(reinterpret_cast<char*>(&vDotPosition), sizeof(_float3));
+		vSavePositions.push_back(vDotPosition);
+	}
 
-		ReadFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+	// 셀 개수 저장 (점 개수 x 3)
+	_uint iNumCell{};
+	fin.read(reinterpret_cast<char*>(&iNumCell), sizeof(_uint));
 
-		if (0 == dwByte)
-			break;
+	// 셀 생성
+	for (size_t i = 0; i < iNumCell; i++)
+	{
+		_float3	vPositions[3] = {};
+		for (size_t j = 0; j < 3; j++)
+		{
+			vPositions[j] = vSavePositions[i * 3 + j];
+		}
 
-		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, m_Cells.size());
+		// 각 점들의 이웃 인덱스 저장
+		_int vNeighborIndex[3] = {};
+		fin.read(reinterpret_cast<char*>(&vNeighborIndex), sizeof(_int) * 3);
+
+		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPositions, i);
 		if (nullptr == pCell)
 			return E_FAIL;
 
-		m_Cells.emplace_back(pCell);
+		pCell->Set_NeighborIndex(vNeighborIndex);
+		m_Cells.push_back(pCell);
 	}
 
 	if (FAILED(SetUp_Neighbors()))
@@ -56,7 +78,6 @@ HRESULT CNavigation::Initialize_Prototype(const wstring& strDataFile)
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Cell.hlsl"), VTXPOS::Elements, VTXPOS::iNumElements);
 	if (nullptr == m_pShader)
 		return E_FAIL;
-
 #endif
 
 	return S_OK;
@@ -99,6 +120,9 @@ _bool CNavigation::isMove(_fvector vPosition)
 				if (-1 == iNeighborIndex)
 					return false;
 
+				if (m_iCurrentIndex == iNeighborIndex)
+					return true;
+
 				if (true == m_Cells[iNeighborIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
 				{
 					m_iCurrentIndex = iNeighborIndex;
@@ -140,6 +164,10 @@ HRESULT CNavigation::Render()
 
 HRESULT CNavigation::SetUp_Neighbors()
 {
+	_int Index[3] = {-1, -1, -1};
+	for(auto& pCell : m_Cells)
+		pCell->Set_NeighborIndex(Index);
+
 	for (auto& pSrcCell : m_Cells)
 	{
 		for (auto& pDstCell : m_Cells)

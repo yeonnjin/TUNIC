@@ -277,6 +277,86 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
     }
 }
 
+void CTransform::Go_Front(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vUp = { 0.f, 0.f, 1.f };
+
+    vPosition -= XMVector3Normalize(vUp) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_FL(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vDir = { -1.f, 0.f, -1.f };
+
+    vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_L(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vLeft = { 1.f, 0.f, 0.f };
+
+    vPosition -= XMVector3Normalize(vLeft) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_BL(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vDir = { -1.f, 0.f, 1.f };
+
+    vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_Back(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vUp = { 0.f, 0.f, 1.f };
+
+    vPosition += XMVector3Normalize(vUp) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_BR(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vDir = { 1.f, 0.f, 1.f };
+
+    vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_R(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vLeft = { 1.f, 0.f, 0.f };
+
+    vPosition += XMVector3Normalize(vLeft) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_FR(_float fTimeDelta)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vDir = { 1.f, 0.f, -1.f };
+
+    vPosition += XMVector3Normalize(vDir) * m_fSpeedPerSec * fTimeDelta;
+
+    Set_State(STATE_POSITION, vPosition);
+}
+
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CTransform* pInstance = new CTransform(pDevice, pContext);

@@ -6,6 +6,7 @@
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
 #include "Light_Manager.h"
+#include "Camera_Manager.h"
 #include "Font_Manager.h"
 #include "ImGui_Manager.h"
 
@@ -58,6 +59,10 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pCollision_Manager)
 		return E_FAIL;
 
+	m_pCamera_Manager = CCamera_Manager::Create();
+	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
 	m_pFont_Manager = CFont_Manager::Create();
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
@@ -91,7 +96,8 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 {
 	if (nullptr == m_pLevel_Manager || 
 		nullptr == m_pObject_Manager ||
-		nullptr == m_pPipeLine)
+		nullptr == m_pPipeLine ||
+		nullptr == m_pCamera_Manager)
 		return;
 
 	/* 반복적인 갱신이 필요한 객체들의 Tick함수를 호출 */
@@ -99,6 +105,8 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pInput_Device->Tick();
 
 	m_pObject_Manager->Tick(fTimeDelta);
+
+	m_pCamera_Manager->Tick(fTimeDelta);
 
 	m_pPipeLine->Tick();
 
@@ -110,10 +118,13 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 void CGameInstance::Late_Tick_Engine(_float fTimeDelta)
 {
 	if ( nullptr == m_pObject_Manager ||
-		nullptr == m_pCollision_Manager)
+		nullptr == m_pCollision_Manager ||
+		nullptr == m_pCamera_Manager)
 		return;
 
 	m_pObject_Manager->Late_Tick(fTimeDelta);
+
+	m_pCamera_Manager->Late_Tick(fTimeDelta);
 
 	m_pCollision_Manager->Clear_Group();
 }
@@ -392,6 +403,38 @@ void CGameInstance::Check_Collision_Groups(CCollision_Manager::GROUP eCollisionG
 	m_pCollision_Manager->Check_Collision_Groups(eCollisionGroupA, eCollisionGroupB);
 }
 
+HRESULT CGameInstance::Add_Camera(const wstring& strCameraTag, CCamera* pCamera)
+{
+	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
+	return m_pCamera_Manager->Add_Camera(strCameraTag, pCamera);
+}
+
+HRESULT CGameInstance::Change_Camera(const wstring& strCameraTag, void* pArg)
+{
+	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
+	return m_pCamera_Manager->Change_Camera(strCameraTag, pArg);
+}
+
+void CGameInstance::Set_Camera_Level(_uint iLevel)
+{
+	if (nullptr == m_pCamera_Manager)
+		return;
+
+	m_pCamera_Manager->Set_Camera_Level(iLevel);
+}
+
+HRESULT CGameInstance::Set_Exit(const wstring& strCameraTag, _bool isExit)
+{
+	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
+	return m_pCamera_Manager->Set_Exit(strCameraTag, isExit);
+}
+
 HRESULT CGameInstance::Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strFontTag, const wstring& strFontFilePath)
 {
 	if (nullptr == m_pFont_Manager)
@@ -445,8 +488,9 @@ void CGameInstance::Free()
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);	
 	Safe_Release(m_pPicking);
-	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pComponent_Manager);
+	Safe_Release(m_pCamera_Manager);
+	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);
 }

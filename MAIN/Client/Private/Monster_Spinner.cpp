@@ -21,7 +21,7 @@ CMonster_Spinner::CMonster_Spinner(const CMonster_Spinner& rhs)
 
 _bool CMonster_Spinner::Get_isCollision()
 {
-    return m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider")));   
+    return m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_Player"), TEXT("Com_Collider")));
 }
 
 void CMonster_Spinner::Change_State(STATE eState)
@@ -64,7 +64,7 @@ HRESULT CMonster_Spinner::Tick(_float fTimeDelta)
     m_fDamageCoolTime += fTimeDelta;
     if (true == m_isDamage && 0.5f < m_fDamageCoolTime)
     {
-        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0))->isAttack())
+        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0))->isAttack())
         {
             --m_iHP;
                       
@@ -75,25 +75,6 @@ HRESULT CMonster_Spinner::Tick(_float fTimeDelta)
         m_isDamage = false;
         m_fDamageCoolTime = 0.f;
     }
-
-    // State_Machine
-    m_pModelCom->Update_State(fTimeDelta);
-    Update_State();
-
-    // Blending
-    if (true == m_isBlend)
-    {
-        if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
-        {
-            m_isBlend = false;
-            m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
-            m_eAnimationIndex = m_eBlendAnimIndex;
-        }
-    }
-    else
-        m_pModelCom->Play_Animation(fTimeDelta);
-
-    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
 
     return S_OK;
 }
@@ -131,7 +112,7 @@ HRESULT CMonster_Spinner::Add_Components()
 
 HRESULT CMonster_Spinner::Add_States()
 {
-    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0));
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0));
     m_pModelCom->Add_State(STATE_IDLE, CSpinner_State_Idle::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_HIDDEN, CSpinner_State_Hidden::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_EXPLODE, CSpinner_State_Explode::Create(this, pPlayer));
@@ -181,6 +162,15 @@ void CMonster_Spinner::Set_Animation()
     // ROOT
     m_pModelCom->Set_Animation_isRoot(ANIM_FORWARD, true);
     m_pModelCom->Set_Animation_isRoot(ANIM_RECOIL, true);
+
+    // BLENDING
+    m_pModelCom->Set_Blend_Time(ANIM_EXPLODE, true);
+    m_pModelCom->Set_Blend_Time(ANIM_EMERGE, true);
+    m_pModelCom->Set_Blend_Time(ANIM_FORWARD, true);
+    m_pModelCom->Set_Blend_Time(ANIM_HIDDEN, true);
+    m_pModelCom->Set_Blend_Time(ANIM_IDLE, true);
+    m_pModelCom->Set_Blend_Time(ANIM_RECOIL, true);
+    m_pModelCom->Set_Blend_Time(ANIM_START_SPIN, true);
 }
 
 CMonster_Spinner* CMonster_Spinner::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

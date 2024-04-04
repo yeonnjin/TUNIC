@@ -27,16 +27,28 @@ protected:
 	virtual ~CCamera() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT Tick(_float fTimeDelta) override;
-	virtual void Late_Tick(_float fTimeDelta) override;
+	virtual _fvector	Get_Position();
+
+	virtual void		Set_Exit(_bool isExit) { m_isExit = isExit; }
+	virtual void		Set_Position(_fvector vPosition);
+	virtual void		Set_Level(_uint iLevel) = 0;
+
+public:
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual HRESULT		Tick(_float fTimeDelta) override;
+	virtual void		Late_Tick(_float fTimeDelta) override;
+
+	virtual void		OnEnter(void* pArg) = 0;
+	virtual void		OnExit() = 0;
 
 protected:
-	_float			m_fFovy = { 0.0f };
-	_float			m_fAspect = { 0.0f };
-	_float			m_fNear = { 0.0f };
-	_float			m_fFar = { 0.0f };
+	_float				m_fFovy = { 0.0f };
+	_float				m_fAspect = { 0.0f };
+	_float				m_fNear = { 0.0f };
+	_float				m_fFar = { 0.0f };
+
+	_bool				m_isExit = { false };
 
 protected:
 	HRESULT Bind_PipeLines();

@@ -50,6 +50,8 @@ public:
 		memcpy(&m_WorldMatrix, &matrix, sizeof(_float4x4));
 	}
 
+	void Set_Dead(_bool isDead) { m_isDead = isDead; }
+
 	// Get
 	_vector Get_State_Vector(STATE eState) {
 		return XMLoadFloat4x4(&m_WorldMatrix).r[eState];
@@ -90,6 +92,8 @@ public:
 		return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix));
 	}
 
+	_bool Get_Dead() { return m_isDead; }
+
 public:
 	virtual HRESULT	Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -99,7 +103,7 @@ public:
 
 public:
 	void Go_Straight(_float fTimeDelta, class CNavigation* pNavigation = nullptr);
-	void Go_Backward(_float fTimeDelta);
+	void Go_Backward(_float fTimeDelta);	
 	void Go_Left(_float fTimeDelta);
 	void Go_Right(_float fTimeDelta);
 	void Go_Look(_float fTimeDelta, _fvector vLook);
@@ -111,10 +115,21 @@ public:
 	_bool Turn_Angle(_fvector vAxis, _float fAngle, _float fTimeDelta);
 	void Rotation(_fvector vAxis, _float fRadian);
 
+	void Go_Front(_float fTimeDelta);
+	void Go_FL(_float fTimeDelta);
+	void Go_L(_float fTimeDelta);
+	void Go_BL(_float fTimeDelta);
+	void Go_Back(_float fTimeDelta);
+	void Go_BR(_float fTimeDelta);
+	void Go_R(_float fTimeDelta);
+	void Go_FR(_float fTimeDelta);
+
 private:
 	_float4x4		m_WorldMatrix;
 	_float			m_fSpeedPerSec = { 0.f };
 	_float			m_fRotationPerSec = { 0.f };
+
+	_bool			m_isDead = { false };
 
 public:
 	static	CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

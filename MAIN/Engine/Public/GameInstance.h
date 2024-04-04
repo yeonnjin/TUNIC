@@ -73,6 +73,12 @@ public: /* For.Collision_Manager */
 	HRESULT				Add_Group(CCollision_Manager::GROUP eCollisionGroup, class CGameObject* pGameObject);
 	void				Check_Collision_Groups(CCollision_Manager::GROUP eCollisionGroupA, CCollision_Manager::GROUP eCollisionGroupB);
 
+public: /* For.Camera_Manager */
+	HRESULT				Add_Camera(const wstring& strCameraTag, class CCamera* pCamera);
+	HRESULT				Change_Camera(const wstring& strCameraTag, void* pArg = nullptr);
+	void				Set_Camera_Level(_uint iLevel);
+	HRESULT				Set_Exit(const wstring& strCameraTag, _bool isExit);
+
 public: /* For.Font_Manager */
 	HRESULT				Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strFontTag, const wstring& strFontFilePath);
 	HRESULT				Render_Font(const wstring& strFontTag, const wstring& strOutputText, const _float2& vPosition, _fvector vColor, _float fRadian);
@@ -95,6 +101,7 @@ private:
 	class CPicking*					m_pPicking = { nullptr };
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CCollision_Manager*		m_pCollision_Manager = { nullptr };
+	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CImGui_Manager*			m_pImGui_Manager = { nullptr };
 

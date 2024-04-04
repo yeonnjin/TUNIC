@@ -76,6 +76,11 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
+void CGameObject::Set_Dead(_bool isDead) 
+{
+	m_isDead = isDead;
+	m_pTransformCom->Set_Dead(isDead);
+}
 
 HRESULT CGameObject::Add_Component(_uint iLevelIndex, const wstring & strPrototypeTag, const wstring & strComponentTag, CComponent** ppOut, void* pArg)
 {

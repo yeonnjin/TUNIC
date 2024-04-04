@@ -33,6 +33,12 @@ public:
 	virtual HRESULT Render() override;
 
 protected:
+	_bool			m_isBlend = { false };
+	_uint			m_eAnimationIndex = { 0 };
+	_uint			m_eBlendAnimIndex = { 0 };
+	_uint			m_eState = { 0 };
+
+protected:
 	wstring			m_strModelComTag = {};
 	CAnimator*		m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };

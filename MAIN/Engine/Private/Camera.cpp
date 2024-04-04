@@ -12,6 +12,16 @@ CCamera::CCamera(const CCamera & rhs)
 {
 }
 
+_fvector CCamera::Get_Position()
+{
+	return m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+}
+
+void CCamera::Set_Position(_fvector vPosition)
+{
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
 HRESULT CCamera::Initialize_Prototype()
 {
 	return S_OK;

@@ -111,7 +111,7 @@ HRESULT CMap::Add_Components()
         return E_FAIL;
 
     /* For.Com_Navigation */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation_Load"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Navigation"),
         TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
         return E_FAIL;
     

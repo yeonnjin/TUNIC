@@ -356,16 +356,16 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	return E_FAIL;
 
 	/* For.Prototype_Component_Model_Map_FOXGOD */
-	TransformMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f);/* XMMatrixIdentity();*/
+	TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Model_Map_FOXGOD */
-	/*TransformMatrix =  XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Librarian"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map4/Map_Librarian.fbx", TEXT("Prototype_Component_Model_Map_Librarian"), TransformMatrix))))
-		return E_FAIL;*/
+	///* For.Prototype_Component_Model_Map_FOXGOD */
+	//TransformMatrix =  XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Librarian"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map4/Map_Librarian.fbx", TEXT("Prototype_Component_Model_Map_Librarian"), TransformMatrix))))
+	//	return E_FAIL;
 
 	/*TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Object_Chest"),
@@ -393,15 +393,15 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/CowBot/CowBot.fbx", TEXT("Prototype_Component_Model_Monster_CowBot"), TransformMatrix))))
 	//	return E_FAIL;
 
-	/*TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
+	TransformMatrix = /*XMMatrixScaling(20.f, 20.f, 20.f);*/XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Monster_CowBot_Shield"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/CowBot/CowBotShield.fbx", TEXT("Prototype_Component_Model_Monster_CowBot_Shield"), TransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/CowBot/shield.fbx", TEXT("Prototype_Component_Model_Monster_CowBot_Shield"), TransformMatrix))))
 		return E_FAIL;
 
-	TransformMatrix = XMMatrixScaling(20.f, 20.f, 20.f);
+	TransformMatrix = /*XMMatrixScaling(20.f, 20.f, 20.f);*/XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Monster_CowBot_Sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/CowBot/CowBotSword.fbx", TEXT("Prototype_Component_Model_Monster_CowBot_Sword"), TransformMatrix))))
-		return E_FAIL;*/
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/CowBot/sword.fbx", TEXT("Prototype_Component_Model_Monster_CowBot_Sword"), TransformMatrix))))
+		return E_FAIL;
 
 	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Monster_Spinner"),

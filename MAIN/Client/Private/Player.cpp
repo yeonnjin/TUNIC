@@ -7,12 +7,15 @@
 #include "Player_State_Idle.h"
 #include "Player_State_Sleep.h"
 #include "Player_State_Move.h"
+//#include "Player_State_LockOn.h"
 #include "Player_State_Attack_Stick.h"
 #include "Player_State_Attack_Sword.h"
 #include "Player_State_Attack_Shotgun.h"
 #include "Player_State_Damage.h"
 #include "Player_State_Dodge.h"
 #include "Player_State_Defense.h"
+
+#include "Camera_LockOn.h"
 
 #define	WEAPONBONEIDX 45
 #define SHIELDBONE 24
@@ -40,7 +43,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC		GameObjectDesc{};
 
-	GameObjectDesc.fSpeedPerSec = 5.f;
+	GameObjectDesc.fSpeedPerSec = 8.f;
 	GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -63,7 +66,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	m_eType = OBJ_PLAYER;
 
-	_float4 vPosition = _float4(0.f, 0.5f, 0.f, 1.f);
+	_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);  /*_float4(3.f, 0.2f, 50.f, 1.f);*/ /*_float4(-75.f, 3.f, 68.f, 1.f);*/
+	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	m_pModelCom->Set_Animation_Index(ANIM_IDLE);
@@ -76,79 +80,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 HRESULT CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	//static _uint iIndex = 0;
-	//if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
-	//{
-	//	iIndex++;
-	//	if (iIndex > 60)
-	//		iIndex = 0;
-
-	//	if (iIndex == 39)
-	//	{
-	//		int a = 0;
-	//	}
-
-	//	//m_pModelCom->Set_Animation_Index(iIndex);
-	//	m_isBlend = true;
-	//}
-	//if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
-	//{
-	//	iIndex--;
-	//	if (iIndex < 0)
-	//		iIndex = 60;
-
-	//	//m_pModelCom->Set_Animation_Index(iIndex);
-	//	m_isBlend = true;
-	//}
-
-	//if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
-	//{
-	//	m_pTransformCom->Go_Straight(fTimeDelta);
-	//}
-	//if (m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_PRESS))
-	//{
-	//	m_pTransformCom->Go_Left(fTimeDelta);
-	//}
-	//if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_PRESS))
-	//{
-	//	m_pTransformCom->Go_Backward(fTimeDelta);
-	//}
-	//if (m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_PRESS))
-	//{
-	//	m_pTransformCom->Go_Right(fTimeDelta);
-	//}
-
-	//// Test
-	////m_isBlend = false;
-	//if (true == m_pModelCom->isFinished())
-	//{
-	//	m_isBlend = true;
-	//}
-
-	//if (true == m_isBlend)
-	//{
-	//	if (S_OK == m_pModelCom->Blending_Animation(iIndex, fTimeDelta))
-	//	{
-	//		m_isBlend = false;
-	//		m_pModelCom->Set_Animation_Index(iIndex);
-	//	}
-	//}
-
-	
 
 	Set_Dir();
 	Set_Weapon();
 	
-	
-	// PartObject
-	for (auto& PartObject : m_PartObjects)
-		PartObject.second->Tick(fTimeDelta);
-
 	// State_Machine
 	m_fDamageCoolTime += fTimeDelta;
 	m_pModelCom->Update_State(fTimeDelta);
 	Update_State();
-
+	Update_Camera();
 
 	// Blending
 	if (true == m_isBlend)
@@ -164,6 +104,17 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		m_pModelCom->Play_Animation(fTimeDelta);
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+	if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+	}
+
+	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+	// PartObject
+	for (auto& PartObject : m_PartObjects)
+		PartObject.second->Tick(fTimeDelta);
 
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 
@@ -225,7 +176,7 @@ void CPlayer::Update_State()
 			m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) ||
 			m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 		{
-			Change_State(STATE_MOVE);
+			Change_State(STATE_MOVE);			
 		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
@@ -270,7 +221,24 @@ void CPlayer::Update_State()
 		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-			Change_State(STATE_ATTACK_STICK);
+		{
+			switch (m_eWeapon)
+			{
+			case WEAPON_STICK:
+				Change_State(STATE_ATTACK_STICK);
+				break;
+			case WEAPON_SWORD:
+				Change_State(STATE_ATTACK_SWORD);
+				break;
+			case WEAPON_SHOTGUN:
+				Change_State(STATE_ATTACK_SHOTGUN);
+				break;
+			case WEAPON_END:
+				break;
+			default:
+				break;
+			}
+		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
@@ -296,6 +264,35 @@ void CPlayer::Update_State()
 		break;
 	default:
 		break;
+	}
+}
+
+void CPlayer::Update_Camera()
+{
+	if ((LOCK_OFF == m_eLockOn || LOCK_END == m_eLockOn) && true == m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_DOWN))
+	{
+		CTransform* pLockOnTransform = Set_LockOn_Target();
+		if (nullptr != pLockOnTransform)
+		{
+			CCamera_LockOn::CAMERA_LOCKON_DESC tDesc{};
+			tDesc.vTargetTransform = pLockOnTransform;
+			m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"), &tDesc);
+			m_eLockOn = LOCK_ON_FIND;
+		}
+		else
+		{
+			m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"));
+			m_eLockOn = LOCK_ON_NONE;
+		}
+	}
+
+	if((LOCK_ON_FIND == m_eLockOn || LOCK_ON_NONE == m_eLockOn )&& true == m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_UP))
+	{
+		m_pGameInstance->Set_Exit(TEXT("Camera_LockOn"), true);
+		m_eLockOn = LOCK_OFF;
+
+		if(true == isMove())
+			Set_Blending(true, ANIM_WALK_FORWARD);
 	}
 }
 
@@ -359,6 +356,13 @@ HRESULT CPlayer::Add_Components()
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
+
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NavigationDesc{};
+	NavigationDesc.iCurrentIndex = 0;
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -442,6 +446,7 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_IDLE, CPlayer_State_Idle::Create(this));
 	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
 	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
+	//m_pModelCom->Add_State(STATE_LOCKON, CPlayer_State_LockOn::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second)));
 	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second)));
 	m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second)));
@@ -554,15 +559,52 @@ void CPlayer::Set_Dir()
 
 	m_eDir = DIR_END;
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
-		m_eDir = DIR_FRONT;
-	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
-		m_eDir = DIR_BACK;
-	if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		m_eDir = DIR_LEFT;
-	if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		m_eDir = DIR_RIGHT;
+	if (LOCK_ON_FIND == m_eLockOn || LOCK_ON_NONE == m_eLockOn)
+	{
+		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_DOWN))
+		{
+			Set_Blending(true, CPlayer::ANIM_WALK_FORWARD);
+			m_eDir = DIR_FRONT;
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+			m_eDir = DIR_FRONT;
 
+		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_DOWN))
+		{
+			Set_Blending(true, CPlayer::ANIM_WALK_BACKWARD);
+			m_eDir = DIR_BACK;
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+			m_eDir = DIR_BACK;
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_DOWN))
+		{
+			Set_Blending(true, CPlayer::ANIM_WALK_LEFT);
+			m_eDir = DIR_LEFT;
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+			m_eDir = DIR_LEFT;
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_DOWN))
+		{
+			Set_Blending(true, CPlayer::ANIM_WALK_RIGHT);
+			m_eDir = DIR_RIGHT;
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+			m_eDir = DIR_RIGHT;
+	}
+	else
+	{
+		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+			m_eDir = DIR_FRONT;
+		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+			m_eDir = DIR_BACK;
+		if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+			m_eDir = DIR_LEFT;
+		if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+			m_eDir = DIR_RIGHT;
+	}
+	
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
 		m_eDir = DIR_FL;
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
@@ -571,7 +613,6 @@ void CPlayer::Set_Dir()
 		m_eDir = DIR_BL;
 	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 		m_eDir = DIR_BR;
-	
 }
 
 void CPlayer::Set_Weapon()
@@ -630,6 +671,34 @@ void CPlayer::Set_Weapon()
 		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Shield"))->second);
 }
 
+CTransform* CPlayer::Set_LockOn_Target()
+{
+	CTransform* pTargetTransform = nullptr;
+
+	// 최대 거리
+	_float fDistance = 20.f;
+	_vector vPlayerPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+	// 플레이어와의 거리
+	_uint iNumMonsters = m_pGameInstance->Get_Object_Count(m_iLevel, TEXT("Layer_Monster"));
+	for (size_t i = 0; i < iNumMonsters; i++)
+	{
+		CTransform* pMonsterTransform = (CTransform*)(m_pGameInstance->Get_Component(m_iLevel, TEXT("Layer_Monster"), g_strTransformTag, i));
+		_vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+		_float fDiff = XMVector3Length(vMonsterPosition - vPlayerPosition).m128_f32[0];
+
+		if (fDistance > fDiff)
+		{
+			fDistance = fDiff;
+			pTargetTransform = pMonsterTransform;
+		}
+	}
+
+	m_pLookOnTransform = pTargetTransform;
+
+	return pTargetTransform;
+}
+
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CPlayer* pInstance = new CPlayer(pDevice, pContext);
@@ -670,6 +739,7 @@ void CPlayer::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pNavigationCom);
 }
 
 void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)

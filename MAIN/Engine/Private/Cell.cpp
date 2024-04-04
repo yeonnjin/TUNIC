@@ -12,27 +12,28 @@ CCell::CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	Safe_AddRef(m_pContext);
 }
 
+void CCell::Set_NeighborIndex(_int* pNeighborindex)
+{
+	for (size_t i = 0; i < 3; i++)
+		m_iNeighborIndices[i] = pNeighborindex[i];
+}
+
 _bool CCell::isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex)
 {
-	_vector	vPoints[3];
+	_vector		vPoints[3];
 
-	// 월드 위치 변환
 	for (size_t i = 0; i < POINT_END; i++)
 		vPoints[i] = XMVector3TransformCoord(XMLoadFloat3(&m_vPoints[i]), TerrainWorldMatrix);
 
 	for (size_t i = 0; i < LINE_END; i++)
 	{
-		// 첫 번째 점 - 오브젝트 위치 (정규화)
-		_vector	vSrcDir = XMVector3Normalize(vPosition - vPoints[i]);
+		_vector		vSourDir = XMVector3Normalize(vPosition - vPoints[i]);
 
-		// 첫 번째 점 - 두 번째 점
-		_vector	vTargetDir = vPoints[(i + 1) % 3] - vPoints[i];
-		// 수직 벡터 (정규화)
+		_vector		vDir = vPoints[i + 1 >= POINT_END ? 0 : i + 1] - vPoints[i];
+		_vector		vDestDir = XMVector3Normalize(XMVectorSet(XMVectorGetZ(vDir) * -1.f, 0.f, XMVectorGetX(vDir), 0.0f));
 
-		_vector vDstDir = XMVector3Normalize(XMVectorSet(XMVectorGetZ(vTargetDir) * -1, 0.f, XMVectorGetX(vTargetDir), 0.f));
-
-		// 외적 : 해당 방향으로 나갔으면 이웃 인덱스 갱신 (이동한 인덱스)
-		if (0 < XMVectorGetX(XMVector3Dot(vSrcDir, vDstDir)))
+		_vector vDot = XMVector3Dot(vSourDir, vDestDir);
+		if (0 < XMVectorGetX(XMVector3Dot(vSourDir, vDestDir)))
 		{
 			*pNeighborIndex = m_iNeighborIndices[i];
 			return false;
@@ -40,6 +41,38 @@ _bool CCell::isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighb
 	}
 
 	return true;
+
+	//_vector	vPoints[3];
+	//_vector vObjectPosition = vPosition;
+	//vObjectPosition.m128_f32[1] = 0.f;
+
+	//// 월드 위치 변환
+	//for (size_t i = 0; i < POINT_END; i++)
+	//{
+	//	vPoints[i] = XMVector3TransformCoord(XMLoadFloat3(&m_vPoints[i]), TerrainWorldMatrix);
+	//	vPoints[i].m128_f32[1] = 0.f;
+	//}
+
+	//for (size_t i = 0; i < LINE_END; i++)
+	//{
+	//	// 첫 번째 점 - 오브젝트 위치 (정규화)
+	//	_vector	vSrcDir = XMVector3Normalize(vObjectPosition - vPoints[i]);
+
+	//	// 첫 번째 점 - 두 번째 점
+	//	_vector	vTargetDir = vPoints[(i + 1) % 3] - vPoints[i];
+	//	
+	//	// 수직 벡터 (정규화)
+	//	_vector vDstDir = XMVector3Normalize(XMVectorSet(XMVectorGetZ(vTargetDir) * -1, 0.f, XMVectorGetX(vTargetDir), 0.f));
+
+	//	// 외적 : 해당 방향으로 나갔으면 이웃 인덱스 갱신 (이동한 인덱스)
+	//	if (0 < XMVectorGetX(XMVector3Dot(vSrcDir, vDstDir)))
+	//	{
+	//		*pNeighborIndex = m_iNeighborIndices[i];
+	//		return false;
+	//	}
+	//}
+
+	//return true;
 }
 
 _bool CCell::Compare_Points(_fvector vSrcPoint, _fvector vDstPoint)
@@ -99,6 +132,7 @@ CCell* CCell::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const
 
 void CCell::Free()
 {
+	__super::Free();
 #ifdef _DEBUG
 	Safe_Release(m_pVIBufferCom);
 #endif

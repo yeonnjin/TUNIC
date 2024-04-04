@@ -42,14 +42,14 @@ HRESULT CSky::Tick(_float fTimeDelta)
 }
 
 void CSky::Late_Tick(_float fTimeDelta)
-{
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pGameInstance->Get_CamPosition_Vector());
-    
+{ 
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 }
 
 HRESULT CSky::Render()
 {
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pGameInstance->Get_CamPosition_Vector());
+
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
 
@@ -58,7 +58,7 @@ HRESULT CSky::Render()
     m_pVIBufferCom->Bind_Buffers();
 
     m_pVIBufferCom->Render();
-
+    
     return S_OK;
 }
 

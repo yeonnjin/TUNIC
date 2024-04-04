@@ -26,6 +26,7 @@
 
 using namespace DirectX;
 
+#include <unordered_map>
 #include <algorithm>
 #include <string>
 #include <vector>

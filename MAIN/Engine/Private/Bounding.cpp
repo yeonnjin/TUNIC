@@ -13,10 +13,12 @@ HRESULT CBounding::Initialize(CBounding::BOUNDING_DESC* pBoundingDesc)
     return S_OK;
 }
 
+#ifdef _DEBUG
 HRESULT CBounding::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 {
     return S_OK;
 }
+#endif
 
 void CBounding::Free()
 {

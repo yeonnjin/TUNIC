@@ -252,7 +252,7 @@ void CAnimator_Controller::Update_RootMotion(_float fTimeDelta)
 	memcpy(&m_vRootDistance[STATE_CUR], (*m_pBones)[ROOTBONEIDX]->Get_TransformationMatrix().m[3], sizeof(_float3));
 
 	// 애니메이션이 끝나면 이전 로컬 위치 갱신
-	if (true == isFinished(m_iPrevAnimIndex) || true == m_isNeedRoot)
+	if (true == isFinished(m_iPrevAnimIndex) || true == isFinished(m_iCurrentAnimIndex) || true == m_isNeedRoot)
 	{
 		m_isNeedRoot = false;
 		m_vRootDistance[STATE_PREV] = m_vRootDistance[STATE_CUR];

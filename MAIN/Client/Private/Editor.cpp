@@ -137,7 +137,8 @@ void CEditor::Gizmo(CTransform* pTransform)
 
 void CEditor::Tool_Picking()
 {
-	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
+	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_Player"), g_strTransformTag);
+	//Safe_AddRef(m_pGizmoTransform);
 	Gizmo(m_pGizmoTransform);
 	
 }
@@ -189,8 +190,8 @@ void CEditor::Free()
 {
 	__super::Free();
 
-	if(nullptr != m_pGizmoTransform)
-		Safe_Release(m_pGizmoTransform);
+	/*if(nullptr != m_pGizmoTransform)
+		Safe_Release(m_pGizmoTransform);*/
 }
 #pragma endregion
 

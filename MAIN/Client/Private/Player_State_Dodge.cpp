@@ -37,7 +37,10 @@ void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
     if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
-        if(m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+        if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) ||
+            m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) ||
+            m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) ||
+            m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
             m_pPlayer->Change_State(CPlayer::STATE_MOVE);
         else
             m_pPlayer->Change_State(CPlayer::STATE_IDLE);

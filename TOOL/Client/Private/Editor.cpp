@@ -15,8 +15,8 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Librarian.dat"
-#define MODELPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
-#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Model_Cow_Weapon.dat"
+#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -390,6 +390,40 @@ HRESULT CEditor::Save_Nav_Mesh()
 
 	// 점 개수 저장
 	fout.write(reinterpret_cast<char*>(&iNumDots), sizeof(_uint));
+
+	for (size_t i = 0; i < m_iNumCell; i++)
+	{
+		_float3	vPoints[3] = { m_DotPositions[i * 3 + 0], m_DotPositions[i * 3 + 1], m_DotPositions[i * 3 + 2] };
+
+		// 방향 설정
+		_float3 vDirPoints[3];
+
+		// 외적
+		_vector vDir1 = XMLoadFloat3(&vPoints[1]) - XMLoadFloat3(&vPoints[0]);
+		_vector vDir2 = XMLoadFloat3(&vPoints[2]) - XMLoadFloat3(&vPoints[1]);
+		_vector vCross = XMVector3Normalize(XMVector3Cross(vDir1, vDir2));
+
+		// 내적
+		_vector vNor = { 0.f, 1.f, 0.f };
+		_vector vDot = XMVector3Dot(vCross, vNor);
+
+		if (vDot.m128_f32[0] >= 0.f && vDot.m128_f32[0] <= 1.f)
+		{
+			vDirPoints[0] = vPoints[0];
+			vDirPoints[1] = vPoints[1];
+			vDirPoints[2] = vPoints[2];
+		}
+		else
+		{
+			vDirPoints[0] = vPoints[0];
+			vDirPoints[1] = vPoints[2];
+			vDirPoints[2] = vPoints[1];
+
+			m_DotPositions[i * 3 + 1] = vDirPoints[1];
+			m_DotPositions[i * 3 + 2] = vDirPoints[2];
+		}
+	}
+
 
 	// 점 위치 저장
 	for(size_t i = 0; i < iNumDots; i++)

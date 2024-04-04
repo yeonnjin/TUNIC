@@ -148,3 +148,36 @@
 +[145] "fox cape"
 +[146] "fox"
 +[147] "fox hair"
+
+// CowBot
++[0]	"RootNode" m_TransformationMatrix = { _11 = 1.00000000 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[1]	"Skuladot redux_shield" m_TransformationMatrix = { _11 = ... } ...}	Engine.dll!Engine::CBone *
++[2]	"Armature" m_TransformationMatrix = { _11 = 1.00000000 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[3]	"root" m_TransformationMatrix = { _11 = 0.780630410 _12 = -2.01347525e-08 ... } ...}	Engine.dll!Engine::CBone *
++[4]	"arm_IK.L" m_TransformationMatrix = { _11 = -0.995344341 ... } ...}	Engine.dll!Engine::CBone *
++[5]	"arm_IK.R" m_TransformationMatrix = { _11 = 0.0454264469 ... } ...}	Engine.dll!Engine::CBone *
++[6]	"hand_IK_pole.L" m_TransformationMatrix = { _11 = 0.710422337 ... } ...}	Engine.dll!Engine::CBone *
++[7]	"hand_IK_pole.R" m_TransformationMatrix = { _11 = 0.956163883 ... } ...}	Engine.dll!Engine::CBone *
++[8]	"leg_IK.L" m_TransformationMatrix = { _11 = 0.911117017 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[9]	"leg_IK.R" m_TransformationMatrix = { _11 = 0.999099731 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[10]	"leg_IK_pole.L" m_TransformationMatrix = { _11 = 1.00000000 ... } ...}	Engine.dll!Engine::CBone *
++[11]	"leg_IK_pole.R" m_TransformationMatrix = { _11 = 1.00000000 ... } ...}	Engine.dll!Engine::CBone *
++[12]	"pelvis" m_TransformationMatrix = { _11 = 0.436290532 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[13]	"chest" m_TransformationMatrix = { _11 = 0.890392780 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[14]	"head" m_TransformationMatrix = { _11 = 0.0419269204 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[15]	"upper_arm.L" m_TransformationMatrix = { _11 = -0.167266265 ... } ...}	Engine.dll!Engine::CBone *
++[16]	"lower_arm.L" m_TransformationMatrix = { _11 = 0.848620594 ... } ...}	Engine.dll!Engine::CBone *
++[17]	"hand.L" m_TransformationMatrix = { _11 = 0.833582878 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[18]	"shield_bone" m_TransformationMatrix = { _11 = -1.07902026 ... } ...}	Engine.dll!Engine::CBone *
++[19]	"upper_arm.R" m_TransformationMatrix = { _11 = -0.162886396 ... } ...}	Engine.dll!Engine::CBone *
++[20]	"lower_arm.R" m_TransformationMatrix = { _11 = 0.930259943 ... } ...}	Engine.dll!Engine::CBone *
++[21]	"hand.R" m_TransformationMatrix = { _11 = 0.450366288 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[22]	"upper_cape" m_TransformationMatrix = { _11 = -0.982765019 ... } ...}	Engine.dll!Engine::CBone *
++[23]	"lower_cape" m_TransformationMatrix = { _11 = 0.674589217 ... } ...}	Engine.dll!Engine::CBone *
++[24]	"upper_leg.L" m_TransformationMatrix = { _11 = -0.455246657 ... } ...}	Engine.dll!Engine::CBone *
++[25]	"lower_leg.L" m_TransformationMatrix = { _11 = 0.999968529 ... } ...}	Engine.dll!Engine::CBone *
++[26]	"foot.L" m_TransformationMatrix = { _11 = 0.908738375 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[27]	"upper_leg.R" m_TransformationMatrix = { _11 = -0.107232690 ... } ...}	Engine.dll!Engine::CBone *
++[28]	"lower_leg.R" m_TransformationMatrix = { _11 = 0.999968171 ... } ...}	Engine.dll!Engine::CBone *
++[29]	"foot.R" m_TransformationMatrix = { _11 = 0.997959554 _12 = ... } ...}	Engine.dll!Engine::CBone *
++[30]	"skuladot" m_TransformationMatrix = { _11 = -0.00999372732 ... } ...}	Engine.dll!Engine::CBone*

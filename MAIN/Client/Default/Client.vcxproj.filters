@@ -97,9 +97,6 @@
     <Filter Include="02.GameObjects\Camera\Free">
       <UniqueIdentifier>{f623cb06-2a97-447a-857d-2f4f0432355f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Camera\Focus">
-      <UniqueIdentifier>{24d0de29-702a-4f20-8473-8ed3583fb9df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Sword">
       <UniqueIdentifier>{3f29a8fb-128a-46a5-bed6-9af3013f52b6}</UniqueIdentifier>
     </Filter>
@@ -165,6 +162,36 @@
     </Filter>
     <Filter Include="02.GameObjects\Particle\Particle_Blue">
       <UniqueIdentifier>{e2c74caa-9c9c-4229-9a34-d204834642a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Follow">
+      <UniqueIdentifier>{24d0de29-702a-4f20-8473-8ed3583fb9df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\LockOn">
+      <UniqueIdentifier>{6a73ccd6-0076-4413-9a25-6e1f0699c07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_LockOn">
+      <UniqueIdentifier>{66e2902d-6533-43de-857f-0c364b728a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot">
+      <UniqueIdentifier>{ef38fa83-fa3f-47f4-84eb-706c59b97437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\Weapon">
+      <UniqueIdentifier>{7b6794b0-2560-4c09-a107-495bd6ac9538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State">
+      <UniqueIdentifier>{376da532-3c5d-4273-9d6f-7e1231e1d939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Idle">
+      <UniqueIdentifier>{105600b3-c915-4352-b166-0a3f9681ed4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Walk">
+      <UniqueIdentifier>{5b09d303-0a0a-4347-9589-21b780b0a4d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Run">
+      <UniqueIdentifier>{5e11e5d9-8162-419c-bb8f-97084c567494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Attack">
+      <UniqueIdentifier>{a82502a2-c301-4174-a11c-2bd22e3b899f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -262,7 +289,7 @@
       <Filter>02.GameObjects\Camera\Free</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Follow.h">
-      <Filter>02.GameObjects\Camera\Focus</Filter>
+      <Filter>02.GameObjects\Camera\Follow</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_State_Attack_Sword.h">
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
@@ -320,6 +347,30 @@
     </ClInclude>
     <ClInclude Include="..\Public\Particle_Blue.h">
       <Filter>02.GameObjects\Particle\Particle_Blue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_LockOn.h">
+      <Filter>02.GameObjects\Camera\LockOn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_LockOn.h">
+      <Filter>02.GameObjects\Player\State\Player_State_LockOn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_CowBot.h">
+      <Filter>02.GameObjects\Monster\CowBot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CowBot_Weapon.h">
+      <Filter>02.GameObjects\Monster\CowBot\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CowBot_State_Idle.h">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CowBot_State_Walk.h">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CowBot_State_Run.h">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CowBot_State_Attack.h">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -402,7 +453,7 @@
       <Filter>02.GameObjects\Camera\Free</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Follow.cpp">
-      <Filter>02.GameObjects\Camera\Focus</Filter>
+      <Filter>02.GameObjects\Camera\Follow</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Attack_Sword.cpp">
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
@@ -457,6 +508,30 @@
     </ClCompile>
     <ClCompile Include="..\Private\Particle_Blue.cpp">
       <Filter>02.GameObjects\Particle\Particle_Blue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_LockOn.cpp">
+      <Filter>02.GameObjects\Camera\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_LockOn.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_CowBot.cpp">
+      <Filter>02.GameObjects\Monster\CowBot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_Weapon.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_State_Idle.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_State_Walk.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_State_Run.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_State_Attack.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
