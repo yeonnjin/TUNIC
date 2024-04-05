@@ -28,9 +28,11 @@ protected:
 
 public:
 	virtual _fvector	Get_Position();
+	virtual _float4x4		Get_Matrix();
 
 	virtual void		Set_Exit(_bool isExit) { m_isExit = isExit; }
 	virtual void		Set_Position(_fvector vPosition);
+	virtual void		Set_Matrix(_float4x4 Matrix);
 	virtual void		Set_Level(_uint iLevel) = 0;
 
 public:

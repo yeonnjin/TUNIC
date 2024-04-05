@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\Monster_CowBot.h" />
     <ClInclude Include="..\Public\Monster_Spinner.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
+    <ClInclude Include="..\Public\Particle_Red.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_State_Attack.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="..\Private\Monster_CowBot.cpp" />
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
+    <ClCompile Include="..\Private\Particle_Red.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp" />
@@ -298,7 +300,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_MAIN</EntryPointName>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance_Point.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_MAIN</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance_Rect.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_MAIN</EntryPointName>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">

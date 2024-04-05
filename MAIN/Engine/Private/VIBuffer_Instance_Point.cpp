@@ -1,37 +1,37 @@
-#include "VIBuffer_Instance_Rect.h"
+#include "VIBuffer_Instance_Point.h"
 
-CVIBuffer_Instance_Rect::CVIBuffer_Instance_Rect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CVIBuffer_Instance_Point::CVIBuffer_Instance_Point(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CVIBuffer_Instance{ pDevice, pContext }
 {
 }
 
-CVIBuffer_Instance_Rect::CVIBuffer_Instance_Rect(const CVIBuffer_Instance_Rect& rhs)
+CVIBuffer_Instance_Point::CVIBuffer_Instance_Point(const CVIBuffer_Instance_Point& rhs)
     : CVIBuffer_Instance{ rhs }
 {
 }
 
-HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::INSTANCE_DESC& tInstanceDesc)
+HRESULT CVIBuffer_Instance_Point::Initialize_Prototype(const CVIBuffer_Instance::INSTANCE_DESC& tInstanceDesc)
 {
 	if (FAILED(__super::Initialize_Prototype(tInstanceDesc)))
 		return E_FAIL;
 
-    m_iNumInstance = tInstanceDesc.iNumInstance;
-    m_iInstanceStride = sizeof(VTXMATRIX);
-    m_iIndexCountPerInstance = 6;
+	m_iNumInstance = tInstanceDesc.iNumInstance;
+	m_iInstanceStride = sizeof(VTXMATRIX);
+	m_iIndexCountPerInstance = 1;
 
-    m_iNumVertices = 4;
-    m_iVertexStride = sizeof(VTXPOSTEX);
+	m_iNumVertices = 1;
+	m_iVertexStride = sizeof(VTXPOS);
 
-    m_iNumIndices = m_iIndexCountPerInstance * m_iNumInstance;
-    m_iIndexStride = sizeof(_ushort);
-    m_iNumVertexBuffers = 2;
-    m_eIndexFormat = DXGI_FORMAT_R16_UINT;
-    m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	m_iNumIndices = m_iIndexCountPerInstance * m_iNumInstance;
+	m_iIndexStride = sizeof(_ushort);
+	m_iNumVertexBuffers = 2;
+	m_eIndexFormat = DXGI_FORMAT_R16_UINT;
+	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
 
 #pragma region VERTEX_BUFFER
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 
-	/* 정점 버퍼의 byte 크기 */
+	/* 정점버퍼의 byte크기 */
 	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -39,20 +39,10 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
-	VTXPOSTEX* pVertices = new VTXPOSTEX[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXPOSTEX) * m_iNumVertices);
+	VTXPOS* pVertices = new VTXPOS[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTXPOS) * m_iNumVertices);
 
-	pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.f);
-	pVertices[0].vTexcoord = _float2(0.0f, 0.f);
-
-	pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.f);
-	pVertices[1].vTexcoord = _float2(1.0f, 0.f);
-
-	pVertices[2].vPosition = _float3(0.5f, -0.5f, 0.f);
-	pVertices[2].vTexcoord = _float2(1.0f, 1.f);
-
-	pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.f);
-	pVertices[3].vTexcoord = _float2(0.0f, 1.f);
+	pVertices[0].vPosition = _float3(0.0f, 0.0f, 0.f);
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
 	m_InitialData.pSysMem = pVertices;
@@ -63,11 +53,12 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
 	Safe_Delete_Array(pVertices);
 #pragma endregion
 
+
 #pragma region INDEX_BUFFER
 
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 
-	/* 인덱스 버퍼의 byte 크기 */
+	/* 인덱스 버퍼의 byte크기 */
 	m_BufferDesc.ByteWidth = m_iIndexStride * m_iNumIndices;
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	m_BufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -75,21 +66,10 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = 0;
 
+
+
 	_ushort* pIndices = new _ushort[m_iNumIndices];
 	ZeroMemory(pIndices, sizeof(_ushort) * m_iNumIndices);
-
-	_uint		iNumIndices = { 0 };
-
-	for (size_t i = 0; i < m_iNumInstance; i++)
-	{
-		pIndices[iNumIndices++] = 0;
-		pIndices[iNumIndices++] = 1;
-		pIndices[iNumIndices++] = 2;
-
-		pIndices[iNumIndices++] = 0;
-		pIndices[iNumIndices++] = 2;
-		pIndices[iNumIndices++] = 3;
-	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
 	m_InitialData.pSysMem = pIndices;
@@ -103,19 +83,19 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
 
 #pragma region INSTANCE_BUFFER
 
-	ZeroMemory(&m_InstanceBufferDesc, sizeof(m_InstanceBufferDesc));
+	ZeroMemory(&m_InstanceBufferDesc, sizeof m_InstanceBufferDesc);
 
-	/* 랜덤 설정 */
-	uniform_real_distribution<_float>	ScaleX(tInstanceDesc.vMinScale.x, tInstanceDesc.vMaxScale.x);
-	uniform_real_distribution<_float>	ScaleY(tInstanceDesc.vMinScale.y, tInstanceDesc.vMaxScale.y);
-	uniform_real_distribution<_float>	ScaleZ(tInstanceDesc.vMinScale.z, tInstanceDesc.vMaxScale.z);
+	uniform_real_distribution<float>	ScaleX(tInstanceDesc.vMinScale.x, tInstanceDesc.vMaxScale.x);
+	uniform_real_distribution<float>	ScaleY(tInstanceDesc.vMinScale.y, tInstanceDesc.vMaxScale.y);
+	uniform_real_distribution<float>	ScaleZ(tInstanceDesc.vMinScale.z, tInstanceDesc.vMaxScale.z);
 
-	uniform_real_distribution<_float>	LifeTime(tInstanceDesc.vLifeTime.x, tInstanceDesc.vLifeTime.y);
-	uniform_real_distribution<_float>	Speed(tInstanceDesc.vSpeed.x, tInstanceDesc.vSpeed.y);
+	uniform_real_distribution<float>	LifeTime(tInstanceDesc.vLifeTime.x, tInstanceDesc.vLifeTime.y);
+	uniform_real_distribution<float>	Speed(tInstanceDesc.vSpeed.x, tInstanceDesc.vSpeed.y);
 
-	/* 인스턴스 버퍼의 byte 크기 */
+
+	/* 인덱스 버퍼의 byte크기 */
 	m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;
-	m_InstanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;	// 동적
+	m_InstanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_InstanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	m_InstanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_InstanceBufferDesc.MiscFlags = 0;
@@ -136,7 +116,7 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
 		XMStoreFloat4(&m_pInstanceVertices[i].vUp, XMVectorSet(0.f, 1.f, 0.f, 0.f) * ScaleY(m_RandomNumber));
 		XMStoreFloat4(&m_pInstanceVertices[i].vLook, XMVectorSet(0.f, 0.f, 1.f, 0.f) * ScaleZ(m_RandomNumber));
 		m_pInstanceVertices[i].vPosition = Compute_Random_Position();
-	
+
 		m_pInstanceVertices[i].isLived = true;
 
 		/* 인스턴스마다 랜덤하게 설정된 각각의 라이프 타임 */
@@ -144,7 +124,7 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
 		m_pSpeeds[i] = Speed(m_RandomNumber);
 	}
 
-	ZeroMemory(&m_InstanceSubResourceData, sizeof(m_InstanceSubResourceData));
+	ZeroMemory(&m_InstanceSubResourceData, sizeof m_InstanceSubResourceData);
 	m_InstanceSubResourceData.pSysMem = m_pInstanceVertices;
 
 #pragma endregion
@@ -152,15 +132,15 @@ HRESULT CVIBuffer_Instance_Rect::Initialize_Prototype(const CVIBuffer_Instance::
     return S_OK;
 }
 
-HRESULT CVIBuffer_Instance_Rect::Initialize(void* pArg)
+HRESULT CVIBuffer_Instance_Point::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-    return S_OK;
+	return S_OK;
 }
 
-_float4 CVIBuffer_Instance_Rect::Compute_Random_Position()
+_float4 CVIBuffer_Instance_Point::Compute_Random_Position()
 {
 	uniform_real_distribution<_float>	RangePosX(m_InstanceDesc.vCenter.x - m_InstanceDesc.vRange.x * 0.5f, m_InstanceDesc.vCenter.x + m_InstanceDesc.vRange.x * 0.5f);
 	uniform_real_distribution<_float>	RangePosY(m_InstanceDesc.vCenter.y - m_InstanceDesc.vRange.y * 0.5f, m_InstanceDesc.vCenter.y + m_InstanceDesc.vRange.y * 0.5f);
@@ -169,13 +149,13 @@ _float4 CVIBuffer_Instance_Rect::Compute_Random_Position()
 	return _float4(RangePosX(m_RandomNumber), RangePosY(m_RandomNumber), RangePosZ(m_RandomNumber), 1.f);
 }
 
-CVIBuffer_Instance_Rect* CVIBuffer_Instance_Rect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instance::INSTANCE_DESC& tInstanceDesc)
+CVIBuffer_Instance_Point* CVIBuffer_Instance_Point::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instance::INSTANCE_DESC& tInstanceDesc)
 {
-	CVIBuffer_Instance_Rect* pInstance = new CVIBuffer_Instance_Rect(pDevice, pContext);
+	CVIBuffer_Instance_Point* pInstance = new CVIBuffer_Instance_Point(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(tInstanceDesc)))
 	{
-		MSG_BOX(TEXT("Failed To Create : CVIBuffer_Instance_Rect"));
+		MSG_BOX(TEXT("Failed To Create : CVIBuffer_Instance_Point"));
 
 		Safe_Release(pInstance);
 	}
@@ -183,13 +163,13 @@ CVIBuffer_Instance_Rect* CVIBuffer_Instance_Rect::Create(ID3D11Device* pDevice, 
 	return pInstance;
 }
 
-CComponent* CVIBuffer_Instance_Rect::Clone(void* pArg)
+CComponent* CVIBuffer_Instance_Point::Clone(void* pArg)
 {
-	CComponent* pInstance = new CVIBuffer_Instance_Rect(*this);
+	CComponent* pInstance = new CVIBuffer_Instance_Point(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed To Clone : CVIBuffer_Instance_Rect"));
+		MSG_BOX(TEXT("Failed To Clone : CVIBuffer_Instance_Point"));
 
 		Safe_Release(pInstance);
 	}
@@ -197,7 +177,7 @@ CComponent* CVIBuffer_Instance_Rect::Clone(void* pArg)
 	return pInstance;
 }
 
-void CVIBuffer_Instance_Rect::Free()
+void CVIBuffer_Instance_Point::Free()
 {
 	__super::Free();
 }

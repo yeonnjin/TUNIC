@@ -73,7 +73,11 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 			return;
 	}
 
-	
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD0, KEY_DOWN))
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Particle_Red"))))
+			return;
+	}
 }
 
 HRESULT CLevel_GamePlay::Render()

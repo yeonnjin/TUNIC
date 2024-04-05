@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "Particle_Blue.h"
+#include "Particle_Red.h"
 
-CParticle_Blue::CParticle_Blue(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CParticle_Red::CParticle_Red(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
 }
 
-CParticle_Blue::CParticle_Blue(const CParticle_Blue& rhs)
+CParticle_Red::CParticle_Red(const CParticle_Red& rhs)
     : CGameObject{ rhs }
 {
 }
 
-HRESULT CParticle_Blue::Initialize_Prototype()
+HRESULT CParticle_Red::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CParticle_Blue::Initialize(void* pArg)
+HRESULT CParticle_Red::Initialize(void* pArg)
 {
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -24,22 +24,24 @@ HRESULT CParticle_Blue::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(rand() % 20, 3.0f, rand() % 20, 1.f));
+
     return S_OK;
 }
 
-HRESULT CParticle_Blue::Tick(_float fTimeDelta)
+HRESULT CParticle_Red::Tick(_float fTimeDelta)
 {
     m_pVIBufferCom->Spread(fTimeDelta);
 
     return S_OK;
 }
 
-void CParticle_Blue::Late_Tick(_float fTimeDelta)
+void CParticle_Red::Late_Tick(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 
-HRESULT CParticle_Blue::Render()
+HRESULT CParticle_Red::Render()
 {
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
@@ -56,10 +58,10 @@ HRESULT CParticle_Blue::Render()
     return S_OK;
 }
 
-HRESULT CParticle_Blue::Add_Components()
+HRESULT CParticle_Red::Add_Components()
 {
-    /* For. Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxInstance_Rect"),
+    /* For.Com_Shader */
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxInstance_Point"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
@@ -69,14 +71,14 @@ HRESULT CParticle_Blue::Add_Components()
         return E_FAIL;
 
     /* For.Com_VIBuffer */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Instance_Rect"),
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Instance_Point"),
         TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
         return E_FAIL;
 
     return S_OK;
 }
 
-HRESULT CParticle_Blue::Bind_ShaderResources()
+HRESULT CParticle_Red::Bind_ShaderResources()
 {
     if (nullptr == m_pShaderCom)
         return E_FAIL;
@@ -86,8 +88,10 @@ HRESULT CParticle_Blue::Bind_ShaderResources()
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
         return E_FAIL;
 
     if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
@@ -96,13 +100,13 @@ HRESULT CParticle_Blue::Bind_ShaderResources()
     return S_OK;
 }
 
-CParticle_Blue* CParticle_Blue::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CParticle_Red* CParticle_Red::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CParticle_Blue* pInstance = new CParticle_Blue(pDevice, pContext);
+    CParticle_Red* pInstance = new CParticle_Red(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed To Create : CParticle_Blue"));
+        MSG_BOX(TEXT("Failed To Create : CParticle_Red"));
 
         Safe_Release(pInstance);
     }
@@ -110,13 +114,13 @@ CParticle_Blue* CParticle_Blue::Create(ID3D11Device* pDevice, ID3D11DeviceContex
     return pInstance;
 }
 
-CGameObject* CParticle_Blue::Clone(void* pArg)
+CGameObject* CParticle_Red::Clone(void* pArg)
 {
-    CParticle_Blue* pInstance = new CParticle_Blue(*this);
+    CParticle_Red* pInstance = new CParticle_Red(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed To Clone : CParticle_Blue"));
+        MSG_BOX(TEXT("Failed To Clone : CParticle_Red"));
 
         Safe_Release(pInstance);
     }
@@ -124,8 +128,7 @@ CGameObject* CParticle_Blue::Clone(void* pArg)
     return pInstance;
 }
 
-
-void CParticle_Blue::Free()
+void CParticle_Red::Free()
 {
     __super::Free();
 

@@ -17,9 +17,19 @@ _fvector CCamera::Get_Position()
 	return m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 }
 
+_float4x4 CCamera::Get_Matrix()
+{
+	return m_pTransformCom->Get_WorldFloat4x4();
+}
+
 void CCamera::Set_Position(_fvector vPosition)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CCamera::Set_Matrix(_float4x4 Matrix)
+{
+	m_pTransformCom->Set_WorldMatrix(Matrix);
 }
 
 HRESULT CCamera::Initialize_Prototype()

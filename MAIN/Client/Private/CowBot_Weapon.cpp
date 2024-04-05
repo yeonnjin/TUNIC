@@ -38,6 +38,8 @@ HRESULT CCowBot_Weapon::Initialize(void* pArg)
 
     if (CMonster_CowBot::WEAPON_SWORD == m_eWeapon)
         m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(90.0f));
+    else if (CMonster_CowBot::WEAPON_SHIELD == m_eWeapon)
+        m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
 
     return S_OK;
 }

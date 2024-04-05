@@ -33,7 +33,11 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+
+        IF_PLAYER_ISMOVE
+            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        else
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 
     // 두 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 3번째 콤보
@@ -49,7 +53,11 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+        
+        IF_PLAYER_ISMOVE
+            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        else
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 
     // 세 번째 콤보가 끝나면 상태 종료
@@ -57,7 +65,11 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+        
+        IF_PLAYER_ISMOVE
+            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        else
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 
 

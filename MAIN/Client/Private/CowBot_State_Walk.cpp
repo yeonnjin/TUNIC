@@ -15,7 +15,9 @@ void CCowBot_State_Walk::OnStateEnter()
     m_pMonster->Set_Blending(true, CMonster_CowBot::ANIM_WALK);
 
     _vector vMonsterPosition = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-    m_vTargetPosition = _vector{ vMonsterPosition.m128_f32[0] + (_float)(rand() % 6 + 1), vMonsterPosition.m128_f32[1], vMonsterPosition.m128_f32[2] + (_float)(rand() % 6 + 1), 1.f};
+    m_vTargetPosition = _vector{    vMonsterPosition.m128_f32[0] + (_float)(rand() % 20 + 1) - (_float)(rand() % 20 + 1), 
+                                    vMonsterPosition.m128_f32[1], 
+                                    vMonsterPosition.m128_f32[2] + (_float)(rand() % 20 + 1) - (_float)(rand() % 20 + 1), 1.f};
 }
 
 void CCowBot_State_Walk::OnStateUpdate(_float fTimeDelta)

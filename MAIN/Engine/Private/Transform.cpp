@@ -161,23 +161,22 @@ void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
     }
 }
 
-_bool CTransform::Turn_Look(_Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta)
+_bool CTransform::Turn_Look(_Out_ _bool* isFirst, _Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta)
 {
-    _bool isFinish = false;
-    static _bool isFirst = true;
-  
     static _vector vLook, vFinishLook, vUp;
+    static _float fTime = 0.f;
+    _bool isFinish = false;
 
-    if (isFirst == true)
+    if (*isFirst == true)
     {
         vLook = XMVector3Normalize(Get_State_Vector(STATE_LOOK));
         vLook.m128_f32[1] = 0.f;
         vFinishLook = XMVector3Normalize(vTargetLook);
         vFinishLook.m128_f32[1] = 0.f;
-        isFirst = false;
+        *isFirst = false;
+        fTime = 0.f;
     }
-
-    static _float fTime = 0.f;
+  
     fTime += fTimeDelta;
     _float  fRatio = fTime / 0.2f;
     if (fRatio >= 1.f)
@@ -185,7 +184,6 @@ _bool CTransform::Turn_Look(_Out_ _float3* vLerpLook, _fvector vTargetLook, _flo
         fTime = 0.f;
         fRatio = 1.f;
         isFinish = true;
-        isFirst = true;
     }
 
     vUp = { 0.f, 1.f, 0.f };

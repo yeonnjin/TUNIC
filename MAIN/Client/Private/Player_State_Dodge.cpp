@@ -31,16 +31,57 @@ void CPlayer_State_Dodge::OnStateEnter()
     default:
         break;
     }
+
+    CPlayer::LOCKON eLockOn = m_pPlayer->Get_LockOn();
+
+    //CPlayer::DIR eDir = m_pPlayer->Get_Dir();
+    _vector vLook = m_pPlayer->Get_Look();
+
+    if ((CPlayer::LOCK_ON_FIND == eLockOn || CPlayer::LOCK_ON_NONE == eLockOn))
+    {
+        /*switch (eDir)
+        {
+        case CPlayer::DIR_FRONT:
+            vLook = { 0.f, 0.f, 1.f };
+            break;
+        case CPlayer::DIR_BACK:
+            vLook = { 0.f, 0.f, -1.f };
+            break;
+        case CPlayer::DIR_LEFT:
+            vLook = { 1.f, 0.f, 0.f };
+            break;
+        case CPlayer::DIR_RIGHT:
+            vLook = { -1.f, 0.f, 0.f };
+            break;
+        case CPlayer::DIR_FL:
+            vLook = { 1.f, 0.f, 1.f };
+            break;
+        case CPlayer::DIR_FR:
+            vLook = { -1.f, 0.f, 1.f };
+            break;
+        case CPlayer::DIR_BL:
+            vLook = { 1.f, 0.f, -1.f };
+            break;
+        case CPlayer::DIR_BR:
+            vLook = { -1.f, 0.f, -1.f };
+            break;
+        case CPlayer::DIR_END:
+            break;
+        default:
+            break;
+        }*/
+
+        vLook = { 1.f, 0.f, 0.f };
+
+        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Look_At_For_LandOject(vLook);
+    }
 }
 
 void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
     if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
-        if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) ||
-            m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) ||
-            m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) ||
-            m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+        IF_PLAYER_ISMOVE
             m_pPlayer->Change_State(CPlayer::STATE_MOVE);
         else
             m_pPlayer->Change_State(CPlayer::STATE_IDLE);

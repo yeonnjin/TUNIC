@@ -25,7 +25,9 @@
 #include "Editor.h"
 #include "Player_Weapon.h"
 #include "Animator.h"
+
 #include "Particle_Blue.h"
+#include "Particle_Red.h"
 
 #include "Camera_Free.h"
 #include "Camera_Follow.h"
@@ -160,15 +162,35 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* Prototype_Component_VIBuffer_Instance_Rect */
 	CVIBuffer_Instance::INSTANCE_DESC		InstanceDesc{};
+	InstanceDesc.vPivot = _float3(0.f, -5.f, 0.f);
+	InstanceDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	InstanceDesc.vRange = _float3(1.f, 1.f, 1.f);
+	InstanceDesc.vMinScale = _float3(0.2f, 0.2f, 0.2f);
+	InstanceDesc.vMaxScale = _float3(0.4f, 0.4f, 0.4f);
+	InstanceDesc.iNumInstance = 400;
+	InstanceDesc.vLifeTime = _float2(2.f, 10.0f);
+	InstanceDesc.isLoop = true;
+	InstanceDesc.vSpeed = _float2(2.f, 15.f);
 
-	InstanceDesc.vPivot = _float3(0.f, 0.f, 0.f);
-	InstanceDesc.vRange = _float3(20.f, 20.f, 20.f);
-	InstanceDesc.vMinScale = _float3(1.f, 1.f, 1.f);
-	InstanceDesc.vMaxScale = _float3(4.f, 4.f, 4.f);
-	InstanceDesc.iNumInstance = 100;
-	InstanceDesc.vLifeTime = _float2(0.f, 10.0f);
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Instance_Rect"),
 		CVIBuffer_Instance_Rect::Create(m_pDevice, m_pContext, InstanceDesc))))
+		return E_FAIL;
+
+	/* Prototype_Component_VIBuffer_Instance_Point */
+	ZeroMemory(&InstanceDesc, sizeof InstanceDesc);
+	InstanceDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	InstanceDesc.vPivot = InstanceDesc.vCenter;
+	InstanceDesc.vRange = _float3(0.2f, 0.2f, 0.2f);
+	InstanceDesc.vMinScale = _float3(0.2f, 0.2f, 0.2f);
+	InstanceDesc.vMaxScale = _float3(0.4f, 0.4f, 0.4f);
+	InstanceDesc.iNumInstance = 300;
+	InstanceDesc.vLifeTime = _float2(0.2f, 0.7f);
+	InstanceDesc.isLoop = false;
+	InstanceDesc.vSpeed = _float2(2.f, 10.f);
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Instance_Point"),
+		CVIBuffer_Instance_Point::Create(m_pDevice, m_pContext, InstanceDesc))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("콜라이더를(을) 로딩 중 입니다.");
@@ -203,17 +225,26 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Shader_VtxInstance */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxInstance"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxInstance.hlsl"), VTXINSTANCE::Elements, VTXINSTANCE::iNumElements))))
+	/* For.Prototype_Component_Shader_VtxInstance_Rect */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxInstance_Rect"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxInstance_Rect.hlsl"), VTXINSTANCE_RECT::Elements, VTXINSTANCE_RECT::iNumElements))))
 		return E_FAIL;
 
-	
+	/* For.Prototype_Component_Shader_VtxInstance_Point */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxInstance_Point"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxInstance_Point.hlsl"), VTXINSTANCE_POINT::Elements, VTXINSTANCE_POINT::iNumElements))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
 
 	/* For.Prototype_GameObject_Particle_Blue */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Blue"),
 		CParticle_Blue::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Particle_Red */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Red"),
+		CParticle_Red::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Editor */

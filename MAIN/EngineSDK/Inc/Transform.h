@@ -111,7 +111,7 @@ public:
 	void Look_At_For_LandOject(_fvector vAt, _bool isReverse = false);
 	_bool Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance = 0.f);
 	void Turn(_fvector vAxis, _float fTimeDelta);
-	_bool Turn_Look(_Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta);
+	_bool Turn_Look(_Out_ _bool* isFirst, _Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta);
 	_bool Turn_Angle(_fvector vAxis, _float fAngle, _float fTimeDelta);
 	void Rotation(_fvector vAxis, _float fRadian);
 

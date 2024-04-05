@@ -160,9 +160,6 @@
     <Filter Include="02.GameObjects\Particle">
       <UniqueIdentifier>{ec4dc272-b385-436c-8e1d-f2da5d591754}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Particle\Particle_Blue">
-      <UniqueIdentifier>{e2c74caa-9c9c-4229-9a34-d204834642a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Camera\Follow">
       <UniqueIdentifier>{24d0de29-702a-4f20-8473-8ed3583fb9df}</UniqueIdentifier>
     </Filter>
@@ -192,6 +189,12 @@
     </Filter>
     <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Attack">
       <UniqueIdentifier>{a82502a2-c301-4174-a11c-2bd22e3b899f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Particle\Red">
+      <UniqueIdentifier>{dd886f8f-80df-4b8c-9f82-0537f171ba09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Particle\Blue">
+      <UniqueIdentifier>{e2c74caa-9c9c-4229-9a34-d204834642a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -346,7 +349,7 @@
       <Filter>02.GameObjects\Sky</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Particle_Blue.h">
-      <Filter>02.GameObjects\Particle\Particle_Blue</Filter>
+      <Filter>02.GameObjects\Particle\Blue</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_LockOn.h">
       <Filter>02.GameObjects\Camera\LockOn</Filter>
@@ -371,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Attack.h">
       <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Red.h">
+      <Filter>02.GameObjects\Particle\Red</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -507,7 +513,7 @@
       <Filter>02.GameObjects\Sky</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Particle_Blue.cpp">
-      <Filter>02.GameObjects\Particle\Particle_Blue</Filter>
+      <Filter>02.GameObjects\Particle\Blue</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_LockOn.cpp">
       <Filter>02.GameObjects\Camera\LockOn</Filter>
@@ -532,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Attack.cpp">
       <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Red.cpp">
+      <Filter>02.GameObjects\Particle\Red</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -563,7 +572,10 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCube.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance_Rect.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance_Point.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

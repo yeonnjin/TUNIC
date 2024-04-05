@@ -29,6 +29,7 @@ private:
 
 	_vector			m_vLook = {};
 	_float3			m_vLerpLook = {};
+	_bool			m_isFirst = { true };
 
 public:
 	static CPlayer_State_Move* Create(class CPlayer* pPlayer);

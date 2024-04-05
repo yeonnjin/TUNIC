@@ -88,6 +88,8 @@ public:
 	_bool			isParrying() { return m_isParrying; }
 
 	DIR				Get_Dir() { return m_eDir; }
+	_vector			Get_Look() { return XMVector3Normalize(m_vLook); }
+	STATE			Get_State() { return m_eState; }
 	STATUS			Get_Status() { return m_eStatus; }
 	DODGE			Get_Dodge() { return m_eDodge; }
 	LOCKON			Get_LockOn() { return m_eLockOn; }
@@ -119,6 +121,7 @@ private:
 
 	STATE								m_eState = { STATE_END };
 	DIR									m_eDir = { DIR_END };
+	_vector								m_vLook = {};
 	STATUS								m_eStatus = { STATUS_HURT };	// πŸ¿Ã∆Æ?
 	DODGE								m_eDodge = { DODGE_END };
 	WEAPON								m_eWeapon = { WEAPON_END };

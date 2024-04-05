@@ -16,9 +16,11 @@ void CPlayer_State_Defense::OnStateEnter()
 void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
 {
     m_ePreDir = m_eCurDir;
-    m_eCurDir = m_pPlayer->Get_Dir();
+    //m_eCurDir = m_pPlayer->Get_Dir();
 
-    switch (m_eCurDir)
+    _vector vLook = m_pPlayer->Get_Look();
+
+   /* switch (m_eCurDir)
     {
     case CPlayer::DIR_FRONT:
         m_vLook = { 0.f, 0.f, 1.f };
@@ -48,10 +50,10 @@ void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
         break;
     default:
         break;
-    }
+    }*/
 
     _vector vTargetLook{};
-    vTargetLook = XMVector3Normalize(m_vLook);
+    vTargetLook = XMVector3Normalize(vLook);
     _vector PlayerVector = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_LOOK);
 
     if (false == XMVector3Equal(vTargetLook, XMVector3Normalize(PlayerVector)))
@@ -65,8 +67,8 @@ void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
             m_isTurn = false;*/
     }
 
-    if(CPlayer::DIR_END != m_pPlayer->Get_Dir())
-        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Look(fTimeDelta, XMLoadFloat3(&m_vLerpLook));
+    /*if(CPlayer::DIR_END != m_pPlayer->Get_Dir())
+        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Look(fTimeDelta, XMLoadFloat3(&m_vLerpLook));*/
 
 
     // ==================================================================================

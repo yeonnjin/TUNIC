@@ -21,11 +21,12 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
 
     m_ePreDir = m_eCurDir;
     m_eCurDir = m_pPlayer->Get_Dir();
+    _vector vLook = m_pPlayer->Get_Look();
 
     // 일반 상태일 때
     if ((CPlayer::LOCK_OFF == eLockOn || CPlayer::LOCK_END == eLockOn))
     {
-        switch (m_eCurDir)
+        /*switch (m_eCurDir)
         {
         case CPlayer::DIR_FRONT:
             m_vLook = { 0.f, 0.f, 1.f };
@@ -55,21 +56,25 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
             break;
         default:
             break;
-        }
+        }*/
 
         _vector vTargetLook{};
-        vTargetLook = XMVector3Normalize(m_vLook);
+        vTargetLook = XMVector3Normalize(vLook);
         _vector PlayerVector = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_LOOK);
 
         if (false == XMVector3Equal(vTargetLook, XMVector3Normalize(PlayerVector)))
         {
             m_isTurn = true;
+            m_isFirst = true;
         }
 
         if (true == m_isTurn)
         {
-            if (true == ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn_Look(&m_vLerpLook, vTargetLook, fTimeDelta))
+            if (true == ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn_Look(&m_isFirst, &m_vLerpLook, vTargetLook, fTimeDelta))
+            {
                 m_isTurn = false;
+                m_isFirst = true;
+            }
         }
 
         //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Look(fTimeDelta, XMLoadFloat3(&m_vLerpLook));
@@ -85,8 +90,11 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
 
         if (CPlayer::LOCK_ON_FIND == eLockOn)
         {
-            _vector vTargetPosition = m_pPlayer->Get_LockOn_Transform()->Get_State_Vector(CTransform::STATE_POSITION);
-            ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Look_At_For_LandOject(vTargetPosition, true);
+            if(CPlayer::STATE_DODGE != m_pPlayer->Get_State())
+            {
+                _vector vTargetPosition = m_pPlayer->Get_LockOn_Transform()->Get_State_Vector(CTransform::STATE_POSITION);
+                ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Look_At_For_LandOject(vTargetPosition, true);
+            }
             //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn_Look(&m_vLerpLook, vTargetPosition, fTimeDelta);
         }
 

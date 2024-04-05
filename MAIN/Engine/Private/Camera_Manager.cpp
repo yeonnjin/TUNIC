@@ -25,7 +25,7 @@ HRESULT CCamera_Manager::Change_Camera(const wstring& strCameraTag, void* pArg)
 
     if (nullptr != m_pCurCamera)
     {
-        pNextCamera->Set_Position(m_pCurCamera->Get_Position());
+        pNextCamera->Set_Matrix(m_pCurCamera->Get_Matrix());
         m_pCurCamera->OnExit();
     }
 

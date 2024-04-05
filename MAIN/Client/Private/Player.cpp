@@ -198,6 +198,12 @@ void CPlayer::Update_State()
 				break;
 			}
 		}
+		 
+		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+		{
+			m_eDodge = DODGE_ROLL;
+			Change_State(STATE_DODGE);
+		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_O, KEY_DOWN))
 			Change_State(STATE_SLEEP);
@@ -291,8 +297,8 @@ void CPlayer::Update_Camera()
 		m_pGameInstance->Set_Exit(TEXT("Camera_LockOn"), true);
 		m_eLockOn = LOCK_OFF;
 
-		if(true == isMove())
-			Set_Blending(true, ANIM_WALK_FORWARD);
+		IF_PLAYER_ISMOVE
+			Change_State(CPlayer::STATE_MOVE);
 	}
 }
 
@@ -559,60 +565,102 @@ void CPlayer::Set_Dir()
 
 	m_eDir = DIR_END;
 
-	if (LOCK_ON_FIND == m_eLockOn || LOCK_ON_NONE == m_eLockOn)
+	/*if (LOCK_ON_FIND == m_eLockOn || LOCK_ON_NONE == m_eLockOn)
 	{
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_DOWN))
 		{
 			Set_Blending(true, CPlayer::ANIM_WALK_FORWARD);
-			m_eDir = DIR_FRONT;
+			{
+				m_eDir = DIR_FRONT;
+				m_vLook = { 0.f, 0.f, 1.f };
+			}
 		}
 		else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+		{
 			m_eDir = DIR_FRONT;
+			m_vLook = { 0.f, 0.f, 1.f };
+		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_DOWN))
 		{
 			Set_Blending(true, CPlayer::ANIM_WALK_BACKWARD);
 			m_eDir = DIR_BACK;
+			m_vLook = { 0.f, 0.f, -1.f };
 		}
 		else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+		{
 			m_eDir = DIR_BACK;
+			m_vLook = { 0.f, 0.f, -1.f };
+		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_DOWN))
 		{
 			Set_Blending(true, CPlayer::ANIM_WALK_LEFT);
 			m_eDir = DIR_LEFT;
+			m_vLook = { 1.f, 0.f, 0.f };
 		}
 		else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		{
 			m_eDir = DIR_LEFT;
+			m_vLook = { 1.f, 0.f, 0.f };
+		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_DOWN))
 		{
 			Set_Blending(true, CPlayer::ANIM_WALK_RIGHT);
 			m_eDir = DIR_RIGHT;
+			m_vLook = { -1.f, 0.f, 0.f };
 		}
 		else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		{
 			m_eDir = DIR_RIGHT;
+			m_vLook = { -1.f, 0.f, 0.f };
+		}
 	}
 	else
-	{
+	{*/
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+		{
 			m_eDir = DIR_FRONT;
+			m_vLook = { 0.f, 0.f, 1.f };
+		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+		{
 			m_eDir = DIR_BACK;
+			m_vLook = { 0.f, 0.f, -1.f };
+		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+		{
 			m_eDir = DIR_LEFT;
+			m_vLook = { 1.f, 0.f, 0.f };
+		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+		{
 			m_eDir = DIR_RIGHT;
-	}
+			m_vLook = { -1.f, 0.f, 0.f };
+		}
+	//}
 	
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+	{
 		m_eDir = DIR_FL;
+		m_vLook = { 1.f, 0.f, 1.f };
+	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+	{
 		m_eDir = DIR_FR;
+		m_vLook = { -1.f, 0.f, 1.f };
+	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+	{
 		m_eDir = DIR_BL;
+		m_vLook = { 1.f, 0.f, -1.f };
+	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+	{
 		m_eDir = DIR_BR;
+		m_vLook = { -1.f, 0.f, -1.f };
+	}
 }
 
 void CPlayer::Set_Weapon()
