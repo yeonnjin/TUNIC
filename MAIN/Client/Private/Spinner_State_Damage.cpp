@@ -16,22 +16,18 @@ void CSpinner_State_Damage::OnStateEnter()
 
 void CSpinner_State_Damage::OnStateUpdate(_float fTimeDelta)
 {
-    /*_int iHP = m_pMonster->Get_HP();
-    if (0 >= iHP)
-    {
-        m_pMonster->Change_State(CMonster_Spinner::STATE_EXPLODE);
-    }
-
-    else if (true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_RECOIL))
-            m_pMonster->Change_State(CMonster_Spinner::STATE_IDLE);  */
-
-    if (true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_RECOIL))
+    /*if (true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_RECOIL))
     {
         _int iHP = m_pMonster->Get_HP();
         if(0 >= iHP)
             m_pMonster->Change_State(CMonster_Spinner::STATE_EXPLODE);
         else
             m_pMonster->Change_State(CMonster_Spinner::STATE_IDLE);
+    }*/
+
+    if (true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_RECOIL))
+    {
+        m_pMonster->Change_State(CMonster_Spinner::STATE_IDLE);
     }
 }
 

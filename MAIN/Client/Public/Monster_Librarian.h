@@ -8,18 +8,22 @@ END
 
 BEGIN(Client)
 
-class CMonster_CowBot final : public CMonster
+class CMonster_Librarian final : public CMonster
 {
 public:
 	enum ANIMATION {
-		ANIM_ATTACK, ANIM_DIE, ANIM_PARRY, ANIM_X_QUICKTURN, ANIM_RUN,
-		ANIM_BACKSWIPE, ANIM_HIT, ANIM_IDLE, ANIM_RECOIL, ANIM_X_RECOVER,
-		ANIM_WALK, ANIM_END
+		ANIM_ADDITIVE_FLINCH, ANIM_DIE, ANIM_FAST_SLAM, ANIM_FLINCH, ANIM_FLYING_DODGE,
+		ANIM_FLYING_IDLE, ANIM_FLYING_IDLE_LEFT, ANIM_FLYING_IDLE_RIGHT, ANIM_FLYING_HAND_DOWN, ANIM_FLYING_HAND_UP,
+		ANIM_FLYING_SWING, ANIM_FLYING_SWOOP, ANIM_IDLE_GHOST, ANIM_ENTRY, ANIM_LIGHTNING, 
+		ANIM_LIGHTNING_LOOP, ANIM_LIGHTNING_DRAW, ANIM_LIGHTNING_UP, ANIM_LIGHTNING_UP2, ANIM_LIGHTNING_SLAM,
+		ANIM_MELEE_WIDE, ANIM_MELEE_WIDE2, ANIM_MELEE_THRUST, ANIM_PALPATINE, ANIM_PALPATINE_EXIT,
+		ANIM_PALPATINE_ONCE, ANIM_PALPATINE2, ANIM_RETREAT, ANIM_TUGGED, ANIM_TURN, ANIM_END
 	};
 
 	enum STATE {
-		STATE_IDLE, STATE_WALK, STATE_RUN, STATE_ATTACK, STATE_DAMAGE,
-		STATE_PARRY, STATE_DIE, STATE_END
+		STATE_ENTRY, STATE_IDLE, 
+		STATE_PATTERN_ENERGY_WAVE, STATE_PATTERN_ENERGY_BEAM, STATE_PATTERN_HOMING_ORBS, STATE_PATTERN_LIGHTNING_WARP, STATE_PATTERN_LUNGE_SWIPE, 
+		STATE_DIE, STATE_END
 	};
 
 	enum WEAPON {
@@ -27,9 +31,9 @@ public:
 	};
 
 private:
-	CMonster_CowBot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CMonster_CowBot(const CMonster_CowBot& rhs);
-	virtual ~CMonster_CowBot() = default;
+	CMonster_Librarian(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CMonster_Librarian(const CMonster_Librarian& rhs);
+	virtual ~CMonster_Librarian() = default;
 
 public:
 	// Set
@@ -52,6 +56,7 @@ public:
 
 private:
 	map<const wstring, CPartObject*>	m_PartObjects;
+	queue<STATE>	m_States;
 
 private:
 	HRESULT			Add_Components();
@@ -63,7 +68,7 @@ private:
 	virtual void	Set_Animation();
 
 public:
-	static CMonster_CowBot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CMonster_Librarian* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 

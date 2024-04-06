@@ -6,6 +6,9 @@
 #include "Terrain.h"
 
 #include "Monster.h"
+#include "Monster_Librarian.h"
+#include "Librarian_Weapon.h"
+
 #include "Monster_Spinner.h"
 #include "Monster_Blob.h"
 #include "Monster_Bat.h"
@@ -155,9 +158,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
-	/* Prototype_Component_Navigation_Load */
+	/* Prototype_Component_Navigation_Load */ // Nav_Librarian, Nav_FOXGOD, Nav_Beach
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_Librarian.dat")))))
 		return E_FAIL;
 
 	/* Prototype_Component_VIBuffer_Instance_Rect */
@@ -282,6 +285,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Monster_Librarian */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Librarian"),
+		CMonster_Librarian::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Monster_Spinner */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Spinner"),
 		CMonster_Spinner::Create(m_pDevice, m_pContext))))
@@ -322,18 +330,26 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CCowBot_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Part_Librarian_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Librarian_Weapon"),
+		CLibrarian_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Stick.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shield.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Sword.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shotgun.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Wandbow.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Librarian_Weapon.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 

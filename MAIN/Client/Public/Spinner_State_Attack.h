@@ -21,6 +21,7 @@ public:
 
 private:
 	_bool		m_isAttack = { false };
+	_vector		m_vPrePosition = {};
 
 private:
 	class CMonster_Spinner* m_pMonster = { nullptr };

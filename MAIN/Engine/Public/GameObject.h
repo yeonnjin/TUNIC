@@ -38,7 +38,7 @@ public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 	virtual HRESULT	Tick(_float fTimeDelta);
-	virtual void Late_Tick(_float fTimeDelta);
+	virtual void	Late_Tick(_float fTimeDelta);
 	virtual HRESULT Render();
 
 protected:
@@ -53,12 +53,17 @@ protected:
 	OBJECT										m_eType = { OBJ_END };
 
 	_int										m_iHP = { 5 };
-	_bool										m_isDamage = { false };
 	_bool										m_isDead = { false };
-	_float										m_fDamageCoolTime = { 0.f };
+	_bool										m_isDamage = { false };
+	_bool										m_isDamageCoolTime = { false };
+
+	_float										m_fAccDamageCoolTime = { 0.f };
+	_float										m_fDamageCoolTime = { 0.5f };
 
 protected:
-	HRESULT Add_Component(_uint iLevelIndex, const wstring& strPrototypeTag, const wstring& strComponentTag, class CComponent** ppOut, void* pArg = nullptr);
+	HRESULT			Add_Component(_uint iLevelIndex, const wstring& strPrototypeTag, const wstring& strComponentTag, class CComponent** ppOut, void* pArg = nullptr);
+	void			Compute_Damage_CoolTime(_float fTimeDelta);
+	virtual void	Damage_Event() {}
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

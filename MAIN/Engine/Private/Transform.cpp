@@ -118,20 +118,34 @@ void CTransform::Look_At_For_LandOject(_fvector vAt, _bool isReverse)
     // XMMatrixDecompose();
     // : Transform 이 들고 있는 WorldMatrix 로 부터 값을 뽑아옴 (회전 정보 들고 오기 가능(쿼터니언))
 
-    _vector vUp = Get_State_Vector(STATE_UP);
+    _vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
     _vector vLook;
     if (false == isReverse)
         vLook = vAt - Get_State_Vector(STATE_POSITION);
     else
         vLook = Get_State_Vector(STATE_POSITION) - vAt;
 
-    _vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+    _vector vRight = XMVector3Cross(vUp, XMVector3Normalize(vLook));
     vLook = XMVector3Cross(vRight, vUp);
 
     _float3 vScaled = Get_Scaled();
 
     Set_State(STATE_RIGHT,  XMVector3Normalize(vRight) * vScaled.x);
     Set_State(STATE_LOOK,   XMVector3Normalize(vLook) * vScaled.z);
+}
+
+void CTransform::Look_At_Dir(_fvector vDir)
+{
+    _float3 vScaled = Get_Scaled();
+    _vector vLook = XMVector3Normalize(vDir) * vScaled.z;
+
+    _vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+    _vector vRight = XMVector3Cross(vUp, XMVector3Normalize(vLook));
+    vLook = XMVector3Cross(vRight, vUp);
+
+    Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScaled.x);
+    Set_State(STATE_UP, XMVector3Normalize(vUp) * vScaled.y);
+    Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScaled.z);
 }
 
 _bool CTransform::Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance)
@@ -178,7 +192,7 @@ _bool CTransform::Turn_Look(_Out_ _bool* isFirst, _Out_ _float3* vLerpLook, _fve
     }
   
     fTime += fTimeDelta;
-    _float  fRatio = fTime / 0.2f;
+    _float  fRatio = fTime / 0.1f;
     if (fRatio >= 1.f)
     {
         fTime = 0.f;

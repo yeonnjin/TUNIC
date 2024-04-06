@@ -26,38 +26,6 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
     // 일반 상태일 때
     if ((CPlayer::LOCK_OFF == eLockOn || CPlayer::LOCK_END == eLockOn))
     {
-        /*switch (m_eCurDir)
-        {
-        case CPlayer::DIR_FRONT:
-            m_vLook = { 0.f, 0.f, 1.f };
-            break;
-        case CPlayer::DIR_BACK:
-            m_vLook = { 0.f, 0.f, -1.f };
-            break;
-        case CPlayer::DIR_LEFT:
-            m_vLook = { 1.f, 0.f, 0.f };
-            break;
-        case CPlayer::DIR_RIGHT:
-            m_vLook = { -1.f, 0.f, 0.f };
-            break;
-        case CPlayer::DIR_FL:
-            m_vLook = { 1.f, 0.f, 1.f };
-            break;
-        case CPlayer::DIR_FR:
-            m_vLook = { -1.f, 0.f, 1.f };
-            break;
-        case CPlayer::DIR_BL:
-            m_vLook = { 1.f, 0.f, -1.f };
-            break;
-        case CPlayer::DIR_BR:
-            m_vLook = { -1.f, 0.f, -1.f };
-            break;
-        case CPlayer::DIR_END:
-            break;
-        default:
-            break;
-        }*/
-
         _vector vTargetLook{};
         vTargetLook = XMVector3Normalize(vLook);
         _vector PlayerVector = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_LOOK);
@@ -77,9 +45,7 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
             }
         }
 
-        //((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Look(fTimeDelta, XMLoadFloat3(&m_vLerpLook));
-
-        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Backward(fTimeDelta);
+        ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Go_Look(fTimeDelta, vTargetLook);
     }
     // 락온 상태일 때
     else
@@ -134,6 +100,8 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
 
 void CPlayer_State_Move::OnStateExit()
 {
+    m_isFirst = { true };
+    m_isTurn = { false };
 }
 
 CPlayer_State_Move* CPlayer_State_Move::Create(CPlayer* pPlayer)

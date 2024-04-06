@@ -15,7 +15,7 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Librarian.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Model_Cow_Weapon.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Weapon_Wandbow.dat"
 #define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach.dat"
 #pragma region Initial
 

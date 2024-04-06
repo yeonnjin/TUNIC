@@ -25,3 +25,5 @@ using namespace Client;
 			m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))			
 
 #define		CAM_DISTANCE _vector{ 0.f, 12.8, -13.f };
+
+#define		FIND_DISTANCE 15.f

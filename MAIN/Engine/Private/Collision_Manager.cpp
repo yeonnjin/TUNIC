@@ -37,6 +37,9 @@ void CCollision_Manager::Check_Collision_Groups(GROUP eCollisionGroupA, GROUP eC
     {
         for (auto& GameObjectB : m_arrCollisionGroups[eCollisionGroupB])
         {
+            if (GameObjectA == GameObjectB)
+                continue;
+
             CCollider* pColliderA = dynamic_cast<CCollider*>(GameObjectA->Get_Component(TEXT("Com_Collider")));
             CCollider* pColliderB = dynamic_cast<CCollider*>(GameObjectB->Get_Component(TEXT("Com_Collider")));
 

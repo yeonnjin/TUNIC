@@ -109,6 +109,7 @@ public:
 	void Go_Look(_float fTimeDelta, _fvector vLook);
 	void Look_At(_fvector vAt);
 	void Look_At_For_LandOject(_fvector vAt, _bool isReverse = false);
+	void Look_At_Dir(_fvector vDir);
 	_bool Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance = 0.f);
 	void Turn(_fvector vAxis, _float fTimeDelta);
 	_bool Turn_Look(_Out_ _bool* isFirst, _Out_ _float3* vLerpLook, _fvector vTargetLook, _float fTimeDelta);

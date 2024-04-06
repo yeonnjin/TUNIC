@@ -20,7 +20,7 @@ void CCowBot_State_Idle::OnStateUpdate(_float fTimeDelta)
     _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
     _vector vMonsterPosition = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
     
-    if (15 > XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0])
+    if (FIND_DISTANCE > XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0])
     {
         m_pMonster->Change_State(CMonster_CowBot::STATE_RUN);
         m_fIdleTime = 0.f;

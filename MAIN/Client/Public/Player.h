@@ -42,7 +42,7 @@ public:
 	};
 
 	enum WEAPON { 
-		WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_SHIELD, WEAPON_END 
+		WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_WANDBOW, WEAPON_SHIELD, WEAPON_END 
 	};
 
 	enum DIR { 
@@ -114,14 +114,13 @@ private:
 	_bool								m_isParrying = { false };
 
 	_vector								m_vPrePosition = {};
+	_vector								m_vLook = {};
 
 private:
 	ANIMATION							m_eAnimationIndex = { ANIM_END };
 	ANIMATION							m_eBlendAnimIndex = { ANIM_END };
-
 	STATE								m_eState = { STATE_END };
 	DIR									m_eDir = { DIR_END };
-	_vector								m_vLook = {};
 	STATUS								m_eStatus = { STATUS_HURT };	// 바이트?
 	DODGE								m_eDodge = { DODGE_END };
 	WEAPON								m_eWeapon = { WEAPON_END };
@@ -156,6 +155,7 @@ public:
 
 	// CGameObject을(를) 통해 상속됨
 	void Collision_Event(Engine::CGameObject* pGameObject) override;
+	void Damage_Event() override;
 };
 
 END

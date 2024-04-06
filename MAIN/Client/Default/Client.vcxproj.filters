@@ -196,6 +196,18 @@
     <Filter Include="02.GameObjects\Particle\Blue">
       <UniqueIdentifier>{e2c74caa-9c9c-4229-9a34-d204834642a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian">
+      <UniqueIdentifier>{49c4a1ac-7a6e-4fe9-904d-fca2465b9f7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\Weapon">
+      <UniqueIdentifier>{209a2471-af3c-41d3-a91c-818c62c4b719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State">
+      <UniqueIdentifier>{2c18f7e4-a29f-4583-be0e-7e9610a30b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern_Lightning_Warp">
+      <UniqueIdentifier>{a46559ee-e43b-4c07-bf71-3dbfc60b7f87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -378,6 +390,15 @@
     <ClInclude Include="..\Public\Particle_Red.h">
       <Filter>02.GameObjects\Particle\Red</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_Librarian.h">
+      <Filter>02.GameObjects\Monster\Librarian</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_Weapon.h">
+      <Filter>02.GameObjects\Monster\Librarian\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Lightning_Warp.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern_Lightning_Warp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -541,6 +562,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Particle_Red.cpp">
       <Filter>02.GameObjects\Particle\Red</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Librarian.cpp">
+      <Filter>02.GameObjects\Monster\Librarian</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_Weapon.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Lightning_Warp.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern_Lightning_Warp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

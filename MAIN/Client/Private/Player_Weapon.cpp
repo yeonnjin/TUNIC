@@ -226,6 +226,6 @@ void CPlayer_Weapon::Free()
 
 void CPlayer_Weapon::Collision_Event(Engine::CGameObject* pGameObject)
 {
-    if (OBJ_MONSTER == pGameObject->Get_ObjectType())
+    if (OBJ_MONSTER == pGameObject->Get_ObjectType() && CPlayer::WEAPON_SHIELD != m_eWeapon)
         pGameObject->Set_isDamage(true);
 }

@@ -178,3 +178,7 @@ void CMonster_Bat::Free()
 void CMonster_Bat::Collision_Event(Engine::CGameObject* pGameObject)
 {
 }
+
+void CMonster_Bat::Damage_Event()
+{
+}

@@ -30,6 +30,7 @@ using namespace DirectX;
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <queue>
 #include <array>
 #include <list>
 #include <map>

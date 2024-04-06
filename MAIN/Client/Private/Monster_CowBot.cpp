@@ -239,3 +239,7 @@ void CMonster_CowBot::Free()
 void CMonster_CowBot::Collision_Event(Engine::CGameObject* pGameObject)
 {
 }
+
+void CMonster_CowBot::Damage_Event()
+{
+}

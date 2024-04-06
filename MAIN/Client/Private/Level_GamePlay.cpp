@@ -64,13 +64,13 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
 			return;
 
-		tDesc = {};
+		/*tDesc = {};
 		_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
 		wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
 		tDesc.strModelComTag = wstr1;
 
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
-			return;
+			return;*/
 	}
 
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD0, KEY_DOWN))
@@ -232,6 +232,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
 	// Desc
 	CMonster::Monster_Desc tDesc = {};
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	tDesc.strModelComTag = wstr;
+
+	for (size_t i = 0; i < 1; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Librarian"), &tDesc)))
+			return E_FAIL;
+	}
+
+	/*CMonster::Monster_Desc tDesc = {};
 	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
@@ -240,42 +251,41 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	{
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
 			return E_FAIL;
-	}
+	}*/
 	
+	//// Desc
+	///*CMonster::Monster_Desc*/ tDesc = {};
+	//_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
+	//wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+	//tDesc.strModelComTag = wstr1;
 
-	// Desc
-	/*CMonster::Monster_Desc*/ tDesc = {};
-	_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
-	wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
-	tDesc.strModelComTag = wstr1;
+	//for (size_t i = 0; i < 2; ++i)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
+	//		return E_FAIL;
+	//}
 
-	for (size_t i = 0; i < 2; ++i)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
-			return E_FAIL;
-	}
+	//tDesc = {};
+	//_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
+	//wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
+	//tDesc.strModelComTag = wstr2;
 
-	tDesc = {};
-	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
-	wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
-	tDesc.strModelComTag = wstr2;
+	//for (size_t i = 0; i < 3; ++i)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
+	//		return E_FAIL;
+	//}
 
-	for (size_t i = 0; i < 3; ++i)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
-			return E_FAIL;
-	}
+	//tDesc = {};
+	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
+	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	//tDesc.strModelComTag = wstr3;
 
-	tDesc = {};
-	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
-	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	tDesc.strModelComTag = wstr3;
-
-	for (size_t i = 0; i < 1; ++i)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
-			return E_FAIL;
-	}
+	//for (size_t i = 0; i < 1; ++i)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
+	//		return E_FAIL;
+	//}
 	
 
 	// "Prototype_Component_Model_Monster_Bat"
@@ -303,7 +313,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	CMap::MAP_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*/"Prototype_Component_Model_Map_FOXGOD";/*"Prototype_Component_Model_Map_Librarian";*/
+	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*//*"Prototype_Component_Model_Map_FOXGOD";*/"Prototype_Component_Model_Map_Librarian";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");

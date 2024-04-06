@@ -29,6 +29,7 @@ private:
 	virtual ~CPlayer_Weapon() = default;
 
 public:
+	CPlayer::WEAPON	Get_Weapon() { return m_eWeapon; }
 	void			Set_isRender(_bool isRender) { m_isRender = isRender; }
 
 public:
@@ -42,6 +43,7 @@ private:
 	wstring				m_strModelComTag = {};
 	CPlayer::WEAPON		m_eWeapon = {};
 	_bool				m_isRender = { false };
+
 
 private:
 	CModel*			m_pModelCom = { nullptr };

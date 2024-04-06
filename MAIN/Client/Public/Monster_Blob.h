@@ -53,6 +53,7 @@ public:
 
 	// CMonster을(를) 통해 상속됨
 	void Collision_Event(Engine::CGameObject* pGameObject) override;
+	void Damage_Event() override;
 };
 
 END

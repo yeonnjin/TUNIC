@@ -21,6 +21,7 @@
 #define SHIELDBONE 24
 #define STICKBONE 45
 #define SWORDBONE 28
+#define WANDBONE 28
 #define SHOTGUNBONE 45
 // stick - 29 / sword - 45 / shield - 24 / Shotgun - 45?
 
@@ -65,8 +66,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_eType = OBJ_PLAYER;
+	m_fDamageCoolTime = 1.f;
 
-	_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);  /*_float4(3.f, 0.2f, 50.f, 1.f);*/ /*_float4(-75.f, 3.f, 68.f, 1.f);*/
+	_float4 vPosition = /*_float4(0.f, 0.2f, 0.f, 1.f);*/  _float4(3.f, 0.2f, 50.f, 1.f); /*_float4(-75.f, 3.f, 68.f, 1.f);*/
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -85,7 +87,6 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	Set_Weapon();
 	
 	// State_Machine
-	m_fDamageCoolTime += fTimeDelta;
 	m_pModelCom->Update_State(fTimeDelta);
 	Update_State();
 	Update_Camera();
@@ -132,6 +133,8 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	}
 	else
 		m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.f);*/
+
+	Compute_Damage_CoolTime(fTimeDelta);
 
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
@@ -427,15 +430,32 @@ HRESULT CPlayer::Add_PartObjects()
 
 	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shotgun"), pWeaponObject);
 
+	/* For. Part_Player_Weapon_Wandbow */
+	pWeaponObject = { nullptr };
+	tDesc = {};
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(WANDBONE);
+	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Weapon_Wandbow";
+	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	tDesc.strModelComTag = wstr3;
+	tDesc.eWeapon = WEAPON_WANDBOW;
+
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Wandbow"), pWeaponObject);
+
 	/* For. Part_Player_Weapon_Shield */
 	pWeaponObject = { nullptr };
 	tDesc = {};
 
 	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHIELDBONE);
-	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Weapon_Shield";
-	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	tDesc.strModelComTag = wstr3;
+	_char szModelTag4[MAX_PATH] = "Prototype_Component_Model_Weapon_Shield";
+	wstring wstr4(&szModelTag4[0], &szModelTag4[MAX_PATH]);
+	tDesc.strModelComTag = wstr4;
 	tDesc.eWeapon = WEAPON_SHIELD;
 
 	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
@@ -619,6 +639,7 @@ void CPlayer::Set_Dir()
 	}
 	else
 	{*/
+
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
 		{
 			m_eDir = DIR_FRONT;
@@ -697,9 +718,20 @@ void CPlayer::Set_Weapon()
 		else
 			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), false);
 	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
+	{
+		m_eWeapon = WEAPON_WANDBOW;
+		static _bool isWandbow = false;
+		isWandbow = !isWandbow;
+		if (true == isWandbow)
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wandbow"), true);
+		else
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wandbow"), false);
+	}
 	
 	static _bool isShield = false;
-	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
+	if (m_pGameInstance->Get_DIKeyState(DIK_B, KEY_DOWN))
 	{		
 		isShield = !isShield;
 		if (true == isShield)
@@ -792,16 +824,9 @@ void CPlayer::Free()
 
 void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 {
-	if (OBJ_MONSTER == pGameObject->Get_ObjectType() && 0.7f < m_fDamageCoolTime)
-	{
-		if (m_eState == STATE_DEFENSE)
-			m_isParrying = true;
-		else
-		{
-			--m_iHP;				
-			//Change_State(STATE_DAMAGE);
-		}
+}
 
-		m_fDamageCoolTime = 0.f;
-	}
+void CPlayer::Damage_Event()
+{
+	Change_State(STATE_DAMAGE);
 }

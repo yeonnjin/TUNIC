@@ -58,6 +58,7 @@ HRESULT CMonster::Tick(_float fTimeDelta)
     m_pModelCom->Update_State(fTimeDelta);
     Update_State();
 
+
     // Blending
     if (true == m_isBlend)
     {
@@ -81,6 +82,10 @@ HRESULT CMonster::Tick(_float fTimeDelta)
 
 void CMonster::Late_Tick(_float fTimeDelta)
 {
+    Compute_Damage_CoolTime(fTimeDelta);
+    //Compute_Collision_CoolTime(fTimeDelta);
+
+   
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 
@@ -150,5 +155,26 @@ void CMonster::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
     Safe_Release(m_pColliderCom);
+}
+
+void CMonster::Collision_Event(Engine::CGameObject* pGameObject)
+{
+    if (OBJ_MONSTER == pGameObject->Get_ObjectType() && true == m_isMove )
+    {
+        // 몬스터끼리 충돌 시 LOOK 방향 변경
+        CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
+        if (false == pMonster->isCollision())
+        {
+            _vector vOpposite = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION) - dynamic_cast<CTransform*>(pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
+            vOpposite = XMVector3Normalize(vOpposite);
+            vOpposite.m128_f32[1] = 0.f;
+            _vector vOriginLook = XMVector3Normalize(m_pTransformCom->Get_State_Vector(CTransform::STATE_LOOK));
+            vOriginLook.m128_f32[1] = 0.f;
+            _vector vTargetLook = vOpposite * -0.8f - vOriginLook;
+            vTargetLook = XMVector3Normalize(vTargetLook);
+            m_pTransformCom->Look_At_Dir(XMVector3Normalize(vTargetLook));
+            m_isCollision = true;
+        }       
+    }
 }
 

@@ -194,3 +194,7 @@ void CMonster_Blob::Free()
 void CMonster_Blob::Collision_Event(Engine::CGameObject* pGameObject)
 {
 }
+
+void CMonster_Blob::Damage_Event()
+{
+}

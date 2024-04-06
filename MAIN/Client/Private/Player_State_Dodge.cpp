@@ -39,41 +39,11 @@ void CPlayer_State_Dodge::OnStateEnter()
 
     if ((CPlayer::LOCK_ON_FIND == eLockOn || CPlayer::LOCK_ON_NONE == eLockOn))
     {
-        /*switch (eDir)
-        {
-        case CPlayer::DIR_FRONT:
-            vLook = { 0.f, 0.f, 1.f };
-            break;
-        case CPlayer::DIR_BACK:
-            vLook = { 0.f, 0.f, -1.f };
-            break;
-        case CPlayer::DIR_LEFT:
-            vLook = { 1.f, 0.f, 0.f };
-            break;
-        case CPlayer::DIR_RIGHT:
-            vLook = { -1.f, 0.f, 0.f };
-            break;
-        case CPlayer::DIR_FL:
-            vLook = { 1.f, 0.f, 1.f };
-            break;
-        case CPlayer::DIR_FR:
-            vLook = { -1.f, 0.f, 1.f };
-            break;
-        case CPlayer::DIR_BL:
-            vLook = { 1.f, 0.f, -1.f };
-            break;
-        case CPlayer::DIR_BR:
-            vLook = { -1.f, 0.f, -1.f };
-            break;
-        case CPlayer::DIR_END:
-            break;
-        default:
-            break;
-        }*/
+        m_vPreRight = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_RIGHT);
+        m_vPreUp = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_UP);
+        m_vPreLook = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_LOOK);
 
-        vLook = { 1.f, 0.f, 0.f };
-
-        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Look_At_For_LandOject(vLook);
+        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Look_At_Dir(vLook);
     }
 }
 
@@ -90,6 +60,14 @@ void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 
 void CPlayer_State_Dodge::OnStateExit()
 {
+    CPlayer::LOCKON eLockOn = m_pPlayer->Get_LockOn();
+
+    if ((CPlayer::LOCK_ON_FIND == eLockOn || CPlayer::LOCK_ON_NONE == eLockOn))
+    {
+        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Set_State(CTransform::STATE_RIGHT, m_vPreRight);
+        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Set_State(CTransform::STATE_UP, m_vPreUp);
+        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Set_State(CTransform::STATE_LOOK, m_vPreLook);
+    }
 }
 
 CPlayer_State_Dodge* CPlayer_State_Dodge::Create(CPlayer* pPlayer)

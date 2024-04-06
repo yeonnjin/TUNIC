@@ -30,7 +30,7 @@ void CCowBot_State_Run::OnStateUpdate(_float fTimeDelta)
     if (4 > XMVector3Length(vDistance).m128_f32[0])
         m_pMonster->Change_State(CMonster_CowBot::STATE_ATTACK);
 
-    else if (15 < XMVector3Length(vDistance).m128_f32[0])
+    else if (FIND_DISTANCE < XMVector3Length(vDistance).m128_f32[0])
     {
         m_pMonster->Change_State(CMonster_CowBot::STATE_IDLE);
     }

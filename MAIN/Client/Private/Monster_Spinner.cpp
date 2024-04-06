@@ -8,6 +8,7 @@
 #include "Spinner_State_Damage.h"
 
 #include "Player.h"
+#include "Player_Weapon.h"
 
 CMonster_Spinner::CMonster_Spinner(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CMonster{ pDevice, pContext }
@@ -43,7 +44,7 @@ HRESULT CMonster_Spinner::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(-10.f + rand() % 6, 0.5f, rand() % 6, 1.f);
+    _float4 vPosition = _float4(-10.f + rand() % 20, 0.5f, rand() % 20, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_HIDDEN);
@@ -60,28 +61,23 @@ HRESULT CMonster_Spinner::Tick(_float fTimeDelta)
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
 
-    // Damage
-    m_fDamageCoolTime += fTimeDelta;
-    if (true == m_isDamage && 0.5f < m_fDamageCoolTime)
-    {
-        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0))->isAttack())
-        {
-            --m_iHP;
-                      
-            if(m_eState != STATE_EXPLODE)
-                Change_State(STATE_DAMAGE);
-        }
-
-        m_isDamage = false;
-        m_fDamageCoolTime = 0.f;
-    }
-
     return S_OK;
 }
 
 void CMonster_Spinner::Late_Tick(_float fTimeDelta)
 {
     __super::Late_Tick(fTimeDelta);
+
+    static _float fTest = 0.f;
+    if (true == m_isCollision)
+    {
+        fTest += fTimeDelta;
+        if (fTest >0.5f)
+        {
+            fTest = 0.f;
+            m_isCollision = false;
+        }
+    }
 }
 
 HRESULT CMonster_Spinner::Render()
@@ -100,7 +96,7 @@ HRESULT CMonster_Spinner::Add_Components()
     /* For. Com_Collider */
     CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
 
-    ColliderDesc.fRadius = 1.2f;
+    ColliderDesc.fRadius = 1.8f;
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius, 0.f);
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
@@ -158,19 +154,15 @@ void CMonster_Spinner::Set_Animation()
     // LOOP
     m_pModelCom->Set_Animation_isLoop(ANIM_IDLE, true);
     m_pModelCom->Set_Animation_isLoop(ANIM_HIDDEN, true);
+    m_pModelCom->Set_Animation_isLoop(ANIM_FORWARD, true);
 
     // ROOT
     m_pModelCom->Set_Animation_isRoot(ANIM_FORWARD, true);
     m_pModelCom->Set_Animation_isRoot(ANIM_RECOIL, true);
 
-    // BLENDING
-    m_pModelCom->Set_Blend_Time(ANIM_EXPLODE, true);
-    m_pModelCom->Set_Blend_Time(ANIM_EMERGE, true);
-    m_pModelCom->Set_Blend_Time(ANIM_FORWARD, true);
-    m_pModelCom->Set_Blend_Time(ANIM_HIDDEN, true);
-    m_pModelCom->Set_Blend_Time(ANIM_IDLE, true);
-    m_pModelCom->Set_Blend_Time(ANIM_RECOIL, true);
-    m_pModelCom->Set_Blend_Time(ANIM_START_SPIN, true);
+    // BLEND TIME
+    m_pModelCom->Set_Blend_Time(ANIM_START_SPIN, 0.1f);
+    m_pModelCom->Set_Blend_Time(ANIM_FORWARD, 0.1f);
 }
 
 CMonster_Spinner* CMonster_Spinner::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -208,23 +200,25 @@ void CMonster_Spinner::Free()
 
 void CMonster_Spinner::Collision_Event(Engine::CGameObject* pGameObject)
 {
-    //if (OBJ_PLAYER_WEAPON == pGameObject->Get_ObjectType() && 0.3f < m_fDamageCoolTime && true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0))->isAttack())
-    //{
-    //    --m_iHP;
-    //    /*if(0 > m_iHP)
-    //        Change_State(STATE_EXPLODE);
-    //    else if(0 <= m_iHP && m_eState != STATE_EXPLODE)*/
-    //        Change_State(STATE_DAMAGE);
+    __super::Collision_Event(pGameObject);
 
-    //    m_fDamageCoolTime = 0.f;
-    //}
-
-    //else 
     if(OBJ_PLAYER == pGameObject->Get_ObjectType() && m_eState != STATE_EXPLODE && m_eState != STATE_DAMAGE)
     {
-        Change_State(STATE_IDLE);
-
-        //if (false == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
-        //    pGameObject->Set_isDamage(true);
+        // 패링 상태일 떄 : STUN(DAMAGE)
+        if (true == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
+        {
+            Change_State(STATE_DAMAGE);
+        }
+        // 패링 상태가 아닐 때 : 데미지 주기
+        else
+        {
+            dynamic_cast<CPlayer*>(pGameObject)->Set_isDamage(true);
+        }
     }
+}
+
+void CMonster_Spinner::Damage_Event()
+{
+    if (0 >= m_iHP)
+        Change_State(STATE_EXPLODE);
 }

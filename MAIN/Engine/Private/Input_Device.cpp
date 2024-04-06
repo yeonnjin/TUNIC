@@ -6,21 +6,6 @@ CInput_Device::CInput_Device()
 
 _bool CInput_Device::Get_DIKeyState(_ubyte byKeyID, KEYSTATE eState)
 {
-	if (m_byKeyState[byKeyID] & 0x80)
-	{
-		if (m_eKeyState[byKeyID] == KEY_FREE)
-			m_eKeyState[byKeyID] = KEY_DOWN;
-		else
-			m_eKeyState[byKeyID] = KEY_PRESS;
-	}
-	else
-	{
-		if (m_eKeyState[byKeyID] == KEY_DOWN || m_eKeyState[byKeyID] == KEY_PRESS)
-			m_eKeyState[byKeyID] = KEY_UP;
-		else
-			m_eKeyState[byKeyID] = KEY_FREE;
-	}
-
 	return (m_eKeyState[byKeyID] == eState);
 }
 
@@ -89,6 +74,24 @@ void CInput_Device::Tick()
 	/* 키보드와 마우스가 어떤 입력 상태를 가지고 있는지를 저장 */
 	m_pKeyBoard->GetDeviceState(256, m_byKeyState);
 	m_pMouse->GetDeviceState(sizeof(m_tMouseState), &m_tMouseState);
+
+	for (size_t i = 0; i < 256; i++)
+	{
+		if (m_byKeyState[i] & 0x80)
+		{
+			if (m_eKeyState[i] == KEY_FREE)
+				m_eKeyState[i] = KEY_DOWN;
+			else
+				m_eKeyState[i] = KEY_PRESS;
+		}
+		else
+		{
+			if (m_eKeyState[i] == KEY_DOWN || m_eKeyState[i] == KEY_PRESS)
+				m_eKeyState[i] = KEY_UP;
+			else
+				m_eKeyState[i] = KEY_FREE;
+		}
+	}
 }
 
 CInput_Device* CInput_Device::Create(HINSTANCE hInst, HWND hWnd)
