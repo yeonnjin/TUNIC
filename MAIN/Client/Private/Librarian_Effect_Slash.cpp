@@ -117,22 +117,6 @@ HRESULT CLibrarian_Effect_Slash::Add_Components()
 	ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
 
-	/* if (CPlayer::WEAPON_STICK == m_eWeapon)
-	 {
-		 ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
-		 ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
-	 }
-	 else if (CPlayer::WEAPON_SWORD == m_eWeapon)
-	 {
-		 ColliderDesc.vSize = _float3(0.4f, 1.8f, 0.4f);
-		 ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-	 }
-	 else if (CPlayer::WEAPON_SHIELD == m_eWeapon)
-	 {
-		 ColliderDesc.vSize = _float3(1.2f, 1.2f, 0.4f);
-		 ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-	 }*/
-
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;

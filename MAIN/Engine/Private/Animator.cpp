@@ -77,6 +77,14 @@ CBone* CAnimator::Get_Bone_Ptr(_uint iBoneIndex) const
 	return m_pAvatar->Get_Bone_Ptr(iBoneIndex);
 }
 
+_float4 CAnimator::Get_Bone_Position(_uint iBoneIndex) const
+{
+	if (nullptr == m_pAvatar)
+		return _float4{};
+
+	return m_pAvatar->Get_Bone_Position(iBoneIndex);
+}
+
 HRESULT CAnimator::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex)
 {
 	if (nullptr == m_pAvatar)

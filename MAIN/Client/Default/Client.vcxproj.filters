@@ -238,6 +238,12 @@
     <Filter Include="02.GameObjects\Monster\Librarian\Trigger">
       <UniqueIdentifier>{04a5deb8-ab85-49d0-9517-97bc74f5536a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\Effect\Attack_Beam">
+      <UniqueIdentifier>{078b618a-de74-4e2f-a123-c2d8ab3d6101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam">
+      <UniqueIdentifier>{9774b780-8a5a-4b20-91a4-1bef2117d443}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -453,6 +459,12 @@
     <ClInclude Include="..\Public\Librarian_State_Entry.h">
       <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Entry</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Librarian_Effect_Beam.h">
+      <Filter>02.GameObjects\Monster\Librarian\Effect\Attack_Beam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Energy_Beam.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -649,6 +661,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Entry.cpp">
       <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_Effect_Beam.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\Effect\Attack_Beam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Energy_Beam.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -38,6 +38,7 @@ public:
 	// Avatar
 	_uint					Get_NumMeshes() const;
 	CBone*					Get_Bone_Ptr(_uint iBoneIndex) const;
+	_float4					Get_Bone_Position(_uint iBoneIndex) const;
 	//void					Add_Model(MODELFILE* pModelFile);
 	HRESULT					Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
 	HRESULT					Bind_ShaderResource(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, AITEXTURETYPE eTextureType);

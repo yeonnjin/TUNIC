@@ -71,6 +71,15 @@ CBone* CAvatar::Get_Bone_Ptr(_uint iBoneIndex) const
 	return *iter;
 }
 
+_float4 CAvatar::Get_Bone_Position(_uint iBoneIndex) const
+{
+	auto iter = m_Bones.begin();
+	for (size_t i = 0; i < iBoneIndex; i++)
+		++iter;
+
+	return (*iter)->Get_Position();
+}
+
 HRESULT CAvatar::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 {
 	if (nullptr == pModelFile)

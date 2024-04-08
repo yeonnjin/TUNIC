@@ -47,6 +47,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	/*if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 		return E_FAIL;*/
 
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Librarian_Effect"), TEXT("Prototype_GameObject_Librarian_Attack_Beam"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -78,6 +81,8 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Particle_Red"))))
 			return;
 	}
+
+	
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -130,7 +135,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFreeDesc.fFar = 1000.0f;
 	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f);
 	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
-	tCameraFreeDesc.fSpeedPerSec = 3.f;
+	tCameraFreeDesc.fSpeedPerSec = 6.f;
 	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc));

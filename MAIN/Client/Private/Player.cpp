@@ -81,7 +81,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 HRESULT CPlayer::Tick(_float fTimeDelta)
 {
-	__super::Tick(fTimeDelta);
+	if (E_FAIL == __super::Tick(fTimeDelta))
+		return E_FAIL;
 
 	Set_Dir();
 	Set_Weapon();
@@ -104,13 +105,14 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	else
 		m_pModelCom->Play_Animation(fTimeDelta);
 
+	// Collider
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
+	// Navigation
 	if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 	}
-
 	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
 	// PartObject

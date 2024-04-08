@@ -32,6 +32,8 @@ public:
 	}
 
 	_float4x4 Get_TransformationMatrix() { return m_TransformationMatrix; } // Blending
+
+	_float4	Get_Position();
 	
 public:
 	HRESULT Initialize(BONEFILE* pBoneFile);

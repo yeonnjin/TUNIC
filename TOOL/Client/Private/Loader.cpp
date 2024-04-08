@@ -373,25 +373,25 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		return E_FAIL;*/
 
 	/* Boss */
-	/*TransformMatrix = XMMatrixIdentity();
+	TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Boss_Librarian"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Librarian/Librarian.fbx", TEXT("Prototype_Component_Model_Boss_Librarian"), TransformMatrix))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Orb"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Librarian/Effect/Orb/Orb.fbx", TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Orb"), TransformMatrix))))
 		return E_FAIL;*/
 
-	/*TransformMatrix = XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Beam"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Librarian/Effect/Beam/Beam_Fin.fbx", TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Beam"), TransformMatrix))))
-		return E_FAIL;*/
-
 	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Beam"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Librarian/Effect/Beam/Beam.fbx", TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Beam"), TransformMatrix))))
+		return E_FAIL;
+
+	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Slash_Horizon"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Librarian/Effect/Slash/Slash_Horizon.fbx", TEXT("Prototype_Component_Model_Boss_Librarian_Effect_Slash_Horizon"), TransformMatrix))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Boss_Librarian_Sword"),

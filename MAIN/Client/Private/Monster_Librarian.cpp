@@ -6,6 +6,7 @@
 #include "Librarian_State_Pattern_Lightning_Warp.h"
 #include "Librarian_State_Pattern_Lunge_Swipe.h"
 #include "Librarian_State_Pattern_Homing_Orbs.h"
+#include "Librarian_State_Pattern_Energy_Beam.h"
 
 #include "Librarian_State_Entry.h"
 #include "Librarian_State_Idle.h"
@@ -23,6 +24,11 @@ CMonster_Librarian::CMonster_Librarian(ID3D11Device* pDevice, ID3D11DeviceContex
 CMonster_Librarian::CMonster_Librarian(const CMonster_Librarian& rhs)
     : CMonster{ rhs }
 {
+}
+
+_float4 CMonster_Librarian::Get_Bone_Position(_uint iBoneIndex)
+{
+    return m_pModelCom->Get_Bone_Position(iBoneIndex);
 }
 
 void CMonster_Librarian::Change_State(STATE eState)
@@ -67,7 +73,7 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
 
-    /*static _uint iIndex = 14;
+    /*static _uint iIndex = 25;
     if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {
         iIndex++;
@@ -76,7 +82,7 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
         m_pModelCom->Set_Animation_Index(iIndex);
     }
 
-    m_pModelCom->Play_Animation(fTimeDelta);*/     
+    m_pModelCom->Play_Animation(fTimeDelta);     */
 
     for (auto& PartObject : m_PartObjects)
         PartObject.second->Tick(fTimeDelta);
@@ -177,12 +183,13 @@ HRESULT CMonster_Librarian::Add_States()
     m_pModelCom->Add_State(STATE_PATTERN_ENERGY_WAVE, CLibrarian_State_Pattern_Energy_Wave::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_PATTERN_LUNGE_SWIPE, CLibrarian_State_Pattern_Lunge_Swipe::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_PATTERN_HOMING_ORBS, CLibrarian_State_Pattern_Homing_Orbs::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_PATTERN_ENERGY_BEAM, CLibrarian_State_Pattern_Energy_Beam::Create(this, pPlayer));
 
     m_pModelCom->Add_State(STATE_ENTRY, CLibrarian_State_Entry::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_IDLE, CLibrarian_State_Idle::Create(this, pPlayer));
 
-    m_pModelCom->Change_State(STATE_ENTRY);
-    m_eState = STATE_ENTRY;
+    m_pModelCom->Change_State(STATE_IDLE);
+    m_eState = STATE_IDLE;
 
     return S_OK;
 }
@@ -200,6 +207,8 @@ void CMonster_Librarian::Update_State()
             Change_State(STATE_PATTERN_LUNGE_SWIPE);
         else if (m_pGameInstance->Get_DIKeyState(DIK_4, KEY_DOWN))
             Change_State(STATE_PATTERN_HOMING_ORBS);
+        else if (m_pGameInstance->Get_DIKeyState(DIK_5, KEY_DOWN))
+            Change_State(STATE_PATTERN_ENERGY_BEAM);
         break;
 
     default:
@@ -220,6 +229,7 @@ void CMonster_Librarian::Set_Animation()
     m_pModelCom->Set_Animation_isLoop(ANIM_LIGHTNING_LOOP, true);
     m_pModelCom->Set_Animation_isLoop(ANIM_SUMMON_ORB_LOOP, true);
     m_pModelCom->Set_Animation_isLoop(ANIM_FLYING_SWOOP, true);
+    m_pModelCom->Set_Animation_isLoop(ANIM_PALPATINE_LOOP, true);
 
     // ROOT
     m_pModelCom->Set_Animation_isRoot(ANIM_DIE, true);
@@ -230,7 +240,7 @@ void CMonster_Librarian::Set_Animation()
     m_pModelCom->Set_Animation_isRoot(ANIM_LIGHTNING_LAND, true);
     m_pModelCom->Set_Animation_isRoot(ANIM_FLYING_SWOOP, true);
     m_pModelCom->Set_Animation_isRoot(ANIM_SUMMON_ORB_LOOP, true);
-    m_pModelCom->Set_Animation_isRoot(ANIM_PALPATINE, true);
+    m_pModelCom->Set_Animation_isRoot(ANIM_PALPATINE_START, true);
     m_pModelCom->Set_Animation_isRoot(ANIM_TURN, true);  
 }
 

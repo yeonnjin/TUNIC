@@ -28,6 +28,7 @@ public:
 	vector<CAnimation*>*		Get_Animations_Ptr() { return &m_Animations; }
 	vector<CBone*>*				Get_Bones_Ptr() { return &m_Bones; }
 	CBone*						Get_Bone_Ptr(_uint iBoneIndex) const;
+	_float4						Get_Bone_Position(_uint iBoneIndex) const;
 
 	_uint						Get_NumMeshes() const { return m_iNumMeshes;}
 

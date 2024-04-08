@@ -58,6 +58,11 @@ void CTest_Object::Tick(_float fTimeDelta)
         iIndex++;
         m_pModelCom->Set_Animation(iIndex, true);
     }
+    if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
+    {
+        iIndex--;
+        m_pModelCom->Set_Animation(iIndex, true);
+    }
 
     if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
         m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);

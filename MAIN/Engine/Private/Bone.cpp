@@ -4,6 +4,13 @@ CBone::CBone()
 {
 }
 
+_float4 CBone::Get_Position()
+{
+    _float4 vPosition;
+    memcpy(&vPosition, m_CombinedTransformationMatrix.m[3], sizeof(_float4));
+    return vPosition;
+}
+
 HRESULT CBone::Initialize(BONEFILE* pBoneFile)
 {
     m_iParentBoneIndex = pBoneFile->iParentBoneIndex;

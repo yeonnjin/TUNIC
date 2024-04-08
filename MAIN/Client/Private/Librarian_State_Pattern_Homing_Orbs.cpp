@@ -106,13 +106,6 @@ void CLibrarian_State_Pattern_Homing_Orbs::Set_Orbs_Line()
 
 void CLibrarian_State_Pattern_Homing_Orbs::Set_Orbs_Hexagon()
 {
-    /*m_Orbs[0]->Set_Start_Position(_vector{0.f, 2.f, 9.f});
-    m_Orbs[1]->Set_Start_Position(_vector{0.f, 2.f, 9.f});
-    m_Orbs[2]->Set_Start_Position(_vector{0.f, 2.f, 9.f});
-    m_Orbs[3]->Set_Start_Position(_vector{0.f, 2.f, 9.f});
-    m_Orbs[4]->Set_Start_Position(_vector{0.f, 2.f, 9.f});
-    m_Orbs[5]->Set_Start_Position(_vector{0.f, 2.f, 9.f});*/
-
     _vector StartPosition = { 9.f, 2.f, 0.f };
     
     for (size_t i = 0; i < m_Orbs.size(); i++)
