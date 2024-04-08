@@ -42,7 +42,7 @@ public:
 
 	_float			Get_BlendTime() { return m_fBlendTime; }
 	_uint			Get_NumChannels() { return m_iNumChannels; }
-	_uint			Get_Current_Frame() { return m_CurrentKeyFrameIndices[m_MaxKeyFrameChannel]; }
+	_uint			Get_Current_Frame() { return m_CurrentKeyFrameIndices[m_iMaxKeyFrameChannel]; }
 	class CChannel* Get_Channel(_uint iChannelIndex) { return m_Channels[iChannelIndex]; }
 
 public:
@@ -55,7 +55,7 @@ private:
 	_float						m_fDuration = { 0.f };			// 전체 재생 길이
 	_float						m_fOriginDuration = { 0.f };		// 원래 전체 재생 길이
 	_float						m_fTicksPerSecond = { 0.f };	// 초당 얼마나 재생하는지 (속도)
-	_uint						m_MaxKeyFrameChannel = { 0 };
+	_uint						m_iMaxKeyFrameChannel = { 0 };
 	vector<_float>				m_KeyFrameTickWeights = { 1.f };
 	_float						m_fTrackPosition = { 0.f };		// 현재 애니메이션이 어디까지 재생되었는지
 

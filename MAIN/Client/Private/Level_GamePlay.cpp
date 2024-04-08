@@ -44,8 +44,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Editor(TEXT("Layer_Editor"))))
 		return E_FAIL;
 	
-	if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
-		return E_FAIL;
+	/*if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -123,12 +123,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 
 	// Camera_Free
 	CCamera_Free::CAMERA_FREE_DESC tCameraFreeDesc{};
-	tCameraFreeDesc.fMouseSensor = 1.f;
+	tCameraFreeDesc.fMouseSensor = 0.5f;
 	tCameraFreeDesc.fFovy = XMConvertToRadians(60.0f);
 	tCameraFreeDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	tCameraFreeDesc.fNear = 0.1f;
 	tCameraFreeDesc.fFar = 1000.0f;
-	tCameraFreeDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f);
 	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	tCameraFreeDesc.fSpeedPerSec = 3.f;
 	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);

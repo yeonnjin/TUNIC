@@ -8,6 +8,8 @@
 #include "Monster.h"
 #include "Monster_Librarian.h"
 #include "Librarian_Weapon.h"
+#include "Librarian_Effect_Slash.h"
+#include "Librarian_Effect_Orb.h"
 
 #include "Monster_Spinner.h"
 #include "Monster_Blob.h"
@@ -335,6 +337,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CLibrarian_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Librarian_Attack_Slash */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Librarian_Attack_Slash"),
+		CLibrarian_Effect_Slash::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Librarian_Attack_Orb */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Librarian_Attack_Orb"),
+		CLibrarian_Effect_Orb::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Stick.dat");
@@ -344,6 +356,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Wandbow.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Librarian_Weapon.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Orb.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");

@@ -31,7 +31,7 @@ HRESULT CAnimation::Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& 
         if (iMaxKeyFrame < pChannel->Get_NumKeyFrame())
         {
             iMaxKeyFrame = pChannel->Get_NumKeyFrame();
-            m_MaxKeyFrameChannel = i;
+            m_iMaxKeyFrameChannel = i;
         }
     }
 
@@ -54,8 +54,8 @@ void CAnimation::Set_AnimationData_Initialize()
 {
     m_fTrackPosition = 0.f;
 
-    for (auto& iIndex : m_CurrentKeyFrameIndices)
-        iIndex = 0;
+    /*for (auto& iIndex : m_CurrentKeyFrameIndices)
+        iIndex = 0;*/
 
     m_isFinished = false;
 }
@@ -75,7 +75,7 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
 {
     m_isFinished = false;
 
-    m_fTrackPosition += m_fTicksPerSecond * m_KeyFrameTickWeights[m_CurrentKeyFrameIndices[m_MaxKeyFrameChannel]] * fTimeDelta;
+    m_fTrackPosition += m_fTicksPerSecond * m_KeyFrameTickWeights[m_CurrentKeyFrameIndices[m_iMaxKeyFrameChannel]] * fTimeDelta;
 
     if (m_fDuration <= m_fTrackPosition)
     {

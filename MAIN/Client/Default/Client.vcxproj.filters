@@ -205,8 +205,38 @@
     <Filter Include="02.GameObjects\Monster\Librarian\State">
       <UniqueIdentifier>{2c18f7e4-a29f-4583-be0e-7e9610a30b26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern_Lightning_Warp">
+    <Filter Include="02.GameObjects\Monster\Librarian\Effect">
+      <UniqueIdentifier>{6d75fe49-5a44-4908-8707-52acca1c3e4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\Effect\Attack_Slash">
+      <UniqueIdentifier>{e4eee54f-ad61-43c5-8b9f-2572423b0dcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\Effect\Attack_Orb">
+      <UniqueIdentifier>{7594749e-f67e-4f0b-9940-f2856be813f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern">
+      <UniqueIdentifier>{6505fc6b-94ce-410a-b08c-4b80f94ec51b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp">
       <UniqueIdentifier>{a46559ee-e43b-4c07-bf71-3dbfc60b7f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave">
+      <UniqueIdentifier>{3098d494-0bbb-40b7-b615-7d9881701465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe">
+      <UniqueIdentifier>{ff0ec93a-bb6d-4e99-966e-fef278117b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs">
+      <UniqueIdentifier>{9be00ffb-03b1-4627-bcb0-efb3c2468f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Entry">
+      <UniqueIdentifier>{50569d9d-5393-4a25-aae2-576247f252c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\State\Librarian_State_Idle">
+      <UniqueIdentifier>{f1e455c6-5ae6-4840-8b64-f5748cb24d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Librarian\Trigger">
+      <UniqueIdentifier>{04a5deb8-ab85-49d0-9517-97bc74f5536a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -315,9 +345,6 @@
     <ClInclude Include="..\Public\Spinner_State_Idle.h">
       <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Idle</Filter>
     </ClInclude>
-    <ClInclude Include="Monster_Anim_List.h">
-      <Filter>99.Defines</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Spinner_State_Hidden.h">
       <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden</Filter>
     </ClInclude>
@@ -397,7 +424,34 @@
       <Filter>02.GameObjects\Monster\Librarian\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Pattern_Lightning_Warp.h">
-      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern_Lightning_Warp</Filter>
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Librarian.h">
+      <Filter>02.GameObjects\Monster\Librarian\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_Effect_Slash.h">
+      <Filter>02.GameObjects\Monster\Librarian\Effect\Attack_Slash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Energy_Wave.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Lunge_Swipe.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_Effect_Orb.h">
+      <Filter>02.GameObjects\Monster\Librarian\Effect\Attack_Orb</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster_Anim_List.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Homing_Orbs.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Idle.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Entry.h">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Entry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -570,7 +624,31 @@
       <Filter>02.GameObjects\Monster\Librarian\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Pattern_Lightning_Warp.cpp">
-      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern_Lightning_Warp</Filter>
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Librarian.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_Effect_Slash.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\Effect\Attack_Slash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Energy_Wave.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Lunge_Swipe.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_Effect_Orb.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\Effect\Attack_Orb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Homing_Orbs.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Idle.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Entry.cpp">
+      <Filter>02.GameObjects\Monster\Librarian\State\Librarian_State_Entry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Librarian.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Weapon_Wandbow.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Librarian_Effect_Slash_Horizon.dat"
 #define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach.dat"
 #pragma region Initial
 
@@ -1015,7 +1015,7 @@ void CEditor::Tool_Picking()
 {
 	//m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
 
-	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Player"), g_strTransformTag);
+	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), g_strTransformTag);
 
 	Gizmo(m_pGizmoTransform);
 	ImGui::Checkbox("Using Picking", &m_isUsingPicking);

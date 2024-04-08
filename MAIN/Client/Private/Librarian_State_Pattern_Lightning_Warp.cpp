@@ -4,11 +4,11 @@
 #include "Monster_Librarian.h"
 #include "Librarian_State_Pattern_Lightning_Warp.h"
 
-#define MAP_X_MIN -5.f
-#define MAP_X_SIZE 10
-#define MAP_Y 0.2f
-#define MAP_Z_MIN -5.f
-#define MAP_Z_SIZE 10
+#define MAP_X_MIN -4.f
+#define MAP_X_SIZE 8
+#define MAP_Y 0.5f
+#define MAP_Z_MIN -4.f
+#define MAP_Z_SIZE 8
 
 CLibrarian_State_Pattern_Lightning_Warp::CLibrarian_State_Pattern_Lightning_Warp(CMonster_Librarian* pMonster, CPlayer* pPlayer)
 {
@@ -26,13 +26,13 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateEnter()
     // 4. Ä® »Ì±â
 
     // 0. Ä® µé°í ÇÏ´Ã·Î ¿Ã¶ó°¡±â
-    m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_UP);
+    m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_WINDUP);
 }
 
 void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
 {
     // 0 -> 1
-    if (0 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_UP))
+    if (0 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_WINDUP))
     {
         ++m_iPattern;   
 
@@ -53,12 +53,29 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
         {
             ++m_iPattern;
             m_fAccLightningTime = 0.f;
-            m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_SLAM);
+            m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_LAND);
         }
     }
 
+    // ¾Ö´Ï¸ÞÀÌ¼Ç ¸ØÃã »óÅÂ º¸Á¤
+    if (2 == m_iPattern && 0 == m_pMonster->Get_Current_Frame(CMonster_Librarian::ANIM_LIGHTNING_LAND))
+    {
+        CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
+        _vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        vMonsterPosition.m128_f32[1] = 50.f;
+        pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonsterPosition);
+    }
+
+    if (2 == m_iPattern && 1 == m_pMonster->Get_Current_Frame(CMonster_Librarian::ANIM_LIGHTNING_LAND))
+    {
+        CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
+        _vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        vMonsterPosition.m128_f32[1] = 0.2f;
+        pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonsterPosition);
+    }
+
     // 2. Ä® ³»·Á ²È±â
-    if (2 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_SLAM))
+    if (2 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_LAND))
     {
         ++m_iPattern;
         // 2 -> 3
@@ -75,23 +92,20 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
         {
             ++m_iPattern;
             m_fAccLoopTime = 0.f;
-            m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_DRAW);
+            m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_RELEASE);
         }
     }
 
     // 4. Ä® »Ì±â
-    if (4 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_DRAW))
+    if (4 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_RELEASE))
     {
         m_iPattern = 0;
 
         // ÆÐÅÏ Á¾·á
         // TODO: ¼öÁ¤ ÇÊ¿ä
-        //m_pMonster->Change_State(CMonster_Librarian::STATE_IDLE);
-
-        m_iPattern = 0;
-        m_fAccLightningTime = 0.f;
-        m_fAccLoopTime = 0.f;
-        m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_UP);
+        
+        //m_pMonster->Change_State(CMonster_Librarian::STATE_PATTERN_ENERGY_WAVE);
+        m_pMonster->Change_State(CMonster_Librarian::STATE_IDLE);
     }
 }
 

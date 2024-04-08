@@ -74,9 +74,9 @@ HRESULT CMap::Render()
         m_pModelCom->Render(i);
     }
 
-#ifdef _DEBUG
-    m_pNavigationCom->Render();
-#endif // _DEBUG
+//#ifdef _DEBUG
+//    m_pNavigationCom->Render();
+//#endif // _DEBUG
 
     return S_OK;
 }

@@ -27,6 +27,9 @@ public:
 	vector<wstring>*		Get_Model_List(CModel::TYPE eType) { return &m_strModels[eType]; }
 
 private:
+	_bool					m_isGrid = { false };
+
+private:
 	class CGameInstance*	m_pGameInstance = { nullptr };
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };

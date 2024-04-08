@@ -31,6 +31,10 @@ public:
 	}*/
 
 	// Set
+	void Set_SpeedPerSec(_float fSpeed) { m_fSpeedPerSec = fSpeed; }
+
+	void Set_RotationPerSec(_float fRotation) { m_fRotationPerSec = fRotation; }
+
 	void Set_State(STATE eState, _fvector vState)
 	{
 		_float4 vTemp;
@@ -53,6 +57,10 @@ public:
 	void Set_Dead(_bool isDead) { m_isDead = isDead; }
 
 	// Get
+	_float Get_SpeedPerSec() { return m_fSpeedPerSec; }
+
+	_float Get_RotationPerSec() { return m_fRotationPerSec; }
+
 	_vector Get_State_Vector(STATE eState) {
 		return XMLoadFloat4x4(&m_WorldMatrix).r[eState];
 	}

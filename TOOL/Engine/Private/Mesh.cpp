@@ -155,6 +155,7 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(const aiMesh* pAIMesh, _fmatrix T
         memcpy(&m_tMeshFile.pMeshVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
         XMStoreFloat3(&m_tMeshFile.pMeshVertices[i].vNormal, XMVector3TransformCoord(XMLoadFloat3(&m_tMeshFile.pMeshVertices[i].vNormal), TransformationMatrix));
         memcpy(&m_tMeshFile.pMeshVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2)); // 8개 까지 가질 수 있으므로 2차원 배열로 선언, 맵핑 이상하면 숫자 넘겨보면서 확인
+        
         memcpy(&m_tMeshFile.pMeshVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
     }
 

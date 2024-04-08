@@ -117,10 +117,15 @@ void CImGui_Manager::EditTransform(CTransform* pTransformCom)
     ImGuizmo::Manipulate(ViewMatrix.m[0], ProjMatrix.m[0], mCurrentGizmoOperation, mCurrentGizmoMode, matrix.m[0], NULL, useSnap ? &snap[0] : NULL);
     pTransformCom->Set_WorldMatrix(matrix);
 
+    ImGui::Checkbox("Using Grid", &m_isGrid);
+
     // Grid
-    _float4x4 identityMatrix;
-    XMStoreFloat4x4(&identityMatrix, XMMatrixIdentity());
-    ImGuizmo::DrawGrid(ViewMatrix.m[0], ProjMatrix.m[0], identityMatrix.m[0], 100.f);
+    if(true == m_isGrid)
+    {
+        _float4x4 identityMatrix;
+        XMStoreFloat4x4(&identityMatrix, XMMatrixIdentity());
+        ImGuizmo::DrawGrid(ViewMatrix.m[0], ProjMatrix.m[0], identityMatrix.m[0], 100.f);
+    }
 }
 
 HRESULT CImGui_Manager::Create_Prototype_Model(CModel::TYPE eType, const wstring& strFolderPath)

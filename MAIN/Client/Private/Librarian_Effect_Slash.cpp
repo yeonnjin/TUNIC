@@ -1,0 +1,195 @@
+#include "stdafx.h"
+#include "Librarian_Effect_Slash.h"
+
+#include "Player.h"
+
+CLibrarian_Effect_Slash::CLibrarian_Effect_Slash(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CEffect{ pDevice, pContext }
+{
+}
+
+CLibrarian_Effect_Slash::CLibrarian_Effect_Slash(const CLibrarian_Effect_Slash& rhs)
+	: CEffect{ rhs }
+{
+}
+
+HRESULT CLibrarian_Effect_Slash::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CLibrarian_Effect_Slash::Initialize(void* pArg)
+{
+	GAMEOBJECT_DESC		GameObjectDesc{};
+
+	GameObjectDesc.fSpeedPerSec = 70.f;
+	GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+
+	if (FAILED(__super::Initialize(&GameObjectDesc)))
+		return E_FAIL;
+
+	if (FAILED(Add_Components()))
+		return E_FAIL;
+
+	LIBRARIAN_EFFECT_SLASH_DESC* pDesc = (LIBRARIAN_EFFECT_SLASH_DESC*)pArg;
+	m_isVertical = pDesc->isVertical;
+	m_pTransformCom->Look_At_Dir(pDesc->vLookDir);
+
+	if (false == m_isVertical)
+	{
+		m_pTransformCom->Turn(XMVectorSet(0.f, 0.f, 1.f, 0.f), 1.f);
+		m_pTransformCom->Set_Scaled(1.2f, 1.2f, 1.2f);
+	}
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vStartPosition);
+
+
+	return S_OK;
+}
+
+HRESULT CLibrarian_Effect_Slash::Tick(_float fTimeDelta)
+{
+	m_fAccLiveTime += fTimeDelta;
+	if (m_fAccLiveTime >= m_fLiveTime)
+		m_isDead = true;
+
+	if (E_FAIL == __super::Tick(fTimeDelta))
+		return E_FAIL;
+
+	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+	m_pTransformCom->Go_Backward(fTimeDelta);
+
+	return S_OK;
+}
+
+void CLibrarian_Effect_Slash::Late_Tick(_float fTimeDelta)
+{
+	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+}
+
+HRESULT CLibrarian_Effect_Slash::Render()
+{
+	if (FAILED(Bind_ShaderResources()))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		/*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
+			return E_FAIL;*/
+
+		if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		m_pModelCom->Render(i);
+	}
+
+#ifdef _DEBUG
+	m_pColliderCom->Render();
+#endif
+
+	return S_OK;
+}
+
+HRESULT CLibrarian_Effect_Slash::Add_Components()
+{
+	/* For.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
+		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+		return E_FAIL;
+
+	/* For.Com_Model */
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	/* Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
+
+	/* 로컬상의 정보를 셋팅한다. */
+
+	ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+
+	/* if (CPlayer::WEAPON_STICK == m_eWeapon)
+	 {
+		 ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
+		 ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+	 }
+	 else if (CPlayer::WEAPON_SWORD == m_eWeapon)
+	 {
+		 ColliderDesc.vSize = _float3(0.4f, 1.8f, 0.4f);
+		 ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+	 }
+	 else if (CPlayer::WEAPON_SHIELD == m_eWeapon)
+	 {
+		 ColliderDesc.vSize = _float3(1.2f, 1.2f, 0.4f);
+		 ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	 }*/
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLibrarian_Effect_Slash::Bind_ShaderResources()
+{
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+CLibrarian_Effect_Slash* CLibrarian_Effect_Slash::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CLibrarian_Effect_Slash* pInstance = new CLibrarian_Effect_Slash(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed To Create : CLibrarian_Effect_Slash"));
+
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CGameObject* CLibrarian_Effect_Slash::Clone(void* pArg)
+{
+	CLibrarian_Effect_Slash* pInstance = new CLibrarian_Effect_Slash(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed To Clone : CLibrarian_Effect_Slash"));
+
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CLibrarian_Effect_Slash::Free()
+{
+	__super::Free();
+
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pModelCom);
+	Safe_Release(m_pColliderCom);
+}

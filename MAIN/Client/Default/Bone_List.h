@@ -322,3 +322,5 @@
 +[135]	"leg3_R_end_end" m_TransformationMatrix = { _11 = 1.00000000 ... } ...}	Engine.dll!Engine::CBone *
 +[136]	"Librarian.001" m_TransformationMatrix = { _11 = 1.00000000 ... } ...}	Engine.dll!Engine::CBone*
 
++[78]	0x0000023e815e6730 {m_szName = 0x0000023e815e6740 "hand.L" m_TransformationMatrix = { _11 = 0.412353724 _12 = ... } ...}	Engine.dll!Engine::CBone*
++[94]	0x0000023e8e3dcf10 {m_szName = 0x0000023e8e3dcf20 "hand_attach" m_TransformationMatrix = { _11 = 0.113269940 ... } ...}	Engine.dll!Engine::CBone*

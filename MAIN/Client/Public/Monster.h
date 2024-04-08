@@ -29,6 +29,7 @@ public:
 	_bool			isMove() { return m_isMove; }
 	_bool			isCollision() { return m_isCollision; }
 
+	_uint			Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
 	void			Set_isMove(_bool isMove) { m_isMove = isMove; }
 
 public:	

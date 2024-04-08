@@ -184,6 +184,12 @@
     <Filter Include="01. Utility\02. Components\02%29 VIBuffer\Instance\Point">
       <UniqueIdentifier>{35072799-c5d3-4653-a077-9106b5a3bee1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\01. GameObjects\Effect">
+      <UniqueIdentifier>{db77f538-37b6-42ce-9389-ea9128183cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\01. GameObjects\Trigger">
+      <UniqueIdentifier>{9c95077b-685d-48fc-a8c9-5c6ca50d0737}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -377,6 +383,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Instance_Point.cpp">
       <Filter>01. Utility\02. Components\02%29 VIBuffer\Instance\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect.cpp">
+      <Filter>01. Utility\01. GameObjects\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trigger.cpp">
+      <Filter>01. Utility\01. GameObjects\Trigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -586,6 +598,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Instance_Point.h">
       <Filter>01. Utility\02. Components\02%29 VIBuffer\Instance\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect.h">
+      <Filter>01. Utility\01. GameObjects\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Trigger.h">
+      <Filter>01. Utility\01. GameObjects\Trigger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
