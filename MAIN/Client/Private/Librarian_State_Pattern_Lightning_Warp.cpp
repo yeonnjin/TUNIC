@@ -14,6 +14,9 @@ CLibrarian_State_Pattern_Lightning_Warp::CLibrarian_State_Pattern_Lightning_Warp
 {
     m_pMonster = pMonster;
     m_pPlayer = pPlayer;
+
+    m_pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
+    m_pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
 }
 
 void CLibrarian_State_Pattern_Lightning_Warp::OnStateEnter()
@@ -60,18 +63,16 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
     // 애니메이션 멈춤 상태 보정
     if (2 == m_iPattern && 0 == m_pMonster->Get_Current_Frame(CMonster_Librarian::ANIM_LIGHTNING_LAND))
     {
-        CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
-        _vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
         vMonsterPosition.m128_f32[1] = 50.f;
-        pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonsterPosition);
+        m_pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonsterPosition);
     }
 
     if (2 == m_iPattern && 1 == m_pMonster->Get_Current_Frame(CMonster_Librarian::ANIM_LIGHTNING_LAND))
     {
-        CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
-        _vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
         vMonsterPosition.m128_f32[1] = 0.2f;
-        pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonsterPosition);
+        m_pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonsterPosition);
     }
 
     // 2. 칼 내려 꽂기
@@ -101,11 +102,18 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
     {
         m_iPattern = 0;
 
-        // 패턴 종료
-        // TODO: 수정 필요
-        
-        //m_pMonster->Change_State(CMonster_Librarian::STATE_PATTERN_ENERGY_WAVE);
-        m_pMonster->Change_State(CMonster_Librarian::STATE_IDLE);
+        // 애니메이션 종료 시 플레이어가 가까이 있으면 ? 근접공격 : 기본상태 
+        _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        _vector vPlayerPosition = m_pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
+        if (fDistance < 5.f)
+        {
+            m_pMonster->Change_State(CMonster_Librarian::STATE_MELEE);
+        }
+        else
+        {
+            m_pMonster->Change_State(CMonster_Librarian::STATE_IDLE);
+        }
     }
 }
 

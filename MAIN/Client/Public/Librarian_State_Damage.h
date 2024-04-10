@@ -3,13 +3,17 @@
 #include "Client_Defines.h"
 #include "State.h"
 
+BEGIN(Engine)
+class CTransform;
+END
+
 BEGIN(Client)
 
-class CLibrarian_State_Pattern_Energy_Wave final : public CState
+class CLibrarian_State_Damage : public CState
 {
 private:
-	CLibrarian_State_Pattern_Energy_Wave(class CMonster_Librarian* pMonster, class CPlayer* pPlayer);
-	virtual ~CLibrarian_State_Pattern_Energy_Wave() = default;
+	CLibrarian_State_Damage(class CMonster_Librarian* pMonster, class CPlayer* pPlayer);
+	virtual ~CLibrarian_State_Damage() = default;
 
 public:
 	// 상태 진입 시 최초에 한 번만 호출
@@ -20,17 +24,15 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	_bool	m_isSlash = { false };
-
-	_uint	m_iMotionIndex = { 12 };
-	_uint	m_iSlashIndex = { 32 };
+	_float	m_fAccDamageTime = { 0.f };
+	_float	m_fDamageTime = { 2.f };
 
 private:
 	class CMonster_Librarian* m_pMonster = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 
 public:
-	static CLibrarian_State_Pattern_Energy_Wave* Create(class CMonster_Librarian* pMonster, class CPlayer* pPlayer);
+	static CLibrarian_State_Damage* Create(class CMonster_Librarian* pMonster, class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

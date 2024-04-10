@@ -1,18 +1,43 @@
 #include "Renderer.h"
 #include "GameObject.h"
 
-
+#include "GameInstance.h"
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{ pContext }
+	, m_pGameInstance {CGameInstance::Get_Instance()}
 {
+	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
 }
 
 HRESULT CRenderer::Initialize()
 {
+	//_uint			iNumViewports = { 1 };
+	//D3D11_VIEWPORT	ViewportDesc = {};
+
+	//// 뷰포트 정보를 받아서 Width, Height 세팅
+	//m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+	///* 디퍼드 셰이딩을 위한 렌더 타켓들을 생성 */
+
+	///* For. Target_Diffuse */
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+	//	return E_FAIL;
+
+	///* For. Target_Normal */
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+	//	return E_FAIL;		// UNORM : 0 ~ 1 사이 변환
+
+	///* MRT_GameObjects : 객체들의 특정 정보를 받아오기 위한 렌더 타겟들 */
+	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Diffuse"))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
+	//	return E_FAIL;
+
 	return S_OK;
 }
 
@@ -32,10 +57,13 @@ HRESULT CRenderer::Render()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
+
 	if (FAILED(Render_NonBlend()))
 		return E_FAIL;
+
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
+
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
@@ -57,6 +85,14 @@ HRESULT CRenderer::Render_Priority()
 
 HRESULT CRenderer::Render_NonBlend()
 {
+	/* 0. 렌더 타겟을 교체 */
+	/* 1. 이 그룹에 있는 객체들은 다 빛 연산이 필요하다고 가정 => 빛 연산을 후처리로 처리할 것이다 */
+	/* 2. 후처리를 위해서는 빛 연산을 위한 데이터가 필요 => 빛 : 빛 매니저, ☆노멀,재질☆ : 이걸 받아오기 위해 렌더 타겟에 저장해서 받아옴 */
+	/* 3. Diffuse를 0번째, Normal을 1번째에 세팅 => 순서대로 함수 호출 필요 */
+
+	/*if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_GameObjects"))))
+		return E_FAIL;*/
+
 	for (auto& pRenderObject : m_RenderObjects[RENDER_NONBLEND])
 	{
 		if (nullptr != pRenderObject)
@@ -64,6 +100,9 @@ HRESULT CRenderer::Render_NonBlend()
 		Safe_Release(pRenderObject);
 	}
 	m_RenderObjects[RENDER_NONBLEND].clear();
+
+	/*if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -132,6 +171,7 @@ void CRenderer::Free()
 		RenderList.clear();		
 	}
 
+	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 }

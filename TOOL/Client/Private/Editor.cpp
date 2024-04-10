@@ -14,7 +14,7 @@
 #include <fstream>
 //#include "Texture.h"
 
-#define DATAPATH "../Bin/Resources/Data/Map/Map_Librarian.dat"
+#define DATAPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
 #define MODELPATH "../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat"
 #define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach.dat"
 #pragma region Initial

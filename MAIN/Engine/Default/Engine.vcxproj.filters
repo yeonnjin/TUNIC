@@ -190,6 +190,12 @@
     <Filter Include="01. Utility\01. GameObjects\Trigger">
       <UniqueIdentifier>{9c95077b-685d-48fc-a8c9-5c6ca50d0737}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\10. RenderTargets">
+      <UniqueIdentifier>{3e17e2c2-62d1-45be-a144-ee1ebaab66c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Utility\10. RenderTargets\Manager">
+      <UniqueIdentifier>{3c0b310e-baf8-4182-9301-4a96c2d910a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -389,6 +395,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Trigger.cpp">
       <Filter>01. Utility\01. GameObjects\Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RenderTarget.cpp">
+      <Filter>01. Utility\10. RenderTargets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Target_Manager.cpp">
+      <Filter>01. Utility\10. RenderTargets\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -604,6 +616,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Trigger.h">
       <Filter>01. Utility\01. GameObjects\Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RenderTarget.h">
+      <Filter>01. Utility\10. RenderTargets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Target_Manager.h">
+      <Filter>01. Utility\10. RenderTargets\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

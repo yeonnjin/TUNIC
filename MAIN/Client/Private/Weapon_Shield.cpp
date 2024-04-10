@@ -1,0 +1,125 @@
+#include "stdafx.h"
+#include "Weapon_Shield.h"
+
+#include "Bone.h"
+
+CWeapon_Shield::CWeapon_Shield(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+    : CPlayer_Weapon{ pDevice, pContext }
+{
+}
+
+CWeapon_Shield::CWeapon_Shield(const CWeapon_Shield& rhs)
+    : CPlayer_Weapon{ rhs }
+{
+}
+
+HRESULT CWeapon_Shield::Initialize_Prototype()
+{
+    return S_OK;
+}
+
+HRESULT CWeapon_Shield::Initialize(void* pArg)
+{
+    if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
+
+    m_eType = OBJ_PLAYER_WEAPON;
+
+    m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+
+    return S_OK;
+}
+
+HRESULT CWeapon_Shield::Tick(_float fTimeDelta)
+{
+    if (FAILED(__super::Tick(fTimeDelta)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+void CWeapon_Shield::Late_Tick(_float fTimeDelta)
+{
+    __super::Late_Tick(fTimeDelta);
+}
+
+HRESULT CWeapon_Shield::Render()
+{
+    if (FAILED(__super::Render()))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CWeapon_Shield::Add_Components()
+{
+    /* For.Com_Shader */
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
+        TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+        return E_FAIL;
+
+    /* For.Com_Model */
+    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Weapon_Shield";
+    wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;
+
+    /* Com_Collider */
+    CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
+
+    // 로컬상의 정보를 셋팅한다.
+    ColliderDesc.vSize = _float3(1.2f, 1.2f, 0.4f);
+    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CWeapon_Shield::Bind_ShaderResources()
+{
+    if (FAILED(__super::Bind_ShaderResources()))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+CWeapon_Shield* CWeapon_Shield::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+    CWeapon_Shield* pInstance = new CWeapon_Shield(pDevice, pContext);
+
+    if (FAILED(pInstance->Initialize_Prototype()))
+    {
+        MSG_BOX(TEXT("Failed To Create : CWeapon_Shield"));
+
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+CGameObject* CWeapon_Shield::Clone(void* pArg)
+{
+    CWeapon_Shield* pInstance = new CWeapon_Shield(*this);
+
+    if (FAILED(pInstance->Initialize(pArg)))
+    {
+        MSG_BOX(TEXT("Failed To Clone : CWeapon_Shield"));
+
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+void CWeapon_Shield::Free()
+{
+    __super::Free();
+}
+
+void CWeapon_Shield::Collision_Event(Engine::CGameObject* pGameObject)
+{
+}

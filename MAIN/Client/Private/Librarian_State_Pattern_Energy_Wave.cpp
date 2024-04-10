@@ -14,10 +14,11 @@ CLibrarian_State_Pattern_Energy_Wave::CLibrarian_State_Pattern_Energy_Wave(CMons
 
 void CLibrarian_State_Pattern_Energy_Wave::OnStateEnter()
 {
-    // 패턴
+    // 패턴 
     // 0. 칼 뒤로 슥 한다음에
     // 1. 에너지 웨이브 발사 (플레이어 기준?) , 오른쪽 아래부터 날리면 수평, 아님 수직
     // 2. 칼 아래에서 위로 올리기
+    // ☆ 몬스터 높이가 0.f 이상일 때만 날리기~~
 
     m_iMotionIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? CMonster_Librarian::ANIM_MELEE_WIDE : CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD;
     m_iSlashIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? 32 : 35;
@@ -27,6 +28,7 @@ void CLibrarian_State_Pattern_Energy_Wave::OnStateEnter()
 void CLibrarian_State_Pattern_Energy_Wave::OnStateUpdate(_float fTimeDelta)
 {
     _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
+    vPlayerPosition.m128_f32[1] += 1.f; // 슬래쉬 방향 보정
     CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
     pMonsterTransform->Look_At_For_LandOject(vPlayerPosition, true);
     //35

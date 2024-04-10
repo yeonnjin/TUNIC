@@ -14,11 +14,13 @@ void CPlayer_State_Attack_Stick::OnStateEnter()
 {
 	m_pPlayer->Set_Blending(true, CPlayer::ANIM_SWING_STICK1);
 	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), true);
+    m_pWeapon->Set_isAttackFrame(false);
 }
 
 void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
 {
     m_fComboTime += fTimeDelta;
+    m_pWeapon->Set_isAttackFrame(false);
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 다음 콤보
     if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
@@ -28,11 +30,27 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
         m_pPlayer->Set_Blending(true, CPlayer::ANIM_SWING_STICK2);
     }
 
+    // 첫 번째 콤보 공격 가능 프레임 : 28 ~ 36
+    if (0 == m_iCombo)
+    {
+        _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_STICK1);
+        if (28 <= iFrame && 36 >= iFrame)
+            m_pWeapon->Set_isAttackFrame(true);
+    }
+
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
     if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1))
     {
         m_fComboTime = 0.f;
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+    }
+
+    // 두 번째 콤보 공격 가능 프레임 : 20 ~ 33
+    if (1 == m_iCombo)
+    {
+        _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_STICK2);
+        if (20 <= iFrame && 33 >= iFrame)
+            m_pWeapon->Set_isAttackFrame(true);
     }
 
     // 두 번째 콤보가 끝나면 상태 종료

@@ -24,17 +24,13 @@ public:
 	};
 
 	enum STATE {
-		STATE_ENTRY, STATE_IDLE, 
+		STATE_ENTRY, STATE_IDLE, STATE_MELEE, STATE_DAMAGE,
 		STATE_PATTERN_ENERGY_WAVE, STATE_PATTERN_ENERGY_BEAM, STATE_PATTERN_HOMING_ORBS, STATE_PATTERN_LIGHTNING_WARP, STATE_PATTERN_LUNGE_SWIPE, 
 		STATE_DIE, STATE_END
 	};
 
 	enum WEAPON {
-		WEAPON_SWORD, WEAPON_SHIELD, WEAPON_END
-	};
-
-	enum EFFECT {
-		EFFECT_SLASH, EFFECT_END
+		WEAPON_SWORD, WEAPON_END
 	};
 
 private:
@@ -46,10 +42,12 @@ public:
 	// Set
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
+	void			Set_Damage_AccCoolTime(_float fCoolTime) { m_fAccDamageCoolTime = fCoolTime; }
 
 	// Get
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
 	_float4			Get_Bone_Position(_uint iBoneIndex);
+	_uint			Get_Pattern();
 	//_bool			Get_isCollision();
 
 	// State
@@ -63,14 +61,16 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+
+
+private:
 	map<const wstring, CPartObject*>	m_PartObjects;
-	map<const wstring, CEffect*>		m_Effects;
-	queue<STATE>	m_States;
+	queue<STATE>						m_States;
 
 private:
 	HRESULT			Add_Components();
 	HRESULT			Add_PartObjects();
-	HRESULT			Add_Effects();
+	HRESULT			Add_Patterns();
 	HRESULT			Bind_ShaderResources();
 
 	virtual HRESULT	Add_States();

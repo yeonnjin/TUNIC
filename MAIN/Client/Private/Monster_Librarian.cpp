@@ -10,6 +10,8 @@
 
 #include "Librarian_State_Entry.h"
 #include "Librarian_State_Idle.h"
+#include "Librarian_State_Melee.h"
+#include "Librarian_State_Damage.h"
 
 #include "Player.h"
 
@@ -31,6 +33,17 @@ _float4 CMonster_Librarian::Get_Bone_Position(_uint iBoneIndex)
     return m_pModelCom->Get_Bone_Position(iBoneIndex);
 }
 
+_uint CMonster_Librarian::Get_Pattern()
+{
+    _uint iPattern = m_States.front();
+    m_States.pop();
+
+    if (true == m_States.empty()) 
+        Add_Patterns();
+
+    return iPattern;
+}
+
 void CMonster_Librarian::Change_State(STATE eState)
 {
     m_pModelCom->Change_State(eState);
@@ -50,20 +63,21 @@ HRESULT CMonster_Librarian::Initialize(void* pArg)
     if (FAILED(Add_PartObjects()))
         return E_FAIL;
 
-    /*if (FAILED(Add_Effects()))
-        return E_FAIL;*/
-
     if (FAILED(Add_States()))
+        return E_FAIL;
+
+    if (FAILED(Add_Patterns()))
         return E_FAIL;
 
     //m_pModelCom->Set_Animation_Index(ANIM_FLYING_IDLE);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
     Set_Animation();
 
-    _float4 vPosition = _float4(0.f, 0.5f, 0.f, 1.f);
+    _float4 vPosition = _float4(-7.f, 0.5f, -7.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_iHP = 6;
+    m_fDamageCoolTime = 0.2f;
 
     return S_OK;
 }
@@ -73,7 +87,7 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
 
-    /*static _uint iIndex = 25;
+   /* static _uint iIndex = 22;
     if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {
         iIndex++;
@@ -82,7 +96,7 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
         m_pModelCom->Set_Animation_Index(iIndex);
     }
 
-    m_pModelCom->Play_Animation(fTimeDelta);     */
+    m_pModelCom->Play_Animation(fTimeDelta);  */   
 
     for (auto& PartObject : m_PartObjects)
         PartObject.second->Tick(fTimeDelta);
@@ -146,24 +160,18 @@ HRESULT CMonster_Librarian::Add_PartObjects()
     return S_OK;
 }
 
-HRESULT CMonster_Librarian::Add_Effects()
+HRESULT CMonster_Librarian::Add_Patterns()
 {
-    ///* For. Part_Librarian_Effect_Slash */
-    //CEffect* pEffect = { nullptr };
-    //CEffect_Librarian::EFFECT_LIBRARIAN_DESC tDesc{};
-
-    //tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
-    //tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SWORDBONE);
-    //_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash";
-    //wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-    //tDesc.strModelComTag = wstr;
-    ////tDesc.eWeapon = WEAPON_SWORD;
-
-    //pEffect = dynamic_cast<CEffect*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Librarian_Weapon"), &tDesc));
-    //if (nullptr == pEffect)
-    //    return E_FAIL;
-
-    //m_PartObjects.emplace(TEXT("Part_Librarian_Effect_Slash"), pEffect);
+    // 번개
+    m_States.push(STATE_PATTERN_ENERGY_WAVE);
+    m_States.push(STATE_PATTERN_LIGHTNING_WARP);
+    // 에너지 웨이브
+    // 런지 
+    m_States.push(STATE_PATTERN_LUNGE_SWIPE);
+    // 에너지 빔
+    m_States.push(STATE_PATTERN_ENERGY_BEAM);
+    // 오브 소환
+    m_States.push(STATE_PATTERN_HOMING_ORBS);
 
     return S_OK;
 }
@@ -187,9 +195,11 @@ HRESULT CMonster_Librarian::Add_States()
 
     m_pModelCom->Add_State(STATE_ENTRY, CLibrarian_State_Entry::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_IDLE, CLibrarian_State_Idle::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_MELEE, CLibrarian_State_Melee::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_DAMAGE, CLibrarian_State_Damage::Create(this, pPlayer));
 
-    m_pModelCom->Change_State(STATE_IDLE);
-    m_eState = STATE_IDLE;
+    m_pModelCom->Change_State(STATE_ENTRY);
+    m_eState = STATE_ENTRY;
 
     return S_OK;
 }
@@ -209,11 +219,14 @@ void CMonster_Librarian::Update_State()
             Change_State(STATE_PATTERN_HOMING_ORBS);
         else if (m_pGameInstance->Get_DIKeyState(DIK_5, KEY_DOWN))
             Change_State(STATE_PATTERN_ENERGY_BEAM);
+        else if (m_pGameInstance->Get_DIKeyState(DIK_6, KEY_DOWN))
+            Change_State(STATE_MELEE);
         break;
 
     default:
         break;
     }
+
 }
 
 void CMonster_Librarian::Set_Animation()
@@ -288,4 +301,5 @@ void CMonster_Librarian::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_Librarian::Damage_Event()
 {
+    Change_State(STATE_DAMAGE);
 }

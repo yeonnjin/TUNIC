@@ -8,6 +8,7 @@
 #include "Light_Manager.h"
 #include "Camera_Manager.h"
 #include "Font_Manager.h"
+#include "Target_Manager.h"
 #include "ImGui_Manager.h"
 
 #include "Renderer.h"
@@ -65,6 +66,10 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 
 	m_pFont_Manager = CFont_Manager::Create();
 	if (nullptr == m_pFont_Manager)
+		return E_FAIL;
+
+	m_pTarget_Manager = CTarget_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pTarget_Manager)
 		return E_FAIL;
 
 	/* 인풋 디바이스를 초기화 */
@@ -379,6 +384,7 @@ void CGameInstance::Transform_Picking_To_LocalSpace(const CTransform* pTransform
 	m_pPicking->Transform_Picking_To_LocalSpace(pTransform, pRayDir, pRayPos);
 }
 
+/* For.Light_Manager */
 const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint iIndex)
 {
 	if (nullptr == m_pLight_Manager)
@@ -395,6 +401,7 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 	return m_pLight_Manager->Add_Light(LightDesc);
 }
 
+/* For.Collision_Manager */
 HRESULT CGameInstance::Add_Group(CCollision_Manager::GROUP eCollisionGroup, CGameObject* pGameObject)
 {
 	if (nullptr == m_pCollision_Manager)
@@ -411,6 +418,7 @@ void CGameInstance::Check_Collision_Groups(CCollision_Manager::GROUP eCollisionG
 	m_pCollision_Manager->Check_Collision_Groups(eCollisionGroupA, eCollisionGroupB);
 }
 
+/* For.Camera_Manager */
 HRESULT CGameInstance::Add_Camera(const wstring& strCameraTag, CCamera* pCamera)
 {
 	if (nullptr == m_pCamera_Manager)
@@ -443,6 +451,7 @@ HRESULT CGameInstance::Set_Exit(const wstring& strCameraTag, _bool isExit)
 	return m_pCamera_Manager->Set_Exit(strCameraTag, isExit);
 }
 
+/* For.Font_Manager */
 HRESULT CGameInstance::Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strFontTag, const wstring& strFontFilePath)
 {
 	if (nullptr == m_pFont_Manager)
@@ -457,6 +466,27 @@ HRESULT CGameInstance::Render_Font(const wstring& strFontTag, const wstring& str
 		return E_FAIL;
 
 	return m_pFont_Manager->Render_Font(strFontTag, strOutputText, vPosition, vColor, fRadian);
+}
+
+/* For.Target_Manager */
+HRESULT CGameInstance::Add_RenderTarget(const wstring& strRenderTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
+{
+	return m_pTarget_Manager->Add_RenderTarget(strRenderTargetTag, iSizeX, iSizeY, ePixelFormat, vClearColor);
+}
+
+HRESULT CGameInstance::Add_MRT(const wstring& strMRTTag, const wstring& strRenderTargetTag)
+{
+	return m_pTarget_Manager->Add_MRT(strMRTTag, strRenderTargetTag);
+}
+
+HRESULT CGameInstance::Begin_MRT(const wstring& strMRTTag)
+{
+	return m_pTarget_Manager->Begin_MRT(strMRTTag);
+}
+
+HRESULT CGameInstance::End_MRT()
+{
+	return m_pTarget_Manager->End_MRT();
 }
 
 /* For.ImGui_Manager */
@@ -488,6 +518,7 @@ void CGameInstance::Release_Engine()
 void CGameInstance::Free()
 {	
 	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pLight_Manager);

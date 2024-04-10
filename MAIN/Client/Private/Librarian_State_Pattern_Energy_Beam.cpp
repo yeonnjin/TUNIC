@@ -6,7 +6,9 @@
 
 #include "Librarian_Effect_Beam.h"
 
-#define HANDBONE 94
+//#define HANDBONE 94
+//#define HANDBONE 78
+#define HANDBONE 98
 
 CLibrarian_State_Pattern_Energy_Beam::CLibrarian_State_Pattern_Energy_Beam(CMonster_Librarian* pMonster, CPlayer* pPlayer)
 {
@@ -47,13 +49,14 @@ void CLibrarian_State_Pattern_Energy_Beam::OnStateUpdate(_float fTimeDelta)
         ++m_iPattern;
 
         _vector vPlayerPostion = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-        //_vector vHandPosition = XMLoadFloat4(&m_pMonster->Get_Bone_Position(HANDBONE));
-        _vector vHandPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
-        vHandPosition.m128_f32[0] += 0.4f;
-        vHandPosition.m128_f32[1] += 1.3f;
-        vHandPosition.m128_f32[2] += 3.2f;
+        _vector vHandPosition = XMVector3TransformCoord(XMLoadFloat4(&m_pMonster->Get_Bone_Position(HANDBONE)), m_pMonsterTransform->Get_WorldMatrix());
+        //_vector vHandPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        //vHandPosition.m128_f32[0] += 0.4f;
+        //vHandPosition.m128_f32[1] += 1.3f;
+        //vHandPosition.m128_f32[2] += 3.2f;
         _vector vDir = XMVector3Normalize(vHandPosition - vPlayerPostion);
         vDir.m128_f32[1] = 0.f;
+        //vHandPosition = XMVector3TransformCoord(vHandPosition, XMMatrixRotationY(m_pMonster->fRaian));
         m_pBeam->Start_Pattern(vHandPosition, vDir);
     }
 

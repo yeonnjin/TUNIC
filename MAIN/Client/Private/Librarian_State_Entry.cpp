@@ -23,7 +23,7 @@ void CLibrarian_State_Entry::OnStateEnter()
 
 void CLibrarian_State_Entry::OnStateUpdate(_float fTimeDelta)
 {
-    _float4 vPosition = _float4(0.f, 0.5f, 0.f, 1.f);
+    _float4 vPosition = _float4(-7.f, 0.5f, -7.f, 1.f);
     CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
     pMonsterTransform->Set_State(CTransform::STATE_POSITION, vPosition);
 

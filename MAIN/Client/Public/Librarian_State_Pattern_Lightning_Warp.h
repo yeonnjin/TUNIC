@@ -3,6 +3,10 @@
 #include "Client_Defines.h"
 #include "State.h"
 
+BEGIN(Engine)
+class CTransform;
+END
+
 BEGIN(Client)
 
 class CLibrarian_State_Pattern_Lightning_Warp final : public CState
@@ -32,6 +36,9 @@ private:
 	_float					m_fLoopTime = { 3.f };
 
 private:
+	class CTransform* m_pMonsterTransform = { nullptr };
+	class CTransform* m_pPlayerTransform = { nullptr };
+
 	class CMonster_Librarian* m_pMonster = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 

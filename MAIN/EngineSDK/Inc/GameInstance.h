@@ -84,6 +84,11 @@ public: /* For.Font_Manager */
 	HRESULT				Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const wstring& strFontTag, const wstring& strFontFilePath);
 	HRESULT				Render_Font(const wstring& strFontTag, const wstring& strOutputText, const _float2& vPosition, _fvector vColor, _float fRadian);
 
+public: /* For.Target_Manager */
+	HRESULT				Add_RenderTarget(const wstring& strRenderTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT				Add_MRT(const wstring& strMRTTag, const wstring& strRenderTargetTag);
+	HRESULT				Begin_MRT(const wstring& strMRTTag);
+	HRESULT				End_MRT();
 
 public: /* For.ImGui_Manager */
 	void				New_Frame();
@@ -104,6 +109,7 @@ private:
 	class CCollision_Manager*		m_pCollision_Manager = { nullptr };
 	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
+	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
 	class CImGui_Manager*			m_pImGui_Manager = { nullptr };
 
 public:		

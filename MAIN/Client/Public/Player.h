@@ -42,7 +42,7 @@ public:
 	};
 
 	enum WEAPON { 
-		WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_WANDBOW, WEAPON_SHIELD, WEAPON_END 
+		WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_WAND, WEAPON_SHIELD, WEAPON_END 
 	};
 
 	enum DIR { 
@@ -95,6 +95,7 @@ public:
 	LOCKON			Get_LockOn() { return m_eLockOn; }
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
 	CTransform*		Get_LockOn_Transform() { return m_pLookOnTransform; }
+	_uint			Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
 
 	// State
 	void			Change_State(STATE eState);
@@ -112,6 +113,7 @@ private:
 	
 	_bool								m_isBlend = { false };
 	_bool								m_isParrying = { false };
+	_bool								m_isAttackFrame = { false };
 
 	_vector								m_vPrePosition = {};
 	_vector								m_vLook = {};

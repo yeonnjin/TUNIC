@@ -35,10 +35,13 @@ private:
 	_vector m_vDashPosition = {};
 
 private:
-	class CTransform* m_pMonsterTransform = { nullptr };
-	class CMonster_Librarian* m_pMonster = { nullptr };
-	class CPlayer* m_pPlayer = { nullptr };
-	class CEasing* m_pEasing = { nullptr };
+	class CTransform*			m_pMonsterTransform = { nullptr };
+	class CTransform*			m_pPlayerTransform = { nullptr };
+
+	class CMonster_Librarian*	m_pMonster = { nullptr };
+	class CPlayer*				m_pPlayer = { nullptr };
+
+	class CEasing*				m_pEasing = { nullptr };
 
 public:
 	static CLibrarian_State_Pattern_Lunge_Swipe* Create(class CMonster_Librarian* pMonster, class CPlayer* pPlayer);

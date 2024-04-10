@@ -15,6 +15,16 @@ void CPlayer_State_Idle::OnStateEnter()
 
 void CPlayer_State_Idle::OnStateUpdate(_float fTimeDelta)
 {
+    CPlayer::LOCKON eLockOn = m_pPlayer->Get_LockOn();
+
+    if (CPlayer::LOCK_ON_FIND == eLockOn)
+    {
+        if (CPlayer::STATE_DODGE != m_pPlayer->Get_State())
+        {
+            _vector vTargetPosition = m_pPlayer->Get_LockOn_Transform()->Get_State_Vector(CTransform::STATE_POSITION);
+            ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Look_At_For_LandOject(vTargetPosition, true);
+        }
+    }
 }
 
 void CPlayer_State_Idle::OnStateExit()

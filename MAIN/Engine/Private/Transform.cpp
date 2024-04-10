@@ -134,18 +134,23 @@ void CTransform::Look_At_For_LandOject(_fvector vAt, _bool isReverse)
     Set_State(STATE_LOOK,   XMVector3Normalize(vLook) * vScaled.z);
 }
 
-void CTransform::Look_At_Dir(_fvector vDir)
+void CTransform::Look_At_Dir(_fvector vDir, _bool isUp)
 {
     _float3 vScaled = Get_Scaled();
     _vector vLook = XMVector3Normalize(vDir) * vScaled.z;
 
     _vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
     _vector vRight = XMVector3Cross(vUp, XMVector3Normalize(vLook));
-    vLook = XMVector3Cross(vRight, vUp);
+
+    if (true == isUp)
+        vUp = XMVector3Cross(vLook, vRight);
+    else
+        vLook = XMVector3Cross(vRight, vUp);
+   
 
     Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScaled.x);
     Set_State(STATE_UP, XMVector3Normalize(vUp) * vScaled.y);
-    Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScaled.z);
+    Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScaled.z); 
 }
 
 _bool CTransform::Move_To_Target(_fvector vTargetPos, _float fTimeDelta, _float fMinDistance)
@@ -221,6 +226,34 @@ _bool CTransform::Turn_Look(_Out_ _bool* isFirst, _Out_ _float3* vLerpLook, _fve
     XMStoreFloat3(vLerpLook, Get_State_Vector(STATE_LOOK));
 
     return isFinish;
+}
+
+_bool CTransform::Turn_Look(_fvector vTargetLook, _float fTimeDelta)
+{
+    _vector vLook = Get_State_Vector(STATE_LOOK);
+    vLook.m128_f32[1] = 0.f;
+    
+    m_vTargetLook = vTargetLook;
+    m_vTargetLook.m128_f32[1] = 0.f;
+
+    // 외적
+    _vector vCross = XMVector3Normalize(XMVector3Cross(vLook, m_vTargetLook));
+
+    // 내적
+    _vector vNor = { 0.f, 1.f, 0.f };
+    _vector vDot = XMVector3Dot(vCross, vNor);
+
+    // TargetLook 이 오른쪽에 위치
+    if (vDot.m128_f32[0] >= 0.f && vDot.m128_f32[0] <= 1.f)
+    {
+
+    }
+    else
+    {
+
+    }
+
+    return _bool();
 }
 
 _bool CTransform::Turn_Angle(_fvector vAxis, _float fAngle, _float fTimeDelta)

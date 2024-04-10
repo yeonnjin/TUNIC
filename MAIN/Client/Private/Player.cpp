@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "Player.h"
 
-#include "Player_Weapon.h"
+#include "Weapon_Stick.h"
+#include "Weapon_Sword.h"
+#include "Weapon_Shield.h"
 
 // State
 #include "Player_State_Idle.h"
 #include "Player_State_Sleep.h"
 #include "Player_State_Move.h"
-//#include "Player_State_LockOn.h"
 #include "Player_State_Attack_Stick.h"
 #include "Player_State_Attack_Sword.h"
 #include "Player_State_Attack_Shotgun.h"
@@ -319,7 +320,7 @@ void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 	if (nullptr == pWeapon)
 		return;
 
-	dynamic_cast<CPlayer_Weapon*>(pWeapon)->Set_isRender(isRender);
+	dynamic_cast<CPlayer_Weapon*>(pWeapon)->Set_isUsing(isRender);
 }
 
 //_bool CPlayer::isAttack()
@@ -387,12 +388,9 @@ HRESULT CPlayer::Add_PartObjects()
 
 	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(STICKBONE);
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Object";
-	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-	tDesc.strModelComTag = wstr;
 	tDesc.eWeapon = WEAPON_STICK;
 
-	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon_Stick"), &tDesc));
 	if (nullptr == pWeaponObject)
 		return E_FAIL;
 
@@ -404,50 +402,47 @@ HRESULT CPlayer::Add_PartObjects()
 
 	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SWORDBONE);
-	_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Weapon_Sword";
-	wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
-	tDesc.strModelComTag = wstr1;
 	tDesc.eWeapon = WEAPON_SWORD;
 
-	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon_Sword"), &tDesc));
 	if (nullptr == pWeaponObject)
 		return E_FAIL;
 
 	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Sword"), pWeaponObject);
 
-	/* For. Part_Player_Weapon_Shotgun */
-	pWeaponObject = { nullptr };
-	tDesc = {};
+	///* For. Part_Player_Weapon_Shotgun */
+	//pWeaponObject = { nullptr };
+	//tDesc = {};
 
-	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
-	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHOTGUNBONE);
-	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Weapon_Shotgun";
-	wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
-	tDesc.strModelComTag = wstr2;
-	tDesc.eWeapon = WEAPON_SHOTGUN;
+	//tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	//tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHOTGUNBONE);
+	//_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Weapon_Shotgun";
+	//wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
+	//tDesc.strModelComTag = wstr2;
+	//tDesc.eWeapon = WEAPON_SHOTGUN;
 
-	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
-	if (nullptr == pWeaponObject)
-		return E_FAIL;
+	//pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	//if (nullptr == pWeaponObject)
+	//	return E_FAIL;
 
-	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shotgun"), pWeaponObject);
+	//m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shotgun"), pWeaponObject);
 
-	/* For. Part_Player_Weapon_Wandbow */
-	pWeaponObject = { nullptr };
-	tDesc = {};
+	///* For. Part_Player_Weapon_Wandbow */
+	//pWeaponObject = { nullptr };
+	//tDesc = {};
 
-	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
-	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(WANDBONE);
-	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Weapon_Wandbow";
-	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	tDesc.strModelComTag = wstr3;
-	tDesc.eWeapon = WEAPON_WANDBOW;
+	//tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	//tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(WANDBONE);
+	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Weapon_Wandbow";
+	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	//tDesc.strModelComTag = wstr3;
+	//tDesc.eWeapon = WEAPON_WAND;
 
-	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
-	if (nullptr == pWeaponObject)
-		return E_FAIL;
+	//pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	//if (nullptr == pWeaponObject)
+	//	return E_FAIL;
 
-	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Wandbow"), pWeaponObject);
+	//m_PartObjects.emplace(TEXT("Part_Player_Weapon_Wandbow"), pWeaponObject);
 
 	/* For. Part_Player_Weapon_Shield */
 	pWeaponObject = { nullptr };
@@ -455,12 +450,9 @@ HRESULT CPlayer::Add_PartObjects()
 
 	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHIELDBONE);
-	_char szModelTag4[MAX_PATH] = "Prototype_Component_Model_Weapon_Shield";
-	wstring wstr4(&szModelTag4[0], &szModelTag4[MAX_PATH]);
-	tDesc.strModelComTag = wstr4;
 	tDesc.eWeapon = WEAPON_SHIELD;
 
-	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon_Shield"), &tDesc));
 	if (nullptr == pWeaponObject)
 		return E_FAIL;
 
@@ -477,7 +469,7 @@ HRESULT CPlayer::Add_States()
 	//m_pModelCom->Add_State(STATE_LOCKON, CPlayer_State_LockOn::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second)));
 	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second)));
-	m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second)));
+	//m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second)));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
 	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
@@ -723,7 +715,7 @@ void CPlayer::Set_Weapon()
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
 	{
-		m_eWeapon = WEAPON_WANDBOW;
+		m_eWeapon = WEAPON_WAND;
 		static _bool isWandbow = false;
 		isWandbow = !isWandbow;
 		if (true == isWandbow)

@@ -35,6 +35,7 @@ private:
 
 private:
 	CModel*			m_pModelCom = { nullptr };
+	CModel*			m_pModelCom_Horizon = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };
 

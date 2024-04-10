@@ -25,11 +25,14 @@
 #include "Navigation.h"
 
 #include "Player.h"
+#include "Weapon_Stick.h"
+#include "Weapon_Sword.h"
+#include "Weapon_Shield.h"
+
 #include "Map.h"
 #include "Map_Object.h"
 #include "Test_Object.h"
 #include "Editor.h"
-#include "Player_Weapon.h"
 #include "Animator.h"
 
 #include "Particle_Blue.h"
@@ -288,6 +291,21 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Part_Player_Weapon_Stick */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon_Stick"),
+		CWeapon_Stick::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Part_Player_Weapon_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon_Sword"),
+		CWeapon_Sword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Part_Player_Weapon_Shield */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon_Shield"),
+		CWeapon_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Monster_Librarian */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Librarian"),
 		CMonster_Librarian::Create(m_pDevice, m_pContext))))
@@ -321,11 +339,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Map */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map"),
 		CMap::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Part_Player_Weapon */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon"),
-		CPlayer_Weapon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Part_CowBot_Weapon */
@@ -363,6 +376,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Librarian_Weapon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash_Horizon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Orb.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");

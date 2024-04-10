@@ -182,8 +182,10 @@
     <ClInclude Include="..\Public\Librarian_Effect_Beam.h" />
     <ClInclude Include="..\Public\Librarian_Effect_Orb.h" />
     <ClInclude Include="..\Public\Librarian_Effect_Slash.h" />
+    <ClInclude Include="..\Public\Librarian_State_Damage.h" />
     <ClInclude Include="..\Public\Librarian_State_Entry.h" />
     <ClInclude Include="..\Public\Librarian_State_Idle.h" />
+    <ClInclude Include="..\Public\Librarian_State_Melee.h" />
     <ClInclude Include="..\Public\Librarian_State_Pattern_Energy_Beam.h" />
     <ClInclude Include="..\Public\Librarian_State_Pattern_Energy_Wave.h" />
     <ClInclude Include="..\Public\Librarian_State_Pattern_Homing_Orbs.h" />
@@ -214,7 +216,9 @@
     <ClInclude Include="..\Public\Player_State_LockOn.h" />
     <ClInclude Include="..\Public\Player_State_Move.h" />
     <ClInclude Include="..\Public\Player_State_Sleep.h" />
-    <ClInclude Include="..\Public\Player_Weapon.h" />
+    <ClInclude Include="..\Public\Player_Weapon.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Spinner_State_Attack.h" />
     <ClInclude Include="..\Public\Spinner_State_Damage.h" />
@@ -223,6 +227,9 @@
     <ClInclude Include="..\Public\Spinner_State_Idle.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
+    <ClInclude Include="..\Public\Weapon_Shield.h" />
+    <ClInclude Include="..\Public\Weapon_Stick.h" />
+    <ClInclude Include="..\Public\Weapon_Sword.h" />
     <ClInclude Include="Anim_List.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -262,8 +269,10 @@
     <ClCompile Include="..\Private\Librarian_Effect_Beam.cpp" />
     <ClCompile Include="..\Private\Librarian_Effect_Orb.cpp" />
     <ClCompile Include="..\Private\Librarian_Effect_Slash.cpp" />
+    <ClCompile Include="..\Private\Librarian_State_Damage.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Entry.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Idle.cpp" />
+    <ClCompile Include="..\Private\Librarian_State_Melee.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Pattern_Energy_Beam.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Pattern_Energy_Wave.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Pattern_Homing_Orbs.cpp" />
@@ -294,7 +303,9 @@
     <ClCompile Include="..\Private\Player_State_LockOn.cpp" />
     <ClCompile Include="..\Private\Player_State_Move.cpp" />
     <ClCompile Include="..\Private\Player_State_Sleep.cpp" />
-    <ClCompile Include="..\Private\Player_Weapon.cpp" />
+    <ClCompile Include="..\Private\Player_Weapon.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Spinner_State_Attack.cpp" />
     <ClCompile Include="..\Private\Spinner_State_Damage.cpp" />
@@ -303,6 +314,9 @@
     <ClCompile Include="..\Private\Spinner_State_Idle.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Test_Object.cpp" />
+    <ClCompile Include="..\Private\Weapon_Shield.cpp" />
+    <ClCompile Include="..\Private\Weapon_Stick.cpp" />
+    <ClCompile Include="..\Private\Weapon_Sword.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

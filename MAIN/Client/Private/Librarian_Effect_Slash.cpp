@@ -33,12 +33,16 @@ HRESULT CLibrarian_Effect_Slash::Initialize(void* pArg)
 
 	LIBRARIAN_EFFECT_SLASH_DESC* pDesc = (LIBRARIAN_EFFECT_SLASH_DESC*)pArg;
 	m_isVertical = pDesc->isVertical;
-	m_pTransformCom->Look_At_Dir(pDesc->vLookDir);
+	m_pTransformCom->Look_At_Dir(pDesc->vLookDir, true);
 
 	if (false == m_isVertical)
 	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 0.f, 1.f, 0.f), 1.f);
+		//m_pTransformCom->Turn(XMVectorSet(0.f, 0.f, 1.f, 0.f), 1.f);
 		m_pTransformCom->Set_Scaled(1.2f, 1.2f, 1.2f);
+	}
+	else
+	{
+		m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
 	}
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vStartPosition);
@@ -79,13 +83,27 @@ HRESULT CLibrarian_Effect_Slash::Render()
 		/*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
 			return E_FAIL;*/
 
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
-			return E_FAIL;
+		if (true == m_isVertical)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
 
-		m_pModelCom->Render(i);
+			m_pModelCom->Render(i);
+		}
+		else
+		{
+			if (FAILED(m_pModelCom_Horizon->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+
+			m_pModelCom_Horizon->Render(i);
+		}
+		
 	}
 
 #ifdef _DEBUG
@@ -107,6 +125,12 @@ HRESULT CLibrarian_Effect_Slash::Add_Components()
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash_Horizon";
+	wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr1,
+		TEXT("Com_Model_Horizon"), (CComponent**)&m_pModelCom_Horizon)))
 		return E_FAIL;
 
 	/* Com_Collider */
@@ -175,5 +199,6 @@ void CLibrarian_Effect_Slash::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pModelCom_Horizon);
 	Safe_Release(m_pColliderCom);
 }
