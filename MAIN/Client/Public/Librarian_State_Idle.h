@@ -29,10 +29,12 @@ private:
 	_bool		m_isClockwise = { true };
 	_bool		m_isUp = { false };
 	_bool		m_isRetreat = { false };
+	_bool		m_isLook = { true };
 
 	_vector		m_vOriginPosition = {};
 	_vector		m_vTargetPosition = {};
 	_vector		m_vEnterPosition = {};
+	_vector		m_vTargetDir = {};
 
 	_float		m_fRadian = { 0.f };
 	_float		m_fHeight = { 1.f };
@@ -46,6 +48,9 @@ private:
 
 	_float		m_fAccIdleTime = { 0.f };
 	_float		m_fIdleTime = { 3.f };
+
+	_float		m_fAccLookTime = { 0.f };
+	_float		m_fLookTime = { 3.f };
 
 private:
 	class CTransform* m_pMonsterTransform = { nullptr };

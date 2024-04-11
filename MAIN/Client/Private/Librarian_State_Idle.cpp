@@ -68,6 +68,12 @@ void CLibrarian_State_Idle::OnStateEnter()
     {
         m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_FLYING_IDLE_RIGHT);
     }
+
+    /* 목표 방향 설정 */
+    m_vTargetDir = XMVector3Normalize(m_vEnterPosition - vPlayerPosition);
+    _vector vLookDir = XMVector3Normalize(m_pMonsterTransform->Get_State_Vector(CTransform::STATE_LOOK));
+    if (false == XMVector3Equal(m_vTargetDir, vLookDir))
+        m_isLook = false;
 }
 
 void CLibrarian_State_Idle::OnStateUpdate(_float fTimeDelta)
@@ -86,7 +92,35 @@ void CLibrarian_State_Idle::OnStateUpdate(_float fTimeDelta)
     }
 
     // 플레이어 바라보기
-    m_pMonsterTransform->Look_At_For_LandOject(dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION), true);
+    _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+    _vector vPlayerPosition = m_pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
+    if (false == m_isLook)
+    {
+        m_vTargetDir = XMVector3Normalize(vMonsterPosition - vPlayerPosition);
+        _vector vLookDir = XMVector3Normalize(m_pMonsterTransform->Get_State_Vector(CTransform::STATE_LOOK));
+        if (false == XMVector3Equal(m_vTargetDir, vLookDir))
+        {
+            m_fAccLookTime += fTimeDelta;
+            _float fRatio = m_fAccLookTime / m_fLookTime;
+            if (fRatio >= 1)
+            {
+                fRatio = 1.f;
+                m_isLook = true;
+            }
+
+            _vector vDir;
+            vDir.m128_f32[0] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, vLookDir.m128_f32[0], m_vTargetDir.m128_f32[0], fRatio);
+            vDir.m128_f32[1] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, vLookDir.m128_f32[1], m_vTargetDir.m128_f32[1], fRatio);
+            vDir.m128_f32[2] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, vLookDir.m128_f32[2], m_vTargetDir.m128_f32[2], fRatio);
+            vDir.m128_f32[3] = 0.f;
+
+            m_pMonsterTransform->Look_At_Dir(vDir);
+        }
+    }
+    else
+    {
+        m_pMonsterTransform->Look_At_For_LandOject(dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION), true);
+    }
 
     // 타겟 위치로 이동 
     if(false == m_isTargetPosition)
@@ -144,10 +178,12 @@ void CLibrarian_State_Idle::OnStateExit()
     m_isTargetPosition = true;
     m_isUp = false;
     m_isRetreat = false;
+    m_isLook = true;
 
     m_fAccTargetTime = 0.f;
     m_fAccHeightTime = 0.f;
     m_fAccIdleTime = 0.f;
+    m_fAccLookTime = 0.f;
 }
 
 void CLibrarian_State_Idle::Compute_TargetPosition()

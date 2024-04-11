@@ -47,9 +47,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	/*if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect"))))
 		return E_FAIL;*/
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Librarian_Effect"), TEXT("Prototype_GameObject_Librarian_Attack_Beam"))))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -60,11 +57,11 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 	if (0 == m_pGameInstance->Get_Object_Count(LEVEL_GAMEPLAY, TEXT("Layer_Monster")))
 	{
 		CMonster::Monster_Desc tDesc = {};
-		_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
+		_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
 		wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 		tDesc.strModelComTag = wstr;
 
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
 			return;
 
 		/*tDesc = {};
@@ -236,7 +233,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
 	// Desc
-	CMonster::Monster_Desc tDesc = {};
+	/*CMonster::Monster_Desc tDesc = {};
 	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
@@ -245,7 +242,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	{
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Librarian"), &tDesc)))
 			return E_FAIL;
-	}
+	}*/
 
 	/*CMonster::Monster_Desc tDesc = {};
 	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
@@ -259,7 +256,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	}*/
 	
 	//// Desc
-	///*CMonster::Monster_Desc*/ tDesc = {};
+	CMonster::Monster_Desc tDesc = {};
 	//_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
 	//wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
 	//tDesc.strModelComTag = wstr1;
@@ -281,16 +278,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	//		return E_FAIL;
 	//}
 
-	//tDesc = {};
-	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
-	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	//tDesc.strModelComTag = wstr3;
+	tDesc = {};
+	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
+	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	tDesc.strModelComTag = wstr3;
 
-	//for (size_t i = 0; i < 1; ++i)
-	//{
-	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
-	//		return E_FAIL;
-	//}
+	for (size_t i = 0; i < 1; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
+			return E_FAIL;
+	}
 	
 
 	// "Prototype_Component_Model_Monster_Bat"
@@ -318,7 +315,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	CMap::MAP_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*//*"Prototype_Component_Model_Map_FOXGOD";*/"Prototype_Component_Model_Map_Librarian";
+	_char szModelTag[MAX_PATH] = /*"Prototype_Component_Model_Map_Beach";*/"Prototype_Component_Model_Map_FOXGOD";/*"Prototype_Component_Model_Map_Librarian";*/
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");

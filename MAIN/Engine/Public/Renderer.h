@@ -26,16 +26,26 @@ private:
 	list<class CGameObject*>			m_RenderObjects[RENDER_END];
 
 private:
+	class CVIBuffer_Rect*				m_pVIBuffer = { nullptr };
+	class CShader*						m_pShader = { nullptr };
+	_float4x4							m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
+
+private:
 	HRESULT Render_Priority();
 	HRESULT Render_NonBlend();
 	HRESULT Render_Blend();
 	HRESULT Render_UI();
 
+private:
+	HRESULT Render_Lights();
+
+#ifdef _DEBUG
+	HRESULT Render_Debug();
+#endif
+
 public:
 	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;
-
-
 };
 
 END

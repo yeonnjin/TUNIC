@@ -33,7 +33,7 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, const aiMesh* pAIMe
         return E_FAIL;
 
 #pragma endregion
-
+                                                                                                                                                                                                                                                                                                                        
 #pragma region INDEX_BUFFER
 
     ZeroMemory(&m_BufferDesc, sizeof(m_BufferDesc));

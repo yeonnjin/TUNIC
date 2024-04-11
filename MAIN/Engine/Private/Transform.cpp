@@ -131,6 +131,7 @@ void CTransform::Look_At_For_LandOject(_fvector vAt, _bool isReverse)
     _float3 vScaled = Get_Scaled();
 
     Set_State(STATE_RIGHT,  XMVector3Normalize(vRight) * vScaled.x);
+    Set_State(STATE_UP,     XMVector3Normalize(vUp) * vScaled.y);
     Set_State(STATE_LOOK,   XMVector3Normalize(vLook) * vScaled.z);
 }
 
@@ -230,30 +231,59 @@ _bool CTransform::Turn_Look(_Out_ _bool* isFirst, _Out_ _float3* vLerpLook, _fve
 
 _bool CTransform::Turn_Look(_fvector vTargetLook, _float fTimeDelta)
 {
+    _bool isLook = false;
+
     _vector vLook = Get_State_Vector(STATE_LOOK);
     vLook.m128_f32[1] = 0.f;
+    vLook = XMVector3Normalize(vLook);
     
+    m_vPreTargetLook = m_vTargetLook;
     m_vTargetLook = vTargetLook;
     m_vTargetLook.m128_f32[1] = 0.f;
 
-    // 외적
-    _vector vCross = XMVector3Normalize(XMVector3Cross(vLook, m_vTargetLook));
-
-    // 내적
-    _vector vNor = { 0.f, 1.f, 0.f };
-    _vector vDot = XMVector3Dot(vCross, vNor);
-
-    // TargetLook 이 오른쪽에 위치
-    if (vDot.m128_f32[0] >= 0.f && vDot.m128_f32[0] <= 1.f)
+    if (false == XMVector3Equal(m_vPreTargetLook, m_vTargetLook))
     {
-
-    }
-    else
-    {
-
+        m_fAccTurnTime = 0.f;
     }
 
-    return _bool();
+    m_fAccTurnTime += fTimeDelta;
+    _float fRatio = m_fAccTurnTime / m_fTurnTime;
+    if (fRatio >= 1.f)
+    {
+        fRatio = 1.f;
+        m_fAccTurnTime = 0.f;
+        isLook = true;
+    }
+
+    _vector vLerpLook = XMVectorLerp(vLook, m_vTargetLook, fRatio);
+     vLerpLook.m128_f32[1] = 0.f;
+
+    _vector vUp = { 0.f, 1.f, 0.f, 0.f };
+    _vector vRight = XMVector3Cross(vUp, XMVector3Normalize(vLerpLook));
+
+    _float3 vScaled = Get_Scaled();
+    Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScaled.x);
+    Set_State(STATE_UP, XMVector3Normalize(vUp) * vScaled.y);
+    Set_State(STATE_LOOK, XMVector3Normalize(vLerpLook) * vScaled.z);
+
+    //'// 외적
+    //_vector vCross = XMVector3Normalize(XMVector3Cross(vLook, m_vTargetLook));
+
+    //// 내적
+    //_vector vNor = { 0.f, 1.f, 0.f };
+    //_vector vDot = XMVector3Dot(vCross, vNor);
+
+    //// TargetLook 이 오른쪽에 위치
+    //if (vDot.m128_f32[0] >= 0.f && vDot.m128_f32[0] <= 1.f)
+    //{
+
+    //}
+    //else
+    //{
+
+    //}'
+
+    return isLook;
 }
 
 _bool CTransform::Turn_Angle(_fvector vAxis, _float fAngle, _float fTimeDelta)

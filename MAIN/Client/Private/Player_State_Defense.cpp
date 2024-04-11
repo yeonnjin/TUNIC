@@ -39,7 +39,13 @@ void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
 
             if (true == m_isTurn)
             {
-                if (true == ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn_Look(&m_isFirst, &m_vLerpLook, vTargetLook, fTimeDelta))
+                /*if (true == ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn_Look(&m_isFirst, &m_vLerpLook, vTargetLook, fTimeDelta))
+                {
+                    m_isTurn = false;
+                    m_isFirst = true;
+                }*/
+
+                if (true == ((CTransform*)(m_pPlayer->Get_Component(g_strTransformTag)))->Turn_Look(vTargetLook, fTimeDelta))
                 {
                     m_isTurn = false;
                     m_isFirst = true;

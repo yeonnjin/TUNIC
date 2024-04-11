@@ -69,6 +69,7 @@ public: /* For.Picking */
 public: /* For.Light_Manager */
 	const LIGHT_DESC*	Get_LightDesc(_uint iIndex);
 	HRESULT				Add_Light(const LIGHT_DESC& LightDesc);
+	HRESULT				Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 
 public: /* For.Collision_Manager */
 	HRESULT				Add_Group(CCollision_Manager::GROUP eCollisionGroup, class CGameObject* pGameObject);
@@ -89,6 +90,13 @@ public: /* For.Target_Manager */
 	HRESULT				Add_MRT(const wstring& strMRTTag, const wstring& strRenderTargetTag);
 	HRESULT				Begin_MRT(const wstring& strMRTTag);
 	HRESULT				End_MRT();
+	HRESULT				Bind_RTShaderResource(class CShader* pShader, const wstring& strRenderTargetTag, const _char* pConstantName);
+
+#ifdef _DEBUG
+	HRESULT				Ready_RTVDebug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT				Draw_RTVDebug(const wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+#endif
+
 
 public: /* For.ImGui_Manager */
 	void				New_Frame();

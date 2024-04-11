@@ -18,6 +18,7 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
+	HRESULT Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 
 private: // 컨테이너는 후에 필요하면 바꾸기 (이름과 함께 쓰려면 map으로 저장 -> 동적 푸쉬X)
 	list<class CLight*>				m_Lights;

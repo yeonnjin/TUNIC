@@ -226,9 +226,6 @@
     <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Entry">
       <UniqueIdentifier>{50569d9d-5393-4a25-aae2-576247f252c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Idle">
-      <UniqueIdentifier>{f1e455c6-5ae6-4840-8b64-f5748cb24d1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Melee">
       <UniqueIdentifier>{ffa77168-fdd3-4222-b48c-13ca2b83ad6b}</UniqueIdentifier>
     </Filter>
@@ -264,6 +261,9 @@
     </Filter>
     <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Damage">
       <UniqueIdentifier>{e2c63c83-8731-488b-b9ee-ffada8424da8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Idle">
+      <UniqueIdentifier>{f1e455c6-5ae6-4840-8b64-f5748cb24d1c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

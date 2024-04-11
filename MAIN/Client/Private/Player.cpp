@@ -69,7 +69,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_eType = OBJ_PLAYER;
 	m_fDamageCoolTime = 1.f;
 
-	_float4 vPosition = /*_float4(0.f, 0.2f, 0.f, 1.f);*/  _float4(3.f, 0.2f, 50.f, 1.f); /*_float4(-75.f, 3.f, 68.f, 1.f);*/
+	_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);  /*_float4(3.f, 0.2f, 50.f, 1.f);*/ /*_float4(-75.f, 3.f, 68.f, 1.f);*/
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 

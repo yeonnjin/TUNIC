@@ -166,7 +166,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* Prototype_Component_Navigation_Load */ // Nav_Librarian, Nav_FOXGOD, Nav_Beach
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_Librarian.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat")))))
 		return E_FAIL;
 
 	/* Prototype_Component_VIBuffer_Instance_Rect */
@@ -380,8 +380,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Orb.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");

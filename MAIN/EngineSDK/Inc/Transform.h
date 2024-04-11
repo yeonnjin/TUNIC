@@ -141,7 +141,11 @@ private:
 
 	_bool			m_isDead = { false };
 
+	_vector			m_vPreTargetLook = {};
 	_vector			m_vTargetLook = {};
+
+	_float			m_fAccTurnTime = { 0.f };
+	_float			m_fTurnTime = { 1.f };
 
 public:
 	static	CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

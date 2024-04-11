@@ -79,6 +79,38 @@ HRESULT CTarget_Manager::End_MRT()
     return S_OK;
 }
 
+HRESULT CTarget_Manager::Bind_ShaderResource(CShader* pShader, const wstring& strRenderTargetTag, const _char* pConstantName)
+{
+    CRenderTarget* pRenderTarget = Find_RenderTarget(strRenderTargetTag);
+    if (nullptr == pRenderTarget)
+        return E_FAIL;
+
+    return pRenderTarget->Bind_ShaderResource(pShader, pConstantName);
+}
+
+#ifdef _DEBUG
+HRESULT CTarget_Manager::Ready_Debug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+    CRenderTarget* pRenderTarget = Find_RenderTarget(strRenderTargetTag);
+    if (nullptr == pRenderTarget)
+        return E_FAIL;
+
+    return pRenderTarget->Ready_Debug(fX, fY, fSizeX, fSizeY);
+}
+
+HRESULT CTarget_Manager::Render_Debug(const wstring& strMRTTag, CShader* pShader, CVIBuffer_Rect* pVIBuffer)
+{
+    list<CRenderTarget*>* pRenderTargetList = Find_MRT(strMRTTag);
+    if (nullptr == pRenderTargetList)
+        return E_FAIL;
+
+    for (auto& pRenderTarget : *pRenderTargetList)
+        pRenderTarget->Render_Debug(pShader, pVIBuffer);
+
+    return S_OK;
+}
+#endif
+
 CRenderTarget* CTarget_Manager::Find_RenderTarget(const wstring& strRenderTargetTag)
 {
     auto iter = m_RenderTargets.find(strRenderTargetTag);

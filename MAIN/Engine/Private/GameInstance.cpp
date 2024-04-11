@@ -401,6 +401,11 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 	return m_pLight_Manager->Add_Light(LightDesc);
 }
 
+HRESULT CGameInstance::Render_Lights(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
+{
+	return m_pLight_Manager->Render(pShader, pVIBuffer);
+}
+
 /* For.Collision_Manager */
 HRESULT CGameInstance::Add_Group(CCollision_Manager::GROUP eCollisionGroup, CGameObject* pGameObject)
 {
@@ -488,6 +493,23 @@ HRESULT CGameInstance::End_MRT()
 {
 	return m_pTarget_Manager->End_MRT();
 }
+
+HRESULT CGameInstance::Bind_RTShaderResource(CShader* pShader, const wstring& strRenderTargetTag, const _char* pConstantName)
+{
+	return m_pTarget_Manager->Bind_ShaderResource(pShader, strRenderTargetTag, pConstantName);
+}
+
+#ifdef _DEBUG
+HRESULT CGameInstance::Ready_RTVDebug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+	return m_pTarget_Manager->Ready_Debug(strRenderTargetTag, fX, fY, fSizeX, fSizeY);
+}
+
+HRESULT CGameInstance::Draw_RTVDebug(const wstring& strMRTTag, CShader* pShader, CVIBuffer_Rect* pVIBuffer)
+{
+	return m_pTarget_Manager->Render_Debug(strMRTTag, pShader, pVIBuffer);
+}
+#endif
 
 /* For.ImGui_Manager */
 void CGameInstance::New_Frame()
