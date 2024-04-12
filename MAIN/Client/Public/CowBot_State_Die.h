@@ -3,13 +3,15 @@
 #include "Client_Defines.h"
 #include "State.h"
 
+/* Boss_Librarian 에게 소환될 시, 죽는 모션 없이 바로 사라짐 */
+
 BEGIN(Client)
 
-class CBat_State_Sleep final : public CState
+class CCowBot_State_Die final : public CState
 {
 private:
-	CBat_State_Sleep(class CMonster_Bat* pMonster, class CPlayer* pPlayer);
-	virtual ~CBat_State_Sleep() = default;
+	CCowBot_State_Die(class CMonster_CowBot* pMonster, class CPlayer* pPlayer);
+	virtual ~CCowBot_State_Die() = default;
 
 public:
 	// 상태 진입 시 최초에 한 번만 호출
@@ -20,16 +22,11 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	_bool m_isDetect = { false };
-
-	_float m_fDetectDistance = { 5.f };
-
-private:
-	class CMonster_Bat* m_pMonster = { nullptr };
+	class CMonster_CowBot* m_pMonster = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 
 public:
-	static CBat_State_Sleep* Create(class CMonster_Bat* pMonster, class CPlayer* pPlayer);
+	static CCowBot_State_Die* Create(class CMonster_CowBot* pMonster, class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

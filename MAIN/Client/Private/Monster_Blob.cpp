@@ -36,12 +36,12 @@ HRESULT CMonster_Blob::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(5.f, 0.5f, 0.f, 1.f);
+    //_float4 vPosition = _float4(5.f, 0.5f, 0.f, 1.f);
+    _float4 vPosition = _float4(5.f + rand() % 6, 0.5f, rand() % 6 + 1.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_IDLE);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
-    //m_pModelCom->Set_ParentBoneIndex(0);
     m_pModelCom->Set_isUseTransformaion(true);
     Set_Animation();
 
@@ -54,41 +54,6 @@ HRESULT CMonster_Blob::Tick(_float fTimeDelta)
 {
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
-
-    // Damage
-    m_fDamageCoolTime += fTimeDelta;
-    if (true == m_isDamage && 0.5f < m_fDamageCoolTime)
-    {
-        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0))->isAttack())
-        {
-            --m_iHP;
-
-            if (0 >= m_iHP)
-                m_isDead = true;
-        }
-
-        m_isDamage = false;
-        m_fDamageCoolTime = 0.f;
-    }
-
-    //// State_Machine
-    //m_pModelCom->Update_State(fTimeDelta);
-    //Update_State();
-
-    //// Blending
-    //if (true == m_isBlend)
-    //{
-    //    if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
-    //    {
-    //        m_isBlend = false;
-    //        m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
-    //        m_eAnimationIndex = m_eBlendAnimIndex;
-    //    }
-    //}
-    //else
-    //    m_pModelCom->Play_Animation(fTimeDelta);
-
-    //m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
 
     return S_OK;
 }
@@ -155,7 +120,7 @@ void CMonster_Blob::Set_Animation()
     m_pModelCom->Set_Animation_isLoop(ANIM_JUMP, true);
 
     // ROOT
-    m_pModelCom->Set_Animation_isRoot(ANIM_ATTACK, true);
+    //m_pModelCom->Set_Animation_isRoot(ANIM_ATTACK, true);
 }
 
 CMonster_Blob* CMonster_Blob::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -193,8 +158,20 @@ void CMonster_Blob::Free()
 
 void CMonster_Blob::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    __super::Collision_Event(pGameObject);
+
+    if (OBJ_PLAYER == pGameObject->Get_ObjectType() && STATE_ATTACK == m_eState)
+    {
+        // 패링 상태 아닐 때 공격
+        if (false == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
+        {
+            dynamic_cast<CPlayer*>(pGameObject)->Set_isDamage(true);
+        }
+    }
 }
 
 void CMonster_Blob::Damage_Event()
 {
+    if (0 >= m_iHP)
+        m_isDead = true;
 }

@@ -31,6 +31,7 @@ private:
 
 public:
 	void			Set_isRender(_bool isRender) { m_isRender = isRender; }
+	void			Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -43,6 +44,7 @@ private:
 	wstring						m_strModelComTag = {};
 	CMonster_CowBot::WEAPON		m_eWeapon = {};
 	_bool						m_isRender = { true };
+	_bool						m_isAttackFrame = { false };
 
 private:
 	CModel*						m_pModelCom = { nullptr };

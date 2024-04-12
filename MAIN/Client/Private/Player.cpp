@@ -20,7 +20,7 @@
 
 #define	WEAPONBONEIDX 45
 #define SHIELDBONE 24
-#define STICKBONE 45
+#define STICKBONE 28
 #define SWORDBONE 28
 #define WANDBONE 28
 #define SHOTGUNBONE 45
@@ -822,5 +822,5 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CPlayer::Damage_Event()
 {
-	Change_State(STATE_DAMAGE);
+	//Change_State(STATE_DAMAGE);
 }

@@ -3,6 +3,11 @@
 #include "Client_Defines.h"
 #include "State.h"
 
+BEGIN(Engine)
+class CTransform;
+class CEasing;
+END
+
 BEGIN(Client)
 
 class CCowBot_State_Run final : public CState
@@ -20,10 +25,25 @@ public:
 	virtual void OnStateExit() override;
 
 private:
+	_bool						m_isLook = { true };
+
+	_float						m_fAccLookTime = { 0.f };
+	_float						m_fLookTime = { 1.f };
+
+	_float						m_fAccChangeTime = { 0.f };
+	_float						m_fChangeTime = { 0.4f };
+
+	_vector						m_vTargetDir = {};
+	_vector						m_vEnterPosition = {};
 
 private:
-	class CMonster_CowBot* m_pMonster = { nullptr };
-	class CPlayer* m_pPlayer = { nullptr };
+	class CTransform*			m_pMonsterTransform = { nullptr };
+	class CTransform*			m_pPlayerTransform = { nullptr };
+
+	class CMonster_CowBot*		m_pMonster = { nullptr };
+	class CPlayer*				m_pPlayer = { nullptr };
+
+	class CEasing*				m_pEasing = { nullptr };
 
 public:
 	static CCowBot_State_Run* Create(class CMonster_CowBot* pMonster, class CPlayer* pPlayer);

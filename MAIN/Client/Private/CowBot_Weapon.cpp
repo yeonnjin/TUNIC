@@ -186,6 +186,6 @@ void CCowBot_Weapon::Free()
 
 void CCowBot_Weapon::Collision_Event(Engine::CGameObject* pGameObject)
 {
-    if (OBJ_PLAYER == pGameObject->Get_ObjectType())
+    if (true == m_isAttackFrame && OBJ_PLAYER == pGameObject->Get_ObjectType())
         pGameObject->Set_isDamage(true);
 }

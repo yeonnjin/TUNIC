@@ -55,23 +55,6 @@ HRESULT CMonster_Bat::Tick(_float fTimeDelta)
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
 
-    // Damage
-    m_fDamageCoolTime += fTimeDelta;
-    if (true == m_isDamage && 0.3f < m_fDamageCoolTime)
-    {
-        if (true == dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0))->isAttack())
-        {
-            --m_iHP;
-
-            Change_State(STATE_DAMAGE);
-            /*if (0 >= m_iHP)
-                m_isDead = true;*/
-        }
-
-        m_isDamage = false;
-        m_fDamageCoolTime = 0.f;
-    }
-
     return S_OK;
 }
 
@@ -177,8 +160,22 @@ void CMonster_Bat::Free()
 
 void CMonster_Bat::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    __super::Collision_Event(pGameObject);
+
+    if (OBJ_PLAYER == pGameObject->Get_ObjectType() && STATE_ATTACK == m_eState)
+    {
+        // 패링 상태 아닐 때 공격
+        if (false == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
+        {
+            dynamic_cast<CPlayer*>(pGameObject)->Set_isDamage(true);
+        }
+    }
 }
 
 void CMonster_Bat::Damage_Event()
 {
+    if (0 >= m_iHP)
+        m_isDead = true;
+    else
+        Change_State(STATE_DAMAGE);
 }

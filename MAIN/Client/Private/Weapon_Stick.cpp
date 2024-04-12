@@ -25,7 +25,7 @@ HRESULT CWeapon_Stick::Initialize(void* pArg)
 
     m_eType = OBJ_PLAYER_WEAPON;
 
-    m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
+    //m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.0f));
 
     return S_OK;
 }
@@ -122,6 +122,6 @@ void CWeapon_Stick::Free()
 
 void CWeapon_Stick::Collision_Event(Engine::CGameObject* pGameObject)
 {
-    if (OBJ_MONSTER == pGameObject->Get_ObjectType())
+    if (true == m_isAttackFrame && OBJ_MONSTER == pGameObject->Get_ObjectType())
         pGameObject->Set_isDamage(true);
 }

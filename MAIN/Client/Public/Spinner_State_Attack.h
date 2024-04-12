@@ -20,8 +20,15 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	_bool		m_isAttack = { false };
-	_vector		m_vPrePosition = {};
+	_bool					m_isAttack = { false };
+
+	_vector					m_vPrePosition = {};
+
+	_float					m_fAccSpinTime = { 0.f };
+	_float					m_fSpinTime = { 0.4f };
+
+	_float					m_fAccChangeTime = { 0.f };
+	_float					m_fChangeTime = { 0.4f };
 
 private:
 	class CMonster_Spinner* m_pMonster = { nullptr };

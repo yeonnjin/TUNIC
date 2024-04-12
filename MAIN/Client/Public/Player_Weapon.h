@@ -28,16 +28,17 @@ protected:
 	virtual ~CPlayer_Weapon() = default;
 
 public:
-	CPlayer::WEAPON	Get_Weapon() { return m_eWeapon; }
-	void			Set_isUsing(_bool isUsing) { m_isUsing = isUsing; }
-	void			Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
+	CPlayer::WEAPON		Get_Weapon() { return m_eWeapon; }
 
+	void				Set_isUsing(_bool isUsing) { m_isUsing = isUsing; }
+	void				Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
+	
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual HRESULT		Tick(_float fTimeDelta) override;
+	virtual void		Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT		Render() override;
 
 protected:
 	CPlayer::WEAPON		m_eWeapon = {};

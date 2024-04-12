@@ -5,11 +5,11 @@
 
 BEGIN(Client)
 
-class CSpinner_State_Damage final : public CState
+class CCowBot_State_Damage final : public CState
 {
 private:
-	CSpinner_State_Damage(class CMonster_Spinner* pMonster, class CPlayer* pPlayer);
-	virtual ~CSpinner_State_Damage() = default;
+	CCowBot_State_Damage(class CMonster_CowBot* pMonster, class CPlayer* pPlayer);
+	virtual ~CCowBot_State_Damage() = default;
 
 public:
 	// 상태 진입 시 최초에 한 번만 호출
@@ -24,11 +24,11 @@ private:
 	_float					m_fChangeTime = { 0.4f };
 
 private:
-	class CMonster_Spinner* m_pMonster = { nullptr };
-	class CPlayer* m_pPlayer = { nullptr };
+	class CMonster_CowBot*	m_pMonster = { nullptr };
+	class CPlayer*			m_pPlayer = { nullptr };
 
 public:
-	static CSpinner_State_Damage* Create(class CMonster_Spinner* pMonster, class CPlayer* pPlayer);
+	static CCowBot_State_Damage* Create(class CMonster_CowBot* pMonster, class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

@@ -19,11 +19,7 @@ void CBat_State_Damage::OnStateUpdate(_float fTimeDelta)
 {
     if (true == m_pMonster->Get_isFinished(CMonster_Bat::ANIM_FLINCH))
     {
-        _int iHP = m_pMonster->Get_HP();
-        if (0 >= iHP)
-            m_pMonster->Set_Dead(true);
-        else
-            m_pMonster->Change_State(CMonster_Bat::STATE_IDLE);
+        m_pMonster->Change_State(CMonster_Bat::STATE_IDLE);
     }
 }
 

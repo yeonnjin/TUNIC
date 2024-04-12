@@ -4,45 +4,87 @@
 #include "Monster_CowBot.h"
 #include "CowBot_State_Walk.h"
 
+#include "Easing.h"
+
 CCowBot_State_Walk::CCowBot_State_Walk(CMonster_CowBot* pMonster, CPlayer* pPlayer)
 {
     m_pMonster = pMonster;
     m_pPlayer = pPlayer;
+
+    m_pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
+    m_pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
+
+    m_pEasing = CEasing::Get_Instance();
 }
 
 void CCowBot_State_Walk::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_CowBot::ANIM_WALK);
 
-    _vector vMonsterPosition = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-    m_vTargetPosition = _vector{    vMonsterPosition.m128_f32[0] + (_float)(rand() % 20 + 1) - (_float)(rand() % 20 + 1), 
-                                    vMonsterPosition.m128_f32[1], 
-                                    vMonsterPosition.m128_f32[2] + (_float)(rand() % 20 + 1) - (_float)(rand() % 20 + 1), 1.f};
+    m_vEnterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+
+    // TODO : 나중에 설정된 지역 내 위치로 이동하도록 바꾸기
+    m_vTargetPosition = _vector{    m_vEnterPosition.m128_f32[0] + (_float)(rand() % 20 + 1) - (_float)(rand() % 20 + 1), 
+                                    m_vEnterPosition.m128_f32[1], 
+                                    m_vEnterPosition.m128_f32[2] + (_float)(rand() % 20 + 1) - (_float)(rand() % 20 + 1), 1.f};
+
+    /* 목표 방향 설정 */
+    m_vTargetDir = XMVector3Normalize(m_vEnterPosition - m_vTargetPosition);
+    _vector vLookDir = XMVector3Normalize(m_pMonsterTransform->Get_State_Vector(CTransform::STATE_LOOK));
+    if (false == XMVector3Equal(m_vTargetDir, vLookDir))
+        m_isLook = false;
 }
 
 void CCowBot_State_Walk::OnStateUpdate(_float fTimeDelta)
 {
-    CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
+    m_fAccChangeTime += fTimeDelta;
 
-    _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-    _vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
-
-    if (FIND_DISTANCE > XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0])
+    // 플레이어 바라보기
+    _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+    _vector vPlayerPosition = m_pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
+    if (false == m_isLook)
     {
-        m_pMonster->Change_State(CMonster_CowBot::STATE_RUN);
+        m_vTargetDir = XMVector3Normalize(vMonsterPosition - m_vTargetPosition);
+        _vector vLookDir = XMVector3Normalize(m_pMonsterTransform->Get_State_Vector(CTransform::STATE_LOOK));
+        if (false == XMVector3Equal(m_vTargetDir, vLookDir))
+        {
+            m_fAccLookTime += fTimeDelta;
+            _float fRatio = m_fAccLookTime / m_fLookTime;
+            if (fRatio >= 1)
+            {
+                fRatio = 1.f;
+                m_isLook = true;
+            }
+
+            _vector vDir;
+            vDir.m128_f32[0] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, vLookDir.m128_f32[0], m_vTargetDir.m128_f32[0], fRatio);
+            vDir.m128_f32[1] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, vLookDir.m128_f32[1], m_vTargetDir.m128_f32[1], fRatio);
+            vDir.m128_f32[2] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, vLookDir.m128_f32[2], m_vTargetDir.m128_f32[2], fRatio);
+            vDir.m128_f32[3] = 0.f;
+
+            m_pMonsterTransform->Look_At_Dir(vDir);
+        }
     }
-    else
-    {
-       pMonsterTransform->Look_At_For_LandOject(m_vTargetPosition, true);
 
-        if (4 > XMVector3Length(m_vTargetPosition - vMonsterPosition).m128_f32[0])
-            m_pMonster->Change_State(CMonster_CowBot::STATE_IDLE);
-    }   
+    if (m_fAccChangeTime > m_fChangeTime)
+    {
+        _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
+        if (FIND_DISTANCE > fDistance)
+        {
+            m_pMonster->Change_State(CMonster_CowBot::STATE_RUN);
+        }
+        else
+        {
+            if (4 > fDistance)
+                m_pMonster->Change_State(CMonster_CowBot::STATE_IDLE);
+        }
+    }    
 }
 
 void CCowBot_State_Walk::OnStateExit()
 {
     m_fRandomTime = 0.f;
+    m_fAccChangeTime = 0.f;
 }
 
 CCowBot_State_Walk* CCowBot_State_Walk::Create(CMonster_CowBot* pMonster, CPlayer* pPlayer)

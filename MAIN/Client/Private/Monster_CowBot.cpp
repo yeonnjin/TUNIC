@@ -6,6 +6,8 @@
 #include "CowBot_State_Walk.h"
 #include "CowBot_State_Run.h"
 #include "CowBot_State_Attack.h"
+#include "CowBot_State_Damage.h"
+#include "CowBot_State_Die.h"
 
 #include "Player.h"
 
@@ -62,20 +64,18 @@ HRESULT CMonster_CowBot::Tick(_float fTimeDelta)
 		return E_FAIL;
 
 	/*static _uint iIndex = 0;
-	if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
-	{		
-		m_pModelCom->Set_Animation_Index(iIndex);
-		iIndex++;
-		if (iIndex > 10)
-			iIndex = 0;
-	}*/
+	  if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
+	  {
+		  iIndex++;
+		  if (iIndex > 10)
+			  iIndex = 0;
+		  m_pModelCom->Set_Animation_Index(iIndex);
+	  }
 
+	  m_pModelCom->Play_Animation(fTimeDelta);*/
 	// PartObject
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Tick(fTimeDelta);
-
-	
-
 
 	return S_OK;
 }
@@ -86,8 +86,6 @@ void CMonster_CowBot::Late_Tick(_float fTimeDelta)
 
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Late_Tick(fTimeDelta);
-
-	//m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
 }
 
 HRESULT CMonster_CowBot::Render()
@@ -169,7 +167,14 @@ HRESULT CMonster_CowBot::Add_States()
 	m_pModelCom->Add_State(STATE_IDLE, CCowBot_State_Idle::Create(this, pPlayer));
 	m_pModelCom->Add_State(STATE_WALK, CCowBot_State_Walk::Create(this, pPlayer));
 	m_pModelCom->Add_State(STATE_RUN, CCowBot_State_Run::Create(this, pPlayer));
-	m_pModelCom->Add_State(STATE_ATTACK, CCowBot_State_Attack::Create(this, pPlayer));
+	m_pModelCom->Add_State(STATE_DAMAGE, CCowBot_State_Damage::Create(this, pPlayer));
+	m_pModelCom->Add_State(STATE_DIE, CCowBot_State_Die::Create(this, pPlayer));
+
+	CCowBot_Weapon* pWeapon = dynamic_cast<CCowBot_Weapon*>(m_PartObjects.find(TEXT("Part_CowBot_Weapon_Sword"))->second);
+	if (nullptr == pWeapon)
+		return E_FAIL;
+
+	m_pModelCom->Add_State(STATE_ATTACK, CCowBot_State_Attack::Create(this, pPlayer, pWeapon));
 
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
@@ -242,4 +247,8 @@ void CMonster_CowBot::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_CowBot::Damage_Event()
 {
+	if (0 >= m_iHP)
+		Change_State(STATE_DIE);
+	else
+		Change_State(STATE_DAMAGE);
 }

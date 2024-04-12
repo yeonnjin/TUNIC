@@ -20,12 +20,15 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	_float					m_fIdleTime = { 0.f };
-	_float					m_fRandomTime = { 0.f };
+	_float						m_fIdleTime = { 0.f };
+	_float						m_fRandomTime = { 0.f };
+
+	_float						m_fAccChangeTime = { 0.f };
+	_float						m_fChangeTime = { 0.4f };
 
 private:
-	class CMonster_CowBot* m_pMonster = { nullptr };
-	class CPlayer* m_pPlayer = { nullptr };
+	class CMonster_CowBot*		m_pMonster = { nullptr };
+	class CPlayer*				m_pPlayer = { nullptr };
 
 public:
 	static CCowBot_State_Idle* Create(class CMonster_CowBot* pMonster, class CPlayer* pPlayer);

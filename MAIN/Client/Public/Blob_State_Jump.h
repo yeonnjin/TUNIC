@@ -20,6 +20,13 @@ public:
 	virtual void OnStateExit() override;
 
 private:
+	_float m_fAccJumpTime = { 0.f };
+	_float m_fJumpTime = { 0.4f };
+
+	_float m_fIdleDistance = { 5.f };
+	_float m_fAttackDistance = { 2.f };
+
+private:
 	class CMonster_Blob* m_pMonster = { nullptr };
 	class CPlayer* m_pPlayer = { nullptr };
 

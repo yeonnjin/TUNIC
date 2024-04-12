@@ -3,6 +3,11 @@
 #include "Client_Defines.h"
 #include "State.h"
 
+BEGIN(Engine)
+class CTransform;
+class CEasing;
+END
+
 BEGIN(Client)
 
 class CBat_State_Idle final : public CState
@@ -20,11 +25,27 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	_float					m_fIdleTime = { 0.f };
+	_bool					m_isLook = { true };
+
+	_float					m_fAccIdleTime = { 0.f };
+	_float					m_fIdleTime = { 2.f };
+
+	_float					m_fAccLookTime = { 0.f };
+	_float					m_fLookTime = { 1.f };
+
+	_float					m_fAttackDistance = { 5.f };
+
+	_vector					m_vTargetDir = {};
+	_vector					m_vEnterPosition = {};
 
 private:
-	class CMonster_Bat* m_pMonster = { nullptr };
-	class CPlayer* m_pPlayer = { nullptr };
+	class CTransform*		m_pMonsterTransform = { nullptr };
+	class CTransform*		m_pPlayerTransform = { nullptr };
+
+	class CMonster_Bat*		m_pMonster = { nullptr };
+	class CPlayer*			m_pPlayer = { nullptr };
+
+	class CEasing*			m_pEasing = { nullptr };
 
 public:
 	static CBat_State_Idle* Create(class CMonster_Bat* pMonster, class CPlayer* pPlayer);

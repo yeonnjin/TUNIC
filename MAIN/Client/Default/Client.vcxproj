@@ -170,6 +170,8 @@
     <ClInclude Include="..\Public\Camera_LockOn.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\CowBot_State_Attack.h" />
+    <ClInclude Include="..\Public\CowBot_State_Damage.h" />
+    <ClInclude Include="..\Public\CowBot_State_Die.h" />
     <ClInclude Include="..\Public\CowBot_State_Idle.h" />
     <ClInclude Include="..\Public\CowBot_State_Run.h" />
     <ClInclude Include="..\Public\CowBot_State_Walk.h" />
@@ -257,6 +259,8 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_LockOn.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Attack.cpp" />
+    <ClCompile Include="..\Private\CowBot_State_Damage.cpp" />
+    <ClCompile Include="..\Private\CowBot_State_Die.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Idle.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Run.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Walk.cpp" />

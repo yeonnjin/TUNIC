@@ -17,14 +17,14 @@ HRESULT CPartObject::Initialize_Prototype()
 
 HRESULT CPartObject::Initialize(void* pArg)
 {
+    if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
+
     if (nullptr != pArg)
     {
         PARTOBJECT_DESC* pPartObjectDesc = (PARTOBJECT_DESC*)pArg;
         m_pParentMatrix = pPartObjectDesc->pParentMatrix;
     }
-
-    if (FAILED(__super::Initialize(pArg)))
-        return E_FAIL;
 
     return S_OK;
 }

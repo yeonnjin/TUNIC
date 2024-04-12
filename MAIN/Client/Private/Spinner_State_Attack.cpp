@@ -19,17 +19,24 @@ void CSpinner_State_Attack::OnStateEnter()
 
 void CSpinner_State_Attack::OnStateUpdate(_float fTimeDelta)
 {
+    m_fAccSpinTime += fTimeDelta;
+
     CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
     _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
     _vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
 
-    // 준비 모션이 끝나면 : SPIN 애니메이션 재생
-    if (false == m_isAttack && true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_START_SPIN))
-    {
-        m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_FORWARD);     
-        m_isAttack = true;
-    }
+    if (m_fAccSpinTime > m_fSpinTime)
+    { 
+        // 준비 모션이 끝나면 : SPIN 애니메이션 재생
+        if (false == m_isAttack && true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_START_SPIN))
+        {
+            m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_FORWARD);
+            m_isAttack = true;
+        }
 
+        m_fAccChangeTime += fTimeDelta;
+    }
+   
     // 플레이어를 쫓아오면서 틱 뎀
     if (true == m_isAttack && false == m_pMonster->isCollision())
     {
@@ -43,20 +50,22 @@ void CSpinner_State_Attack::OnStateUpdate(_float fTimeDelta)
     //}
 
     // 플레이어와의 거리가 일정 이상이면 IDLE
-    
-    _vector vDistance = vPlayerPosition - vMonsterPosition;
+    _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
 
-    if (FIND_DISTANCE < XMVector3Length(vDistance).m128_f32[0])
+    if (m_fAccChangeTime > m_fChangeTime)
     {
-        m_pMonster->Change_State(CMonster_Spinner::STATE_IDLE);
+        if (FIND_DISTANCE < fDistance)
+        {
+            m_pMonster->Change_State(CMonster_Spinner::STATE_IDLE);
+        }       
     }
 
     // 플레이어와 거리가 가까우면 제자리에서 재생
-    if (2.f > XMVector3Length(vDistance).m128_f32[0])
+    if (2.f > fDistance)
     {
         pMonsterTransform->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
-    }   
-
+    }
+    
     m_vPrePosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
 }
 
@@ -64,6 +73,9 @@ void CSpinner_State_Attack::OnStateExit()
 {
     m_isAttack = false;
     m_pMonster->Set_isMove(false);
+
+    m_fAccSpinTime = 0.f;
+    m_fAccChangeTime = 0.f;
 }
 
 CSpinner_State_Attack* CSpinner_State_Attack::Create(CMonster_Spinner* pMonster, CPlayer* pPlayer)

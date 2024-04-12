@@ -17,21 +17,35 @@ void CBlob_State_Jump::OnStateEnter()
 
 void CBlob_State_Jump::OnStateUpdate(_float fTimeDelta)
 {
+    m_fAccJumpTime += fTimeDelta;
+
     _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
     
     CTransform* pBlob = (CTransform*)(m_pMonster->Get_Component(g_strTransformTag));
     pBlob->Look_At_For_LandOject(vPlayerPosition, true);
-    pBlob->Go_Backward(fTimeDelta);
 
     _vector vMonsterPosition = pBlob->Get_State_Vector(CTransform::STATE_POSITION);
-    if (1 > XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0])
+    _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
+
+    if (m_fAttackDistance >= fDistance)
     {
-        m_pMonster->Change_State(CMonster_Blob::STATE_ATTACK);
+        if(m_fAccJumpTime > m_fJumpTime)
+            m_pMonster->Change_State(CMonster_Blob::STATE_ATTACK);
+    }
+    else if (m_fIdleDistance <= fDistance)
+    {
+        if (m_fAccJumpTime > m_fJumpTime)
+            m_pMonster->Change_State(CMonster_Blob::STATE_IDLE);
+    }
+    else
+    {
+        pBlob->Go_Backward(fTimeDelta);
     }
 }
 
 void CBlob_State_Jump::OnStateExit()
 {
+    m_fAccJumpTime = 0.f;
 }
 
 CBlob_State_Jump* CBlob_State_Jump::Create(CMonster_Blob* pMonster, CPlayer* pPlayer)

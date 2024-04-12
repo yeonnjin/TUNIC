@@ -247,15 +247,15 @@ HRESULT CPlayer_Weapon::Initialize_Prototype()
 
 HRESULT CPlayer_Weapon::Initialize(void* pArg)
 {
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
 	PLAYER_WEAPON_DESC* pDesc = (PLAYER_WEAPON_DESC*)pArg;
 
 	m_pSocketBone = pDesc->pSocketBone;
 	m_eWeapon = pDesc->eWeapon;
 
 	Safe_AddRef(m_pSocketBone);
-
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;

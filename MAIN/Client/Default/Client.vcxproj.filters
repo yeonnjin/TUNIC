@@ -265,6 +265,12 @@
     <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Idle">
       <UniqueIdentifier>{f1e455c6-5ae6-4840-8b64-f5748cb24d1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Damage">
+      <UniqueIdentifier>{bdd61f62-7dc2-4dd9-a589-2587beaca30f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Die">
+      <UniqueIdentifier>{ec7f0ca1-9abb-4d48-8801-249f2da14fed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -501,6 +507,12 @@
     <ClInclude Include="..\Public\Librarian_State_Damage.h">
       <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Damage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CowBot_State_Damage.h">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CowBot_State_Die.h">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Die</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -718,6 +730,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Damage.cpp">
       <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_State_Damage.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CowBot_State_Die.cpp">
+      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Die</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,9 @@ void CBat_State_Sleep::OnStateUpdate(_float fTimeDelta)
     _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
     _vector vMonsterPosition = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
 
-    if (false == m_isDetect && 5 > XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0])
+    _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
+
+    if (false == m_isDetect && m_fDetectDistance > fDistance)
     {
         m_pMonster->Set_Blending(true, CMonster_Bat::ANIM_WAKEUP);
         m_isDetect = true;
