@@ -24,12 +24,24 @@ HRESULT CRenderer::Initialize()
 	///* 디퍼드 셰이딩을 위한 렌더 타켓들을 생성 */
 
 	///* For. Target_Diffuse */
-	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 	//	return E_FAIL;
 
 	///* For. Target_Normal */
 	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
 	//	return E_FAIL;		// UNORM : 0 ~ 1 사이 변환
+
+	///* For. Target_Depth */
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+	//	return E_FAIL;
+	//
+	///* For. Target_Shade */
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+	//	return E_FAIL;
+	//
+	///* For. Target_Specular */
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Specular"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+	//	return E_FAIL;
 
 	///* MRT_GameObjects : 객체들의 특정 정보를 받아오기 위한 렌더 타겟들 */
 	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Diffuse"))))
@@ -38,8 +50,14 @@ HRESULT CRenderer::Initialize()
 	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
 	//	return E_FAIL;
 
+	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Depth"))))
+	//	return E_FAIL;
+
 //	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
 //		return E_FAIL;		// 객체 정보들을 다 받은 후 빛 연산을 위한 셰이드 타겟
+// 
+//	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
+//		return E_FAIL;
 //
 //	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 //	if (nullptr == m_pVIBuffer)
@@ -95,6 +113,12 @@ HRESULT CRenderer::Render()
 	/*if (FAILED(Render_Lights()))
 		return E_FAIL;*/
 
+	/*if (FAILED(Render_Result()))
+		return E_FAIL;*/
+
+	/*if (FAILED(Render_NonLight()))
+		return E_FAIL;*/
+
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
 
@@ -108,6 +132,17 @@ HRESULT CRenderer::Render()
 
 	return S_OK;
 }
+
+#ifdef _DEBUG
+HRESULT CRenderer::Add_DebugComponent(CComponent* pRenerComponent)
+{
+	m_DebugComponents.emplace_back(pRenerComponent);
+
+	Safe_AddRef(pRenerComponent);
+
+	return S_OK;
+}
+#endif // _DEBUG
 
 HRESULT CRenderer::Render_Priority()
 {
@@ -145,6 +180,20 @@ HRESULT CRenderer::Render_NonBlend()
 
 	return S_OK;
 }
+HRESULT CRenderer::Render_NonLight()
+{
+	for (auto& pRenderObject : m_RenderObjects[RENDER_NONLIGHT])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[RENDER_NONLIGHT].clear();
+
+	return S_OK;
+}
+
 //
 //_bool Compare(CGameObject* pSour, CGameObject* pDest)
 //{
@@ -213,9 +262,42 @@ HRESULT CRenderer::Render_Lights()
 	return S_OK;
 }
 
+HRESULT CRenderer::Render_Result()
+{
+	/* 백 버퍼에 디퍼드 방식으로 연산된 최종 결과물을 찍어줌 */
+	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Shade"), "g_ShadeTexture")))
+		return E_FAIL;
+
+	m_pShader->Begin(3);	// pass Final
+
+	m_pVIBuffer->Bind_Buffers();
+
+	m_pVIBuffer->Render();
+
+	return S_OK;
+}
+
 #ifdef _DEBUG
 HRESULT CRenderer::Render_Debug()
 {
+	for (auto& pDebugCom : m_DebugComponents)
+	{
+		if (nullptr != pDebugCom)
+			pDebugCom->Render();
+
+		Safe_Release(pDebugCom);
+	}
+	m_DebugComponents.clear();
+
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))

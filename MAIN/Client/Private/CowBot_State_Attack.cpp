@@ -27,7 +27,7 @@ void CCowBot_State_Attack::OnStateUpdate(_float fTimeDelta)
     pMonsterTransform->Look_At_For_LandOject(vPlayerPosition, true);
 
     // TODO: 코드 최적화하기
-    if (false == m_isCombo && true == m_pMonster->Get_isFinished(CMonster_CowBot::ANIM_ATTACK))
+    if (false == m_isCombo && 42 == m_pMonster->Get_Current_Frame(CMonster_CowBot::ANIM_ATTACK))
     {    
         if(FIND_DISTANCE < XMVector3Length(vDistance).m128_f32[0])
             m_pMonster->Change_State(CMonster_CowBot::STATE_IDLE);

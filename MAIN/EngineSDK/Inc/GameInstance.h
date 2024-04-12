@@ -33,6 +33,9 @@ public: /* For.Input_Device */
 
 public: /* For.Renderer */
 	HRESULT				Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
+#ifdef _DEBUG
+	HRESULT				Add_DebugComponent(class CComponent* pRenderComponent);
+#endif
 
 public: /* For.Level_Manager */
 	HRESULT				Open_Level(_uint iNewLevelID, class CLevel* pNewLevel);
@@ -96,7 +99,6 @@ public: /* For.Target_Manager */
 	HRESULT				Ready_RTVDebug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	HRESULT				Draw_RTVDebug(const wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 #endif
-
 
 public: /* For.ImGui_Manager */
 	void				New_Frame();

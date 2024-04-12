@@ -15,16 +15,33 @@ HRESULT CLight::Initialize(const LIGHT_DESC& LightDesc)
 
 HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 {
+	_uint	iPassIndex = { 0 };
+
 	/* 빛 연산을 위한 정보들을 던져줌 */
-	if (FAILED(pShader->Bind_RawValue("g_vLightDir", &m_LightDesc.vDirection, sizeof(_float4))))
+	if (LIGHT_DESC::TYPE_DIRECTIONAL == m_LightDesc.eType)
+	{
+		iPassIndex = 1;
+
+		if (FAILED(pShader->Bind_RawValue("g_vLightDir", &m_LightDesc.vDirection, sizeof(_float4))))
+		return E_FAIL;
+	}
+	else if (LIGHT_DESC::TYPE_POINT == m_LightDesc.eType)
+	{
+		iPassIndex = 2;
+	}
+
+	if (FAILED(pShader->Bind_RawValue("g_vLightDiffuse", &m_LightDesc.vDiffuse, sizeof(_float4))))
 		return E_FAIL;
 
-	// 1번 패스(두번 째) 사용
-	pShader->Begin(1);
+	if (FAILED(pShader->Bind_RawValue("g_vLightAmbient", &m_LightDesc.vAmbient, sizeof(_float4))))
+		return E_FAIL;
+
+	/* 용도에 맞는 패스 사용 */ 
+	pShader->Begin(iPassIndex);
 
 	pVIBuffer->Render();
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 CLight* CLight::Create(const LIGHT_DESC& LightDesc)

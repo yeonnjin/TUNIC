@@ -145,7 +145,7 @@ private:
 	_vector			m_vTargetLook = {};
 
 	_float			m_fAccTurnTime = { 0.f };
-	_float			m_fTurnTime = { 1.f };
+	_float			m_fTurnTime = { 0.3f };
 
 public:
 	static	CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

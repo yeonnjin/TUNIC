@@ -218,6 +218,14 @@ HRESULT CGameInstance::Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, CGam
 	return m_pRenderer->Add_RenderGroup(eRenderGroup, pRenderObject);	
 }
 
+HRESULT CGameInstance::Add_DebugComponent(CComponent* pRenderComponent)
+{
+	if (nullptr == m_pRenderer)
+		return E_FAIL;
+
+	return m_pRenderer->Add_DebugComponent(pRenderComponent);
+}
+
 /* For.Level_Manager */
 HRESULT CGameInstance::Open_Level(_uint iNewLevelID, CLevel * pNewLevel)
 {
