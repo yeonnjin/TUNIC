@@ -15,8 +15,16 @@
 #include "Monster_Spinner.h"
 #include "Monster_Blob.h"
 #include "Monster_Bat.h"
+
 #include "Monster_CowBot.h"
 #include "CowBot_Weapon.h"
+
+#include "Monster_Frog.h"
+#include "Frog_Weapon.h"
+
+#include "Monster_Guard.h"
+#include "Guard_Weapon_Shield.h"
+#include "Guard_Weapon_Spear.h"
 
 //#include "Effect.h"
 #include "Sky.h"
@@ -331,6 +339,31 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CMonster_CowBot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Monster_Frog */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Frog"),
+		CMonster_Frog::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Part_Frog_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Frog_Weapon"),
+		CFrog_Weapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Monster_Guard */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Guard"),
+		CMonster_Guard::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Part_Guard_Weapon_Shield */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Guard_Weapon_Shield"),
+		CGuard_Weapon_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Part_Guard_Weapon_Spear */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Guard_Weapon_Spear"),
+		CGuard_Weapon_Spear::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Map_Object */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Object"),
 		CMap_Object::Create(m_pDevice, m_pContext))))
@@ -374,6 +407,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shotgun.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Wandbow.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Monster_Frog_Scimitar.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Monster_Guard_Weapon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Librarian_Weapon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash_Horizon.dat");
@@ -384,6 +419,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Guard.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");

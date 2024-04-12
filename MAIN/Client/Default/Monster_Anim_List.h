@@ -39,6 +39,28 @@
 [5] "Spinnerbot Corrupted (5)|Spinnerbot Corrupted (5)|spinnerslime_armature|recoil|Base Laye"	// Spinner_State_Damage - 물러나다, 움찔하다
 [6] "Spinnerbot Corrupted (5)|Spinnerbot Corrupted (5)|spinnerslime_armature|startup spin|Bas"  // Spinner_State_Attack
 
+// Frog
++[0] "Frog_no|Frog_no|Frog Skeleton|aggro|Base Layer"
++[1] "Frog_no|Frog_no|Frog Skeleton|attack|Base Layer" 
++[2] "Frog_no|Frog_no|Frog Skeleton|die|Base Layer" 
++[3] "Frog_no|Frog_no|Frog Skeleton|hurt|Base Layer" 
++[4] "Frog_no|Frog_no|Frog Skeleton|idle nice|Base Layer" 
++[5] "Frog_no|Frog_no|Frog Skeleton|parry|Base Layer" 
++[6] "Frog_no|Frog_no|Frog Skeleton|run forward nice|Base Layer" 
++[7] "Frog_no|Frog_no|Frog Skeleton|walk forward|Base Layer" 
+
+// Guard
++[0] "Armature|Armature|Honourguard|blockstab|Base Layer"
++[1] "Armature|Armature|Honourguard|chase|Base Layer" 
++[2] "Armature|Armature|Honourguard|die|Base Layer"
++[3] "Armature|Armature|Honourguard|hurt|Base Layer"
++[4] "Armature|Armature|Honourguard|idle aggro turn left|Base Layer" 
++[5] "Armature|Armature|Honourguard|idle aggro turn right|Base Layer"
++[6] "Armature|Armature|Honourguard|idle aggro|Base Layer" 
++[7] "Armature|Armature|Honourguard|idle|Base Layer"
++[8] "Armature|Armature|Honourguard|parrystun|Base Layer"
+
+
 // Librarian
 +[0] "Librarian|Librarian|Librarian|Action"
 +[1] "Librarian|Librarian|Librarian|Librarian|Librarian|Librarian|Librarian" 

@@ -178,6 +178,9 @@
     <ClInclude Include="..\Public\CowBot_Weapon.h" />
     <ClInclude Include="..\Public\Editor.h" />
     <ClInclude Include="..\Public\Effect_Librarian.h" />
+    <ClInclude Include="..\Public\Frog_Weapon.h" />
+    <ClInclude Include="..\Public\Guard_Weapon_Shield.h" />
+    <ClInclude Include="..\Public\Guard_Weapon_Spear.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -202,6 +205,8 @@
     <ClInclude Include="..\Public\Monster_Bat.h" />
     <ClInclude Include="..\Public\Monster_Blob.h" />
     <ClInclude Include="..\Public\Monster_CowBot.h" />
+    <ClInclude Include="..\Public\Monster_Frog.h" />
+    <ClInclude Include="..\Public\Monster_Guard.h" />
     <ClInclude Include="..\Public\Monster_Librarian.h" />
     <ClInclude Include="..\Public\Monster_Spinner.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
@@ -267,6 +272,9 @@
     <ClCompile Include="..\Private\CowBot_Weapon.cpp" />
     <ClCompile Include="..\Private\Editor.cpp" />
     <ClCompile Include="..\Private\Effect_Librarian.cpp" />
+    <ClCompile Include="..\Private\Frog_Weapon.cpp" />
+    <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp" />
+    <ClCompile Include="..\Private\Guard_Weapon_Spear.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -291,6 +299,8 @@
     <ClCompile Include="..\Private\Monster_Bat.cpp" />
     <ClCompile Include="..\Private\Monster_Blob.cpp" />
     <ClCompile Include="..\Private\Monster_CowBot.cpp" />
+    <ClCompile Include="..\Private\Monster_Frog.cpp" />
+    <ClCompile Include="..\Private\Monster_Guard.cpp" />
     <ClCompile Include="..\Private\Monster_Librarian.cpp" />
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />

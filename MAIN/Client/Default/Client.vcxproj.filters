@@ -100,60 +100,6 @@
     <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Sword">
       <UniqueIdentifier>{3f29a8fb-128a-46a5-bed6-9af3013f52b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Blob">
-      <UniqueIdentifier>{73f9cadf-21c1-4bd4-b899-239acb2ce1a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner">
-      <UniqueIdentifier>{eb03094e-9d00-48b5-ae70-27d8ccc5b380}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Bat">
-      <UniqueIdentifier>{7545205d-c41f-4b60-9e91-5cd5082c105a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\State">
-      <UniqueIdentifier>{f7832c3d-7170-467c-a044-e9a7b3a2ba88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Attack">
-      <UniqueIdentifier>{7c3668d4-5049-4d76-9703-7f620e1711b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Damage">
-      <UniqueIdentifier>{8ce45d75-e715-4b45-8471-92c9de3d7b65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Explode">
-      <UniqueIdentifier>{bbd423ae-c951-4e3c-9084-04393851b7ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden">
-      <UniqueIdentifier>{73c99384-5e55-471c-8c30-d36b535dbfc0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Spinner\State\Spinner_State_Idle">
-      <UniqueIdentifier>{9685b98d-856f-4d7d-83e6-d4a4a427c9b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Blob\State">
-      <UniqueIdentifier>{d63cca31-b662-43f5-8895-ee1cb8373517}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Blob\State\Blob_State_Idle">
-      <UniqueIdentifier>{f9d53d45-a0aa-4e11-8e38-15bce175f515}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Blob\State\Blob_State_Attack">
-      <UniqueIdentifier>{f9380d26-1d03-4ef4-88b6-9b8d56d5e2a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Blob\State\Blob_State_Jump">
-      <UniqueIdentifier>{a9c9c287-1f6c-436c-b0af-9c34a46f5ffb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Bat\State">
-      <UniqueIdentifier>{ec30c5e1-d106-4174-adc0-0f535f6b40ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Attack">
-      <UniqueIdentifier>{3153a07f-6baa-4fbd-a076-1d18c259c7a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Idle">
-      <UniqueIdentifier>{dd566aa8-f3c2-4fa0-8d99-6ab57fde7562}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Damage">
-      <UniqueIdentifier>{a59f6cd3-3e9d-498e-b1ad-e3852c971c69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Bat\State\Bat_State_Sleep">
-      <UniqueIdentifier>{cf91c7c5-9ef7-4ed3-9722-15f4602b7c17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Sky">
       <UniqueIdentifier>{50e3b214-d4eb-4390-9b63-84bd7952fa88}</UniqueIdentifier>
     </Filter>
@@ -169,80 +115,11 @@
     <Filter Include="02.GameObjects\Player\State\Player_State_LockOn">
       <UniqueIdentifier>{66e2902d-6533-43de-857f-0c364b728a9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot">
-      <UniqueIdentifier>{ef38fa83-fa3f-47f4-84eb-706c59b97437}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\Weapon">
-      <UniqueIdentifier>{7b6794b0-2560-4c09-a107-495bd6ac9538}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State">
-      <UniqueIdentifier>{376da532-3c5d-4273-9d6f-7e1231e1d939}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Idle">
-      <UniqueIdentifier>{105600b3-c915-4352-b166-0a3f9681ed4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Walk">
-      <UniqueIdentifier>{5b09d303-0a0a-4347-9589-21b780b0a4d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Run">
-      <UniqueIdentifier>{5e11e5d9-8162-419c-bb8f-97084c567494}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Attack">
-      <UniqueIdentifier>{a82502a2-c301-4174-a11c-2bd22e3b899f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Particle\Red">
       <UniqueIdentifier>{dd886f8f-80df-4b8c-9f82-0537f171ba09}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Particle\Blue">
       <UniqueIdentifier>{e2c74caa-9c9c-4229-9a34-d204834642a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian">
-      <UniqueIdentifier>{49c4a1ac-7a6e-4fe9-904d-fca2465b9f7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\Weapon">
-      <UniqueIdentifier>{209a2471-af3c-41d3-a91c-818c62c4b719}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State">
-      <UniqueIdentifier>{2c18f7e4-a29f-4583-be0e-7e9610a30b26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern">
-      <UniqueIdentifier>{6505fc6b-94ce-410a-b08c-4b80f94ec51b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp">
-      <UniqueIdentifier>{a46559ee-e43b-4c07-bf71-3dbfc60b7f87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave">
-      <UniqueIdentifier>{3098d494-0bbb-40b7-b615-7d9881701465}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe">
-      <UniqueIdentifier>{ff0ec93a-bb6d-4e99-966e-fef278117b87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs">
-      <UniqueIdentifier>{9be00ffb-03b1-4627-bcb0-efb3c2468f6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam">
-      <UniqueIdentifier>{9774b780-8a5a-4b20-91a4-1bef2117d443}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Entry">
-      <UniqueIdentifier>{50569d9d-5393-4a25-aae2-576247f252c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Melee">
-      <UniqueIdentifier>{ffa77168-fdd3-4222-b48c-13ca2b83ad6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\Effect">
-      <UniqueIdentifier>{6d75fe49-5a44-4908-8707-52acca1c3e4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Slash">
-      <UniqueIdentifier>{e4eee54f-ad61-43c5-8b9f-2572423b0dcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Orb">
-      <UniqueIdentifier>{7594749e-f67e-4f0b-9940-f2856be813f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Beam">
-      <UniqueIdentifier>{078b618a-de74-4e2f-a123-c2d8ab3d6101}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\Trigger">
-      <UniqueIdentifier>{04a5deb8-ab85-49d0-9517-97bc74f5536a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Player\Weapon\Stick">
       <UniqueIdentifier>{db4ef1dc-da2b-4985-9a3f-31982737e8ea}</UniqueIdentifier>
@@ -259,17 +136,164 @@
     <Filter Include="02.GameObjects\Player\Weapon\Wand">
       <UniqueIdentifier>{37643b08-d04c-4c51-a883-b824f0fc0c39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Damage">
+    <Filter Include="02.GameObjects\Monster\Boss">
+      <UniqueIdentifier>{897299d7-27c1-4f59-be53-67a43f98fadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian">
+      <UniqueIdentifier>{49c4a1ac-7a6e-4fe9-904d-fca2465b9f7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Weapon">
+      <UniqueIdentifier>{209a2471-af3c-41d3-a91c-818c62c4b719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State">
+      <UniqueIdentifier>{2c18f7e4-a29f-4583-be0e-7e9610a30b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern">
+      <UniqueIdentifier>{6505fc6b-94ce-410a-b08c-4b80f94ec51b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp">
+      <UniqueIdentifier>{a46559ee-e43b-4c07-bf71-3dbfc60b7f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave">
+      <UniqueIdentifier>{3098d494-0bbb-40b7-b615-7d9881701465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe">
+      <UniqueIdentifier>{ff0ec93a-bb6d-4e99-966e-fef278117b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs">
+      <UniqueIdentifier>{9be00ffb-03b1-4627-bcb0-efb3c2468f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam">
+      <UniqueIdentifier>{9774b780-8a5a-4b20-91a4-1bef2117d443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Entry">
+      <UniqueIdentifier>{50569d9d-5393-4a25-aae2-576247f252c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Melee">
+      <UniqueIdentifier>{ffa77168-fdd3-4222-b48c-13ca2b83ad6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Damage">
       <UniqueIdentifier>{e2c63c83-8731-488b-b9ee-ffada8424da8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Idle">
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Idle">
       <UniqueIdentifier>{f1e455c6-5ae6-4840-8b64-f5748cb24d1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Damage">
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Effect">
+      <UniqueIdentifier>{6d75fe49-5a44-4908-8707-52acca1c3e4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Slash">
+      <UniqueIdentifier>{e4eee54f-ad61-43c5-8b9f-2572423b0dcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Orb">
+      <UniqueIdentifier>{7594749e-f67e-4f0b-9940-f2856be813f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Beam">
+      <UniqueIdentifier>{078b618a-de74-4e2f-a123-c2d8ab3d6101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Trigger">
+      <UniqueIdentifier>{04a5deb8-ab85-49d0-9517-97bc74f5536a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal">
+      <UniqueIdentifier>{c605a9ec-f493-429c-9072-d8507958f265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot">
+      <UniqueIdentifier>{ef38fa83-fa3f-47f4-84eb-706c59b97437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\Weapon">
+      <UniqueIdentifier>{7b6794b0-2560-4c09-a107-495bd6ac9538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State">
+      <UniqueIdentifier>{376da532-3c5d-4273-9d6f-7e1231e1d939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Idle">
+      <UniqueIdentifier>{105600b3-c915-4352-b166-0a3f9681ed4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Walk">
+      <UniqueIdentifier>{5b09d303-0a0a-4347-9589-21b780b0a4d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Run">
+      <UniqueIdentifier>{5e11e5d9-8162-419c-bb8f-97084c567494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Attack">
+      <UniqueIdentifier>{a82502a2-c301-4174-a11c-2bd22e3b899f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Damage">
       <UniqueIdentifier>{bdd61f62-7dc2-4dd9-a589-2587beaca30f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\CowBot\State\CowBot_State_Die">
+    <Filter Include="02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Die">
       <UniqueIdentifier>{ec7f0ca1-9abb-4d48-8801-249f2da14fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Blob">
+      <UniqueIdentifier>{73f9cadf-21c1-4bd4-b899-239acb2ce1a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Blob\State">
+      <UniqueIdentifier>{d63cca31-b662-43f5-8895-ee1cb8373517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Blob\State\Blob_State_Idle">
+      <UniqueIdentifier>{f9d53d45-a0aa-4e11-8e38-15bce175f515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Blob\State\Blob_State_Attack">
+      <UniqueIdentifier>{f9380d26-1d03-4ef4-88b6-9b8d56d5e2a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Blob\State\Blob_State_Jump">
+      <UniqueIdentifier>{a9c9c287-1f6c-436c-b0af-9c34a46f5ffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Bat">
+      <UniqueIdentifier>{7545205d-c41f-4b60-9e91-5cd5082c105a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Bat\State">
+      <UniqueIdentifier>{ec30c5e1-d106-4174-adc0-0f535f6b40ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Bat\State\Bat_State_Attack">
+      <UniqueIdentifier>{3153a07f-6baa-4fbd-a076-1d18c259c7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Bat\State\Bat_State_Idle">
+      <UniqueIdentifier>{dd566aa8-f3c2-4fa0-8d99-6ab57fde7562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Bat\State\Bat_State_Damage">
+      <UniqueIdentifier>{a59f6cd3-3e9d-498e-b1ad-e3852c971c69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Bat\State\Bat_State_Sleep">
+      <UniqueIdentifier>{cf91c7c5-9ef7-4ed3-9722-15f4602b7c17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner">
+      <UniqueIdentifier>{eb03094e-9d00-48b5-ae70-27d8ccc5b380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner\State">
+      <UniqueIdentifier>{f7832c3d-7170-467c-a044-e9a7b3a2ba88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Attack">
+      <UniqueIdentifier>{7c3668d4-5049-4d76-9703-7f620e1711b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Damage">
+      <UniqueIdentifier>{8ce45d75-e715-4b45-8471-92c9de3d7b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Explode">
+      <UniqueIdentifier>{bbd423ae-c951-4e3c-9084-04393851b7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Hidden">
+      <UniqueIdentifier>{73c99384-5e55-471c-8c30-d36b535dbfc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Idle">
+      <UniqueIdentifier>{9685b98d-856f-4d7d-83e6-d4a4a427c9b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Frog">
+      <UniqueIdentifier>{e01f5b6e-2628-431e-9f1b-4571c1f85313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Frog\Weapon">
+      <UniqueIdentifier>{8b556c1a-2f3a-4981-8867-35e197265607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard">
+      <UniqueIdentifier>{a8efbb23-51f1-4b26-86b8-4aec55177e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\Weapon">
+      <UniqueIdentifier>{bece2eba-a27d-4aed-9e14-5901c30eb7e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\Weapon\Spear">
+      <UniqueIdentifier>{6050521e-dd34-40a0-af54-432d4e91ef6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\Weapon\Shield">
+      <UniqueIdentifier>{373ddcc2-1316-45b0-a1c8-b54455179951}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -373,49 +397,49 @@
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Spinner.h">
-      <Filter>02.GameObjects\Monster\Spinner</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Spinner_State_Idle.h">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Spinner_State_Hidden.h">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Hidden</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Spinner_State_Explode.h">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Explode</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Explode</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Spinner_State_Damage.h">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Damage</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Spinner_State_Attack.h">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Blob.h">
-      <Filter>02.GameObjects\Monster\Blob</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Blob_State_Idle.h">
-      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob\State\Blob_State_Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Blob_State_Attack.h">
-      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob\State\Blob_State_Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Blob_State_Jump.h">
-      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Jump</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob\State\Blob_State_Jump</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Bat.h">
-      <Filter>02.GameObjects\Monster\Bat</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bat_State_Sleep.h">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Sleep</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Sleep</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bat_State_Damage.h">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Damage</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bat_State_Idle.h">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bat_State_Attack.h">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\Sky</Filter>
@@ -430,70 +454,70 @@
       <Filter>02.GameObjects\Player\State\Player_State_LockOn</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_CowBot.h">
-      <Filter>02.GameObjects\Monster\CowBot</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_Weapon.h">
-      <Filter>02.GameObjects\Monster\CowBot\Weapon</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Idle.h">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Walk.h">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Walk</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Run.h">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Run</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Attack.h">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Particle_Red.h">
       <Filter>02.GameObjects\Particle\Red</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Librarian.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_Weapon.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Weapon</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Pattern_Lightning_Warp.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Effect_Librarian.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_Effect_Slash.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Slash</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Slash</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Pattern_Energy_Wave.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Pattern_Lunge_Swipe.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_Effect_Orb.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Orb</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Orb</Filter>
     </ClInclude>
     <ClInclude Include="Monster_Anim_List.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Pattern_Homing_Orbs.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Idle.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Entry.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Entry</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Entry</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_Effect_Beam.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Beam</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Beam</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Pattern_Energy_Beam.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Melee.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Melee</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Melee</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_Stick.h">
       <Filter>02.GameObjects\Player\Weapon\Stick</Filter>
@@ -505,13 +529,28 @@
       <Filter>02.GameObjects\Player\Weapon\Shield</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Librarian_State_Damage.h">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Damage</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Damage.h">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Damage</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CowBot_State_Die.h">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Die</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Frog.h">
+      <Filter>02.GameObjects\Monster\Normal\Frog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Frog_Weapon.h">
+      <Filter>02.GameObjects\Monster\Normal\Frog\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Guard.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_Weapon_Spear.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\Weapon\Spear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_Weapon_Shield.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\Weapon\Shield</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -600,49 +639,49 @@
       <Filter>02.GameObjects\Player\State\Player_State_Attack\Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Spinner.cpp">
-      <Filter>02.GameObjects\Monster\Spinner</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Spinner_State_Idle.cpp">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Spinner_State_Hidden.cpp">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Hidden</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Hidden</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Spinner_State_Explode.cpp">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Explode</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Explode</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Spinner_State_Damage.cpp">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Damage</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Spinner_State_Attack.cpp">
-      <Filter>02.GameObjects\Monster\Spinner\State\Spinner_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Spinner\State\Spinner_State_Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Blob.cpp">
-      <Filter>02.GameObjects\Monster\Blob</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Blob_State_Idle.cpp">
-      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob\State\Blob_State_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Blob_State_Attack.cpp">
-      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob\State\Blob_State_Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Blob_State_Jump.cpp">
-      <Filter>02.GameObjects\Monster\Blob\State\Blob_State_Jump</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Blob\State\Blob_State_Jump</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Bat.cpp">
-      <Filter>02.GameObjects\Monster\Bat</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bat_State_Sleep.cpp">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Sleep</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Sleep</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bat_State_Damage.cpp">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Damage</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bat_State_Idle.cpp">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bat_State_Attack.cpp">
-      <Filter>02.GameObjects\Monster\Bat\State\Bat_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\Bat\State\Bat_State_Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\Sky</Filter>
@@ -657,67 +696,67 @@
       <Filter>02.GameObjects\Player\State\Player_State_LockOn</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_CowBot.cpp">
-      <Filter>02.GameObjects\Monster\CowBot</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_Weapon.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\Weapon</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Idle.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Walk.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Walk</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Run.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Run</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Attack.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Attack</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Particle_Red.cpp">
       <Filter>02.GameObjects\Particle\Red</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Librarian.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_Weapon.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Weapon</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Pattern_Lightning_Warp.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lightning_Warp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Librarian.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_Effect_Slash.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Slash</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Slash</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Pattern_Energy_Wave.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Wave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Pattern_Lunge_Swipe.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Lunge_Swipe</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_Effect_Orb.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Orb</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Orb</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Pattern_Homing_Orbs.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Homing_Orbs</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Idle.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Idle</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Entry.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Entry</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Entry</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_Effect_Beam.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\Effect\Attack_Beam</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Beam</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Pattern_Energy_Beam.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Energy_Beam</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Melee.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Melee</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Melee</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_Stick.cpp">
       <Filter>02.GameObjects\Player\Weapon\Stick</Filter>
@@ -729,13 +768,28 @@
       <Filter>02.GameObjects\Player\Weapon\Shield</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Damage.cpp">
-      <Filter>02.GameObjects\Monster\Boss_Librarian\State\Librarian_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Damage</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Damage.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Damage</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Damage</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CowBot_State_Die.cpp">
-      <Filter>02.GameObjects\Monster\CowBot\State\CowBot_State_Die</Filter>
+      <Filter>02.GameObjects\Monster\Normal\CowBot\State\CowBot_State_Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Frog.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Frog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Frog_Weapon.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Frog\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Guard.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_Weapon_Spear.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\Weapon\Spear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\Weapon\Shield</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
