@@ -57,6 +57,7 @@ void CMainApp::Tick(_float fTimeDelta)
 
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER_WEAPON, CCollision_Manager::GROUP_MONSTER);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER);
+	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER_WEAPON);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_MONSTER, CCollision_Manager::GROUP_MONSTER);
 
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))

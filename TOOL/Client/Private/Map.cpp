@@ -125,15 +125,31 @@ HRESULT CMap::Bind_ShaderResources()
 
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
 
-    //if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
-    //    return E_FAIL;
+
+    _float4 vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+    _float4 vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    _float4 vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+    _float4 vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &vDirection, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &vDiffuse, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &vAmbient, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &vSpecular, sizeof(_float4))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
+        return E_FAIL;
 
     return S_OK;
 }

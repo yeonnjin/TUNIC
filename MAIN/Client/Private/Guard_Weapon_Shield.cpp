@@ -110,7 +110,7 @@ HRESULT CGuard_Weapon_Shield::Add_Components()
     /* 로컬상의 정보를 셋팅한다. */
     if (CMonster_Guard::WEAPON_SHIELD == m_eWeapon)
     {
-        ColliderDesc.vSize = _float3(0.8f, 0.8f, 3.5f);
+        ColliderDesc.vSize = _float3(4.f, 4.f, 0.8f);
         ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
     }
 

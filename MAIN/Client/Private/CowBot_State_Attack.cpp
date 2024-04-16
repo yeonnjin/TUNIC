@@ -85,6 +85,8 @@ void CCowBot_State_Attack::OnStateExit()
     m_isCombo = false;
 
     m_fAccChangeTime = 0.f;
+
+    m_pWeapon->Set_isAttackFrame(false);
 }
 
 CCowBot_State_Attack* CCowBot_State_Attack::Create(CMonster_CowBot* pMonster, CPlayer* pPlayer, CCowBot_Weapon* pWeapon)

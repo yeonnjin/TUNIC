@@ -28,13 +28,13 @@ HRESULT CLibrarian_Effect_Slash::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
 		return E_FAIL;
 
-	if (FAILED(Add_Components()))
-		return E_FAIL;
-
 	LIBRARIAN_EFFECT_SLASH_DESC* pDesc = (LIBRARIAN_EFFECT_SLASH_DESC*)pArg;
 	m_isVertical = pDesc->isVertical;
+	
+	if (FAILED(Add_Components()))
+		return E_FAIL;
+	
 	m_pTransformCom->Look_At_Dir(pDesc->vLookDir, true);
-
 	if (false == m_isVertical)
 	{
 		//m_pTransformCom->Turn(XMVectorSet(0.f, 0.f, 1.f, 0.f), 1.f);
@@ -61,6 +61,8 @@ HRESULT CLibrarian_Effect_Slash::Tick(_float fTimeDelta)
 		return E_FAIL;
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER_WEAPON, this);
 
 	m_pTransformCom->Go_Backward(fTimeDelta);
 
@@ -106,9 +108,9 @@ HRESULT CLibrarian_Effect_Slash::Render()
 		
 	}
 
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-#endif
+//#ifdef _DEBUG
+//	m_pColliderCom->Render();
+//#endif
 
 	return S_OK;
 }
@@ -138,9 +140,17 @@ HRESULT CLibrarian_Effect_Slash::Add_Components()
 
 	/* 로컬상의 정보를 셋팅한다. */
 
-	ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
-
+	if (m_isVertical)
+	{
+		ColliderDesc.vSize = _float3(3.f, 20.f, 6.f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+	}
+	else
+	{
+		ColliderDesc.vSize = _float3(20.f, 1.f, 5.f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+	}
+	
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
@@ -201,4 +211,12 @@ void CLibrarian_Effect_Slash::Free()
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pModelCom_Horizon);
 	Safe_Release(m_pColliderCom);
+}
+
+void CLibrarian_Effect_Slash::Collision_Event(Engine::CGameObject* pGameObject)
+{
+	if (OBJ_PLAYER == pGameObject->Get_ObjectType())
+	{
+		pGameObject->Set_isDamage(true);
+	}
 }

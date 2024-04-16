@@ -178,7 +178,13 @@
     <ClInclude Include="..\Public\CowBot_Weapon.h" />
     <ClInclude Include="..\Public\Editor.h" />
     <ClInclude Include="..\Public\Effect_Librarian.h" />
+    <ClInclude Include="..\Public\Effect_WandBeam.h" />
     <ClInclude Include="..\Public\Frog_Weapon.h" />
+    <ClInclude Include="..\Public\Guard_State_Aggro.h" />
+    <ClInclude Include="..\Public\Guard_State_Block.h" />
+    <ClInclude Include="..\Public\Guard_State_Damage.h" />
+    <ClInclude Include="..\Public\Guard_State_Die.h" />
+    <ClInclude Include="..\Public\Guard_State_Idle.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Shield.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Spear.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -188,6 +194,7 @@
     <ClInclude Include="..\Public\Librarian_Effect_Orb.h" />
     <ClInclude Include="..\Public\Librarian_Effect_Slash.h" />
     <ClInclude Include="..\Public\Librarian_State_Damage.h" />
+    <ClInclude Include="..\Public\Librarian_State_Die.h" />
     <ClInclude Include="..\Public\Librarian_State_Entry.h" />
     <ClInclude Include="..\Public\Librarian_State_Idle.h" />
     <ClInclude Include="..\Public\Librarian_State_Melee.h" />
@@ -209,6 +216,7 @@
     <ClInclude Include="..\Public\Monster_Guard.h" />
     <ClInclude Include="..\Public\Monster_Librarian.h" />
     <ClInclude Include="..\Public\Monster_Spinner.h" />
+    <ClInclude Include="..\Public\Object_Chest.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
     <ClInclude Include="..\Public\Particle_Red.h" />
     <ClInclude Include="..\Public\Player.h" />
@@ -216,12 +224,14 @@
     <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Stick.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Sword.h" />
+    <ClInclude Include="..\Public\Player_State_Attack_Wand.h" />
     <ClInclude Include="..\Public\Player_State_Damage.h" />
     <ClInclude Include="..\Public\Player_State_Defense.h" />
     <ClInclude Include="..\Public\Player_State_Dodge.h" />
     <ClInclude Include="..\Public\Player_State_Idle.h" />
     <ClInclude Include="..\Public\Player_State_LockOn.h" />
     <ClInclude Include="..\Public\Player_State_Move.h" />
+    <ClInclude Include="..\Public\Player_State_Open.h" />
     <ClInclude Include="..\Public\Player_State_Sleep.h" />
     <ClInclude Include="..\Public\Player_Weapon.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -234,9 +244,12 @@
     <ClInclude Include="..\Public\Spinner_State_Idle.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
+    <ClInclude Include="..\Public\UI.h" />
+    <ClInclude Include="..\Public\UI_Stat.h" />
     <ClInclude Include="..\Public\Weapon_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Stick.h" />
     <ClInclude Include="..\Public\Weapon_Sword.h" />
+    <ClInclude Include="..\Public\Weapon_Wand.h" />
     <ClInclude Include="Anim_List.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -272,7 +285,13 @@
     <ClCompile Include="..\Private\CowBot_Weapon.cpp" />
     <ClCompile Include="..\Private\Editor.cpp" />
     <ClCompile Include="..\Private\Effect_Librarian.cpp" />
+    <ClCompile Include="..\Private\Effect_WandBeam.cpp" />
     <ClCompile Include="..\Private\Frog_Weapon.cpp" />
+    <ClCompile Include="..\Private\Guard_State_Aggro.cpp" />
+    <ClCompile Include="..\Private\Guard_State_Block.cpp" />
+    <ClCompile Include="..\Private\Guard_State_Damage.cpp" />
+    <ClCompile Include="..\Private\Guard_State_Die.cpp" />
+    <ClCompile Include="..\Private\Guard_State_Idle.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Spear.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -282,6 +301,7 @@
     <ClCompile Include="..\Private\Librarian_Effect_Orb.cpp" />
     <ClCompile Include="..\Private\Librarian_Effect_Slash.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Damage.cpp" />
+    <ClCompile Include="..\Private\Librarian_State_Die.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Entry.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Idle.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Melee.cpp" />
@@ -303,6 +323,7 @@
     <ClCompile Include="..\Private\Monster_Guard.cpp" />
     <ClCompile Include="..\Private\Monster_Librarian.cpp" />
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
+    <ClCompile Include="..\Private\Object_Chest.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
     <ClCompile Include="..\Private\Particle_Red.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
@@ -310,12 +331,14 @@
     <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Stick.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Sword.cpp" />
+    <ClCompile Include="..\Private\Player_State_Attack_Wand.cpp" />
     <ClCompile Include="..\Private\Player_State_Damage.cpp" />
     <ClCompile Include="..\Private\Player_State_Defense.cpp" />
     <ClCompile Include="..\Private\Player_State_Dodge.cpp" />
     <ClCompile Include="..\Private\Player_State_Idle.cpp" />
     <ClCompile Include="..\Private\Player_State_LockOn.cpp" />
     <ClCompile Include="..\Private\Player_State_Move.cpp" />
+    <ClCompile Include="..\Private\Player_State_Open.cpp" />
     <ClCompile Include="..\Private\Player_State_Sleep.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -328,9 +351,12 @@
     <ClCompile Include="..\Private\Spinner_State_Idle.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Test_Object.cpp" />
+    <ClCompile Include="..\Private\UI.cpp" />
+    <ClCompile Include="..\Private\UI_Stat.cpp" />
     <ClCompile Include="..\Private\Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Stick.cpp" />
     <ClCompile Include="..\Private\Weapon_Sword.cpp" />
+    <ClCompile Include="..\Private\Weapon_Wand.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -365,6 +391,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_MAIN</EntryPointName>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMeshMap.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosNorTex.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_MAIN</EntryPointName>
     </FxCompile>

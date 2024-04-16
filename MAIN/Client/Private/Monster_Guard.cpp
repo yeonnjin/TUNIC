@@ -4,6 +4,12 @@
 #include "Guard_Weapon_Shield.h"
 #include "Guard_Weapon_Spear.h"
 
+#include "Guard_State_Idle.h"
+#include "Guard_State_Aggro.h"
+#include "Guard_State_Block.h"
+#include "Guard_State_Damage.h"
+#include "Guard_State_Die.h"
+
 #include "Player.h"
 
 #define SHIELDBONE 27
@@ -55,10 +61,10 @@ HRESULT CMonster_Guard::Initialize(void* pArg)
 
 HRESULT CMonster_Guard::Tick(_float fTimeDelta)
 {
-    /*if (FAILED(__super::Tick(fTimeDelta)))
-        return E_FAIL;*/
+    if (FAILED(__super::Tick(fTimeDelta)))
+        return E_FAIL;
 
-    static _uint iIndex = 0;
+    /*static _uint iIndex = 0;
     if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {
         iIndex++;
@@ -67,7 +73,7 @@ HRESULT CMonster_Guard::Tick(_float fTimeDelta)
         m_pModelCom->Set_Animation_Index(iIndex);
     }
 
-    m_pModelCom->Play_Animation(fTimeDelta);
+    m_pModelCom->Play_Animation(fTimeDelta);*/
 
     // PartObject
     for (auto& PartObject : m_PartObjects)
@@ -160,20 +166,24 @@ HRESULT CMonster_Guard::Bind_ShaderResources()
 HRESULT CMonster_Guard::Add_States()
 {
     CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0));
-    /*m_pModelCom->Add_State(STATE_IDLE, CCowBot_State_Idle::Create(this, pPlayer));
-    m_pModelCom->Add_State(STATE_WALK, CCowBot_State_Walk::Create(this, pPlayer));
-    m_pModelCom->Add_State(STATE_RUN, CCowBot_State_Run::Create(this, pPlayer));
-    m_pModelCom->Add_State(STATE_DAMAGE, CCowBot_State_Damage::Create(this, pPlayer));
-    m_pModelCom->Add_State(STATE_DIE, CCowBot_State_Die::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_IDLE, CGuard_State_Idle::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_AGGRO, CGuard_State_Aggro::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_DAMAGE, CGuard_State_Damage::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_DIE, CGuard_State_Die::Create(this, pPlayer));
 
-    CCowBot_Weapon* pWeapon = dynamic_cast<CCowBot_Weapon*>(m_PartObjects.find(TEXT("Part_CowBot_Weapon_Sword"))->second);
-    if (nullptr == pWeapon)
+    CPartObject* pWeapon_Spear = m_PartObjects.find(TEXT("Part_Guard_Weapon_Spear"))->second;
+    if (nullptr == pWeapon_Spear)
         return E_FAIL;
 
-    m_pModelCom->Add_State(STATE_ATTACK, CCowBot_State_Attack::Create(this, pPlayer, pWeapon));
+    CPartObject* pWeapon_Shield = m_PartObjects.find(TEXT("Part_Guard_Weapon_Shield"))->second;
+    if (nullptr == pWeapon_Shield)
+        return E_FAIL;
+
+    m_pModelCom->Add_State(STATE_BLOCK, CGuard_State_Block::Create(this, pPlayer, pWeapon_Spear, pWeapon_Shield));
+
 
     m_pModelCom->Change_State(STATE_IDLE);
-    m_eState = STATE_IDLE;*/
+    m_eState = STATE_IDLE;
 
     return S_OK;
 }
@@ -184,16 +194,16 @@ void CMonster_Guard::Update_State()
 
 void CMonster_Guard::Set_Animation()
 {
-    //// LOOP
-//m_pModelCom->Set_Animation_isLoop(ANIM_IDLE, true);
-//m_pModelCom->Set_Animation_isLoop(ANIM_RUN, true);
-//m_pModelCom->Set_Animation_isLoop(ANIM_WALK, true);
-//
-//// ROOT
-//m_pModelCom->Set_Animation_isRoot(ANIM_RUN, true);
+    // LOOP
+    m_pModelCom->Set_Animation_isLoop(ANIM_IDLE, true);
+    m_pModelCom->Set_Animation_isLoop(ANIM_AGGRO, true);
+    
+    // ROOT
+    m_pModelCom->Set_Animation_isRoot(ANIM_BLOCK, true);
+    m_pModelCom->Set_Animation_isRoot(ANIM_CHASE, true);
 
-    for (size_t i = 0; i < 9; i++)
-        m_pModelCom->Set_Animation_isLoop(i, true);
+    /*for (size_t i = 0; i < 9; i++)
+        m_pModelCom->Set_Animation_isLoop(i, true);*/
 }
 
 CMonster_Guard* CMonster_Guard::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -240,4 +250,8 @@ void CMonster_Guard::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_Guard::Damage_Event()
 {
+    if (0 >= m_iHP)
+        Change_State(STATE_DIE);
+    else
+        Change_State(STATE_DAMAGE);
 }

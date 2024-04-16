@@ -12,7 +12,7 @@ public:
 	}GAMEOBJECT_DESC;
 
 public:
-	enum OBJECT { OBJ_PLAYER, OBJ_PLAYER_WEAPON, OBJ_MONSTER, OBJ_MONSTER_WEAPON, OBJ_END };
+	enum OBJECT { OBJ_PLAYER, OBJ_PLAYER_WEAPON, OBJ_MONSTER, OBJ_MONSTER_WEAPON, OBJ_UI, OBJ_END };
 
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -24,6 +24,7 @@ public:
 	void				Set_HP(_int iHP) { m_iHP += iHP; /*if (0 > m_iHP) m_iHP = 0;*/ }
 	void				Set_Dead(_bool isDead);
 	void				Set_isDamage(_bool isDamage) { m_isDamage = isDamage; }
+	void				Set_isImmune(_bool isImmune) { m_isImmune = isImmune; }
 
 	// Get
 	class CComponent*	Get_Component(const wstring& strComTag);
@@ -56,6 +57,8 @@ protected:
 	_bool										m_isDead = { false };
 	_bool										m_isDamage = { false };
 	_bool										m_isDamageCoolTime = { false };
+
+	_bool										m_isImmune = { false };
 
 	_float										m_fAccDamageCoolTime = { 0.f };
 	_float										m_fDamageCoolTime = { 0.5f };

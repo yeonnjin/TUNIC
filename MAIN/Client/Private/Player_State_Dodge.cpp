@@ -10,27 +10,27 @@ CPlayer_State_Dodge::CPlayer_State_Dodge(CPlayer* pPlayer)
 
 void CPlayer_State_Dodge::OnStateEnter()
 {
-    m_eDodge = m_pPlayer->Get_Dodge();
+    //m_eDodge = m_pPlayer->Get_Dodge();
 
-    switch (m_eDodge)
-    {
-    case CPlayer::DODGE_ROLL:
-        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
-        m_eAnim = CPlayer::ANIM_DODGE;
-        break;
-    case CPlayer::DODGE_FAST:   // 마나 없을 때 나가는거
-        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
-        m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
-        break;
-    case CPlayer::DODGE_DASH:   // 애니메이션 변경 X, 텔포 느낌
-        m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
-        m_eAnim = CPlayer::ANIM_HYPERDASH;
-        break;
-    case Client::CPlayer::DODGE_END:
-        break;
-    default:
-        break;
-    }
+    //switch (m_eDodge)
+    //{
+    //case CPlayer::DODGE_ROLL:
+    //    m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
+    //    m_eAnim = CPlayer::ANIM_DODGE;
+    //    break;
+    //case CPlayer::DODGE_FAST:   // 마나 없을 때 나가는거
+    //    m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
+    //    m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+    //    break;
+    //case CPlayer::DODGE_DASH:   // 애니메이션 변경 X, 텔포 느낌
+    //    m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
+    //    m_eAnim = CPlayer::ANIM_HYPERDASH;
+    //    break;
+    //case Client::CPlayer::DODGE_END:
+    //    break;
+    //default:
+    //    break;
+    //}
 
     CPlayer::LOCKON eLockOn = m_pPlayer->Get_LockOn();
 
@@ -45,10 +45,31 @@ void CPlayer_State_Dodge::OnStateEnter()
 
         dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Look_At_Dir(vLook);
     }
+
+    _float fPlayerSP = m_pPlayer->Get_SP();
+    if (fPlayerSP >= m_fSP)
+    {
+        m_pPlayer->Set_SP_Minus(m_fSP);
+        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
+        m_eAnim = CPlayer::ANIM_DODGE;
+    }
+    else
+    {
+        m_pPlayer->Set_SP_Minus(fPlayerSP);
+        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
+        m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+    }
 }
 
 void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
+    // 0 ~ 40 : 공격 면역
+    _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
+    if (0 <= iFrame && 40 >= iFrame)
+        m_pPlayer->Set_isImmune(true);
+    else
+        m_pPlayer->Set_isImmune(false);
+
     if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
         IF_PLAYER_ISMOVE
@@ -68,6 +89,8 @@ void CPlayer_State_Dodge::OnStateExit()
         dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Set_State(CTransform::STATE_UP, m_vPreUp);
         dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Set_State(CTransform::STATE_LOOK, m_vPreLook);
     }
+
+    m_pPlayer->Set_isImmune(false);
 }
 
 CPlayer_State_Dodge* CPlayer_State_Dodge::Create(CPlayer* pPlayer)

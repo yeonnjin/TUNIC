@@ -20,6 +20,10 @@ public:
 	virtual void OnStateExit() override;
 
 private:
+	_float				m_fAccChangeTime = { 0.f };
+	_float				m_fChangeTime = { 0.4f };
+
+private:
 	class CPlayer*		m_pPlayer = { nullptr };
 	CPlayer::STATUS		m_eStatus = {};
 

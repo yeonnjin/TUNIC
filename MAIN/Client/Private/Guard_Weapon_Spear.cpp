@@ -2,6 +2,7 @@
 #include "Guard_Weapon_Spear.h"
 
 #include "Bone.h"
+#include "Player.h"
 
 CGuard_Weapon_Spear::CGuard_Weapon_Spear(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CPartObject{ pDevice, pContext }
@@ -47,6 +48,8 @@ HRESULT CGuard_Weapon_Spear::Tick(_float fTimeDelta)
     __super::Tick(fTimeDelta);
 
     m_pColliderCom->Tick(XMLoadFloat4x4(&m_WorldMatrix));
+
+    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER_WEAPON, this);
 
     return S_OK;
 }
@@ -111,8 +114,8 @@ HRESULT CGuard_Weapon_Spear::Add_Components()
     /* 로컬상의 정보를 셋팅한다. */
     if (CMonster_Guard::WEAPON_SPEAR == m_eWeapon)
     {
-        ColliderDesc.vSize = _float3(0.8f, 0.8f, 3.5f);
-        ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+        ColliderDesc.vSize = _float3(4.5f, 2.f, 2.f);
+        ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
     }
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
@@ -180,5 +183,8 @@ void CGuard_Weapon_Spear::Free()
 void CGuard_Weapon_Spear::Collision_Event(Engine::CGameObject* pGameObject)
 {
     if (true == m_isAttackFrame && OBJ_PLAYER == pGameObject->Get_ObjectType())
+    {
         pGameObject->Set_isDamage(true);
+        dynamic_cast<CPlayer*>(pGameObject)->Change_State(CPlayer::STATE_DAMAGE);
+    }
 }

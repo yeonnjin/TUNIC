@@ -51,18 +51,6 @@ HRESULT CLibrarian_Effect_Beam::Initialize(void* pArg)
 
 HRESULT CLibrarian_Effect_Beam::Tick(_float fTimeDelta)
 {
-	/*static _int iIndex = -1;
-	if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
-	{
-		iIndex++;
-		if (iIndex > 3)
-			iIndex = 0;
-		m_pModelCom->Set_Animation_Index(iIndex);
-	}
-
-	m_pModelCom->Play_Animation(fTimeDelta);*/
-
-
 	if (true == m_isActive)
 	{
 		if (E_FAIL == __super::Tick(fTimeDelta))
@@ -72,7 +60,7 @@ HRESULT CLibrarian_Effect_Beam::Tick(_float fTimeDelta)
 
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
-		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER_WEAPON, this);
 	}
 	else
 	{
@@ -110,9 +98,9 @@ HRESULT CLibrarian_Effect_Beam::Render()
 		m_pModelCom->Render(i);
 	}
 
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-#endif // _DEBUG
+	//#ifdef _DEBUG
+	//	m_pColliderCom->Render();
+	//#endif
 
 
 	return S_OK;
@@ -137,8 +125,8 @@ HRESULT CLibrarian_Effect_Beam::Add_Components()
 
 	/* 로컬상의 정보를 셋팅한다. */
 
-	ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
+	ColliderDesc.vSize = _float3(4.f, 4.f, 100.f);
+	ColliderDesc.vCenter = _float3(0.f, 2.f, -50.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
@@ -262,4 +250,12 @@ void CLibrarian_Effect_Beam::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pColliderCom);
+}
+
+void CLibrarian_Effect_Beam::Collision_Event(Engine::CGameObject* pGameObject)
+{
+	if (OBJ_PLAYER == pGameObject->Get_ObjectType())
+	{
+		pGameObject->Set_isDamage(true);
+	}
 }

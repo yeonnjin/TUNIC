@@ -10,7 +10,9 @@ CPlayer_State_Damage::CPlayer_State_Damage(CPlayer* pPlayer)
 
 void CPlayer_State_Damage::OnStateEnter()
 {
-	m_eStatus = m_pPlayer->Get_Status();
+	m_pPlayer->Set_Blending(true, CPlayer::ANIM_STAGGER);
+
+	/*m_eStatus = m_pPlayer->Get_Status();
 
 	switch (m_eStatus)
 	{
@@ -24,15 +26,27 @@ void CPlayer_State_Damage::OnStateEnter()
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void CPlayer_State_Damage::OnStateUpdate(_float fTimeDelta)
 {
-	if (CPlayer::STATUS_HURT == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_HURT))
+	m_fAccChangeTime += fTimeDelta;
+
+	if (m_fAccChangeTime > m_fChangeTime)
+	{
+		if (true == m_pPlayer->Get_isFinished(CPlayer::ANIM_STAGGER))
+		{
+			m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+		}
+	}
+
+
+
+	/*if (CPlayer::STATUS_HURT == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_HURT))
 	{
 		m_pPlayer->Change_State(CPlayer::STATE_IDLE);
-	}
+	}*/
 
 	//if (CPlayer::STATUS_HURT == m_eStatus && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_HURT))
 	//{
@@ -58,6 +72,7 @@ void CPlayer_State_Damage::OnStateUpdate(_float fTimeDelta)
 
 void CPlayer_State_Damage::OnStateExit()
 {
+	m_fAccChangeTime = 0.f;
 }
 
 CPlayer_State_Damage* CPlayer_State_Damage::Create(CPlayer* pPlayer)

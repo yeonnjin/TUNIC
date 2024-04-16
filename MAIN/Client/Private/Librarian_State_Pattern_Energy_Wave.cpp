@@ -20,7 +20,8 @@ void CLibrarian_State_Pattern_Energy_Wave::OnStateEnter()
     // 2. 칼 아래에서 위로 올리기
     // ☆ 몬스터 높이가 0.f 이상일 때만 날리기~~
 
-    m_iMotionIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? CMonster_Librarian::ANIM_MELEE_WIDE : CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD;
+    //m_iMotionIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? CMonster_Librarian::ANIM_MELEE_WIDE : CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD;
+    m_iMotionIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_MELEE_WIDE) ? CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD : CMonster_Librarian::ANIM_MELEE_WIDE;
     m_iSlashIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? 32 : 35;
     m_pMonster->Set_Blending(true, (CMonster_Librarian::ANIMATION)m_iMotionIndex);
 }
@@ -28,7 +29,7 @@ void CLibrarian_State_Pattern_Energy_Wave::OnStateEnter()
 void CLibrarian_State_Pattern_Energy_Wave::OnStateUpdate(_float fTimeDelta)
 {
     _vector vPlayerPosition = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-    vPlayerPosition.m128_f32[1] += 1.f; // 슬래쉬 방향 보정
+    vPlayerPosition.m128_f32[1] += 0.5f; // 슬래쉬 방향 보정
     CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
     pMonsterTransform->Look_At_For_LandOject(vPlayerPosition, true);
     //35

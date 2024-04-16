@@ -5,6 +5,15 @@
 #include "BackGround.h"
 #include "Terrain.h"
 
+// PLAYER
+#include "Player.h"
+#include "Weapon_Stick.h"
+#include "Weapon_Sword.h"
+#include "Weapon_Wand.h"
+#include "Effect_WandBeam.h"
+#include "Weapon_Shield.h"
+
+// MONSTER
 #include "Monster.h"
 #include "Monster_Librarian.h"
 #include "Librarian_Weapon.h"
@@ -26,16 +35,19 @@
 #include "Guard_Weapon_Shield.h"
 #include "Guard_Weapon_Spear.h"
 
+// OBJECT
+#include "Object_Chest.h"
+
+// UI
+#include "UI_Stat.h"
+
 //#include "Effect.h"
 #include "Sky.h"
 #include "Model.h"
 #include "Collider.h"
 #include "Navigation.h"
 
-#include "Player.h"
-#include "Weapon_Stick.h"
-#include "Weapon_Sword.h"
-#include "Weapon_Shield.h"
+
 
 #include "Map.h"
 #include "Map_Object.h"
@@ -165,6 +177,14 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
 		return E_FAIL;
 
+	// UI TEXTURE ==================================================================================================
+
+	/* Prototype_Component_Texture_UI_Stat */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Stat"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/STAT/STAT%d.png"), 13))))
+		return E_FAIL;
+
+
 
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
@@ -174,7 +194,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* Prototype_Component_Navigation_Load */ // Nav_Librarian, Nav_FOXGOD, Nav_Beach
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_Librarian.dat")))))
 		return E_FAIL;
 
 	/* Prototype_Component_VIBuffer_Instance_Rect */
@@ -235,6 +255,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Shader_VtxMesh */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMeshMap"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxMeshMap.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Shader_VtxAnimMesh */
@@ -309,6 +334,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CWeapon_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Part_Player_Weapon_Wand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon_Wand"),
+		CWeapon_Wand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Effect_WandBeam */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_WandBeam"),
+		CEffect_WandBeam::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Part_Player_Weapon_Shield */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon_Shield"),
 		CWeapon_Shield::Create(m_pDevice, m_pContext))))
@@ -364,16 +399,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CGuard_Weapon_Spear::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Map_Object */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Object"),
-		CMap_Object::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Map */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map"),
-		CMap::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	/* For.Prototype_GameObject_Part_CowBot_Weapon */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_CowBot_Weapon"),
 		CCowBot_Weapon::Create(m_pDevice, m_pContext))))
@@ -399,6 +424,34 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CLibrarian_Effect_Beam::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// MAP ========================================================================================== 
+
+	/* For.Prototype_GameObject_Map_Object */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_Object"),
+		CMap_Object::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Map */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map"),
+		CMap::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// OBJECT =======================================================================================
+
+	/* For.Prototype_GameObject_Object_Chest */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Chest"),
+		CObject_Chest::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// UI ===========================================================================================
+
+	/* For.Prototype_GameObject_UI_Stat */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Stat"),
+		CUI_Stat::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// MODEL ========================================================================================
+
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Stick.dat");
@@ -406,6 +459,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Sword.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shotgun.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Wandbow.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Player_Effect_Beam.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Monster_Frog_Scimitar.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Monster_Guard_Weapon.dat");
@@ -415,6 +469,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Orb.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach0.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
@@ -422,6 +477,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Guard.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Object_Chest.dat");
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 
@@ -798,7 +854,6 @@ CLoader * CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, 
 
 	return pInstance;
 }
-
 
 void CLoader::Free()
 {

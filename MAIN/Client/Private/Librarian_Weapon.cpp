@@ -50,6 +50,8 @@ HRESULT CLibrarian_Weapon::Tick(_float fTimeDelta)
 
     m_pColliderCom->Tick(XMLoadFloat4x4(&m_WorldMatrix));
 
+    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER_WEAPON, this);
+
     return S_OK;
 }
 
@@ -113,7 +115,7 @@ HRESULT CLibrarian_Weapon::Add_Components()
     /* 로컬상의 정보를 셋팅한다. */
     if (CMonster_Librarian::WEAPON_SWORD == m_eWeapon)
     {
-        ColliderDesc.vSize = _float3(0.8f, 0.8f, 8.f);
+        ColliderDesc.vSize = _float3(1.2f, 1.2f, 9.f);
         ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * 0.5f);
     }
     //else if (CMonster_Librarian::WEAPON_SHIELD == m_eWeapon)
@@ -186,4 +188,8 @@ void CLibrarian_Weapon::Free()
 
 void CLibrarian_Weapon::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    if (OBJ_PLAYER == pGameObject->Get_ObjectType())
+    {
+        pGameObject->Set_isDamage(true);
+    }
 }

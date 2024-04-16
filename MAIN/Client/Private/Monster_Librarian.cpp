@@ -12,6 +12,7 @@
 #include "Librarian_State_Idle.h"
 #include "Librarian_State_Melee.h"
 #include "Librarian_State_Damage.h"
+#include "Librarian_State_Die.h"
 
 #include "Player.h"
 
@@ -76,7 +77,7 @@ HRESULT CMonster_Librarian::Initialize(void* pArg)
     _float4 vPosition = _float4(-7.f, 0.5f, -7.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-    m_iHP = 6;
+    m_iHP = 2;
     m_fDamageCoolTime = 0.2f;
 
     return S_OK;
@@ -197,6 +198,7 @@ HRESULT CMonster_Librarian::Add_States()
     m_pModelCom->Add_State(STATE_IDLE, CLibrarian_State_Idle::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_MELEE, CLibrarian_State_Melee::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_DAMAGE, CLibrarian_State_Damage::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_DIE, CLibrarian_State_Die::Create(this, pPlayer));
 
     m_pModelCom->Change_State(STATE_ENTRY);
     m_eState = STATE_ENTRY;
@@ -301,5 +303,8 @@ void CMonster_Librarian::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_Librarian::Damage_Event()
 {
-    Change_State(STATE_DAMAGE);
+    if (m_iHP > 0)
+        Change_State(STATE_DAMAGE);
+    else
+        Change_State(STATE_DIE);
 }

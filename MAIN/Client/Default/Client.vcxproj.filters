@@ -190,9 +190,6 @@
     <Filter Include="02.GameObjects\Monster\Boss\Librarian\Effect\Attack_Beam">
       <UniqueIdentifier>{078b618a-de74-4e2f-a123-c2d8ab3d6101}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Monster\Boss\Librarian\Trigger">
-      <UniqueIdentifier>{04a5deb8-ab85-49d0-9517-97bc74f5536a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Monster\Normal">
       <UniqueIdentifier>{c605a9ec-f493-429c-9072-d8507958f265}</UniqueIdentifier>
     </Filter>
@@ -294,6 +291,45 @@
     </Filter>
     <Filter Include="02.GameObjects\Monster\Normal\Guard\Weapon\Shield">
       <UniqueIdentifier>{373ddcc2-1316-45b0-a1c8-b54455179951}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\State">
+      <UniqueIdentifier>{4f8bc01a-1ba2-4ae1-b599-6213ca5ba808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\State\Guard_State_Idle">
+      <UniqueIdentifier>{c84cfff2-a0d5-4297-ac0f-2001f6d95e24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\State\Guard_State_Aggro">
+      <UniqueIdentifier>{edefcc76-d35c-4a31-bac5-2b5b8432adb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\State\Guard_State_Block">
+      <UniqueIdentifier>{ecbdc902-095a-4e2b-b50e-0621e4a617b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\State\Guard_State_Damage">
+      <UniqueIdentifier>{ee339859-1669-433b-a467-f605022e7638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Normal\Guard\State\Guard_State_Die">
+      <UniqueIdentifier>{07340f62-4025-4b57-9b0f-f47f42719dd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map_Object\Chest">
+      <UniqueIdentifier>{f03c9fe8-55d8-4b12-ac45-efd9c319a873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Chest">
+      <UniqueIdentifier>{b813240f-f849-4984-bf03-37744c3714fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI">
+      <UniqueIdentifier>{1154f129-f419-4b19-9fb7-e2a78db47af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\STAT">
+      <UniqueIdentifier>{215557e8-573c-4509-aa95-14f793d928a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Attack\Wand">
+      <UniqueIdentifier>{8b76db03-5edb-449a-a909-d4692da8b84e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\Weapon\Wand\Beam">
+      <UniqueIdentifier>{3dc829cd-19b4-4acd-b5ba-3dc1fff70021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Die">
+      <UniqueIdentifier>{dc5eaec5-90fc-40cd-a408-1b8896891ab6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -552,6 +588,45 @@
     <ClInclude Include="..\Public\Guard_Weapon_Shield.h">
       <Filter>02.GameObjects\Monster\Normal\Guard\Weapon\Shield</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Guard_State_Idle.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_State_Aggro.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Aggro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_State_Block.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_State_Damage.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Guard_State_Die.h">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_Chest.h">
+      <Filter>02.GameObjects\Map_Object\Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Open.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Stat.h">
+      <Filter>02.GameObjects\UI\STAT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Wand.h">
+      <Filter>02.GameObjects\Player\Weapon\Wand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Attack_Wand.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Wand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_WandBeam.h">
+      <Filter>02.GameObjects\Player\Weapon\Wand\Beam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Die.h">
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Die</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -791,6 +866,45 @@
     <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp">
       <Filter>02.GameObjects\Monster\Normal\Guard\Weapon\Shield</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Guard_State_Idle.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_State_Aggro.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Aggro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_State_Block.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_State_Damage.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Guard_State_Die.cpp">
+      <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_Chest.cpp">
+      <Filter>02.GameObjects\Map_Object\Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Open.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Stat.cpp">
+      <Filter>02.GameObjects\UI\STAT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Wand.cpp">
+      <Filter>02.GameObjects\Player\Weapon\Wand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Attack_Wand.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Attack\Wand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_WandBeam.cpp">
+      <Filter>02.GameObjects\Player\Weapon\Wand\Beam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Die.cpp">
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Die</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -825,6 +939,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxInstance_Point.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMeshMap.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

@@ -20,7 +20,7 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	class CPlayer* m_pPlayer = { nullptr };
+	class CPlayer*			m_pPlayer = { nullptr };
 
 public:
 	static CPlayer_State_Idle* Create(class CPlayer* pPlayer);

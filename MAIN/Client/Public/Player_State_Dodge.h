@@ -20,14 +20,18 @@ public:
 	virtual void OnStateExit() override;
 
 private:
+	_float	m_fSP = { 0.8f };
+
+	_vector m_vPreRight = {};
+	_vector m_vPreUp = {};
+	_vector	m_vPreLook = {};
+
+private:
 	class CPlayer* m_pPlayer = { nullptr };
 	CPlayer::DODGE	m_eDodge = { CPlayer::DODGE_END };
 	CPlayer::ANIMATION m_eAnim = { CPlayer::ANIM_END };
 
-private:
-	_vector m_vPreRight = {};
-	_vector m_vPreUp = {};
-	_vector	m_vPreLook = {};
+
 
 public:
 	static CPlayer_State_Dodge* Create(class CPlayer* pPlayer);

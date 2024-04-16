@@ -38,7 +38,8 @@ public:
 
 	enum STATE { 
 		STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, 
-		STATE_ATTACK_SHOTGUN, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, STATE_END 
+		STATE_ATTACK_SHOTGUN, STATE_ATTACK_WAND, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE, 
+		STATE_END
 	};
 
 	enum WEAPON { 
@@ -81,11 +82,16 @@ public:
 	void			Set_Parrying(_bool isParrying) { m_isParrying = isParrying; }
 	void			Set_LockOn(LOCKON eLockOn) { m_eLockOn = eLockOn; }
 
+	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
+	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
+
 	// Get
 	//STATE			Get_State() { return m_eState; }
 	_bool			isMove() { return m_eState == STATE_IDLE ? false : true; }
 	_bool			isAttack() { return m_eState == STATE_ATTACK_STICK || m_eState == STATE_ATTACK_SWORD || m_eState == STATE_ATTACK_SHOTGUN ? true : false; }
 	_bool			isParrying() { return m_isParrying; }
+
+	_float			Get_SP() { return m_fSP; }
 
 	DIR				Get_Dir() { return m_eDir; }
 	_vector			Get_Look() { return XMVector3Normalize(m_vLook); }
@@ -114,9 +120,23 @@ private:
 	_bool								m_isBlend = { false };
 	_bool								m_isParrying = { false };
 	_bool								m_isAttackFrame = { false };
+	_bool								m_isCanChange = { true };
+	//_bool								m_isChanged = { false };
+
+	_float								m_fAccChageTime = { 0.f };
+	_float								m_fChangeTime = { 0.21f };
 
 	_vector								m_vPrePosition = {};
 	_vector								m_vLook = {};
+
+private:
+	_float								m_fSP = { 4.f };
+	_float								m_fMaxSP = { 4.f };
+	_float								m_fMP = { 4.f };
+	_float								m_fMaxMP = { 4.f };
+
+	_float								m_fAccSPTime = { 0.f };
+	_float								m_fSPTime = { 2.f };
 
 private:
 	ANIMATION							m_eAnimationIndex = { ANIM_END };
@@ -136,6 +156,8 @@ private:
 	CNavigation*						m_pNavigationCom = { nullptr };
 	CTransform*							m_pLookOnTransform = { nullptr };
 
+	class CUI_Stat*						m_pUI_Stat = { nullptr };
+
 private:
 	void			Update_State();
 	void			Update_Camera();
@@ -149,6 +171,7 @@ private:
 	void			Set_Dir();
 	void			Set_Weapon();
 	CTransform*		Set_LockOn_Target();
+	void			Compute_Stat_Gauge(_float fTimeDelta);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -28,7 +28,8 @@ private:
 	void			Gizmo(CTransform* pTransform);
 	void			Tool_Picking();
 
-	// MODEL_LIST
+	// PLAYER
+	void			Tool_PlayerInfo();
 	
 
 
@@ -42,7 +43,7 @@ private: // GIZMO
 	_bool					m_isUsingGizmo = { false };
 	_int					m_iTargetIndex = { -1 };
 	CTransform*				m_pGizmoTransform = { nullptr };
-	/*class CPlayer*			m_pTargetObject = { nullptr };*/
+	class CPlayer*			m_pPlayer = { nullptr };
 	class CMonster_Spinner* m_pTargetObject = { nullptr };
 
 private: // MODEL_LIST

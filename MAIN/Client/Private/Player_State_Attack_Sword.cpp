@@ -98,7 +98,7 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 
-
+    // 55 == m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_SWORD3)
 
     //m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.f);
     //m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.2f);

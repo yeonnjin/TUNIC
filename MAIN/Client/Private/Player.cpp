@@ -4,6 +4,7 @@
 #include "Weapon_Stick.h"
 #include "Weapon_Sword.h"
 #include "Weapon_Shield.h"
+#include "Weapon_Wand.h"
 
 // State
 #include "Player_State_Idle.h"
@@ -12,11 +13,16 @@
 #include "Player_State_Attack_Stick.h"
 #include "Player_State_Attack_Sword.h"
 #include "Player_State_Attack_Shotgun.h"
+#include "Player_State_Attack_Wand.h"
 #include "Player_State_Damage.h"
 #include "Player_State_Dodge.h"
 #include "Player_State_Defense.h"
 
+// Camera
 #include "Camera_LockOn.h"
+
+// UI
+#include "UI_Stat.h"
 
 #define	WEAPONBONEIDX 45
 #define SHIELDBONE 24
@@ -69,13 +75,16 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_eType = OBJ_PLAYER;
 	m_fDamageCoolTime = 1.f;
 
-	_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);  /*_float4(3.f, 0.2f, 50.f, 1.f);*/ /*_float4(-75.f, 3.f, 68.f, 1.f);*/
+	_float4 vPosition = /*_float4(0.f, 0.2f, 0.f, 1.f);*/  _float4(3.f, 0.2f, 50.f, 1.f); /*_float4(-75.f, 3.f, 68.f, 1.f);*/ /*_float4(-66.f, 2.f, 62.f, 1.f); */
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	m_pModelCom->Set_Animation_Index(ANIM_IDLE);
 	m_pModelCom->Set_Animation_Transform(m_pTransformCom);
 	Set_Animation();
+
+	m_iHP = 7;
+	m_pUI_Stat = dynamic_cast<CUI_Stat*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_UI_Stat")));
 
 	return S_OK;
 }
@@ -92,6 +101,12 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	m_pModelCom->Update_State(fTimeDelta);
 	Update_State();
 	Update_Camera();
+
+	m_fAccChageTime += fTimeDelta;
+	if (false == m_isCanChange && m_fAccChageTime > m_fChangeTime)
+	{
+		m_isCanChange = true;
+	}
 
 	// Blending
 	if (true == m_isBlend)
@@ -115,6 +130,9 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 	}
 	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+	// Stat
+	Compute_Stat_Gauge(fTimeDelta);
 
 	// PartObject
 	for (auto& PartObject : m_PartObjects)
@@ -198,6 +216,9 @@ void CPlayer::Update_State()
 			case WEAPON_SHOTGUN:
 				Change_State(STATE_ATTACK_SHOTGUN);
 				break;
+			case WEAPON_WAND:
+				if (m_fMP > 0.8f)
+					Change_State(STATE_ATTACK_WAND);
 			case WEAPON_END:
 				break;
 			default:
@@ -244,6 +265,10 @@ void CPlayer::Update_State()
 				break;
 			case WEAPON_SHOTGUN:
 				Change_State(STATE_ATTACK_SHOTGUN);
+				break;
+			case WEAPON_WAND:
+				if(m_fMP >= 0.8f)
+					Change_State(STATE_ATTACK_WAND);	
 				break;
 			case WEAPON_END:
 				break;
@@ -310,9 +335,15 @@ void CPlayer::Update_Camera()
 
 void CPlayer::Change_State(STATE eState)
 {
-	m_pModelCom->Change_State(eState);
-	m_eState = eState;
-}
+	if(true == m_isCanChange)
+	{
+		m_pModelCom->Change_State(eState);
+		m_eState = eState;
+
+		m_isCanChange = false;
+		m_fAccChageTime = 0.f;
+	}
+}	
 
 void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 {
@@ -410,6 +441,20 @@ HRESULT CPlayer::Add_PartObjects()
 
 	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Sword"), pWeaponObject);
 
+	/* For. Part_Player_Weapon_Wand */
+	pWeaponObject = { nullptr };
+	tDesc = {};
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SWORDBONE);
+	tDesc.eWeapon = WEAPON_WAND;
+
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon_Wand"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Wand"), pWeaponObject);
+
 	///* For. Part_Player_Weapon_Shotgun */
 	//pWeaponObject = { nullptr };
 	//tDesc = {};
@@ -469,6 +514,7 @@ HRESULT CPlayer::Add_States()
 	//m_pModelCom->Add_State(STATE_LOCKON, CPlayer_State_LockOn::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second)));
 	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second)));
+	m_pModelCom->Add_State(STATE_ATTACK_WAND, CPlayer_State_Attack_Wand::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Wand"))->second)));
 	//m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second)));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
@@ -531,6 +577,7 @@ void CPlayer::Set_Animation()
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_SWORD2, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_SWORD3, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_SHOTGUN, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_USE_WANDBOW, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_HURT, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_STAGGER, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE, true);
@@ -719,9 +766,9 @@ void CPlayer::Set_Weapon()
 		static _bool isWandbow = false;
 		isWandbow = !isWandbow;
 		if (true == isWandbow)
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wandbow"), true);
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wand"), true);
 		else
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wandbow"), false);
+			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wand"), false);
 	}
 	
 	static _bool isShield = false;
@@ -773,6 +820,33 @@ CTransform* CPlayer::Set_LockOn_Target()
 	return pTargetTransform;
 }
 
+void CPlayer::Compute_Stat_Gauge(_float fTimeDelta)
+{
+	m_fAccSPTime += fTimeDelta;
+
+	if (m_fSP < m_fMaxSP && m_fAccSPTime > m_fSPTime)
+	{
+		m_fSP += 0.1f;
+	}
+	else if (m_fSP >= m_fMaxSP)
+	{
+		m_fAccSPTime = 0.f;
+		m_fSP = m_fMaxSP;
+	}
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_9, KEY_DOWN))
+	{
+		m_fMP += 0.8f;
+		if (m_fMP > m_fMaxMP)
+			m_fMP = m_fMaxMP;
+	}
+
+	if (m_iHP < 0)
+		m_iHP = 0;
+
+	m_pUI_Stat->Set_Stat(m_iHP, m_fSP, m_fMP);
+}
+
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CPlayer* pInstance = new CPlayer(pDevice, pContext);
@@ -814,6 +888,8 @@ void CPlayer::Free()
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);
+
+	Safe_Release(m_pUI_Stat);
 }
 
 void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
@@ -822,5 +898,4 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CPlayer::Damage_Event()
 {
-	//Change_State(STATE_DAMAGE);
 }

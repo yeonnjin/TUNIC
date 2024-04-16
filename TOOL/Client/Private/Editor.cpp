@@ -15,8 +15,8 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Monster_Frog_Scimitar.dat"
-#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Player_Effect_Beam.dat"
+#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach0.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1079,7 +1079,7 @@ void CEditor::Tool_Nav_Mesh()
 	}
 
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN) && true == m_pGameInstance->Get_DIKeyState(DIK_LCONTROL, KEY_PRESS)
-		&& 0 != m_iNumCell)
+		&& 0 != m_iNumCell && 0 == m_iNumDot)
 	{
 		Delete_Nav_Mesh();
 	}

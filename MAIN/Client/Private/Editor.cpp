@@ -41,7 +41,7 @@ HRESULT CEditor::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	/*m_pTargetObject = (CPlayer*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player"), 0);*/
+	m_pPlayer = (CPlayer*)m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0);
 	//m_pTargetObject = (CMonster_Spinner*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), 0);
 
 	return S_OK;
@@ -97,6 +97,12 @@ void CEditor::Frame_Tab()
 			ImGui::EndTabItem();
 		}
 
+		if (ImGui::BeginTabItem("[PLAYER]"))
+		{
+			Tool_PlayerInfo();
+			ImGui::EndTabItem();
+		}
+
 		ImGui::EndTabBar();
 	}
 
@@ -141,6 +147,18 @@ void CEditor::Tool_Picking()
 	//Safe_AddRef(m_pGizmoTransform);
 	Gizmo(m_pGizmoTransform);
 	
+}
+
+void CEditor::Tool_PlayerInfo()
+{
+	// STATE
+	ImGui::Text("STATE : %d", m_pPlayer->Get_State());
+
+	// DAMAGE
+	ImGui::Text("DAMAGE :");
+	ImGui::SameLine();
+	ImGui::Text(m_pPlayer->Get_isDamage() ? "DAMAGE" : "NONE");
+
 }
 
 // ============================================================================================

@@ -48,6 +48,8 @@ HRESULT CLibrarian_Effect_Orb::Tick(_float fTimeDelta)
 
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER_WEAPON, this);
+
 		if (true == m_isMove)
 		{
 			m_fAccStayTime += fTimeDelta;
@@ -101,9 +103,9 @@ HRESULT CLibrarian_Effect_Orb::Render()
 		m_pModelCom->Render(i);
 	}
 
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-#endif
+	//#ifdef _DEBUG
+	//	m_pColliderCom->Render();
+	//#endif
 
 	return S_OK;
 }
@@ -189,5 +191,13 @@ void CLibrarian_Effect_Orb::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pColliderCom);
+}
+
+void CLibrarian_Effect_Orb::Collision_Event(Engine::CGameObject* pGameObject)
+{
+	if (OBJ_PLAYER == pGameObject->Get_ObjectType())
+	{
+		pGameObject->Set_isDamage(true);
+	}
 }
 

@@ -50,6 +50,8 @@ HRESULT CCowBot_Weapon::Tick(_float fTimeDelta)
 
     m_pColliderCom->Tick(XMLoadFloat4x4(&m_WorldMatrix));
 
+    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER_WEAPON, this);
+
     return S_OK;
 }
 

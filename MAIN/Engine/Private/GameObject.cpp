@@ -105,15 +105,15 @@ void CGameObject::Compute_Damage_CoolTime(_float fTimeDelta)
 {
 	m_fAccDamageCoolTime += fTimeDelta;
 
-	// 쿨타임이 지났을 때, 공격을 받은 상태 : 데미지 받음
-	if (m_fAccDamageCoolTime > m_fDamageCoolTime && true == m_isDamage)
+	// 쿨타임이 지났고 면역 상태가 아닐 때, 공격을 받은 상태 : 데미지 받음
+	if (m_fAccDamageCoolTime > m_fDamageCoolTime && true == m_isDamage && false == m_isImmune)
 	{
 		m_fAccDamageCoolTime = 0.f;
 		--m_iHP;
 		Damage_Event();
 	}
-	// 쿨타임이 지나지 않았을 때, 공격을 받은 상태 : 데미지 면역
-	else if (m_fAccDamageCoolTime <= m_fDamageCoolTime && true == m_isDamage)
+	// 쿨타임이 지나지 않았거나, 면역 상태일 때 공격을 받은 상태 : 데미지 면역
+	else if (((m_fAccDamageCoolTime <= m_fDamageCoolTime) || (true == m_isImmune)) && true == m_isDamage)
 	{
 		m_isDamage = false;
 	}
