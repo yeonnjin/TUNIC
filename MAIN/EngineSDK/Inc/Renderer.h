@@ -20,7 +20,7 @@ public:
 	HRESULT Render();
 	
 #ifdef _DEBUG
-	HRESULT Add_DebugComponent(class CComponent* pRenerComponent);
+	HRESULT Add_DebugComponent(class CComponent* pRenderComponent);
 #endif // _DEBUG
 
 	

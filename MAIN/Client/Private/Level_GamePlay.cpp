@@ -140,16 +140,36 @@ HRESULT CLevel_GamePlay::Ready_Layer_Editor(const wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Lights()
 {
-	LIGHT_DESC	tLightDesc{};
+	LIGHT_DESC			LightDesc{};
 
-	tLightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
-	tLightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
 
-	tLightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	tLightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	tLightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
-	if (FAILED(m_pGameInstance->Add_Light(tLightDesc)))
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(20.f, 3.f, 20.f, 1.f);
+	LightDesc.fRange = 10.f;
+
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 0.4f, 0.4f, 1.f);
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(30.f, 3.f, 20.f, 1.f);
+	LightDesc.fRange = 10.f;
+
+	LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
+	LightDesc.vAmbient = _float4(0.2f, 0.4f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(0.4f, 1.f, 0.4f, 1.f);
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -372,7 +392,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Beach
 	// Prototype_Component_Model_Map_Librarian
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_FOXGOD";
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Librarian";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");

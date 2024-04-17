@@ -52,7 +52,6 @@ HRESULT CShader::Initialize_Prototype(const wstring& strShaderFilePath, const D3
 
 		m_InputLayouts.push_back(pInputLayout);
 	}
-
 	return S_OK;
 }
 
@@ -130,7 +129,7 @@ HRESULT CShader::Bind_Texture(const _char* pConstantName, ID3D11ShaderResourceVi
 	return pSRVariable->SetResource(pSRV);
 }
 
-HRESULT CShader::Bind_Textures(const _char* pConstantName, ID3D11ShaderResourceView** ppSRVs, _uint iNumTexutres)
+HRESULT CShader::Bind_Textures(const _char* pConstantName, ID3D11ShaderResourceView** ppSRVs, _uint iNumTextures)
 {
 	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
 	if (nullptr == pVariable)
@@ -140,7 +139,7 @@ HRESULT CShader::Bind_Textures(const _char* pConstantName, ID3D11ShaderResourceV
 	if (nullptr == pSRVariable)
 		return E_FAIL;
 
-	return pSRVariable->SetResourceArray(ppSRVs, 0, iNumTexutres);
+	return pSRVariable->SetResourceArray(ppSRVs, 0, iNumTextures);
 }
 
 HRESULT CShader::Bind_RawValue(const _char* pConstantName, const void* pData, _uint iLength)

@@ -48,6 +48,10 @@ void CEffect_Librarian::Late_Tick(_float fTimeDelta)
 {
     if (true == m_isRender)
         m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
 }
 
 HRESULT CEffect_Librarian::Render()
@@ -56,12 +60,10 @@ HRESULT CEffect_Librarian::Render()
         return E_FAIL;
 
     _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-    for (size_t i = 0; i < iNumMeshes; i++)
+    for (size_t i = 0; i < iNumMeshes; ++i)
     {
-        /*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
-            return E_FAIL;*/
 
-        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
         if (FAILED(m_pShaderCom->Begin(0)))
@@ -69,11 +71,6 @@ HRESULT CEffect_Librarian::Render()
 
         m_pModelCom->Render(i);
     }
-
-#ifdef _DEBUG
-    m_pColliderCom->Render();
-#endif
-
     return S_OK;
 }
 
@@ -97,22 +94,6 @@ HRESULT CEffect_Librarian::Add_Components()
     ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
     ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
 
-   /* if (CPlayer::WEAPON_STICK == m_eWeapon)
-    {
-        ColliderDesc.vSize = _float3(0.2f, 0.2f, 1.f);
-        ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
-    }
-    else if (CPlayer::WEAPON_SWORD == m_eWeapon)
-    {
-        ColliderDesc.vSize = _float3(0.4f, 1.8f, 0.4f);
-        ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
-    }
-    else if (CPlayer::WEAPON_SHIELD == m_eWeapon)
-    {
-        ColliderDesc.vSize = _float3(1.2f, 1.2f, 0.4f);
-        ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    }*/
-
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
@@ -127,14 +108,14 @@ HRESULT CEffect_Librarian::Bind_ShaderResources()
 
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
 
-    return S_OK;
+    _float fCamFar = m_pGameInstance->Get_Camera_Far();
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+        return E_FAIL;
 }
 
 CEffect_Librarian* CEffect_Librarian::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

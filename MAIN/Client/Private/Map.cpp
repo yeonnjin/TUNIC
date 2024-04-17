@@ -54,6 +54,10 @@ HRESULT CMap::Tick(_float fTimeDelta)
 void CMap::Late_Tick(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pNavigationCom);
+#endif
 }
 
 HRESULT CMap::Render()
@@ -65,7 +69,7 @@ HRESULT CMap::Render()
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
 
-        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
         if (FAILED(m_pShaderCom->Begin(0)))
@@ -113,8 +117,11 @@ HRESULT CMap::Bind_ShaderResources()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
 
+    _float fCamFar = m_pGameInstance->Get_Camera_Far();
+    if(FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+        return E_FAIL;
 
-    const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
+    /*const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
     if (nullptr == pLightDesc)
         return E_FAIL;
 
@@ -131,7 +138,7 @@ HRESULT CMap::Bind_ShaderResources()
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
-        return E_FAIL;
+        return E_FAIL;*/
 
     return S_OK;
 }

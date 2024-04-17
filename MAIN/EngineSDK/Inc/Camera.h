@@ -28,7 +28,8 @@ protected:
 
 public:
 	virtual _fvector	Get_Position();
-	virtual _float4x4		Get_Matrix();
+	virtual _float4x4	Get_Matrix();
+	virtual _float		Get_CamFar() { return m_fFar; }
 
 	virtual void		Set_Exit(_bool isExit) { m_isExit = isExit; }
 	virtual void		Set_Position(_fvector vPosition);

@@ -81,6 +81,7 @@ public: /* For.Collision_Manager */
 public: /* For.Camera_Manager */
 	HRESULT				Add_Camera(const wstring& strCameraTag, class CCamera* pCamera);
 	HRESULT				Change_Camera(const wstring& strCameraTag, void* pArg = nullptr);
+	_float				Get_Camera_Far();
 	void				Set_Camera_Level(_uint iLevel);
 	HRESULT				Set_Exit(const wstring& strCameraTag, _bool isExit);
 
@@ -94,11 +95,15 @@ public: /* For.Target_Manager */
 	HRESULT				Begin_MRT(const wstring& strMRTTag);
 	HRESULT				End_MRT();
 	HRESULT				Bind_RTShaderResource(class CShader* pShader, const wstring& strRenderTargetTag, const _char* pConstantName);
-
+	HRESULT				Copy_Resource(const wstring& strRenderTargetTag, ID3D11Texture2D** ppRTTexture);
 #ifdef _DEBUG
 	HRESULT				Ready_RTVDebug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	HRESULT				Draw_RTVDebug(const wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 #endif
+
+public:	/* For.Sampler */
+	_vector				Compute_WorldPos(const _float2& vViewPos, const wstring& strZRenderTargetTag, _uint iOffset = 0);
+
 
 public: /* For.ImGui_Manager */
 	void				New_Frame();
@@ -120,6 +125,7 @@ private:
 	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
+	class CSampler*					m_pSampler = { nullptr };
 	class CImGui_Manager*			m_pImGui_Manager = { nullptr };
 
 public:		

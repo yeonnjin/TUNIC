@@ -15,77 +15,81 @@ CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 HRESULT CRenderer::Initialize()
 {
-	//_uint			iNumViewports = { 1 };
-	//D3D11_VIEWPORT	ViewportDesc = {};
+	_uint				iNumViewports = { 1 };
+	D3D11_VIEWPORT		ViewportDesc{};
 
-	//// 뷰포트 정보를 받아서 Width, Height 세팅
-	//m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+	// 뷰포트 정보를 받아서 Width, Height 세팅
+	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	///* 디퍼드 셰이딩을 위한 렌더 타켓들을 생성 */
+	_uint iWidth = ViewportDesc.Width;
+	_uint iHeight = ViewportDesc.Height;
+	/* 디퍼드 셰이딩을 위한 렌더 타켓들을 생성 */
 
-	///* For. Target_Diffuse */
-	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-	//	return E_FAIL;
+	/* For. Target_Diffuse */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Diffuse"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
 
-	///* For. Target_Normal */
-	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
-	//	return E_FAIL;		// UNORM : 0 ~ 1 사이 변환
+	/* For. Target_Normal */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+		return E_FAIL;		// UNORM : 0 ~ 1 사이 변환
 
-	///* For. Target_Depth */
-	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
-	//	return E_FAIL;
-	//
-	///* For. Target_Shade */
-	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
-	//	return E_FAIL;
-	//
-	///* For. Target_Specular */
-	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Specular"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-	//	return E_FAIL;
+	/* For. Target_Depth */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 1.f))))
+		return E_FAIL;		// Depth 기록 시 16비트는 소수점 이하가 짤려 정밀도가 떨어지므로 32비트로 저장
+	
+	/* For. Target_Shade */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
+		return E_FAIL;
+	
+	/* For. Target_Specular */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Specular"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
 
-	///* MRT_GameObjects : 객체들의 특정 정보를 받아오기 위한 렌더 타겟들 */
-	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Diffuse"))))
-	//	return E_FAIL;
+	/* MRT_GameObjects : 객체들의 특정 정보를 받아오기 위한 렌더 타겟들 */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Diffuse"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Depth"))))
+		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
-	//	return E_FAIL;
+	/* MRT_LightAcc : 빛들의 연산 결과 정보를 받아오기 위한 렌더 타겟 */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
+		return E_FAIL;		// 객체 정보들을 다 받은 후 빛 연산을 위한 셰이드 타겟
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
+		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Depth"))))
-	//	return E_FAIL;
+	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
+	if (nullptr == m_pVIBuffer)
+		return E_FAIL;
 
-//	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
-//		return E_FAIL;		// 객체 정보들을 다 받은 후 빛 연산을 위한 셰이드 타겟
-// 
-//	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
-//		return E_FAIL;
-//
-//	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
-//	if (nullptr == m_pVIBuffer)
-//		return E_FAIL;
-//
-//	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-//	if (nullptr == m_pShader)
-//		return E_FAIL;
-//
-//	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
-//
-//	// 화면 전체를 덮는 VIBuffer_Rect ( 직교 투영 )
-//	m_WorldMatrix._11 = ViewportDesc.Width;
-//	m_WorldMatrix._22 = ViewportDesc.Height;
-//	m_WorldMatrix._41 = 0.f;
-//	m_WorldMatrix._42 = 0.f;
-//
-//	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
-//	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
-//
-//#ifdef  _DEBUG
-//	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Diffuse"), 150.0f, 150.0f, 300.f, 300.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Normal"), 150.0f, 450.0f, 300.f, 300.f)))
-//		return E_FAIL;
-//	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Shade"), 450.0f, 150.0f, 300.f, 300.f)))
-//		return E_FAIL;
-//#endif //  _DEBUG
+	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pShader)
+		return E_FAIL;
+
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+
+	// 화면 전체를 덮는 VIBuffer_Rect ( 직교 투영 )
+	m_WorldMatrix._11 = ViewportDesc.Width;
+	m_WorldMatrix._22 = ViewportDesc.Height;
+	m_WorldMatrix._41 = 0.f;
+	m_WorldMatrix._42 = 0.f;
+
+	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
+
+#ifdef  _DEBUG
+	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Diffuse"), 100.0f, 100.0f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Normal"), 100.0f, 300.0f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Depth"), 100.0f, 500.0f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Shade"), 300.0f, 100.0f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RTVDebug(TEXT("Target_Specular"), 300.0f, 300.0f, 200.f, 200.f)))
+		return E_FAIL;
+#endif //  _DEBUG
 
 	return S_OK;
 }
@@ -110,14 +114,14 @@ HRESULT CRenderer::Render()
 	if (FAILED(Render_NonBlend()))
 		return E_FAIL;
 
-	/*if (FAILED(Render_Lights()))
-		return E_FAIL;*/
+	if (FAILED(Render_Lights()))
+		return E_FAIL;
 
-	/*if (FAILED(Render_Result()))
-		return E_FAIL;*/
+	if (FAILED(Render_Result()))
+		return E_FAIL;
 
-	/*if (FAILED(Render_NonLight()))
-		return E_FAIL;*/
+	if (FAILED(Render_NonLight()))
+		return E_FAIL;
 
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
@@ -125,20 +129,20 @@ HRESULT CRenderer::Render()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-//#ifdef _DEBUG
-//	if (FAILED(Render_Debug()))
-//		return E_FAIL;
-//#endif
+#ifdef _DEBUG
+	if (FAILED(Render_Debug()))
+		return E_FAIL;
+#endif
 
 	return S_OK;
 }
 
 #ifdef _DEBUG
-HRESULT CRenderer::Add_DebugComponent(CComponent* pRenerComponent)
+HRESULT CRenderer::Add_DebugComponent(CComponent* pRenderComponent)
 {
-	m_DebugComponents.emplace_back(pRenerComponent);
+	m_DebugComponents.emplace_back(pRenderComponent);
 
-	Safe_AddRef(pRenerComponent);
+	Safe_AddRef(pRenderComponent);
 
 	return S_OK;
 }
@@ -164,8 +168,8 @@ HRESULT CRenderer::Render_NonBlend()
 	/* 2. 후처리를 위해서는 빛 연산을 위한 데이터가 필요 => 빛 : 빛 매니저, ☆노멀,재질☆ : 이걸 받아오기 위해 렌더 타겟에 저장해서 받아옴 */
 	/* 3. Diffuse를 0번째, Normal을 1번째에 세팅 => 순서대로 함수 호출 필요 */
 
-	/*if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_GameObjects"))))
-		return E_FAIL;*/
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_GameObjects"))))
+		return E_FAIL;
 
 	for (auto& pRenderObject : m_RenderObjects[RENDER_NONBLEND])
 	{
@@ -175,8 +179,8 @@ HRESULT CRenderer::Render_NonBlend()
 	}
 	m_RenderObjects[RENDER_NONBLEND].clear();
 
-	/*if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;*/
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -223,7 +227,7 @@ HRESULT CRenderer::Render_UI()
 	for (auto& pRenderObject : m_RenderObjects[RENDER_UI])
 	{
 		if (nullptr != pRenderObject)
-			pRenderObject->Render();	
+			pRenderObject->Render();
 		Safe_Release(pRenderObject);
 	}
 	m_RenderObjects[RENDER_UI].clear();
@@ -241,13 +245,31 @@ HRESULT CRenderer::Render_Lights()
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	/* 노말 텍스쳐 적용 */
+	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Float4x4_Inverse(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Float4x4_Inverse(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+
+
+	/* 카메라 세팅 */
+	if (FAILED(m_pShader->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
+		return E_FAIL;
+
+	_float fCamFar = m_pGameInstance->Get_Camera_Far();
+	if (FAILED(m_pShader->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+		return E_FAIL;
+
+	/* 렌더 타겟 적용 */
 	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Normal"), "g_NormalTexture")))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+
 
 	/* 버퍼 바인드 */
 	if (FAILED(m_pVIBuffer->Bind_Buffers()))
 		return E_FAIL;
+
 
 	/* SHADE */
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LightAcc"))))
@@ -275,6 +297,8 @@ HRESULT CRenderer::Render_Result()
 	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Shade"), "g_ShadeTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RTShaderResource(m_pShader, TEXT("Target_Specular"), "g_SpecularTexture")))
 		return E_FAIL;
 
 	m_pShader->Begin(3);	// pass Final

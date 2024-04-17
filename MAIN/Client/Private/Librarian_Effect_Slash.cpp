@@ -72,6 +72,10 @@ HRESULT CLibrarian_Effect_Slash::Tick(_float fTimeDelta)
 void CLibrarian_Effect_Slash::Late_Tick(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
+#ifdef _DEBUG
+	m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
 }
 
 HRESULT CLibrarian_Effect_Slash::Render()
@@ -80,38 +84,17 @@ HRESULT CLibrarian_Effect_Slash::Render()
 		return E_FAIL;
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-	for (size_t i = 0; i < iNumMeshes; i++)
+	for (size_t i = 0; i < iNumMeshes; ++i)
 	{
-		/*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
-			return E_FAIL;*/
 
-		if (true == m_isVertical)
-		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
-				return E_FAIL;
+		if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
+			return E_FAIL;
 
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
 
-			m_pModelCom->Render(i);
-		}
-		else
-		{
-			if (FAILED(m_pModelCom_Horizon->Bind_ShaderResource(m_pShaderCom, "g_Texture", i, TEX_DIFFUSE)))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-
-			m_pModelCom_Horizon->Render(i);
-		}
-		
+		m_pModelCom->Render(i);
 	}
-
-//#ifdef _DEBUG
-//	m_pColliderCom->Render();
-//#endif
-
 	return S_OK;
 }
 
@@ -165,14 +148,14 @@ HRESULT CLibrarian_Effect_Slash::Bind_ShaderResources()
 
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
-
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
-
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	return S_OK;
+	_float fCamFar = m_pGameInstance->Get_Camera_Far();
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+		return E_FAIL;
 }
 
 CLibrarian_Effect_Slash* CLibrarian_Effect_Slash::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

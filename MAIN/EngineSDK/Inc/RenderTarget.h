@@ -19,6 +19,7 @@ public:
 	HRESULT Initialize(_uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Clear();
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
+	HRESULT Copy_Resource(ID3D11Texture2D** ppRTTexture);
 
 #ifdef _DEBUG
 public:

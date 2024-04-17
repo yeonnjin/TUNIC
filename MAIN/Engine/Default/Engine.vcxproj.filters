@@ -196,6 +196,9 @@
     <Filter Include="01. Utility\10. RenderTargets\Manager">
       <UniqueIdentifier>{3c0b310e-baf8-4182-9301-4a96c2d910a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\11. Sampler">
+      <UniqueIdentifier>{c61d0bc6-eb76-4c35-8b2c-9dac7d3abdc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -401,6 +404,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Target_Manager.cpp">
       <Filter>01. Utility\10. RenderTargets\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sampler.cpp">
+      <Filter>01. Utility\11. Sampler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -622,6 +628,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Target_Manager.h">
       <Filter>01. Utility\10. RenderTargets\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sampler.h">
+      <Filter>01. Utility\11. Sampler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

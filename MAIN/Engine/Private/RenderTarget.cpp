@@ -12,7 +12,7 @@ CRenderTarget::CRenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 
 HRESULT CRenderTarget::Initialize(_uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
 {
-    D3D11_TEXTURE2D_DESC    TextureDesc{};
+    D3D11_TEXTURE2D_DESC	TextureDesc;
     ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
     TextureDesc.Width = iSizeX;
@@ -55,13 +55,20 @@ HRESULT CRenderTarget::Bind_ShaderResource(CShader* pShader, const _char* pConst
     return pShader->Bind_Texture(pConstantName, m_pSRV);
 }
 
+HRESULT CRenderTarget::Copy_Resource(ID3D11Texture2D** ppRTTexture)
+{
+    m_pContext->CopyResource(*ppRTTexture, m_pTexture2D);
+
+    return S_OK;
+}
+
 #ifdef _DEBUG
 HRESULT CRenderTarget::Ready_Debug(_float fX, _float fY, _float fSizeX, _float fSizeY)
 {
-    _uint               iNumViewPorts = { 1 };
-    D3D11_VIEWPORT      ViewportDesc{};
+    _uint				iNumViewports = { 1 };
+    D3D11_VIEWPORT		ViewportDesc{};
 
-    m_pContext->RSGetViewports(&iNumViewPorts, &ViewportDesc);
+    m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
     XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
@@ -89,12 +96,13 @@ HRESULT CRenderTarget::Render_Debug(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 
     return S_OK;
 }
+#endif
 
 CRenderTarget* CRenderTarget::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
 {
     CRenderTarget* pInstance = new CRenderTarget(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize(iSizeY, iSizeY, ePixelFormat, vClearColor)))
+    if (FAILED(pInstance->Initialize(iSizeX, iSizeY, ePixelFormat, vClearColor)))
     {
         MSG_BOX(TEXT("Failed To Create : CRenderTarget"));
         Safe_Release(pInstance);
@@ -102,7 +110,7 @@ CRenderTarget* CRenderTarget::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 
     return pInstance;
 }
-#endif
+
 
 void CRenderTarget::Free()
 {

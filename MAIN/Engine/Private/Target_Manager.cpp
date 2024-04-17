@@ -58,11 +58,15 @@ HRESULT CTarget_Manager::Begin_MRT(const wstring& strMRTTag)
 
     m_pContext->OMGetRenderTargets(1, &m_pBackBufferRTV, &m_pDSV);
 
-    _uint iNumRenderTargets = { 0 };
+    _uint		iNumRenderTargets = { 0 };
+
     ID3D11RenderTargetView* pRenderTargets[8] = { nullptr };
 
     for (auto& pRenderTarget : *pTargetList)
+    {
+        pRenderTarget->Clear();
         pRenderTargets[iNumRenderTargets++] = pRenderTarget->Get_RTV();
+    }
 
     m_pContext->OMSetRenderTargets(iNumRenderTargets, pRenderTargets, m_pDSV);
 
@@ -88,6 +92,15 @@ HRESULT CTarget_Manager::Bind_ShaderResource(CShader* pShader, const wstring& st
     return pRenderTarget->Bind_ShaderResource(pShader, pConstantName);
 }
 
+HRESULT CTarget_Manager::Copy_Resource(const wstring& strRenderTargetTag, ID3D11Texture2D** ppRTTexture)
+{
+    CRenderTarget* pRenderTarget = Find_RenderTarget(strRenderTargetTag);
+    if (nullptr == pRenderTarget)
+        return E_FAIL;
+
+    return pRenderTarget->Copy_Resource(ppRTTexture);
+}
+
 #ifdef _DEBUG
 HRESULT CTarget_Manager::Ready_Debug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
@@ -105,7 +118,9 @@ HRESULT CTarget_Manager::Render_Debug(const wstring& strMRTTag, CShader* pShader
         return E_FAIL;
 
     for (auto& pRenderTarget : *pRenderTargetList)
+    {
         pRenderTarget->Render_Debug(pShader, pVIBuffer);
+    }
 
     return S_OK;
 }
@@ -113,7 +128,7 @@ HRESULT CTarget_Manager::Render_Debug(const wstring& strMRTTag, CShader* pShader
 
 CRenderTarget* CTarget_Manager::Find_RenderTarget(const wstring& strRenderTargetTag)
 {
-    auto iter = m_RenderTargets.find(strRenderTargetTag);
+    auto	iter = m_RenderTargets.find(strRenderTargetTag);
     if (iter == m_RenderTargets.end())
         return nullptr;
 
@@ -122,7 +137,7 @@ CRenderTarget* CTarget_Manager::Find_RenderTarget(const wstring& strRenderTarget
 
 list<class CRenderTarget*>* CTarget_Manager::Find_MRT(const wstring& strMRTTag)
 {
-    auto iter = m_MRTs.find(strMRTTag);
+    auto	iter = m_MRTs.find(strMRTTag);
     if (iter == m_MRTs.end())
         return nullptr;
 

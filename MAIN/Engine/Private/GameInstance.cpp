@@ -9,6 +9,7 @@
 #include "Camera_Manager.h"
 #include "Font_Manager.h"
 #include "Target_Manager.h"
+#include "Sampler.h"
 #include "ImGui_Manager.h"
 
 #include "Renderer.h"
@@ -32,12 +33,12 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pPipeLine)
 		return E_FAIL;
 
-	/*m_pFont_Manager = CFont_Manager::Create(*ppGraphic_Device);
-	if (nullptr == m_pFont_Manager)
-		return E_FAIL;
-*/
 	m_pTimer_Manager = CTimer_Manager::Create();
 	if (nullptr == m_pTimer_Manager)
+		return E_FAIL;
+
+	m_pTarget_Manager = CTarget_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pTarget_Manager)
 		return E_FAIL;
 
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
@@ -68,8 +69,8 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
 
-	m_pTarget_Manager = CTarget_Manager::Create(*ppDevice, *ppContext);
-	if (nullptr == m_pTarget_Manager)
+	m_pSampler = CSampler::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pSampler)
 		return E_FAIL;
 
 	/* 인풋 디바이스를 초기화 */
@@ -448,6 +449,14 @@ HRESULT CGameInstance::Change_Camera(const wstring& strCameraTag, void* pArg)
 	return m_pCamera_Manager->Change_Camera(strCameraTag, pArg);
 }
 
+_float CGameInstance::Get_Camera_Far()
+{
+	if (nullptr == m_pCamera_Manager)
+		return 0.f;
+
+	return m_pCamera_Manager->Get_Camera_Far();
+}
+
 void CGameInstance::Set_Camera_Level(_uint iLevel)
 {
 	if (nullptr == m_pCamera_Manager)
@@ -507,6 +516,11 @@ HRESULT CGameInstance::Bind_RTShaderResource(CShader* pShader, const wstring& st
 	return m_pTarget_Manager->Bind_ShaderResource(pShader, strRenderTargetTag, pConstantName);
 }
 
+HRESULT CGameInstance::Copy_Resource(const wstring& strRenderTargetTag, ID3D11Texture2D** ppRTTexture)
+{
+	return m_pTarget_Manager->Copy_Resource(strRenderTargetTag, ppRTTexture);
+}
+
 #ifdef _DEBUG
 HRESULT CGameInstance::Ready_RTVDebug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
@@ -518,6 +532,12 @@ HRESULT CGameInstance::Draw_RTVDebug(const wstring& strMRTTag, CShader* pShader,
 	return m_pTarget_Manager->Render_Debug(strMRTTag, pShader, pVIBuffer);
 }
 #endif
+
+/* For.Sampler */
+_vector CGameInstance::Compute_WorldPos(const _float2& vViewPos, const wstring& strZRenderTargetTag, _uint iOffset)
+{
+	return m_pSampler->Compute_WorldPos(vViewPos, strZRenderTargetTag, iOffset);
+}
 
 /* For.ImGui_Manager */
 void CGameInstance::New_Frame()
@@ -548,6 +568,7 @@ void CGameInstance::Release_Engine()
 void CGameInstance::Free()
 {	
 	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pSampler);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pCollision_Manager);
