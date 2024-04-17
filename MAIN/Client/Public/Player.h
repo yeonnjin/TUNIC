@@ -122,6 +122,7 @@ private:
 	_bool								m_isAttackFrame = { false };
 	_bool								m_isCanChange = { true };
 	//_bool								m_isChanged = { false };
+	_bool								m_isUsingInventory = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
@@ -157,6 +158,7 @@ private:
 	CTransform*							m_pLookOnTransform = { nullptr };
 
 	class CUI_Stat*						m_pUI_Stat = { nullptr };
+	class CInventory*					m_pInventory = { nullptr };
 
 private:
 	void			Update_State();

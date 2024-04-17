@@ -12,13 +12,16 @@ END
 BEGIN(Client)
 
 class CUI abstract : public CGameObject
-{
+{	
 public:
+	enum UI_SHADER { UI_STAT = 1, UI_INVENTORYBG, UI_END };
+
 	typedef struct UI_Desc
 	{
-		_bool	isRender = { true };
-		_uint	iBindTextureIndex;
-		_uint	iBindTransformIndex;
+		_bool		isRender = { true };
+		_uint		iBindTextureIndex;
+		_uint		iBindTransformIndex;
+		UI_SHADER	eShader;
 	}UI_DESC;
 
 protected:
@@ -34,6 +37,7 @@ public:
 	virtual HRESULT Render() override;
 
 	virtual HRESULT	Set_UIInfo() = 0;
+	virtual HRESULT	Bind_ShaderResources() = 0;
 
 protected:
 	//_uint			m_iNumUI = { 0 };
@@ -42,6 +46,8 @@ protected:
 
 	_float4x4		m_ViewMatrix = {};
 	_float4x4		m_ProjMatrix = {};
+
+	UI_SHADER		m_eUIType = { UI_END };
 
 protected:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
@@ -53,7 +59,6 @@ protected:
 	
 protected:
 	HRESULT			Add_Components();
-	HRESULT			Bind_ShaderResources();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

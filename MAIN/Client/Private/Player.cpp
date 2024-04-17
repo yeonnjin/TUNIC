@@ -23,6 +23,7 @@
 
 // UI
 #include "UI_Stat.h"
+#include "Inventory.h"
 
 #define	WEAPONBONEIDX 45
 #define SHIELDBONE 24
@@ -75,7 +76,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_eType = OBJ_PLAYER;
 	m_fDamageCoolTime = 1.f;
 
-	_float4 vPosition = /*_float4(0.f, 0.2f, 0.f, 1.f);*/  _float4(3.f, 0.2f, 50.f, 1.f); /*_float4(-75.f, 3.f, 68.f, 1.f);*/ /*_float4(-66.f, 2.f, 62.f, 1.f); */
+	_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);  /*_float4(3.f, 0.2f, 50.f, 1.f);*/ /*_float4(-75.f, 3.f, 68.f, 1.f);*/ /*_float4(-66.f, 2.f, 62.f, 1.f); */
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -85,6 +86,13 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	m_iHP = 7;
 	m_pUI_Stat = dynamic_cast<CUI_Stat*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_UI_Stat")));
+	if (nullptr == m_pUI_Stat)
+		return E_FAIL;
+	Safe_AddRef(m_pUI_Stat);
+
+	m_pInventory = CInventory::Create();
+	if (nullptr == m_pInventory)
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -137,6 +145,14 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	// PartObject
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Tick(fTimeDelta);
+
+	// Inventory
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_U, KEY_DOWN))
+	{
+		m_isUsingInventory = !m_isUsingInventory;
+		m_pInventory->Set_Using(m_isUsingInventory);
+	}
+	m_pInventory->Tick(fTimeDelta);
 
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 
@@ -594,101 +610,28 @@ void CPlayer::Set_Animation()
 void CPlayer::Set_Dir()
 {
 	// 8¹æÇâ
-	/*if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		m_eDir = DIR_FL;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		m_eDir = DIR_FR;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		m_eDir = DIR_BL;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		m_eDir = DIR_BR;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
-		m_eDir = DIR_FRONT;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
-		m_eDir = DIR_BACK;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		m_eDir = DIR_LEFT;
-	else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		m_eDir = DIR_RIGHT;*/
-
 	m_eDir = DIR_END;
 
-	/*if (LOCK_ON_FIND == m_eLockOn || LOCK_ON_NONE == m_eLockOn)
+	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
 	{
-		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_DOWN))
-		{
-			Set_Blending(true, CPlayer::ANIM_WALK_FORWARD);
-			{
-				m_eDir = DIR_FRONT;
-				m_vLook = { 0.f, 0.f, 1.f };
-			}
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
-		{
-			m_eDir = DIR_FRONT;
-			m_vLook = { 0.f, 0.f, 1.f };
-		}
-
-		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_DOWN))
-		{
-			Set_Blending(true, CPlayer::ANIM_WALK_BACKWARD);
-			m_eDir = DIR_BACK;
-			m_vLook = { 0.f, 0.f, -1.f };
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
-		{
-			m_eDir = DIR_BACK;
-			m_vLook = { 0.f, 0.f, -1.f };
-		}
-
-		if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_DOWN))
-		{
-			Set_Blending(true, CPlayer::ANIM_WALK_LEFT);
-			m_eDir = DIR_LEFT;
-			m_vLook = { 1.f, 0.f, 0.f };
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		{
-			m_eDir = DIR_LEFT;
-			m_vLook = { 1.f, 0.f, 0.f };
-		}
-
-		if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_DOWN))
-		{
-			Set_Blending(true, CPlayer::ANIM_WALK_RIGHT);
-			m_eDir = DIR_RIGHT;
-			m_vLook = { -1.f, 0.f, 0.f };
-		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		{
-			m_eDir = DIR_RIGHT;
-			m_vLook = { -1.f, 0.f, 0.f };
-		}
+		m_eDir = DIR_FRONT;
+		m_vLook = { 0.f, 0.f, 1.f };
 	}
-	else
-	{*/
-
-		if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
-		{
-			m_eDir = DIR_FRONT;
-			m_vLook = { 0.f, 0.f, 1.f };
-		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
-		{
-			m_eDir = DIR_BACK;
-			m_vLook = { 0.f, 0.f, -1.f };
-		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
-		{
-			m_eDir = DIR_LEFT;
-			m_vLook = { 1.f, 0.f, 0.f };
-		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
-		{
-			m_eDir = DIR_RIGHT;
-			m_vLook = { -1.f, 0.f, 0.f };
-		}
-	//}
+	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
+	{
+		m_eDir = DIR_BACK;
+		m_vLook = { 0.f, 0.f, -1.f };
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
+	{
+		m_eDir = DIR_LEFT;
+		m_vLook = { 1.f, 0.f, 0.f };
+	}
+	if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
+	{
+		m_eDir = DIR_RIGHT;
+		m_vLook = { -1.f, 0.f, 0.f };
+	}
 	
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
 	{
@@ -877,6 +820,7 @@ void CPlayer::Free()
 	Safe_Release(m_pNavigationCom);
 
 	Safe_Release(m_pUI_Stat);
+	Safe_Release(m_pInventory);
 }
 
 void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)

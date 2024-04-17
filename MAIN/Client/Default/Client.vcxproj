@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\Guard_State_Idle.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Shield.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Spear.h" />
+    <ClInclude Include="..\Public\Inventory.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -246,6 +247,8 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
     <ClInclude Include="..\Public\UI.h" />
+    <ClInclude Include="..\Public\UI_Inventory.h" />
+    <ClInclude Include="..\Public\UI_Slot.h" />
     <ClInclude Include="..\Public\UI_Stat.h" />
     <ClInclude Include="..\Public\Weapon_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Stick.h" />
@@ -295,6 +298,7 @@
     <ClCompile Include="..\Private\Guard_State_Idle.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Spear.cpp" />
+    <ClCompile Include="..\Private\Inventory.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -353,6 +357,8 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Test_Object.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
+    <ClCompile Include="..\Private\UI_Inventory.cpp" />
+    <ClCompile Include="..\Private\UI_Slot.cpp" />
     <ClCompile Include="..\Private\UI_Stat.cpp" />
     <ClCompile Include="..\Private\Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Stick.cpp" />

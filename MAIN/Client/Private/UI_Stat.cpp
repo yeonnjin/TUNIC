@@ -19,8 +19,6 @@ HRESULT CUI_Stat::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    //m_iNumUI = 20;
-
     if (FAILED(Set_UIInfo()))
         return E_FAIL;
 
@@ -98,20 +96,8 @@ void CUI_Stat::Late_Tick(_float fTimeDelta)
 
 HRESULT CUI_Stat::Render()
 {
-    for (size_t i = 0; i < m_UIDescs.size(); i++)
-    {
-        if(true == m_UIDescs[i].isRender)
-        {
-            m_iBindTextureIndex = m_UIDescs[i].iBindTextureIndex;
-            m_iBindTransformIndex = m_UIDescs[i].iBindTransformIndex;
-
-            if (FAILED(Bind_ShaderResources()))
-                return E_FAIL;
-
-            if (FAILED(__super::Render()))
-                return E_FAIL;
-        }
-    }
+    if (FAILED(__super::Render()))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -339,6 +325,9 @@ HRESULT CUI_Stat::Set_UIInfo()
     tDesc.iBindTextureIndex = 12;
     tDesc.iBindTransformIndex = 14;
     m_UIDescs.emplace_back(tDesc);
+
+    for (auto& tDesc : m_UIDescs)
+        tDesc.eShader = UI_STAT;
 
     return S_OK;
 }

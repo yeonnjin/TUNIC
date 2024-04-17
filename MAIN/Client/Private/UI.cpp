@@ -61,17 +61,27 @@ void CUI::Late_Tick(_float fTimeDelta)
 
 HRESULT CUI::Render()
 {
-    /*if (FAILED(Bind_ShaderResources()))
-        return E_FAIL;*/
+    for (size_t i = 0; i < m_UIDescs.size(); i++)
+    {
+        if (true == m_UIDescs[i].isRender)
+        {
+            m_iBindTextureIndex = m_UIDescs[i].iBindTextureIndex;
+            m_iBindTransformIndex = m_UIDescs[i].iBindTransformIndex;
+            m_eUIType = m_UIDescs[i].eShader;
 
-    if (FAILED(m_pShaderCom->Begin(0)))
-        return E_FAIL;
+            if (FAILED(Bind_ShaderResources()))
+                return E_FAIL;
 
-    if (FAILED(m_pVIBufferCom->Bind_Buffers()))
-        return E_FAIL;
+            if (FAILED(m_pShaderCom->Begin((_uint)m_eUIType)))
+                return E_FAIL;
 
-    if (FAILED(m_pVIBufferCom->Render()))
-        return E_FAIL;
+            if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+                return E_FAIL;
+
+            if (FAILED(m_pVIBufferCom->Render()))
+                return E_FAIL;
+        }
+    }
 
     return S_OK;
 }

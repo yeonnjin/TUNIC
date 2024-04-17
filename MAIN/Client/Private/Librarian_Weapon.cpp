@@ -82,7 +82,6 @@ HRESULT CLibrarian_Weapon::Render()
     _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
-
         if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
@@ -133,7 +132,7 @@ HRESULT CLibrarian_Weapon::Bind_ShaderResources()
     if (nullptr == m_pShaderCom)
         return E_FAIL;
 
-    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;

@@ -40,9 +40,6 @@
     <Filter Include="02.GameObjects\Monster">
       <UniqueIdentifier>{2b6c9217-b337-43ce-9ec2-02d92b76628f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Map_Object">
       <UniqueIdentifier>{f5117154-5d6b-4b47-9dd0-dd6ed5d112a1}</UniqueIdentifier>
     </Filter>
@@ -330,6 +327,18 @@
     </Filter>
     <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Die">
       <UniqueIdentifier>{dc5eaec5-90fc-40cd-a408-1b8896891ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory">
+      <UniqueIdentifier>{9e8827d4-db19-4192-98a5-af24b4867e5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\Inventory">
+      <UniqueIdentifier>{5deb4180-e774-499c-92ce-20dcc0462bab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory\Slot">
+      <UniqueIdentifier>{b0324e02-d54b-480c-bd56-3909978e6f50}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -627,6 +636,15 @@
     <ClInclude Include="..\Public\Librarian_State_Die.h">
       <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Die</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UI_Inventory.h">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory.h">
+      <Filter>02.GameObjects\Player\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Slot.h">
+      <Filter>02.GameObjects\UI\Inventory\Slot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -904,6 +922,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Librarian_State_Die.cpp">
       <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Inventory.cpp">
+      <Filter>02.GameObjects\UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory.cpp">
+      <Filter>02.GameObjects\Player\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Slot.cpp">
+      <Filter>02.GameObjects\UI\Inventory\Slot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

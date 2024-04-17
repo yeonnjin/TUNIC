@@ -289,17 +289,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const wstring & strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 {
-	// Desc
-	CMonster::Monster_Desc tDesc = {};
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian";
-	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-	tDesc.strModelComTag = wstr;
+	//// Desc
+	//CMonster::Monster_Desc tDesc = {};
+	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian";
+	//wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	//tDesc.strModelComTag = wstr;
 
-	for (size_t i = 0; i < 1; ++i)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Librarian"), &tDesc)))
-			return E_FAIL;
-	}
+	//for (size_t i = 0; i < 1; ++i)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Librarian"), &tDesc)))
+	//		return E_FAIL;
+	//}
 
 	//CMonster::Monster_Desc tDesc = {};
 	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
@@ -392,7 +392,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Beach
 	// Prototype_Component_Model_Map_Librarian
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Librarian";
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_FOXGOD";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
@@ -457,6 +457,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_Object(const wstring& strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_UI(const wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_UI_Stat"), TEXT("Prototype_GameObject_UI_Stat"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Inventory"), TEXT("Prototype_GameObject_UI_Inventory"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Slot"), TEXT("Prototype_GameObject_UI_Slot"))))
 		return E_FAIL;
 
 	return S_OK;

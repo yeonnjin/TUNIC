@@ -64,11 +64,14 @@ void CPlayer_State_Dodge::OnStateEnter()
 void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
     // 0 ~ 40 : 공격 면역
-    _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
-    if (0 <= iFrame && 40 >= iFrame)
-        m_pPlayer->Set_isImmune(true);
-    else
-        m_pPlayer->Set_isImmune(false);
+    if(CPlayer::ANIM_DODGE == m_eAnim)
+    {
+        _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
+        if (0 <= iFrame && 40 >= iFrame)
+            m_pPlayer->Set_isImmune(true);
+        else
+            m_pPlayer->Set_isImmune(false);
+    }
 
     if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
