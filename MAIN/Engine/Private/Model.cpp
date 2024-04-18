@@ -55,7 +55,7 @@ CBone* CModel::Get_Bone_Ptr(_uint iBoneIndex) const
 	return *iter;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
+HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile, _fmatrix TransformMatrix)
 {
 	if (nullptr == pModelFile)
 		return E_FAIL;
@@ -69,7 +69,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, MODELFILE* pModelFile)
 		return E_FAIL;
 
 	/* 모델을 구성하는 메쉬 생성 */
-	if (FAILED(Ready_Meshes(pModelFile->iNumMeshes, pModelFile->Meshes)))
+	if (FAILED(Ready_Meshes(pModelFile->iNumMeshes, pModelFile->Meshes, TransformMatrix)))
 		return E_FAIL;
 
 	/* 머테리얼 생성 */
@@ -306,13 +306,13 @@ _bool CModel::Animation_Blending(_float fTimeDelta)
 	return false;
 }
 
-HRESULT CModel::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile)
+HRESULT CModel::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile, _fmatrix TransformMatrix)
 {
 	m_iNumMeshes = iNumMeshes;
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType, &pMeshFile[i], m_Bones);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType, &pMeshFile[i], m_Bones, TransformMatrix);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
@@ -396,11 +396,11 @@ HRESULT CModel::Ready_Animations(_uint iNumAnimations, vector<ANIMFILE>& pAnimFi
 	return S_OK;
 }
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, MODELFILE* pModelFile)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, MODELFILE* pModelFile, _fmatrix TransformMatrix)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFile)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFile, TransformMatrix)))
 	{
 		MSG_BOX(TEXT("Failed To Create : CModel"));
 

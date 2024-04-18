@@ -14,7 +14,7 @@ CMesh::CMesh(const CMesh& rhs)
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bone)
+HRESULT CMesh::Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bone, _fmatrix TransformMatrix)
 {
     strcpy_s(m_szName, pMeshFile->szName);
     m_iMaterialIndex = pMeshFile->iMaterialIndex;
@@ -32,7 +32,7 @@ HRESULT CMesh::Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const
 
 #pragma region VERTEX_BUFFER
 
-    HRESULT hr = CModel::TYPE_NONANIM == iModelType ? Ready_Vertices_For_NonAnimModel(pMeshFile) : Ready_Vertices_For_AnimModel(pMeshFile, Bone);
+    HRESULT hr = CModel::TYPE_NONANIM == iModelType ? Ready_Vertices_For_NonAnimModel(pMeshFile, TransformMatrix) : Ready_Vertices_For_AnimModel(pMeshFile, Bone);
     if (FAILED(hr))
         return E_FAIL;
 
@@ -121,7 +121,7 @@ _float3 CMesh::Compute_Picking(const CTransform* pTransform) const
     return vOut;
 }
 
-HRESULT CMesh::Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile)
+HRESULT CMesh::Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile, _fmatrix TransformMatrix)
 {
     m_iVertexStride = sizeof(VTXMESH);
 
@@ -139,8 +139,19 @@ HRESULT CMesh::Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile)
 
     for (size_t i = 0; i < m_iNumVertices; ++i)
     {
-        pVertices[i] = pMeshFile->pMeshVertices[i];
+        /*pVertices[i] = pMeshFile->pMeshVertices[i];
+        m_pVerticesPos[i] = pVertices[i].vPosition;*/
+
+        memcpy(&pVertices[i].vPosition, &pMeshFile->pMeshVertices[i].vPosition, sizeof(_float3));
+        XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), TransformMatrix));
         m_pVerticesPos[i] = pVertices[i].vPosition;
+
+        memcpy(&pVertices[i].vNormal, &pMeshFile->pMeshVertices[i].vNormal, sizeof(_float3));
+        XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), TransformMatrix));
+
+        memcpy(&pVertices[i].vTexcoord, &pMeshFile->pMeshVertices[i].vTexcoord, sizeof(_float2));
+        memcpy(&pVertices[i].vTangent, &pMeshFile->pMeshVertices[i].vTangent, sizeof(_float3));
+        XMStoreFloat3(&pVertices[i].vTangent, XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vTangent), TransformMatrix));
     }
 
     ZeroMemory(&m_InitialData, sizeof(m_InitialData));
@@ -202,11 +213,11 @@ HRESULT CMesh::Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CB
     return S_OK;;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones, _fmatrix TransformMatrix)
 {
     CMesh* pInstance = new CMesh(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(iModelType, pMeshFile, Bones)))
+    if (FAILED(pInstance->Initialize_Prototype(iModelType, pMeshFile, Bones, TransformMatrix)))
     {
         MSG_BOX(TEXT("Failed To Create : CMesh"));
 

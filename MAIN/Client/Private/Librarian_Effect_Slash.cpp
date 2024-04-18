@@ -90,11 +90,17 @@ HRESULT CLibrarian_Effect_Slash::Render()
 		{
 			if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
 				return E_FAIL;
+
+			/*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_NormalTexture", i, TEX_NORMALS)))
+				return E_FAIL;*/
 		}
 		else
 		{
 			if (FAILED(m_pModelCom_Horizon->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
 				return E_FAIL;
+
+			/*if (FAILED(m_pModelCom_Horizon->Bind_ShaderResource(m_pShaderCom, "g_NormalTexture", i, TEX_NORMALS)))
+				return E_FAIL;*/
 		}
 
 		if (FAILED(m_pShaderCom->Begin(0)))

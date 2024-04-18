@@ -199,6 +199,9 @@
     <Filter Include="01. Utility\11. Sampler">
       <UniqueIdentifier>{c61d0bc6-eb76-4c35-8b2c-9dac7d3abdc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\01. GameObjects\BlendObject">
+      <UniqueIdentifier>{06b8ad67-1f3f-4eba-9a7d-b7aeec4d88c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -407,6 +410,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sampler.cpp">
       <Filter>01. Utility\11. Sampler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BlendObject.cpp">
+      <Filter>01. Utility\01. GameObjects\BlendObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -631,6 +637,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Sampler.h">
       <Filter>01. Utility\11. Sampler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BlendObject.h">
+      <Filter>01. Utility\01. GameObjects\BlendObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

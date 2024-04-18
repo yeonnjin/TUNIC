@@ -20,7 +20,7 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bones/*, _fmatrix TransformMatrix*/);
+	virtual HRESULT Initialize_Prototype(_uint iModelType, MESHFILE* pMeshFile, const vector<CBone*>& Bones, _fmatrix TransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -47,11 +47,11 @@ private:
 	vector<_float4x4>	m_OffsetMatrices;
 
 private:
-	HRESULT	Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile);
+	HRESULT	Ready_Vertices_For_NonAnimModel(MESHFILE* pMeshFile, _fmatrix TransformMatrix);
 	HRESULT Ready_Vertices_For_AnimModel(MESHFILE* pMeshFile, const vector<CBone*>& Bones);
 
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iModelType, MESHFILE* pMeshFile, const vector<class CBone*>& Bones, _fmatrix TransformMatrix);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

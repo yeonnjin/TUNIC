@@ -43,7 +43,7 @@
 #include "UI_Inventory.h"
 #include "UI_Slot.h"
 
-//#include "Effect.h"
+#include "BlendEffect.h"
 #include "Sky.h"
 #include "Model.h"
 #include "Collider.h"
@@ -179,6 +179,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_Explosion */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Explosion"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Explosion/Explosion%d.png"), 90))))
+		return E_FAIL;
+
 	// UI TEXTURE ==================================================================================================
 
 	/* Prototype_Component_Texture_UI_Stat */
@@ -285,6 +290,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("객체를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_GameObject_BlendEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BlendEffect"),
+		CBlendEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_Particle_Blue */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Blue"),

@@ -34,9 +34,13 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;		// UNORM : 0 ~ 1 사이 변환
 
 	/* For. Target_Depth */
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 1.f))))
-		return E_FAIL;		// Depth 기록 시 16비트는 소수점 이하가 짤려 정밀도가 떨어지므로 32비트로 저장
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 1.f, 0.f, 1.f))))
+		return E_FAIL;		// Depth 기록 시 16비트는 소수점 이하가 짤려 정밀도가 떨어지므로 32비트로 저장, y가 0.f 일 경우 하늘과 색이 섞일 때 값이 0 이므로 그려지지 않음
 	
+	/* For.Target_FieldDepth */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_FieldDepth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 1.f))))
+		return E_FAIL;
+
 	/* For. Target_Shade */
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Shade"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
@@ -51,6 +55,8 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Normal"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Depth"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_FieldDepth"))))
 		return E_FAIL;
 
 	/* MRT_LightAcc : 빛들의 연산 결과 정보를 받아오기 위한 렌더 타겟 */
@@ -170,6 +176,14 @@ HRESULT CRenderer::Render_NonBlend()
 
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_GameObjects"))))
 		return E_FAIL;
+
+	for (auto& pRenderObject : m_RenderObjects[RENDER_FIELD])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+		Safe_Release(pRenderObject);
+	}
+	m_RenderObjects[RENDER_FIELD].clear();
 
 	for (auto& pRenderObject : m_RenderObjects[RENDER_NONBLEND])
 	{
@@ -322,18 +336,18 @@ HRESULT CRenderer::Render_Debug()
 	}
 	m_DebugComponents.clear();
 
-	//if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-	//	return E_FAIL;
-	//if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-	//	return E_FAIL;
+	/*if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
 
-	//if (FAILED(m_pVIBuffer->Bind_Buffers()))
-	//	return E_FAIL;
+	if (FAILED(m_pVIBuffer->Bind_Buffers()))
+		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Draw_RTVDebug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Draw_RTVDebug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Draw_RTVDebug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Draw_RTVDebug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
+		return E_FAIL;*/
 
 	return S_OK;
 }

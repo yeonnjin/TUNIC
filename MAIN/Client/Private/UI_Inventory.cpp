@@ -28,6 +28,11 @@ HRESULT CUI_Inventory::Initialize(void* pArg)
     return S_OK;
 }
 
+void CUI_Inventory::Set_Select(_uint iRow, _uint iColumn)
+{
+    m_pUITransformComs[2]->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[iRow][iColumn].x, g_iWinSizeY * 0.5f - m_vPositions[iRow][iColumn].y, 0.f, 1.f });
+}
+
 HRESULT CUI_Inventory::Tick(_float fTimeDelta)
 {
     if(true == m_isUsing)
@@ -35,10 +40,12 @@ HRESULT CUI_Inventory::Tick(_float fTimeDelta)
         if (FAILED(__super::Tick(fTimeDelta)))
             return E_FAIL;
 
-        static _uint i = 0;
+       
+
+        /*static _uint i = 0;
         static _uint j = 0;
 
-        m_pUITransformComs[2]->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[i][j].x, g_iWinSizeY * 0.5f - m_vPositions[i][j].y, 0.f, 1.f });
+        m_pUITransformComs[2]->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[m_iSelectRow][m_iSelectColumn].x, g_iWinSizeY * 0.5f - m_vPositions[m_iSelectRow][m_iSelectColumn].y, 0.f, 1.f });
 
         if (true == m_pGameInstance->Get_DIKeyState(DIK_Y, KEY_DOWN))
         {
@@ -48,12 +55,12 @@ HRESULT CUI_Inventory::Tick(_float fTimeDelta)
                 ++i;
                 j = 0;
 
-                if (i == ITEM_END)
+                if (i == CItem::TYPE_END)
                 {
                     i = 0;
                 }
             }
-        }
+        }*/
     }
 
     return S_OK;
@@ -193,11 +200,11 @@ HRESULT CUI_Inventory::Set_UIInfo()
     _float fUseY = 525.f;
     _float fDistanceY = 147.f;
 
-    for (size_t i = 0; i < ITEM_END; i++)
+    for (size_t i = 0; i < CItem::TYPE_END; i++)
     {
         for (size_t j = 0; j < iMaxItem; j++)
         {
-            if (ITEM_USE == i || ITEM_WEAPON == i)
+            if (CItem::TYPE_USE == i || CItem::TYPE_WEAPON == i)
             {
                 m_vPositions[i][j] = { fMinSizeX + j * fDistanceX, fUseY + ( i - 1 ) * fDistanceY };
             }

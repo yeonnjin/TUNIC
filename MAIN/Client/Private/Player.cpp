@@ -107,7 +107,8 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	
 	// State_Machine
 	m_pModelCom->Update_State(fTimeDelta);
-	Update_State();
+	if(false == m_isUsingInventory)
+		Update_State();
 	Update_Camera();
 
 	m_fAccChageTime += fTimeDelta;
@@ -147,7 +148,7 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		PartObject.second->Tick(fTimeDelta);
 
 	// Inventory
-	if (true == m_pGameInstance->Get_DIKeyState(DIK_U, KEY_DOWN))
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_TAB, KEY_DOWN))
 	{
 		m_isUsingInventory = !m_isUsingInventory;
 		m_pInventory->Set_Using(m_isUsingInventory);

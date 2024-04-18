@@ -161,7 +161,7 @@ HRESULT CAvatar::Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile)
 
 	for (size_t i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType, &pMeshFile[i], m_Bones);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType, &pMeshFile[i], m_Bones, XMMatrixIdentity());
 		if (nullptr == pMesh)
 			return E_FAIL;
 

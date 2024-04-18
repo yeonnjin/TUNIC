@@ -1,20 +1,19 @@
 #pragma once
 
 #include "UI.h"
+#include "Item.h"
 
 BEGIN(Client)
 
 class CUI_Inventory final : public CUI
 {
-public:
-	enum ITEM_TYPE {ITEM_UTILE, ITEM_USE, ITEM_WEAPON, ITEM_END};
-
 private:
 	CUI_Inventory(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CUI_Inventory() = default;
 
 public:
 	void	Set_Using(_bool isUsing) { m_isUsing = isUsing; }
+	void	Set_Select(_uint iRow, _uint iColumn);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -34,7 +33,7 @@ private:
 	_float	m_fBGSizeX = { 0.f };
 	_float	m_fBGSizeY = { 0.f };
 
-	_float2 m_vPositions[ITEM_END][4];
+	_float2 m_vPositions[CItem::TYPE_END][4];
 
 public:
 	static CUI_Inventory* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

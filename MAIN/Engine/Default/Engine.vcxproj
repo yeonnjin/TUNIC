@@ -168,6 +168,7 @@
     <ClCompile Include="..\Private\Animator_Controller.cpp" />
     <ClCompile Include="..\Private\Avatar.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
+    <ClCompile Include="..\Private\BlendObject.cpp" />
     <ClCompile Include="..\Private\Bone.cpp" />
     <ClCompile Include="..\Private\Bounding.cpp" />
     <ClCompile Include="..\Private\Bounding_AABB.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="..\Public\Animator_Controller.h" />
     <ClInclude Include="..\Public\Avatar.h" />
     <ClInclude Include="..\Public\Base.h" />
+    <ClInclude Include="..\Public\BlendObject.h" />
     <ClInclude Include="..\Public\Bone.h" />
     <ClInclude Include="..\Public\Bounding.h" />
     <ClInclude Include="..\Public\Bounding_AABB.h" />

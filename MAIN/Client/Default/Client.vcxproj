@@ -163,6 +163,7 @@
     <ClInclude Include="..\Public\Bat_State_Damage.h" />
     <ClInclude Include="..\Public\Bat_State_Idle.h" />
     <ClInclude Include="..\Public\Bat_State_Sleep.h" />
+    <ClInclude Include="..\Public\BlendEffect.h" />
     <ClInclude Include="..\Public\Blob_State_Attack.h" />
     <ClInclude Include="..\Public\Blob_State_Idle.h" />
     <ClInclude Include="..\Public\Blob_State_Jump.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="..\Public\Guard_Weapon_Shield.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Spear.h" />
     <ClInclude Include="..\Public\Inventory.h" />
+    <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -274,6 +276,7 @@
     <ClCompile Include="..\Private\Bat_State_Damage.cpp" />
     <ClCompile Include="..\Private\Bat_State_Idle.cpp" />
     <ClCompile Include="..\Private\Bat_State_Sleep.cpp" />
+    <ClCompile Include="..\Private\BlendEffect.cpp" />
     <ClCompile Include="..\Private\Blob_State_Attack.cpp" />
     <ClCompile Include="..\Private\Blob_State_Idle.cpp" />
     <ClCompile Include="..\Private\Blob_State_Jump.cpp" />
@@ -299,6 +302,7 @@
     <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Spear.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
+    <ClCompile Include="..\Private\Item.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -407,7 +411,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_MAIN</EntryPointName>
     </FxCompile>
   </ItemGroup>

@@ -38,7 +38,7 @@ public:
 	}
 
 public:
-	HRESULT Initialize_Prototype(TYPE eType, MODELFILE* pModelFile);
+	HRESULT Initialize_Prototype(TYPE eType, MODELFILE* pModelFile, _fmatrix TransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -89,13 +89,13 @@ private:
 	_bool	is_Blended(_float fTimeDelta);			// ¿Ã∏ß πŸ≤„æﬂ∞Ÿ¥Á 2
 
 private:
-	HRESULT Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile);
+	HRESULT Ready_Meshes(_uint iNumMeshes, vector<MESHFILE>& pMeshFile, _fmatrix TransformMatrix);
 	HRESULT Ready_Materials(_uint iNumMaterials, vector<_uint>& pNumTextures, vector<vector<MATERIALFILE>>& pMaterialFile);
 	HRESULT Ready_Bones(_uint iNumBones, vector<BONEFILE>& pBoneFile);
 	HRESULT Ready_Animations(_uint iNumAnimations, vector<ANIMFILE>& pAnimFile);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, MODELFILE* pModelFile);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, MODELFILE* pModelFile, _fmatrix TransformMatrix = XMMatrixIdentity());
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

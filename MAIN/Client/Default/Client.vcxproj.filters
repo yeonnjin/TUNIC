@@ -340,6 +340,12 @@
     <Filter Include="02.GameObjects\UI\Inventory\Slot">
       <UniqueIdentifier>{b0324e02-d54b-480c-bd56-3909978e6f50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\BlendEffect">
+      <UniqueIdentifier>{9cf28ec4-c60a-4376-b0ec-962bc53870b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\Inventory\Item">
+      <UniqueIdentifier>{b57d377b-7888-4a7b-8995-56d07b799a37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -645,6 +651,12 @@
     <ClInclude Include="..\Public\UI_Slot.h">
       <Filter>02.GameObjects\UI\Inventory\Slot</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BlendEffect.h">
+      <Filter>02.GameObjects\BlendEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Item.h">
+      <Filter>02.GameObjects\Player\Inventory\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -931,6 +943,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI_Slot.cpp">
       <Filter>02.GameObjects\UI\Inventory\Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BlendEffect.cpp">
+      <Filter>02.GameObjects\BlendEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Item.cpp">
+      <Filter>02.GameObjects\Player\Inventory\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

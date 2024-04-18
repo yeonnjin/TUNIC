@@ -85,6 +85,9 @@ HRESULT CLibrarian_Weapon::Render()
         if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
+        /*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_NormalTexture", i, TEX_NORMALS)))
+            return E_FAIL;*/
+
         if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
 
