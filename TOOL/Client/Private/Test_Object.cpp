@@ -64,6 +64,8 @@ void CTest_Object::Tick(_float fTimeDelta)
         m_pModelCom->Set_Animation(iIndex, true);
     }
 
+    m_pModelCom->Play_Animation(fTimeDelta);
+
     if (m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_PRESS))
         m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);
        // m_pTransformCom->Go_Sliding(fTimeDelta, m_pTransformCom->Get_State_Vector(CTransform::STATE_LOOK), m_pNavigationCom);
@@ -77,8 +79,6 @@ void CTest_Object::Tick(_float fTimeDelta)
 
 void CTest_Object::Late_Tick(_float fTimeDelta)
 {
-    m_pModelCom->Play_Animation(fTimeDelta);
-
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 }
 

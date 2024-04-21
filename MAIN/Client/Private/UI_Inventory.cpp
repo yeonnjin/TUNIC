@@ -131,7 +131,7 @@ HRESULT CUI_Inventory::Set_UIInfo()
     m_fBGSizeX = 550.f;
     m_fBGSizeY = 720.f;
     pTransform->Set_Scaled(m_fBGSizeX, m_fBGSizeY, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_fBGSizeX * 0.5f, 0.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_fBGSizeX * 0.5f, 0.f, 0.8f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     UI_DESC tDesc = {};

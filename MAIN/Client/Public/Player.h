@@ -39,6 +39,7 @@ public:
 	enum STATE { 
 		STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, 
 		STATE_ATTACK_SHOTGUN, STATE_ATTACK_WAND, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE,
+		STATE_OPEN,
 		STATE_END
 	};
 
@@ -84,6 +85,7 @@ public:
 
 	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
 	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
+	void			Set_ChestOpen() { m_isChestOpen = true; }
 
 	// Get
 	//STATE			Get_State() { return m_eState; }
@@ -123,6 +125,8 @@ private:
 	_bool								m_isCanChange = { true };
 	//_bool								m_isChanged = { false };
 	_bool								m_isUsingInventory = { false };
+	_bool								m_isInteractive = { false };
+	_bool								m_isChestOpen = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
@@ -174,6 +178,7 @@ private:
 	void			Set_Weapon();
 	CTransform*		Set_LockOn_Target();
 	void			Compute_Stat_Gauge(_float fTimeDelta);
+	void			Compute_Height();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

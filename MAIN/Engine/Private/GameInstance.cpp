@@ -10,6 +10,7 @@
 #include "Font_Manager.h"
 #include "Target_Manager.h"
 #include "Sampler.h"
+#include "Frustum.h"
 #include "ImGui_Manager.h"
 
 #include "Renderer.h"
@@ -539,6 +540,12 @@ _vector CGameInstance::Compute_WorldPos(const _float2& vViewPos, const wstring& 
 	return m_pSampler->Compute_WorldPos(vViewPos, strZRenderTargetTag, iOffset);
 }
 
+/* For.Frustum */
+_bool CGameInstance::isInFrustum_WorldSpace(_fvector vWorldPos, _float fRange)
+{
+	return m_pFrustum->isIn_WorldSpace(vWorldPos, fRange);
+}
+
 /* For.ImGui_Manager */
 void CGameInstance::New_Frame()
 {
@@ -568,6 +575,7 @@ void CGameInstance::Release_Engine()
 void CGameInstance::Free()
 {	
 	Safe_Release(m_pImGui_Manager);
+	Safe_Release(m_pFrustum);
 	Safe_Release(m_pSampler);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pFont_Manager);

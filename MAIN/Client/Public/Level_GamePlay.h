@@ -27,6 +27,7 @@ private:
 	HRESULT Ready_LandObject();
 	HRESULT Ready_Layer_Player(const wstring& strLayerTag); 
 	HRESULT Ready_Layer_Monster(const wstring& strLayerTag);
+	HRESULT Ready_Layer_NPC(const wstring& strLayerTag);
 	HRESULT Ready_Layer_Effect(const wstring& strLayerTag);
 	HRESULT Ready_Layer_Map(const wstring& strLayerTag);
 	HRESULT Ready_Layer_Object(const wstring& strLayerTag);

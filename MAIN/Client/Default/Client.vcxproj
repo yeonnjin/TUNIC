@@ -189,6 +189,7 @@
     <ClInclude Include="..\Public\Guard_State_Idle.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Shield.h" />
     <ClInclude Include="..\Public\Guard_Weapon_Spear.h" />
+    <ClInclude Include="..\Public\InteractiveObject.h" />
     <ClInclude Include="..\Public\Inventory.h" />
     <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -212,6 +213,9 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\Public\Map.h" />
     <ClInclude Include="..\Public\Map_Object.h" />
+    <ClInclude Include="..\Public\Merchant_State_Hidden.h" />
+    <ClInclude Include="..\Public\Merchant_State_Idle.h" />
+    <ClInclude Include="..\Public\Merchant_State_Thankyou.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Bat.h" />
     <ClInclude Include="..\Public\Monster_Blob.h" />
@@ -220,6 +224,7 @@
     <ClInclude Include="..\Public\Monster_Guard.h" />
     <ClInclude Include="..\Public\Monster_Librarian.h" />
     <ClInclude Include="..\Public\Monster_Spinner.h" />
+    <ClInclude Include="..\Public\NPC_Merchant.h" />
     <ClInclude Include="..\Public\Object_Chest.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
     <ClInclude Include="..\Public\Particle_Red.h" />
@@ -250,6 +255,8 @@
     <ClInclude Include="..\Public\Test_Object.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\Public\UI_Inventory.h" />
+    <ClInclude Include="..\Public\UI_Item.h" />
+    <ClInclude Include="..\Public\UI_Obtain.h" />
     <ClInclude Include="..\Public\UI_Slot.h" />
     <ClInclude Include="..\Public\UI_Stat.h" />
     <ClInclude Include="..\Public\Weapon_Shield.h" />
@@ -301,6 +308,7 @@
     <ClCompile Include="..\Private\Guard_State_Idle.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Guard_Weapon_Spear.cpp" />
+    <ClCompile Include="..\Private\InteractiveObject.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
     <ClCompile Include="..\Private\Item.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -324,6 +332,9 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\Private\Map.cpp" />
     <ClCompile Include="..\Private\Map_Object.cpp" />
+    <ClCompile Include="..\Private\Merchant_State_Hidden.cpp" />
+    <ClCompile Include="..\Private\Merchant_State_Idle.cpp" />
+    <ClCompile Include="..\Private\Merchant_State_Thankyou.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Bat.cpp" />
     <ClCompile Include="..\Private\Monster_Blob.cpp" />
@@ -332,6 +343,7 @@
     <ClCompile Include="..\Private\Monster_Guard.cpp" />
     <ClCompile Include="..\Private\Monster_Librarian.cpp" />
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
+    <ClCompile Include="..\Private\NPC_Merchant.cpp" />
     <ClCompile Include="..\Private\Object_Chest.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
     <ClCompile Include="..\Private\Particle_Red.cpp" />
@@ -362,6 +374,8 @@
     <ClCompile Include="..\Private\Test_Object.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\Private\UI_Inventory.cpp" />
+    <ClCompile Include="..\Private\UI_Item.cpp" />
+    <ClCompile Include="..\Private\UI_Obtain.cpp" />
     <ClCompile Include="..\Private\UI_Slot.cpp" />
     <ClCompile Include="..\Private\UI_Stat.cpp" />
     <ClCompile Include="..\Private\Weapon_Shield.cpp" />

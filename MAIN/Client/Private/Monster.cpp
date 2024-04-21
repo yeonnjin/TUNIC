@@ -84,12 +84,16 @@ void CMonster::Late_Tick(_float fTimeDelta)
 {
     Compute_Damage_CoolTime(fTimeDelta);
     //Compute_Collision_CoolTime(fTimeDelta);
-   
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+  
+
+    if (true == m_pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION), 2.f))
+    {
+        m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 
 #ifdef _DEBUG
-    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+        m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif
+    }
 }
 
 HRESULT CMonster::Render()

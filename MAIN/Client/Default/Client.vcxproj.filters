@@ -307,12 +307,6 @@
     <Filter Include="02.GameObjects\Monster\Normal\Guard\State\Guard_State_Die">
       <UniqueIdentifier>{07340f62-4025-4b57-9b0f-f47f42719dd5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Map_Object\Chest">
-      <UniqueIdentifier>{f03c9fe8-55d8-4b12-ac45-efd9c319a873}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\Player\State\Player_State_Chest">
-      <UniqueIdentifier>{b813240f-f849-4984-bf03-37744c3714fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\UI">
       <UniqueIdentifier>{1154f129-f419-4b19-9fb7-e2a78db47af3}</UniqueIdentifier>
     </Filter>
@@ -345,6 +339,39 @@
     </Filter>
     <Filter Include="02.GameObjects\Player\Inventory\Item">
       <UniqueIdentifier>{b57d377b-7888-4a7b-8995-56d07b799a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive">
+      <UniqueIdentifier>{a0ebc856-b30e-462d-b89e-29c73f948459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Chest">
+      <UniqueIdentifier>{f03c9fe8-55d8-4b12-ac45-efd9c319a873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory\Item">
+      <UniqueIdentifier>{a33c104e-c6cc-4e8e-9610-01b877be796f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Open">
+      <UniqueIdentifier>{b813240f-f849-4984-bf03-37744c3714fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory\Obtain">
+      <UniqueIdentifier>{fc1e9556-ed71-46ba-8a9b-2a0e5b741425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC">
+      <UniqueIdentifier>{886347fd-e7de-443b-9586-ea3e3b1c43c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\Merchant">
+      <UniqueIdentifier>{22f605ce-5f05-49b9-8a19-8b7fd441eeb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\Merchant\State">
+      <UniqueIdentifier>{58fe8369-4f95-4ddf-afbc-c1ed71dadb98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\Merchant\State\Merchant_State_Hidden">
+      <UniqueIdentifier>{60624781-5f9f-4582-bf2d-f36ebc02c2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\Merchant\State\Merchant_State_Idle">
+      <UniqueIdentifier>{dc14952a-5469-42a0-a1a2-2f2d7b9ceb16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\NPC\Merchant\State\Merchant_State_Thankyou">
+      <UniqueIdentifier>{d08dfba6-3c31-4629-9339-75e1e83e5c9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -619,10 +646,10 @@
       <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Die</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Object_Chest.h">
-      <Filter>02.GameObjects\Map_Object\Chest</Filter>
+      <Filter>02.GameObjects\Interactive\Chest</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_State_Open.h">
-      <Filter>02.GameObjects\Player\State\Player_State_Chest</Filter>
+      <Filter>02.GameObjects\Player\State\Player_State_Open</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UI.h">
       <Filter>02.GameObjects\UI</Filter>
@@ -656,6 +683,27 @@
     </ClInclude>
     <ClInclude Include="..\Public\Item.h">
       <Filter>02.GameObjects\Player\Inventory\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\InteractiveObject.h">
+      <Filter>02.GameObjects\Interactive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Item.h">
+      <Filter>02.GameObjects\UI\Inventory\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Obtain.h">
+      <Filter>02.GameObjects\UI\Inventory\Obtain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_Merchant.h">
+      <Filter>02.GameObjects\NPC\Merchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Merchant_State_Hidden.h">
+      <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Merchant_State_Idle.h">
+      <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Merchant_State_Thankyou.h">
+      <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Thankyou</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -912,10 +960,10 @@
       <Filter>02.GameObjects\Monster\Normal\Guard\State\Guard_State_Die</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Object_Chest.cpp">
-      <Filter>02.GameObjects\Map_Object\Chest</Filter>
+      <Filter>02.GameObjects\Interactive\Chest</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Open.cpp">
-      <Filter>02.GameObjects\Player\State\Player_State_Chest</Filter>
+      <Filter>02.GameObjects\Player\State\Player_State_Open</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>02.GameObjects\UI</Filter>
@@ -949,6 +997,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\Item.cpp">
       <Filter>02.GameObjects\Player\Inventory\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InteractiveObject.cpp">
+      <Filter>02.GameObjects\Interactive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Item.cpp">
+      <Filter>02.GameObjects\UI\Inventory\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Obtain.cpp">
+      <Filter>02.GameObjects\UI\Inventory\Obtain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_Merchant.cpp">
+      <Filter>02.GameObjects\NPC\Merchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Merchant_State_Hidden.cpp">
+      <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Merchant_State_Idle.cpp">
+      <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Merchant_State_Thankyou.cpp">
+      <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Thankyou</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

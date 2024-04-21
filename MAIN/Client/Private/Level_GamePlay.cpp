@@ -187,8 +187,13 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFreeDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	tCameraFreeDesc.fNear = 0.1f;
 	tCameraFreeDesc.fFar = 1000.0f;
-	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f);
-	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+
+	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
+	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
+
+	//tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
+	//tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
+
 	tCameraFreeDesc.fSpeedPerSec = 6.f;
 	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
@@ -204,7 +209,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFollowDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	tCameraFollowDesc.fNear = 0.1f;
 	tCameraFollowDesc.fFar = 1000.0f;
-	tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f); 
 	tCameraFollowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	tCameraFollowDesc.fSpeedPerSec = 3.f;
 	tCameraFollowDesc.fRotationPerSec = XMConvertToRadians(10.0f);
@@ -247,14 +252,14 @@ HRESULT CLevel_GamePlay::Ready_LandObject()
 	//LandObjectDesc.pTerrainTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), g_strTransformTag));
 	//LandObjectDesc.pTerrainVIBuffer = (CVIBuffer_Terrain*)(m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer")));	
 
-	///* 구한정보들을 각 랜드오브젝트르 생성할 때 던진다. */
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
-	/* 구한정보들을 각 랜드오브젝트르 생성할 때 던진다. */
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -375,6 +380,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	return S_OK;
 }
 
+HRESULT CLevel_GamePlay::Ready_Layer_NPC(const wstring& strLayerTag)
+{
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_NPC_Merchant"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 {
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Particle_Blue"))))
@@ -398,7 +411,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Beach
 	// Prototype_Component_Model_Map_Librarian
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_FOXGOD";
+	// Prototype_Component_Model_Map_Shop
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Shop";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
@@ -453,9 +467,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 }
 
 HRESULT CLevel_GamePlay::Ready_Layer_Object(const wstring& strLayerTag)
-{/*
+{
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -202,6 +202,9 @@
     <Filter Include="01. Utility\01. GameObjects\BlendObject">
       <UniqueIdentifier>{06b8ad67-1f3f-4eba-9a7d-b7aeec4d88c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\12. Frustum">
+      <UniqueIdentifier>{632cc236-e883-462f-8595-68382ddc38d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -413,6 +416,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\BlendObject.cpp">
       <Filter>01. Utility\01. GameObjects\BlendObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Frustum.cpp">
+      <Filter>01. Utility\12. Frustum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -640,6 +646,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\BlendObject.h">
       <Filter>01. Utility\01. GameObjects\BlendObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Frustum.h">
+      <Filter>01. Utility\12. Frustum</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

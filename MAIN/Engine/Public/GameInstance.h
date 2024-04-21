@@ -104,6 +104,9 @@ public: /* For.Target_Manager */
 public:	/* For.Sampler */
 	_vector				Compute_WorldPos(const _float2& vViewPos, const wstring& strZRenderTargetTag, _uint iOffset = 0);
 
+public: /* For.Frustum */
+	_bool				isInFrustum_WorldSpace(_fvector vWorldPos, _float fRange = 0.f);
+
 
 public: /* For.ImGui_Manager */
 	void				New_Frame();
@@ -126,6 +129,7 @@ private:
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
 	class CSampler*					m_pSampler = { nullptr };
+	class CFrustum*					m_pFrustum = { nullptr };
 	class CImGui_Manager*			m_pImGui_Manager = { nullptr };
 
 public:		

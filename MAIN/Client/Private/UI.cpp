@@ -52,6 +52,8 @@ HRESULT CUI::Tick(_float fTimeDelta)
 {
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
+
+    return S_OK;
 }
 
 void CUI::Late_Tick(_float fTimeDelta)

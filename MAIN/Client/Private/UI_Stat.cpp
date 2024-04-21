@@ -110,7 +110,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(100.f, 190.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.f, g_iWinSizeY * -0.5f + 95.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.f, g_iWinSizeY * -0.5f + 95.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     UI_DESC tDesc = {};
@@ -124,7 +124,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(100.f, 200.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.f, g_iWinSizeY * -0.5f + 100.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.f, g_iWinSizeY * -0.5f + 100.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -138,7 +138,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(100.f, 200.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.f, g_iWinSizeY * -0.5f + 100.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.f, g_iWinSizeY * -0.5f + 100.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -154,7 +154,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(32.f, 32.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.5f, g_iWinSizeY * -0.5f + 43.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.5f, g_iWinSizeY * -0.5f + 43.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -169,7 +169,7 @@ HRESULT CUI_Stat::Set_UIInfo()
 
     m_fHPSize = 120.f;
     pTransform->Set_Scaled(32.f, m_fHPSize, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.5f, g_iWinSizeY * -0.5f + 95.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.5f, g_iWinSizeY * -0.5f + 95.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -183,7 +183,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(32.f, 32.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.5f, g_iWinSizeY * -0.5f + 146.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.5f, g_iWinSizeY * -0.5f + 146.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -199,7 +199,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(32.f, 32.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.5f, g_iWinSizeY * -0.5f + 44.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.5f, g_iWinSizeY * -0.5f + 44.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -214,7 +214,7 @@ HRESULT CUI_Stat::Set_UIInfo()
 
     m_fSPSize = 72.f;
     pTransform->Set_Scaled(32.f, m_fSPSize, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.5f, g_iWinSizeY * -0.5f + 72.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.5f, g_iWinSizeY * -0.5f + 72.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -228,7 +228,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(32.f, 32.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.5f, g_iWinSizeY * -0.5f + 100.f, 0.f, 1.f }); // +17
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.5f, g_iWinSizeY * -0.5f + 100.f, 0.9f, 1.f }); // +17
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -244,7 +244,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(32.f, 32.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.5f, g_iWinSizeY * -0.5f + 44.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.5f, g_iWinSizeY * -0.5f + 44.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -259,7 +259,7 @@ HRESULT CUI_Stat::Set_UIInfo()
 
     m_fMPSize = 72.f;
     pTransform->Set_Scaled(32.f, m_fMPSize, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.5f, g_iWinSizeY * -0.5f + 72.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.5f, g_iWinSizeY * -0.5f + 72.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -273,7 +273,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(32.f, 32.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.5f, g_iWinSizeY * -0.5f + 100.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.5f, g_iWinSizeY * -0.5f + 100.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -290,7 +290,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(100.f, 180.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.f, g_iWinSizeY * -0.5f + 95.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 50.f, g_iWinSizeY * -0.5f + 95.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -304,7 +304,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(100.f, 200.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.f, g_iWinSizeY * -0.5f + 100.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 110.f, g_iWinSizeY * -0.5f + 100.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -318,7 +318,7 @@ HRESULT CUI_Stat::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(100.f, 200.f, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.f, g_iWinSizeY * -0.5f + 100.f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5 + 170.f, g_iWinSizeY * -0.5f + 100.f, 0.9f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};

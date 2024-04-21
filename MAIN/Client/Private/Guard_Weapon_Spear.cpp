@@ -137,6 +137,8 @@ HRESULT CGuard_Weapon_Spear::Bind_ShaderResources()
     _float fCamFar = m_pGameInstance->Get_Camera_Far();
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
         return E_FAIL;
+
+    return S_OK;
 }
 
 CGuard_Weapon_Spear* CGuard_Weapon_Spear::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

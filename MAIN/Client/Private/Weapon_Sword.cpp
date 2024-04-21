@@ -26,6 +26,8 @@ HRESULT CWeapon_Sword::Initialize(void* pArg)
     m_eType = OBJ_PLAYER_WEAPON;
 
     m_pTransformCom->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.0f));
+
+    return S_OK;
 }
 
 HRESULT CWeapon_Sword::Tick(_float fTimeDelta)

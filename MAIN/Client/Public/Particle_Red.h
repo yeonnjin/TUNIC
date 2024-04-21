@@ -13,6 +13,12 @@ BEGIN(Client)
 
 class CParticle_Red final : public CGameObject
 {
+public:
+	typedef struct Particle_Desc : public CGameObject::GAMEOBJECT_DESC
+	{
+		_vector		vPosition;
+	}PARTICLE_DESC;
+
 private:
 	CParticle_Red(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CParticle_Red(const CParticle_Red& rhs);

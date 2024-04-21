@@ -1,21 +1,12 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
-
-BEGIN(Engine)
-class CModel;
-class CShader;
-class CAnimator;
-class CCollider;
-class CTransform;
-END
-
-/* 蓖咯款 咯快 模备 */
+#include "InteractiveObject.h"
+#include "Item.h"
 
 BEGIN(Client)
 
-class CObject_Chest final : public CGameObject
+class CObject_Chest final : public CInteractiveObject
 {
 public:
 	enum ANIMATION {
@@ -25,9 +16,9 @@ public:
 		STATE_OPEN, STATE_AFTER, STATE_END
 	};
 
-	enum ITEM {
+	/*enum ITEM {
 		ITEM_STICK, ITEM_SWORD, ITEM_SHIELD, ITEM_WAND, ITEM_CUBIC, ITEM_END
-	};
+	};*/
 
 public:
 	typedef struct Chest_Desc : public CGameObject::GAMEOBJECT_DESC
@@ -35,7 +26,9 @@ public:
 		// 1. Position
 		// 2. Item
 
-		_float4x4		TransformMatrix;
+		_float4x4			TransformMatrix;
+		CItem::ITEM_TYPE	eType;
+		CItem::ITEM			eItem;
 		
 	}CHEST_DESC;
 
@@ -45,7 +38,9 @@ private:
 	virtual ~CObject_Chest() = default;
 
 public:
-	void			Change_State(STATE eState);
+	_bool			Get_isClose() { return m_isClose; }
+
+	class CItem*	Set_Open() { m_isClose = false; return m_pItem; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -55,26 +50,25 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_bool			m_isFirstFrame = { true };
+	_bool			m_isClose = { true };
+	_bool			m_isFinished = { false };
 	_bool			m_isBlend = { false };
 
 	ANIMATION		m_eAnimationIndex = { ANIM_END };
 	ANIMATION		m_eBlendAnimIndex = { ANIM_END };
 	STATE			m_eState = { STATE_END };
 
-private:
-	CAnimator*		m_pModelCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
-	CCollider*		m_pColliderCom = { nullptr };
-	CTransform*		m_pLookOnTransform = { nullptr };
+	_matrix			m_ColliderMatrix = {};
 
 private:
-	void			Update_State();
+	class CItem*	m_pItem = { nullptr };
 
 private:
-	HRESULT			Add_Components();
-	HRESULT			Add_States();
-	HRESULT			Bind_ShaderResources();
-	void			Set_Animation();
+	virtual HRESULT	Add_Components();
+	virtual HRESULT	Bind_ShaderResources();
+
+	void			Compute_ColliderMatrix();
 
 public:
 	static CObject_Chest* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

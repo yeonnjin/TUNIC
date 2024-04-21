@@ -25,6 +25,12 @@ HRESULT CParticle_Red::Initialize(void* pArg)
         return E_FAIL;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4(rand() % 20, 3.0f, rand() % 20, 1.f));
+    
+    if (nullptr != pArg)
+    {
+        PARTICLE_DESC* pDesc = (PARTICLE_DESC*)pArg;
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPosition);
+    }
 
     return S_OK;
 }

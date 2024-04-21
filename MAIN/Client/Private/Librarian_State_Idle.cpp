@@ -218,7 +218,6 @@ void CLibrarian_State_Idle::Compute_TargetPosition()
 
 void CLibrarian_State_Idle::Compute_Height(_float fTimeDelta)
 {
-    _float fTargetHeight;
     _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);  
 
     if (true == m_isUp)

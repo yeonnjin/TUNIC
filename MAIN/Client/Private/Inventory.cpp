@@ -2,6 +2,7 @@
 #include "Inventory.h"
 
 #include "UI_Inventory.h"
+#include "UI_Item.h"
 #include "UI_Slot.h"
 
 #include "Item.h"
@@ -15,10 +16,33 @@ CInventory::CInventory()
 void CInventory::Add_Item(CItem* pItem)
 {
     CItem::ITEM_TYPE eType = pItem->Get_ItemType();
-    if (m_iMaxItem > m_Items[eType].size())
+    CItem::ITEM      eItem = pItem->Get_Item();
+
+    // 이미 있는 아이템인 경우 : 기존 아이템의 개수 증가, 
+    // TODO: 숫자 카운트 증가
+    for (size_t i = 0; i < m_iNumItems[eType].size(); i++)
     {
-        m_Items[eType].push_back(pItem);
-        Safe_AddRef(pItem);
+        if (eItem == m_Items[eType][i]->Get_Item())
+        {
+            m_Items[eType][i]->Plus_Count(true);
+            m_iNumItems[eType][i] += 1;
+            return;
+        }
+    }
+
+    // 새로운 아이템인 경우 : 사이즈 내에서 가능
+    if (m_iMaxItem > m_iNumItems[eType].size())
+    {
+        m_Items[eType][m_iNumItems[eType].size()] = pItem;
+        CUI_Item::UIITEM_DESC tDesc{};
+        tDesc.iTextureIndex = eItem;
+        tDesc.vPosition = m_pUIInventory->Get_Position((_uint)eType, m_iNumItems[eType].size());
+        CUI_Item* pUIItem = dynamic_cast<CUI_Item*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Item"), &tDesc));
+        if (nullptr == pUIItem)
+            return;
+
+        m_pUIItems.emplace_back(pUIItem);
+        m_iNumItems[eType].push_back(1);
     }
 }
 
@@ -120,11 +144,11 @@ HRESULT CInventory::Initialize()
         m_Items[i].resize(m_iMaxItem, nullptr);
     }
 
-    for (size_t i = 0; i < CItem::TYPE_END; i++)
+    /*for (size_t i = 0; i < CItem::TYPE_END; i++)
     {
         for (auto& pItem : m_Items[i])
             pItem = CItem::Create();
-    }
+    }*/
 
     return S_OK;
 }
@@ -138,6 +162,9 @@ void CInventory::Tick(_float fTimeDelta)
     if(true == m_isUsing)
     {
         Select_Item();
+        
+        for (auto& pItem : m_pUIItems)
+            pItem->Late_Tick(fTimeDelta);
     }
 }
 
@@ -163,6 +190,9 @@ void CInventory::Free()
 
         m_Items[i].clear();
     }
+
+    for (auto& pUIItem : m_pUIItems)
+        Safe_Release(pUIItem);
 
     Safe_Release(m_pGameInstance);
     Safe_Release(m_pUIInventory);

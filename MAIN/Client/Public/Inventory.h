@@ -31,10 +31,12 @@ private:
 	_uint	m_iSelectColumn = { 0 };
 
 	vector<class CItem*>	m_Items[CItem::TYPE_END];
+	vector<_uint>			m_iNumItems[CItem::TYPE_END];
 
 private:
 	class CGameInstance*	m_pGameInstance = { nullptr };
 	class CUI_Inventory*	m_pUIInventory = { nullptr };
+	vector<class CUI_Item*> m_pUIItems;
 	class CUI_Slot*			m_pUISlot = { nullptr };
 
 public:

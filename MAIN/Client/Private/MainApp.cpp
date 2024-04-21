@@ -58,6 +58,7 @@ void CMainApp::Tick(_float fTimeDelta)
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER_WEAPON, CCollision_Manager::GROUP_MONSTER);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER_WEAPON);
+	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_INTERACTIVE);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_MONSTER, CCollision_Manager::GROUP_MONSTER);
 
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
@@ -140,6 +141,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	/* Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Sky_Shop */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky_Shop"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Sky/Shop.dds")))))
 		return E_FAIL;
 
 	return	S_OK;

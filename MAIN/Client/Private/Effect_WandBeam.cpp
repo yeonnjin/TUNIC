@@ -58,6 +58,8 @@ HRESULT CEffect_WandBeam::Tick(_float fTimeDelta)
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, this);
 
 	m_pTransformCom->Go_Backward(fTimeDelta);
+
+	return S_OK;
 }
 
 void CEffect_WandBeam::Late_Tick(_float fTimeDelta)

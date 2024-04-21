@@ -38,9 +38,13 @@
 // OBJECT
 #include "Object_Chest.h"
 
+// NPC
+#include "NPC_Merchant.h"
+
 // UI
 #include "UI_Stat.h"
 #include "UI_Inventory.h"
+#include "UI_Item.h"
 #include "UI_Slot.h"
 
 #include "BlendEffect.h"
@@ -196,7 +200,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Inven%d.png"), 5))))
 		return E_FAIL;
 
-
+	/* Prototype_Component_Texture_UI_Item */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Item"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Item/Item%d.png"), 11))))
+		return E_FAIL;
 
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
@@ -460,6 +467,13 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CObject_Chest::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// NPC ==========================================================================================
+
+	/* For.Prototype_GameObject_NPC_Merchant */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Merchant"),
+		CNPC_Merchant::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// UI ===========================================================================================
 
 	/* For.Prototype_GameObject_UI_Stat */
@@ -470,6 +484,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_UI_Inventory */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Inventory"),
 		CUI_Inventory::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UI_Item */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Item"),
+		CUI_Item::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_UI_Slot */
@@ -497,14 +516,17 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach0.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach_FIN.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Shop.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Guard.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Object_Chest.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/NPC_Merchant.dat");
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 
@@ -689,6 +711,8 @@ HRESULT CLoader::Load_NonAnim_Model(const string& strDataPath)
 	}
 
 	fin.close();
+
+	return S_OK;
 }
 
 HRESULT CLoader::Load_Anim_Model(const string& strDataPath)

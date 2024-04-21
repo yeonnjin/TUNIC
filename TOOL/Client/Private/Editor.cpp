@@ -15,7 +15,7 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Player_Effect_Beam.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Map_Shop.dat"
 #define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach0.dat"
 #pragma region Initial
 

@@ -119,6 +119,8 @@ HRESULT CEffect_Librarian::Bind_ShaderResources()
     _float fCamFar = m_pGameInstance->Get_Camera_Far();
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
         return E_FAIL;
+
+    return S_OK;
 }
 
 CEffect_Librarian* CEffect_Librarian::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

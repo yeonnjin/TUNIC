@@ -2,19 +2,13 @@
 #include "Object_Chest.h"
 
 CObject_Chest::CObject_Chest(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject{ pDevice, pContext }
+    : CInteractiveObject{ pDevice, pContext }
 {
 }
 
 CObject_Chest::CObject_Chest(const CObject_Chest& rhs)
-    : CGameObject{ rhs }
+    : CInteractiveObject{ rhs }
 {
-}
-
-void CObject_Chest::Change_State(STATE eState)
-{
-    m_pModelCom->Change_State(eState);
-    m_eState = eState;
 }
 
 HRESULT CObject_Chest::Initialize_Prototype()
@@ -24,34 +18,36 @@ HRESULT CObject_Chest::Initialize_Prototype()
 
 HRESULT CObject_Chest::Initialize(void* pArg)
 {
-    GAMEOBJECT_DESC		GameObjectDesc{};
-
-    GameObjectDesc.fSpeedPerSec = 8.f;
-    GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-
-    if (FAILED(__super::Initialize(&GameObjectDesc)))
+    if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
     if (nullptr != pArg)
     {
         CHEST_DESC* pDesc = (CHEST_DESC*)pArg;
-        //m_strModelComTag = pDesc->strModelComTag;
+        m_pTransformCom->Set_WorldMatrix(pDesc->TransformMatrix);
+        m_pItem = CItem::Create();
+        if (nullptr == m_pItem)
+            return E_FAIL;
+
+        m_pItem->Set_ItemType(pDesc->eType);
+        m_pItem->Set_Item(pDesc->eItem);
     }
-
-    if (FAILED(Add_Components()))
-        return E_FAIL;
-
-    if (FAILED(Add_States()))
-        return E_FAIL;
-
-    //m_eType = OBJ_OBJECT;
 
     _float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_OPEN);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
-    Set_Animation();
+
+    m_eInteractiveType = INTERACTIVE_CHEST;
+
+    Compute_ColliderMatrix();
+
+    CItem* pItem = CItem::Create();
+    pItem->Set_ItemType((CItem::ITEM_TYPE)2);
+    pItem->Set_Item((CItem::ITEM)2);
+
+    m_pItem = pItem;
 
     return S_OK;
 }
@@ -61,75 +57,64 @@ HRESULT CObject_Chest::Tick(_float fTimeDelta)
     if (E_FAIL == __super::Tick(fTimeDelta))
         return E_FAIL;
 
-    static _uint iIndex = 0;
+    /*static _uint iIndex = 0;
     if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {
         iIndex++;
         if (iIndex > 1)
             iIndex = 0;
         m_pModelCom->Set_Animation_Index(iIndex);
-    }
+    }*/
 
-    // State_Machine
-    m_pModelCom->Update_State(fTimeDelta);
-    Update_State();
 
-    // Blending
-    if (true == m_isBlend)
+
+    //// Blending
+    //if (true == m_isBlend)
+    //{
+    //    if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+    //    {
+    //        m_isBlend = false;
+    //        m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
+    //        m_eAnimationIndex = m_eBlendAnimIndex;
+    //    }
+    //}
+    //else
+
+    if (true == m_isFirstFrame)
     {
-        if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
-        {
-            m_isBlend = false;
-            m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
-            m_eAnimationIndex = m_eBlendAnimIndex;
-        }
+        m_pModelCom->Play_Animation(fTimeDelta);
+        m_isFirstFrame = false;
     }
-    else
+
+    if(false == m_isClose && false == m_isFinished)
+    {
         m_pModelCom->Play_Animation(fTimeDelta);
 
-    // Collider
-    m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+        if (true == m_pModelCom->isFinished(ANIM_OPEN))
+        {
+            m_isFinished = true;
+        }
+    }
 
-    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
+    // Collider
+    m_pColliderCom->Tick(m_ColliderMatrix);
+
+    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_INTERACTIVE, this);
 
     return S_OK;
 }
 
 void CObject_Chest::Late_Tick(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
-
-#ifdef _DEBUG
-    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
-#endif
+    __super::Late_Tick(fTimeDelta);
 }
 
 HRESULT CObject_Chest::Render()
 {
-    if (FAILED(Bind_ShaderResources()))
+    if (FAILED(__super::Render()))
         return E_FAIL;
 
-    _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-    for (size_t i = 0; i < iNumMeshes; ++i)
-    {
-        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
-            return E_FAIL;
-
-        if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
-            return E_FAIL;
-
-        if (FAILED(m_pShaderCom->Begin(0)))
-            return E_FAIL;
-
-        m_pModelCom->Render(i);
-    }
-
     return S_OK;
-}
-
-void CObject_Chest::Update_State()
-{
 }
 
 HRESULT CObject_Chest::Add_Components()
@@ -146,49 +131,33 @@ HRESULT CObject_Chest::Add_Components()
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
-    /* For. Com_Collider */
-    CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
+    /* Com_Collider */ // TODO: 콜라이더를 트랜스폼 위치 앞에다가 둬서 트리거 발동~
+    CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
 
-    ColliderDesc.fRadius = 0.8f;
-    ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius + 0.6f, 0.f);
+    // 로컬상의 정보를 셋팅한다.
+    ColliderDesc.vSize = _float3(2.f, 1.f, 1.f);
+    ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
-}
-
-HRESULT CObject_Chest::Add_States()
-{
-    //m_pModelCom->Add_State(STATE_IDLE, CPlayer_State_Idle::Create(this));
-    //m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
-
-    //m_pModelCom->Change_State(STATE_IDLE);
-    //m_eState = STATE_IDLE;
 
     return S_OK;
 }
 
 HRESULT CObject_Chest::Bind_ShaderResources()
 {
-    if (nullptr == m_pShaderCom)
-        return E_FAIL;
-
-    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
-        return E_FAIL;
-
-    _float fCamFar = m_pGameInstance->Get_Camera_Far();
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+    if (FAILED(__super::Bind_ShaderResources()))
         return E_FAIL;
 
     return S_OK;
 }
 
-void CObject_Chest::Set_Animation()
+void CObject_Chest::Compute_ColliderMatrix()
 {
+    _matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix(); 
+    WorldMatrix.r[3].m128_f32[2] -= 1.2f;
+    m_ColliderMatrix = WorldMatrix;
 }
 
 CObject_Chest* CObject_Chest::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -223,9 +192,7 @@ void CObject_Chest::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pShaderCom);
-    Safe_Release(m_pModelCom);
-    Safe_Release(m_pColliderCom);
+    Safe_Release(m_pItem);
 }
 
 void CObject_Chest::Collision_Event(Engine::CGameObject* pGameObject)

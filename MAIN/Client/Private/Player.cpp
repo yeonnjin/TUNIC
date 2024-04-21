@@ -17,6 +17,7 @@
 #include "Player_State_Damage.h"
 #include "Player_State_Dodge.h"
 #include "Player_State_Defense.h"
+#include "Player_State_Open.h"
 
 // Camera
 #include "Camera_LockOn.h"
@@ -24,6 +25,12 @@
 // UI
 #include "UI_Stat.h"
 #include "Inventory.h"
+
+// Interactive
+#include "Object_Chest.h"
+
+// TEST
+//#include "Particle_Red.h"
 
 #define	WEAPONBONEIDX 45
 #define SHIELDBONE 24
@@ -76,7 +83,11 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_eType = OBJ_PLAYER;
 	m_fDamageCoolTime = 1.f;
 
-	_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);  /*_float4(3.f, 0.2f, 50.f, 1.f);*/ /*_float4(-75.f, 3.f, 68.f, 1.f);*/ /*_float4(-66.f, 2.f, 62.f, 1.f); */
+	// FOXGOD : _float4(0.f, 0.2f, 0.f, 1.f);
+	// BEACH :  _float4(-75.f, 3.f, 68.f, 1.f); _float4(-66.f, 2.f, 62.f, 1.f); 
+	// LIBRARIAN : _float4(3.f, 0.2f, 50.f, 1.f);
+	// SHOP : _float4(0.f, 17.f, 8.f, 1.f);
+	_float4 vPosition = _float4(0.f, 17.f, 8.f, 1.f);
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -134,11 +145,11 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
 	// Navigation
-	if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
+	/*if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 	}
-	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);*/
 
 	// Stat
 	Compute_Stat_Gauge(fTimeDelta);
@@ -155,12 +166,46 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	}
 	m_pInventory->Tick(fTimeDelta);
 
+	m_isInteractive = false;
+
+	/*static _uint iType = 0;
+	static _uint iItem = 0;
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD1, KEY_DOWN))
+	{
+		++iType;
+	}
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD2, KEY_DOWN))
+	{
+		++iItem;
+	}
+
+	if(true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD3, KEY_DOWN))
+	{
+		CItem* pItem = CItem::Create();
+		pItem->Set_ItemType((CItem::ITEM_TYPE)iType);
+		pItem->Set_Item((CItem::ITEM)iItem);
+		
+		m_pInventory->Add_Item(pItem);
+	}*/
+
+	static _bool isCompute = false;
+
+	/*if(true == m_pGameInstance->Get_DIKeyState(DIK_Y, KEY_DOWN))
+	{
+		isCompute = true;		
+	}*/
+
+	if(true == isCompute)
+		Compute_Height();
+
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 
 	return S_OK;
 }
 
-void CPlayer::Late_Tick(_float fTimeDelta)
+void CPlayer::Late_Tick(_float fTimeDelta)	
 {
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Late_Tick(fTimeDelta);
@@ -197,7 +242,6 @@ HRESULT CPlayer::Render()
 		if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
 			return E_FAIL;
 
-		/* 이 함수 내부에서 호출되는 Apply함수 호출 이전에 쉐이더 전역에 던져야할 모든 데이ㅏ터를 다 던져야한다. */
 		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;
 
@@ -244,7 +288,7 @@ void CPlayer::Update_State()
 			}
 		}
 		 
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
 			m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
@@ -298,7 +342,7 @@ void CPlayer::Update_State()
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
 
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
+		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
 			m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
@@ -537,6 +581,7 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
 	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
+	m_pModelCom->Add_State(STATE_OPEN, CPlayer_State_Open::Create(this));
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
 
@@ -778,6 +823,65 @@ void CPlayer::Compute_Stat_Gauge(_float fTimeDelta)
 	m_pUI_Stat->Set_Stat(m_iHP, m_fSP, m_fMP);
 }
 
+void CPlayer::Compute_Height()
+{
+	/*matrix matWV, matWVP;
+
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
+	Out.vPosition = mul(vPosition, matWVP);*/
+
+
+	//_matrix matWVP = /*m_pTransformCom->Get_WorldMatrix() * */m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW) * m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ);
+
+	//_vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+	//vPosition = XMVector3TransformCoord(vPosition, matWVP);
+
+	//_float2 vProjPosition = { (XMVectorGetX(vPosition) / XMVectorGetW(vPosition) + 1.f) * 0.5f * 1280.f,
+	//							(1.f - XMVectorGetY(vPosition) / XMVectorGetW(vPosition)) * 0.5f * 720.f };
+
+	//vPosition = m_pGameInstance->Compute_WorldPos(vProjPosition, TEXT("Target_FieldDepth"));
+
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+	_vector vWorldPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+	//static _float fY = vWorldPosition.m128_f32[1];
+	//vWorldPosition.m128_f32[1] = fY;
+	_vector vViewPos = XMVector3TransformCoord(vWorldPosition, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW));
+	_vector vProjPos = XMVector3TransformCoord(vViewPos, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ));
+
+	// -1 ~ 1 -> 0 ~ 1
+	/*_float2 vProjPosition = { (XMVectorGetX(vProjPos) / XMVectorGetW(vProjPos) + 1.f) * 0.5f * 1280.f,
+								(1.f - XMVectorGetY(vProjPos) / XMVectorGetW(vProjPos)) * 0.5f * 720.f };*/
+
+	
+	_float2 vProjPosition = { (XMVectorGetX(vProjPos) + 1.f) * 0.5f * 1280.f,
+								(1.f - XMVectorGetY(vProjPos)) * 0.5f * 720.f };
+
+	_vector vPosition = m_pGameInstance->Compute_WorldPos(vProjPosition, TEXT("Target_FieldDepth"));
+	//vPosition.m128_f32[1] += 0.2f;
+	//fY = vPosition.m128_f32[1];
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+
+	/*_vector		vWorldPos = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+	POINT		ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	_float2		vMousePos = _float2(ptMouse.x, ptMouse.y);
+
+	vWorldPos = m_pGameInstance->Compute_WorldPos(vMousePos, TEXT("Target_FieldDepth"));*/
+
+	/*CParticle_Red::PARTICLE_DESC tDesc{};
+	tDesc.vPosition = vWorldPos;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Particle_Red"), &tDesc)))
+		return;*/
+}
+
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CPlayer* pInstance = new CPlayer(pDevice, pContext);
@@ -826,6 +930,34 @@ void CPlayer::Free()
 
 void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 {
+	// 상호작용 물체 && 스페이스 바 를 눌렀을 때
+	if (OBJ_INTERACTIVE == pGameObject->Get_ObjectType())
+	{
+		m_isInteractive = true;
+
+		if(true == m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN) || true == m_isChestOpen)
+		{
+			CInteractiveObject* pObject = dynamic_cast<CInteractiveObject*>(pGameObject);
+
+			// 상자
+			if (CInteractiveObject::INTERACTIVE_CHEST == pObject->Get_InteractiveType())
+			{
+				CObject_Chest* pChest = dynamic_cast<CObject_Chest*>(pObject);
+				// 아직 열지 않은 상태일 때 : 열고 아이템을 얻음
+				if (true == pChest->Get_isClose())
+				{
+					Change_State(STATE_OPEN);
+					if(true == m_isChestOpen)
+					{
+						CItem* pItem = pChest->Set_Open();
+						m_pInventory->Add_Item(pItem);
+						m_isChestOpen = false;
+					}
+				}
+			}
+		}
+	}
+
 }
 
 void CPlayer::Damage_Event()

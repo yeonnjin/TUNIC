@@ -259,6 +259,8 @@ HRESULT CPlayer_Weapon::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CPlayer_Weapon::Tick(_float fTimeDelta)
@@ -333,6 +335,8 @@ HRESULT CPlayer_Weapon::Bind_ShaderResources()
 	_float fCamFar = m_pGameInstance->Get_Camera_Far();
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 void CPlayer_Weapon::Free()
