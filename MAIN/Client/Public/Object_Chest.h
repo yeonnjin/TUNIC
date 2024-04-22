@@ -26,7 +26,8 @@ public:
 		// 1. Position
 		// 2. Item
 
-		_float4x4			TransformMatrix;
+		//_float4x4			TransformMatrix;
+		_vector				vPosition;
 		CItem::ITEM_TYPE	eType;
 		CItem::ITEM			eItem;
 		
@@ -59,16 +60,13 @@ private:
 	ANIMATION		m_eBlendAnimIndex = { ANIM_END };
 	STATE			m_eState = { STATE_END };
 
-	_matrix			m_ColliderMatrix = {};
-
 private:
 	class CItem*	m_pItem = { nullptr };
+	CCollider*		m_pRigidColliderCom = { nullptr };
 
 private:
 	virtual HRESULT	Add_Components();
 	virtual HRESULT	Bind_ShaderResources();
-
-	void			Compute_ColliderMatrix();
 
 public:
 	static CObject_Chest* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

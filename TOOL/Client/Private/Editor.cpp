@@ -15,8 +15,8 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Map_Shop.dat"
-#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach0.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Object_Telescope.dat"
+#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Shop.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1013,9 +1013,9 @@ void CEditor::Tool_Model_List()
 
 void CEditor::Tool_Picking()
 {
-	//m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag);
-
-	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), g_strTransformTag);
+	m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Player"), g_strTransformTag);
+	
+	//m_pGizmoTransform = (CTransform*)m_pGameInstance->Get_Component(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), g_strTransformTag);
 
 	Gizmo(m_pGizmoTransform);
 	ImGui::Checkbox("Using Picking", &m_isUsingPicking);
@@ -1062,7 +1062,67 @@ void CEditor::Tool_Nav_Mesh()
 	{
 		// 테스트용 닷 클론
 		CDot::DOT_DESC tDesc{};
-		tDesc.vPosition = { 0.f, 0.f, 0.f };
+		tDesc.vPosition = { 0.f, 17.f, 0.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { -5.f, 17.f, 0.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { -10.f, 17.f, 0.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { 5.f, 17.f, 0.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { 10.f, 17.f, 0.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { 5.f, 17.f, 45.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { -5.f, 17.f, 45.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { -18.f, 17.f, 45.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { 18.f, 17.f, 45.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { 5.f, 17.f, 35.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { -5.f, 17.f, 35.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { -18.f, 17.f, 35.f };
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
+			return;
+
+		tDesc = {};
+		tDesc.vPosition = { 18.f, 17.f, 35.f };
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Dot_Origin"), TEXT("Prototype_GameObject_Dot"), &tDesc)))
 			return;
 	}

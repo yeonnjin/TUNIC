@@ -53,14 +53,20 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Tick(_float fTimeDelta)
 {
+	// Engine : Tick
 	m_pGameInstance->Tick_Engine(fTimeDelta);
 
+	// Collision
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER_WEAPON, CCollision_Manager::GROUP_MONSTER);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_MONSTER_WEAPON);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_PLAYER, CCollision_Manager::GROUP_INTERACTIVE);
 	m_pGameInstance->Check_Collision_Groups(CCollision_Manager::GROUP_MONSTER, CCollision_Manager::GROUP_MONSTER);
 
+	// Rigid
+	m_pGameInstance->Check_Rigid_Groups();
+
+	// Camera
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_G, KEY_DOWN))
 		m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
 	else if (true == m_pGameInstance->Get_DIKeyState(DIK_H, KEY_DOWN))
@@ -68,7 +74,7 @@ void CMainApp::Tick(_float fTimeDelta)
 	else if (true == m_pGameInstance->Get_DIKeyState(DIK_J, KEY_DOWN))
 		m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"));
 
-
+	// Engine : Late Tick
 	m_pGameInstance->Late_Tick_Engine(fTimeDelta);	
 }
 

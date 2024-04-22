@@ -13,6 +13,7 @@ public:
 
 public:
 	enum OBJECT { OBJ_PLAYER, OBJ_PLAYER_WEAPON, OBJ_MONSTER, OBJ_MONSTER_WEAPON, OBJ_INTERACTIVE, OBJ_UI, OBJ_END };
+	enum RIGID { RIGID_BLOCK, RIGID_NONBLOCK, RIGID_PUSH, RIGID_END };
 
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -29,29 +30,33 @@ public:
 	// Get
 	class CComponent*	Get_Component(const wstring& strComTag);
 	OBJECT				Get_ObjectType() { return m_eType; }
+	RIGID				Get_RigidType() { return m_eRigid; }
 	_uint				Get_HP() { return m_iHP; }
 	_bool				Get_isDamage() { return m_isDamage; }
+	_float				Get_Speed();
 
 	// Collision
 	virtual void		Collision_Event(CGameObject* pGameObject) {}
+	void				Rigid_Event(CGameObject* pGameObject);
 
 public:
-	virtual HRESULT Initialize_Prototype();
-	virtual HRESULT Initialize(void* pArg);
-	virtual HRESULT	Tick(_float fTimeDelta);
-	virtual void	Late_Tick(_float fTimeDelta);
-	virtual HRESULT Render();
+	virtual HRESULT		Initialize_Prototype();
+	virtual HRESULT		Initialize(void* pArg);
+	virtual HRESULT		Tick(_float fTimeDelta);
+	virtual void		Late_Tick(_float fTimeDelta);
+	virtual HRESULT		Render();
 
 protected:
-	ID3D11Device*						m_pDevice = { nullptr };
-	ID3D11DeviceContext*				m_pContext = { nullptr };
+	ID3D11Device*								m_pDevice = { nullptr };
+	ID3D11DeviceContext*						m_pContext = { nullptr };
 
-	class CGameInstance*				m_pGameInstance = { nullptr };
-	CTransform*							m_pTransformCom = { nullptr };
+	class CGameInstance*						m_pGameInstance = { nullptr };
+	CTransform*									m_pTransformCom = { nullptr };
 
 protected:
 	map<const wstring, class CComponent*>		m_Components;
 	OBJECT										m_eType = { OBJ_END };
+	RIGID										m_eRigid = { RIGID_END };
 
 	_int										m_iHP = { 5 };
 	_bool										m_isDead = { false };

@@ -24,30 +24,33 @@ HRESULT CObject_Chest::Initialize(void* pArg)
     if (nullptr != pArg)
     {
         CHEST_DESC* pDesc = (CHEST_DESC*)pArg;
-        m_pTransformCom->Set_WorldMatrix(pDesc->TransformMatrix);
-        m_pItem = CItem::Create();
+        //m_pTransformCom->Set_WorldMatrix(pDesc->TransformMatrix);
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPosition);
+        m_pItem = dynamic_cast<CItem*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Object_Item")));
         if (nullptr == m_pItem)
             return E_FAIL;
 
         m_pItem->Set_ItemType(pDesc->eType);
         m_pItem->Set_Item(pDesc->eItem);
     }
-
-    _float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+    
+    //_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);
+    //m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_OPEN);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
 
     m_eInteractiveType = INTERACTIVE_CHEST;
+    m_eRigid = RIGID_BLOCK;
 
     Compute_ColliderMatrix();
 
-    CItem* pItem = CItem::Create();
+    // TODO: Test용
+    /*CItem* pItem = dynamic_cast<CItem*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Object_Item")));
     pItem->Set_ItemType((CItem::ITEM_TYPE)2);
     pItem->Set_Item((CItem::ITEM)2);
 
-    m_pItem = pItem;
+    m_pItem = pItem;*/
 
     return S_OK;
 }
@@ -99,7 +102,11 @@ HRESULT CObject_Chest::Tick(_float fTimeDelta)
     // Collider
     m_pColliderCom->Tick(m_ColliderMatrix);
 
+    m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
     m_pGameInstance->Add_Group(CCollision_Manager::GROUP_INTERACTIVE, this);
+
+    m_pGameInstance->Add_RigidGroup(this);
 
     return S_OK;
 }
@@ -107,6 +114,11 @@ HRESULT CObject_Chest::Tick(_float fTimeDelta)
 void CObject_Chest::Late_Tick(_float fTimeDelta)
 {
     __super::Late_Tick(fTimeDelta);
+
+#ifdef _DEBUG
+    //m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+    m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
+#endif
 }
 
 HRESULT CObject_Chest::Render()
@@ -135,11 +147,22 @@ HRESULT CObject_Chest::Add_Components()
     CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
 
     // 로컬상의 정보를 셋팅한다.
-    ColliderDesc.vSize = _float3(2.f, 1.f, 1.f);
+    ColliderDesc.vSize = _float3(2.f, 2.f, 2.f);
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+        return E_FAIL;
+
+    /* For. Com_RigidCollider */
+    CBounding_OBB::BOUNDING_OBB_DESC		RigidDesc{};
+
+    // 로컬상의 정보를 셋팅한다.
+    RigidDesc.vSize = _float3(2.f, 2.f, 2.f);
+    RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
+
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
         return E_FAIL;
 
     return S_OK;
@@ -151,13 +174,6 @@ HRESULT CObject_Chest::Bind_ShaderResources()
         return E_FAIL;
 
     return S_OK;
-}
-
-void CObject_Chest::Compute_ColliderMatrix()
-{
-    _matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix(); 
-    WorldMatrix.r[3].m128_f32[2] -= 1.2f;
-    m_ColliderMatrix = WorldMatrix;
 }
 
 CObject_Chest* CObject_Chest::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -193,6 +209,7 @@ void CObject_Chest::Free()
     __super::Free();
 
     Safe_Release(m_pItem);
+    Safe_Release(m_pRigidColliderCom);
 }
 
 void CObject_Chest::Collision_Event(Engine::CGameObject* pGameObject)

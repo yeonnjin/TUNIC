@@ -223,6 +223,9 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
 	{		
 		aiMaterial* pAIMaterial = m_pAIScene->mMaterials[i];
 
+		aiColor3D diffuseColor;
+		pAIMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+
 		MESH_MATERIAL			MeshMaterial{};
 		vector<MATERIALFILE>	MaterialFiles;
 		_uint					iNumTextures = 0;

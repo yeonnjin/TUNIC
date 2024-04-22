@@ -119,6 +119,69 @@ void CGameObject::Compute_Damage_CoolTime(_float fTimeDelta)
 	}
 }
 
+_float CGameObject::Get_Speed()
+{
+	return m_pTransformCom->Get_SpeedPerSec();
+}
+
+void CGameObject::Rigid_Event(CGameObject* pGameObject)
+{
+	RIGID eObjectRigid = pGameObject->Get_RigidType();
+
+	CTransform* pObjectTransform = dynamic_cast<CTransform*>(pGameObject->Get_Component(g_strTransformTag));
+
+	_vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+	_vector vObjectPosition = pObjectTransform->Get_State_Vector(CTransform::STATE_POSITION);
+
+	// 나 -> 상대
+	_vector vCollisionDir = vObjectPosition - vPosition;
+	vCollisionDir.m128_f32[1] = 0.f;
+	vCollisionDir = XMVector4Normalize(vCollisionDir);
+
+	float deltaTime = 0.016f; // 예: 60fps의 경우
+
+	// 밀리지 않는 상태일 때
+	if (RIGID_BLOCK == m_eRigid)
+	{
+		// 상대가 밀리는 상태라면 : 밀기
+		if (RIGID_PUSH == eObjectRigid)
+		{
+			vObjectPosition += vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * deltaTime;
+			pObjectTransform->Set_State(CTransform::STATE_POSITION, vObjectPosition);
+		}
+		// 밀리지 않는 상태라면 : 제자리
+		else if (RIGID_BLOCK == eObjectRigid)
+		{
+			vPosition -= vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * deltaTime;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+	}
+	// 통과 가능한 상태일 때
+	else if (RIGID_NONBLOCK == m_eRigid)
+	{
+
+	}
+	// 밀릴 수 있는 상태일 때
+	else if (RIGID_PUSH == m_eRigid)
+	{
+		// 상대가 밀리지 않는 상태라면 : 밀리기
+		if (RIGID_BLOCK == eObjectRigid)
+		{
+			vPosition -= vCollisionDir * pObjectTransform->Get_SpeedPerSec() * deltaTime;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+		// 상대도 밀리는 상태라면 : 서로 밀기
+		else if(RIGID_PUSH == m_eRigid)
+		{
+			vPosition -= vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * deltaTime;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+			vObjectPosition += vCollisionDir * pObjectTransform->Get_SpeedPerSec() * deltaTime;
+			pObjectTransform->Set_State(CTransform::STATE_POSITION, vObjectPosition);
+		}
+	}
+}
+
 void CGameObject::Free()
 {
 	__super::Free();

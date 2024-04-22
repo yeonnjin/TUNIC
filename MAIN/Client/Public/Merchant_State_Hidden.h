@@ -26,7 +26,7 @@ public:
 private:
 	_bool m_isHidden = { true };
 
-	_float m_fWakeUpDistance = { 7.f };
+	_float m_fWakeUpDistance = { 30.f };
 
 private:
 	class CTransform* m_pNPCTransform = { nullptr };

@@ -55,9 +55,9 @@ void CMap::Late_Tick(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_FIELD, this);
 
-#ifdef _DEBUG
-    m_pGameInstance->Add_DebugComponent(m_pNavigationCom);
-#endif
+//#ifdef _DEBUG
+//    m_pGameInstance->Add_DebugComponent(m_pNavigationCom);
+//#endif
 }
 
 HRESULT CMap::Render()
@@ -77,10 +77,6 @@ HRESULT CMap::Render()
 
         m_pModelCom->Render(i);
     }
-
-//#ifdef _DEBUG
-//    m_pNavigationCom->Render();
-//#endif // _DEBUG
 
     return S_OK;
 }

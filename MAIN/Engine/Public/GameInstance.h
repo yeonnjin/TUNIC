@@ -77,6 +77,8 @@ public: /* For.Light_Manager */
 public: /* For.Collision_Manager */
 	HRESULT				Add_Group(CCollision_Manager::GROUP eCollisionGroup, class CGameObject* pGameObject);
 	void				Check_Collision_Groups(CCollision_Manager::GROUP eCollisionGroupA, CCollision_Manager::GROUP eCollisionGroupB);
+	HRESULT				Add_RigidGroup(class CGameObject* pGameObject);
+	void				Check_Rigid_Groups();
 
 public: /* For.Camera_Manager */
 	HRESULT				Add_Camera(const wstring& strCameraTag, class CCamera* pCamera);

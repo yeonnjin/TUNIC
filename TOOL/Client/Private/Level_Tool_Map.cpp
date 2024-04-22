@@ -87,11 +87,11 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	// MAP OBJECT ============================================================================================================================================
 
 	// Player ================================================================================================================================================
-	//CTest_Object::TEST_DESC tDesc = {};
-	//tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Player");
-	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
-	//	return E_FAIL;
+	/*CTest_Object::TEST_DESC tDesc = {};
+	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Player");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
+		return E_FAIL;*/
 
 	//CMap_Object::MAPOBJ_DESC tObjDesc = {};
 	//tObjDesc.isLoad = false;
@@ -229,7 +229,7 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 
 	//CTest_Object::TEST_DESC tObjDesc = {};
 
- //   tObjDesc.vPosition = _float3(0.f, 0.f, 0.f);
+ //   tObjDesc.vPosition = _float3(0.f, 18.f, 56.f);
  //   tObjDesc.strModelComTag =  TEXT("Prototype_Component_Model_NPC_Merchant");
  //   if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Test_Object"), &tObjDesc)))
  //   	return E_FAIL;
@@ -238,7 +238,11 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	CMap::MAP_DESC tMapDesc = {};
 	tMapDesc.isLoad = false;
 	tMapDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	tMapDesc.strModelComTag = /*TEXT("Prototype_Component_Model_Map_Beach");*/ /*TEXT("Prototype_Component_Model_Map_FOXGOD");*/ /*TEXT("Prototype_Component_Model_Map_Librarian");*/ TEXT("Prototype_Component_Model_Map_Shop");
+	// Prototype_Component_Model_Map_Beach
+	// Prototype_Component_Model_Map_FOXGOD
+	// Prototype_Component_Model_Map_Librarian
+	// Prototype_Component_Model_Map_Shop
+	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map"), TEXT("Prototype_GameObject_Map"), &tMapDesc)))
 		return E_FAIL;	
 
@@ -249,6 +253,50 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
 	//	return E_FAIL;
 
+	//CMap_Object::MAPOBJ_DESC tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Item_Berry_HP");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
+
+	//tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(1.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Item_Berry_MP");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
+
+	//tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(2.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Item_IceBomb");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
+
+	//tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(3.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Item_Laurel");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
+
+	//tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Item_Potion");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
+
+	CMap_Object::MAPOBJ_DESC tObjDesc = {};
+	tObjDesc.isLoad = false;
+	tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
+	tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Telescope");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+		return E_FAIL;
+
+
+	// WEAPON =================================================================================================================================================== 
 
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Test_Object"), TEXT("Prototype_GameObject_Test_Object"))))
 		return E_FAIL;*/

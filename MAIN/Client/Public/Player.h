@@ -127,6 +127,7 @@ private:
 	_bool								m_isUsingInventory = { false };
 	_bool								m_isInteractive = { false };
 	_bool								m_isChestOpen = { false };
+	_bool								m_isUsingShop = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
@@ -158,6 +159,7 @@ private:
 	CAnimator*							m_pModelCom = { nullptr };
 	CShader*							m_pShaderCom = { nullptr };
 	CCollider*							m_pColliderCom = { nullptr };
+	CCollider*							m_pRigidColliderCom = { nullptr };
 	CNavigation*						m_pNavigationCom = { nullptr };
 	CTransform*							m_pLookOnTransform = { nullptr };
 
@@ -188,6 +190,8 @@ public:
 	// CGameObject을(를) 통해 상속됨
 	void Collision_Event(Engine::CGameObject* pGameObject) override;
 	void Damage_Event() override;
+
+	//void Rigid_Event(Engine::CGameObject* pGameObject) override;
 };
 
 END

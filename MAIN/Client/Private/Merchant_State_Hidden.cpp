@@ -9,9 +9,15 @@ CMerchant_State_Hidden::CMerchant_State_Hidden(CNPC_Merchant* pNPC, CPlayer* pPl
     m_pNPC = pNPC;
     m_pPlayer = pPlayer;
 
+    //Safe_AddRef(m_pNPC);
+    //Safe_AddRef(m_pPlayer);
+
     m_pNPCTransform = dynamic_cast<CTransform*>(m_pNPC->Get_Component(g_strTransformTag));
     m_pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
-}
+
+    //Safe_AddRef(m_pNPCTransform);
+    //Safe_AddRef(m_pPlayerTransform);
+}   
 
 void CMerchant_State_Hidden::OnStateEnter()
 {
@@ -56,4 +62,9 @@ CMerchant_State_Hidden* CMerchant_State_Hidden::Create(CNPC_Merchant* pNPC, CPla
 void CMerchant_State_Hidden::Free()
 {
     __super::Free();
+
+    //Safe_Release(m_pNPC);
+    //Safe_Release(m_pPlayer);
+    //Safe_Release(m_pNPCTransform);
+    //Safe_Release(m_pPlayerTransform);
 }

@@ -12,22 +12,23 @@ public:
 		GROUP_OBSTACLE, GROUP_END
 	};
 
-	//enum EVENT {EVENT_BLOCK, EVENT_NONBLOCK, EVENT_END};
-
 private:
 	CCollision_Manager();
 	virtual ~CCollision_Manager() = default;
 
 public:
 	HRESULT Add_Group(GROUP eCollisionGroup, class CGameObject* pGameObject);
+	HRESULT Add_RigidGroup(class CGameObject* pGameObject);
 	HRESULT Clear_Group();
 	void	Check_Collision_Groups(GROUP eCollisionGroupA, GROUP eCollisionGroupB);
+	void	Check_Rigid_Groups();
 
 public:
 	HRESULT	Initialize();
 
 private:
-	array<vector<class CGameObject*>, GROUP_END> m_arrCollisionGroups;
+	array<vector<class CGameObject*>, GROUP_END>	m_arrCollisionGroups;
+	vector<class CGameObject*>						m_RigidGroups;
 
 public:
 	static CCollision_Manager* Create();

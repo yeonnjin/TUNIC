@@ -18,6 +18,14 @@ HRESULT CCollision_Manager::Add_Group(GROUP eCollisionGroup, CGameObject* pGameO
     return S_OK;
 }
 
+HRESULT CCollision_Manager::Add_RigidGroup(CGameObject* pGameObject)
+{
+    m_RigidGroups.push_back(pGameObject);
+    Safe_AddRef(pGameObject);
+
+    return S_OK;
+}
+
 HRESULT CCollision_Manager::Clear_Group()
 {
     for (auto& vecGameObject : m_arrCollisionGroups)
@@ -27,6 +35,11 @@ HRESULT CCollision_Manager::Clear_Group()
 
         vecGameObject.clear();
     }
+
+    for (auto& vecGameObject : m_RigidGroups)
+        Safe_Release(vecGameObject);       
+
+    m_RigidGroups.clear();
 
     return S_OK;
 }
@@ -47,6 +60,27 @@ void CCollision_Manager::Check_Collision_Groups(GROUP eCollisionGroupA, GROUP eC
             {
                 GameObjectA->Collision_Event(GameObjectB);
                 GameObjectB->Collision_Event(GameObjectA);
+            }
+        }
+    }
+}
+
+void CCollision_Manager::Check_Rigid_Groups()
+{
+    for (size_t i = 0; i < m_RigidGroups.size(); i++)
+    {
+        for (size_t j = i + 1; j < m_RigidGroups.size(); j++)
+        {
+            if (m_RigidGroups[i] == m_RigidGroups[j])
+                continue;
+
+            CCollider* pColliderA = dynamic_cast<CCollider*>(m_RigidGroups[i]->Get_Component(TEXT("Com_RigidCollider")));
+            CCollider* pColliderB = dynamic_cast<CCollider*>(m_RigidGroups[j]->Get_Component(TEXT("Com_RigidCollider")));
+
+            if (true == pColliderA->Check_Collision(pColliderB))
+            {
+                m_RigidGroups[i]->Rigid_Event(m_RigidGroups[j]);
+                m_RigidGroups[j]->Rigid_Event(m_RigidGroups[i]);
             }
         }
     }
@@ -79,5 +113,12 @@ void CCollision_Manager::Free()
     {
         for (auto& Object : vecGameObject)
             Safe_Release(Object);
+
+        vecGameObject.clear();
     }
+
+    for (auto& vecGameObject : m_RigidGroups)
+        Safe_Release(vecGameObject);
+
+    m_RigidGroups.clear();
 }

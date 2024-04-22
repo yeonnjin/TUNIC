@@ -337,9 +337,6 @@
     <Filter Include="02.GameObjects\BlendEffect">
       <UniqueIdentifier>{9cf28ec4-c60a-4376-b0ec-962bc53870b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\Inventory\Item">
-      <UniqueIdentifier>{b57d377b-7888-4a7b-8995-56d07b799a37}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Interactive">
       <UniqueIdentifier>{a0ebc856-b30e-462d-b89e-29c73f948459}</UniqueIdentifier>
     </Filter>
@@ -351,9 +348,6 @@
     </Filter>
     <Filter Include="02.GameObjects\Player\State\Player_State_Open">
       <UniqueIdentifier>{b813240f-f849-4984-bf03-37744c3714fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\UI\Inventory\Obtain">
-      <UniqueIdentifier>{fc1e9556-ed71-46ba-8a9b-2a0e5b741425}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\NPC">
       <UniqueIdentifier>{886347fd-e7de-443b-9586-ea3e3b1c43c3}</UniqueIdentifier>
@@ -372,6 +366,21 @@
     </Filter>
     <Filter Include="02.GameObjects\NPC\Merchant\State\Merchant_State_Thankyou">
       <UniqueIdentifier>{d08dfba6-3c31-4629-9339-75e1e83e5c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Item">
+      <UniqueIdentifier>{b57d377b-7888-4a7b-8995-56d07b799a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Item">
+      <UniqueIdentifier>{ed1473b2-e4ad-45b3-9b20-36c44049b846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Item\Purchase">
+      <UniqueIdentifier>{e3c67a90-2fef-4e42-8c32-69f63ad37e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Item\Obtain">
+      <UniqueIdentifier>{fc1e9556-ed71-46ba-8a9b-2a0e5b741425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Telescope">
+      <UniqueIdentifier>{539257c3-cdfe-4a40-bdf9-4f75987a649c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -682,7 +691,7 @@
       <Filter>02.GameObjects\BlendEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Item.h">
-      <Filter>02.GameObjects\Player\Inventory\Item</Filter>
+      <Filter>02.GameObjects\Interactive\Item</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\InteractiveObject.h">
       <Filter>02.GameObjects\Interactive</Filter>
@@ -691,7 +700,7 @@
       <Filter>02.GameObjects\UI\Inventory\Item</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UI_Obtain.h">
-      <Filter>02.GameObjects\UI\Inventory\Obtain</Filter>
+      <Filter>02.GameObjects\UI\Item\Obtain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\NPC_Merchant.h">
       <Filter>02.GameObjects\NPC\Merchant</Filter>
@@ -704,6 +713,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Merchant_State_Thankyou.h">
       <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Thankyou</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Purchase.h">
+      <Filter>02.GameObjects\UI\Item\Purchase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_Telescope.h">
+      <Filter>02.GameObjects\Interactive\Telescope</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -996,7 +1011,7 @@
       <Filter>02.GameObjects\BlendEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Item.cpp">
-      <Filter>02.GameObjects\Player\Inventory\Item</Filter>
+      <Filter>02.GameObjects\Interactive\Item</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\InteractiveObject.cpp">
       <Filter>02.GameObjects\Interactive</Filter>
@@ -1005,7 +1020,7 @@
       <Filter>02.GameObjects\UI\Inventory\Item</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UI_Obtain.cpp">
-      <Filter>02.GameObjects\UI\Inventory\Obtain</Filter>
+      <Filter>02.GameObjects\UI\Item\Obtain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\NPC_Merchant.cpp">
       <Filter>02.GameObjects\NPC\Merchant</Filter>
@@ -1018,6 +1033,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Merchant_State_Thankyou.cpp">
       <Filter>02.GameObjects\NPC\Merchant\State\Merchant_State_Thankyou</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Purchase.cpp">
+      <Filter>02.GameObjects\UI\Item\Purchase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_Telescope.cpp">
+      <Filter>02.GameObjects\Interactive\Telescope</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -47,14 +47,15 @@ HRESULT CMonster_Guard::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(-2.f + rand() % 6, 0.5f, rand() % 6 + 5.f, 1.f);
+    _float4 vPosition = _float4(19.7f, 2.5f, 70.5f, 1.f);
+    //_float4 vPosition = _float4(-2.f + rand() % 6, 0.5f, rand() % 6 + 5.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(0);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
     Set_Animation();
 
-    m_iHP = 6;
+    m_iHP = 3;
 
     return S_OK;
 }

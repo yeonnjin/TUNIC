@@ -36,6 +36,7 @@ HRESULT CMonster::Initialize(void* pArg)
         return E_FAIL;
 
     m_eType = OBJ_MONSTER;
+    m_eRigid = RIGID_PUSH;
 
     return S_OK;
 }
@@ -75,7 +76,11 @@ HRESULT CMonster::Tick(_float fTimeDelta)
 
     m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
+    m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
     m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
+
+    m_pGameInstance->Add_RigidGroup(this);
 
     return S_OK;
 }
@@ -83,17 +88,17 @@ HRESULT CMonster::Tick(_float fTimeDelta)
 void CMonster::Late_Tick(_float fTimeDelta)
 {
     Compute_Damage_CoolTime(fTimeDelta);
-    //Compute_Collision_CoolTime(fTimeDelta);
+
   
 
-    if (true == m_pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION), 2.f))
-    {
+    //if (true == m_pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION), 2.f))
+    //{
         m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
-
+    //}
 #ifdef _DEBUG
         m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+        m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom); 
 #endif
-    }
 }
 
 HRESULT CMonster::Render()
@@ -118,10 +123,6 @@ HRESULT CMonster::Render()
         m_pModelCom->Render(i);
     }
 
-//#ifdef _DEBUG
-//    m_pColliderCom->Render();
-//#endif // _DEBUG
-
     return S_OK;
 }
 
@@ -135,6 +136,17 @@ HRESULT CMonster::Add_Components()
     /* For.Com_Model */
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+        return E_FAIL;
+
+    /* For. Com_RigidCollider */
+    CBounding_OBB::BOUNDING_OBB_DESC		RigidDesc{};
+
+    // 로컬상의 정보를 셋팅한다.
+    RigidDesc.vSize = _float3(2.f, 2.f, 2.f);
+    RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
+
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
         return E_FAIL;
 
     return S_OK;
@@ -167,26 +179,11 @@ void CMonster::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
     Safe_Release(m_pColliderCom);
+    Safe_Release(m_pRigidColliderCom);
 }
 
 void CMonster::Collision_Event(Engine::CGameObject* pGameObject)
 {
-    if (OBJ_MONSTER == pGameObject->Get_ObjectType() && true == m_isMove )
-    {
-        // 몬스터끼리 충돌 시 LOOK 방향 변경
-        CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
-        if (false == pMonster->isCollision())
-        {
-            _vector vOpposite = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION) - dynamic_cast<CTransform*>(pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-            vOpposite = XMVector3Normalize(vOpposite);
-            vOpposite.m128_f32[1] = 0.f;
-            _vector vOriginLook = XMVector3Normalize(m_pTransformCom->Get_State_Vector(CTransform::STATE_LOOK));
-            vOriginLook.m128_f32[1] = 0.f;
-            _vector vTargetLook = vOpposite * -0.8f - vOriginLook;
-            vTargetLook = XMVector3Normalize(vTargetLook);
-            m_pTransformCom->Look_At_Dir(XMVector3Normalize(vTargetLook));
-            m_isCollision = true;
-        }       
-    }
+
 }
 

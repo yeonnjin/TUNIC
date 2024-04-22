@@ -35,43 +35,55 @@ private:
 
 public:
 	// Set
-	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
-	
+	void					Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
+
 	// Get
-	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
-	_uint			Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
+	_bool					Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
+	_uint					Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
+
+	// SHOP
+	void					Select_Item(class CItem* pItem);
+	void					Buy_Item(class CItem* pItem);
+	_bool					Get_isOK();
+	void					Exit_Shop();
 
 	// State
-	void			Change_State(STATE eState);
+	void					Change_State(STATE eState);
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT			Initialize_Prototype() override;
+	virtual HRESULT			Initialize(void* pArg) override;
+	virtual HRESULT			Tick(_float fTimeDelta) override;
+	virtual void			Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT			Render() override;
 
 private:
-	_bool			m_isBlend = { false };
-	_bool			m_isMove = { false };
+	_bool					m_isBlend = { false };
+	_bool					m_isMove = { false };
+	_bool					m_isSelect = { false };
+	_bool					m_isLookPurchaseUI = { false };
 
-	_uint			m_eAnimationIndex = { 0 };
-	_uint			m_eBlendAnimIndex = { 0 };
-	_uint			m_eState = { 0 };
-
-private:
-	wstring			m_strModelComTag = {};
-	CAnimator*		m_pModelCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
+	_uint					m_eAnimationIndex = { 0 };
+	_uint					m_eBlendAnimIndex = { 0 };
+	_uint					m_eState = { 0 };
 
 private:
-	void			Update_State();
+	wstring					m_strModelComTag = {};
+	CAnimator*				m_pModelCom = { nullptr };
+	CShader*				m_pShaderCom = { nullptr };
+
+	class CUI_Purchase*		m_pUIPurchase = { nullptr };
+	vector<class CItem*>	m_pItems;
 
 private:
-	HRESULT			Add_Components();
-	HRESULT			Add_States();
-	HRESULT			Bind_ShaderResources();
-	void			Set_Animation();
+	void					Update_State();
+
+private:
+	HRESULT					Add_Components();
+	HRESULT					Add_States();
+	HRESULT					Add_Items();
+	HRESULT					Bind_ShaderResources();
+	void					Set_Animation();
 
 public:
 	static CNPC_Merchant* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

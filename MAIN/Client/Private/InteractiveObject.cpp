@@ -20,7 +20,7 @@ HRESULT CInteractiveObject::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC		GameObjectDesc{};
 
-    GameObjectDesc.fSpeedPerSec = 8.f;
+    GameObjectDesc.fSpeedPerSec = 0.f;
     GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
     if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -98,6 +98,13 @@ HRESULT CInteractiveObject::Bind_ShaderResources()
         return E_FAIL;
 
     return S_OK;
+}
+
+void CInteractiveObject::Compute_ColliderMatrix()
+{
+    _matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+    WorldMatrix.r[3].m128_f32[2] -= 1.2f;
+    m_ColliderMatrix = WorldMatrix;
 }
 
 void CInteractiveObject::Free()

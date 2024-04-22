@@ -17,6 +17,10 @@ void CBlob_State_Attack::OnStateEnter()
 
 void CBlob_State_Attack::OnStateUpdate(_float fTimeDelta)
 {
+    _uint iFrame = m_pPlayer->Get_Current_Frame(CMonster_Blob::ANIM_ATTACK);
+    if (34 <= iFrame && 40 >= iFrame)
+        m_pMonster->Set_isAttackFrame(true);
+
     if (true == m_pMonster->Get_isFinished(CMonster_Blob::ANIM_ATTACK))
     {
         m_pMonster->Change_State(CMonster_Blob::STATE_IDLE);

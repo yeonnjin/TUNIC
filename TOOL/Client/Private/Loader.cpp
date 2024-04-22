@@ -355,17 +355,17 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_FIN.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
 	//	return E_FAIL;
 
-	///* For.Prototype_Component_Model_Map_FOXGOD */
-	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
-	//	return E_FAIL;
-
-	/* For.Prototype_Component_Model_Map_Shop */
+	/* For.Prototype_Component_Model_Map_FOXGOD */
 	TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Shop"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map6/Terrain.fbx", TEXT("Prototype_Component_Model_Map_Shop"), TransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
 		return E_FAIL;
+
+	///* For.Prototype_Component_Model_Map_Shop */
+	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Shop"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map6/Terrain.fbx", TEXT("Prototype_Component_Model_Map_Shop"), TransformMatrix))))
+	//	return E_FAIL;
 
 	///* For.Prototype_Component_Model_Map_FOXGOD */
 	//TransformMatrix =  XMMatrixIdentity();
@@ -470,10 +470,10 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Frog/Frog_Scimitar.fbx", TEXT("Prototype_Component_Model_Monster_Frog_Scimitar"), TransformMatrix))))
 		return E_FAIL;*/
 
-	//TransformMatrix = XMMatrixIdentity();
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_NPC_Merchant"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/NPC/Merchant/Merchant.fbx", TEXT("Prototype_Component_Model_NPC_Merchant"), TransformMatrix))))
-	//	return E_FAIL;
+	/*TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_NPC_Merchant"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/NPC/Merchant/Merchant.fbx", TEXT("Prototype_Component_Model_NPC_Merchant"), TransformMatrix))))
+		return E_FAIL;*/
 
 	/* For.Prototype_Component_Model_Map_Object */
 	
@@ -507,6 +507,38 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Player"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", TEXT("Prototype_Component_Model_Player"), TransformMatrix))))
 	//	return E_FAIL;
+
+
+	/*TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Item_Berry_HP"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Item/Berry_HP.fbx", TEXT("Prototype_Component_Model_Item_Berry_HP"), TransformMatrix))))
+		return E_FAIL;
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Item_Berry_MP"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Item/Berry_MP.fbx", TEXT("Prototype_Component_Model_Item_Berry_MP"), TransformMatrix))))
+		return E_FAIL;
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Item_IceBomb"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Item/IceBomb.fbx", TEXT("Prototype_Component_Model_Item_IceBomb"), TransformMatrix))))
+		return E_FAIL;
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Item_Laurel"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Item/Laurel.fbx", TEXT("Prototype_Component_Model_Item_Laurel"), TransformMatrix))))
+		return E_FAIL;
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Item_Potion"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Item/Potion2.fbx", TEXT("Prototype_Component_Model_Item_Potion"), TransformMatrix))))
+		return E_FAIL;*/
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Object_Telescope"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Telescope/Telescope.fbx", TEXT("Prototype_Component_Model_Object_Telescope"), TransformMatrix))))
+		return E_FAIL; 
+
 
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");
 	/* For.Prototype_Component_Shader_VtxPosNorTex */

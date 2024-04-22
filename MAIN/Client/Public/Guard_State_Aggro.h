@@ -34,7 +34,7 @@ private:
 	_float					m_fChangeTime = { 0.4f };
 
 	_float					m_fIdleDistance = { 20.f };
-	_float					m_fAttackDistance = { 6.f };
+	_float					m_fAttackDistance = { 7.f };
 
 	_vector					m_vTargetDir = {};
 	_vector					m_vEnterPosition = {};

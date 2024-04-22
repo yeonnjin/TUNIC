@@ -27,6 +27,7 @@
 #include "Inventory.h"
 
 // Interactive
+#include "Item.h"
 #include "Object_Chest.h"
 
 // TEST
@@ -59,7 +60,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC		GameObjectDesc{};
 
-	GameObjectDesc.fSpeedPerSec = 8.f;
+	GameObjectDesc.fSpeedPerSec = 6.f;
 	GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))
@@ -81,13 +82,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_eType = OBJ_PLAYER;
+	m_eRigid = RIGID_BLOCK;
+
 	m_fDamageCoolTime = 1.f;
 
 	// FOXGOD : _float4(0.f, 0.2f, 0.f, 1.f);
 	// BEACH :  _float4(-75.f, 3.f, 68.f, 1.f); _float4(-66.f, 2.f, 62.f, 1.f); 
 	// LIBRARIAN : _float4(3.f, 0.2f, 50.f, 1.f);
 	// SHOP : _float4(0.f, 17.f, 8.f, 1.f);
-	_float4 vPosition = _float4(0.f, 17.f, 8.f, 1.f);
+	_float4 vPosition = _float4(-75.f, 3.f, 68.f, 1.f);
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -118,7 +121,7 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	
 	// State_Machine
 	m_pModelCom->Update_State(fTimeDelta);
-	if(false == m_isUsingInventory)
+	if(false == m_isUsingInventory && false == m_isUsingShop)
 		Update_State();
 	Update_Camera();
 
@@ -144,6 +147,8 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	// Collider
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
+	m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
 	// Navigation
 	/*if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
 	{
@@ -159,7 +164,7 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		PartObject.second->Tick(fTimeDelta);
 
 	// Inventory
-	if (true == m_pGameInstance->Get_DIKeyState(DIK_TAB, KEY_DOWN))
+	if (false == m_isUsingShop && true == m_pGameInstance->Get_DIKeyState(DIK_TAB, KEY_DOWN))
 	{
 		m_isUsingInventory = !m_isUsingInventory;
 		m_pInventory->Set_Using(m_isUsingInventory);
@@ -201,6 +206,7 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		Compute_Height();
 
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
+	m_pGameInstance->Add_RigidGroup(this);
 
 	return S_OK;
 }
@@ -222,8 +228,8 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 
 #ifdef _DEBUG
-	//for (auto& pColliderCom : m_pColliderCom)
 		m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+		m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
 #endif
 }
 
@@ -461,6 +467,17 @@ HRESULT CPlayer::Add_Components()
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
+
+	/* For. Com_RigidCollider */
+	CBounding_OBB::BOUNDING_OBB_DESC		RigidDesc{};
+
+	// 로컬상의 정보를 셋팅한다.
+	RigidDesc.vSize = _float3(1.7f, 2.f, 1.7f);
+	RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
 		return E_FAIL;
 
 	/* For.Com_Navigation */
@@ -922,7 +939,9 @@ void CPlayer::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pRigidColliderCom);
 	Safe_Release(m_pNavigationCom);
+	Safe_Release(m_pLookOnTransform);
 
 	Safe_Release(m_pUI_Stat);
 	Safe_Release(m_pInventory);
@@ -935,12 +954,13 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 	{
 		m_isInteractive = true;
 
-		if(true == m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN) || true == m_isChestOpen)
+		if(true == m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN) || true == m_isChestOpen || true == m_isUsingShop)
 		{
 			CInteractiveObject* pObject = dynamic_cast<CInteractiveObject*>(pGameObject);
 
 			// 상자
-			if (CInteractiveObject::INTERACTIVE_CHEST == pObject->Get_InteractiveType())
+			CInteractiveObject::INTERACTIVE eInteractiveType = pObject->Get_InteractiveType();
+			if (CInteractiveObject::INTERACTIVE_CHEST == eInteractiveType)
 			{
 				CObject_Chest* pChest = dynamic_cast<CObject_Chest*>(pObject);
 				// 아직 열지 않은 상태일 때 : 열고 아이템을 얻음
@@ -955,6 +975,28 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					}
 				}
 			}
+			else if (CInteractiveObject::INTERACTIVE_ITEM == eInteractiveType)
+			{
+				m_isUsingShop = true;
+				CItem* pItem = dynamic_cast<CItem*>(pObject);
+				pItem->Select_Item();
+
+				if (true == m_isUsingShop && true == pItem->Get_isOK() && true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN))
+				{
+					Change_State(STATE_IDLE);
+					CItem* pItemBuy = pItem->Buy_Item(m_pInventory->Get_NumCubic());
+					if (nullptr == pItemBuy)
+						return;
+					m_pInventory->Add_Item(pItemBuy);
+					m_isUsingShop = false;
+				}
+				else if (true == m_isUsingShop && false == pItem->Get_isOK() && true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN))
+				{
+					Change_State(STATE_IDLE);
+					m_isUsingShop = false;
+					pItem->Exit_Shop();
+				}
+			}
 		}
 	}
 
@@ -963,3 +1005,113 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 void CPlayer::Damage_Event()
 {
 }
+
+// 충돌 감지 및 밀어내기 함수
+void HandleCollision(DirectX::XMFLOAT3& objectPos1, DirectX::XMFLOAT3& objectPos2,
+	DirectX::XMFLOAT3& objectVel1, DirectX::XMFLOAT3& objectVel2,
+	float objectMass1, float objectMass2, float elasticity, float deltaTime)
+{
+	// 충돌 벡터 계산
+	DirectX::XMVECTOR collisionVector = DirectX::XMLoadFloat3(&objectPos2) - DirectX::XMLoadFloat3(&objectPos1);
+	DirectX::XMFLOAT3 collisionNormal;
+	DirectX::XMStoreFloat3(&collisionNormal, DirectX::XMVector3Normalize(collisionVector));
+
+	// 충돌 시간 계산
+	float relativeVelocity = DirectX::XMVector3Dot(DirectX::XMLoadFloat3(&objectVel2) - DirectX::XMLoadFloat3(&objectVel1), DirectX::XMLoadFloat3(&collisionNormal)).m128_f32[0];
+	float collisionTime = -DirectX::XMVector3Dot(DirectX::XMLoadFloat3(&objectPos2) - DirectX::XMLoadFloat3(&objectPos1), DirectX::XMLoadFloat3(&collisionNormal)).m128_f32[0] / relativeVelocity;
+
+	// 충돌 후 속도 계산
+	float totalMass = objectMass1 + objectMass2;
+	float newVelocity1 = (objectVel1.x * (objectMass1 - elasticity * objectMass2) + objectVel2.x * (2 * elasticity * objectMass2)) / totalMass;
+	float newVelocity2 = (objectVel2.x * (objectMass2 - elasticity * objectMass1) + objectVel1.x * (2 * elasticity * objectMass1)) / totalMass;
+
+	// 충돌 후 위치 업데이트
+	objectPos1.x += objectVel1.x * collisionTime + 0.5f * newVelocity1 * deltaTime;
+	objectPos1.y += objectVel1.y * collisionTime + 0.5f * newVelocity1 * deltaTime;
+	objectPos1.z += objectVel1.z * collisionTime + 0.5f * newVelocity1 * deltaTime;
+	objectPos2.x += objectVel2.x * collisionTime + 0.5f * newVelocity2 * deltaTime;
+	objectPos2.y += objectVel2.y * collisionTime + 0.5f * newVelocity2 * deltaTime;
+	objectPos2.z += objectVel2.z * collisionTime + 0.5f * newVelocity2 * deltaTime;
+
+	// 충돌 후 속도 업데이트
+	objectVel1.x = newVelocity1;
+	objectVel2.x = newVelocity2;
+}
+
+
+
+
+
+
+
+
+
+
+	//CTransform* pObjectTransform = dynamic_cast<CTransform*>(pGameObject->Get_Component(g_strTransformTag));
+
+	//// 객체 1의 위치와 속도
+	//DirectX::XMFLOAT3 object1Pos;
+	//XMStoreFloat3(&object1Pos, m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION));
+	//_float OriginY1 = object1Pos.y;
+	//DirectX::XMFLOAT3 object1Vel = { 1.0f, 0.0f, 0.0f };
+	//float object1Mass = 1.0f;
+
+	//// 객체 2의 위치와 속도
+	//DirectX::XMFLOAT3 object2Pos;
+	//XMStoreFloat3(&object2Pos, pObjectTransform->Get_State_Vector(CTransform::STATE_POSITION));
+	//_float OriginY2 = object2Pos.y;
+	//DirectX::XMFLOAT3 object2Vel = { -1.0f, 0.0f, 0.0f };
+	//float object2Mass = 1.0f;
+
+	//// 탄성 계수
+	//float elasticity = 0.8f;
+
+	//// 시간 간격
+	//float deltaTime = 0.016f; // 예: 60fps의 경우
+
+	//HandleCollision(object1Pos, object2Pos, object1Vel, object2Vel, object1Mass, object2Mass, elasticity, deltaTime);
+
+	//object1Pos.x += object1Vel.x * deltaTime;
+	//object1Pos.y += object1Vel.y * deltaTime;
+	//object1Pos.z += object1Vel.z * deltaTime;
+	//object2Pos.x += object2Vel.x * deltaTime;
+	//object2Pos.y += object2Vel.y * deltaTime;
+	//object2Pos.z += object2Vel.z * deltaTime;
+
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float4{ object1Pos.x, OriginY1, object1Pos.z, 1.f });
+	//pObjectTransform->Set_State(CTransform::STATE_POSITION, _float4{ object2Pos.x,OriginY2, object2Pos.z, 1.f });
+
+
+//// 게임 루프 내에서 호출
+//void GameLoop()
+//{
+//	// 객체 1의 위치와 속도
+//	DirectX::XMFLOAT3 object1Pos = { 0.0f, 0.0f, 0.0f };
+//	DirectX::XMFLOAT3 object1Vel = { 5.0f, 0.0f, 0.0f };
+//	float object1Mass = 10.0f;
+//
+//	// 객체 2의 위치와 속도
+//	DirectX::XMFLOAT3 object2Pos = { 10.0f, 0.0f, 0.0f };
+//	DirectX::XMFLOAT3 object2Vel = { -5.0f, 0.0f, 0.0f };
+//	float object2Mass = 5.0f;
+//
+//	// 탄성 계수
+//	float elasticity = 0.8f;
+//
+//	// 시간 간격
+//	float deltaTime = 0.016f; // 예: 60fps의 경우
+//
+//	// 충돌 감지 및 밀어내기
+//	if (CheckCollision(object1Pos, object2Pos))
+//	{
+//		HandleCollision(object1Pos, object2Pos, object1Vel, object2Vel, object1Mass, object2Mass, elasticity, deltaTime);
+//	}
+//
+//	// 객체 위치와 속도 업데이트
+//	object1Pos.x += object1Vel.x * deltaTime;
+//	object1Pos.y += object1Vel.y * deltaTime;
+//	object1Pos.z += object1Vel.z * deltaTime;
+//	object2Pos.x += object2Vel.x * deltaTime;
+//	object2Pos.y += object2Vel.y * deltaTime;
+//	object2Pos.z += object2Vel.z * deltaTime;
+//}

@@ -56,6 +56,7 @@ protected:
 	CAnimator*		m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };
+	CCollider*		m_pRigidColliderCom = { nullptr };
 
 protected:
 	virtual HRESULT	Add_Components();
@@ -74,6 +75,7 @@ public:
 protected:
 	// CMonster을(를) 통해 상속됨
 	void Collision_Event(Engine::CGameObject* pGameObject) override;
+	//void Rigid_Event(Engine::CGameObject* pGameObject) override;
 };
 
 END

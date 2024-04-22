@@ -36,8 +36,8 @@ HRESULT CMonster_Blob::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    //_float4 vPosition = _float4(5.f, 0.5f, 0.f, 1.f);
-    _float4 vPosition = _float4(5.f + rand() % 6, 0.5f, rand() % 6 + 1.f, 1.f);
+    _float4 vPosition = _float4(-76.f + rand() % 3, 2.5f, 76.f + rand() % 3, 1.f);
+    //_float4 vPosition = _float4(5.f + rand() % 6, 0.5f, rand() % 6 + 1.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_IDLE);
@@ -45,7 +45,7 @@ HRESULT CMonster_Blob::Initialize(void* pArg)
     m_pModelCom->Set_isUseTransformaion(true);
     Set_Animation();
 
-    m_iHP = 5;
+    m_iHP = 2;
 
     return S_OK;
 }
@@ -73,7 +73,14 @@ HRESULT CMonster_Blob::Render()
 
 HRESULT CMonster_Blob::Add_Components()
 {
-    if (FAILED(__super::Add_Components()))
+    /* For.Com_Shader */
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+        TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
+        return E_FAIL;
+
+    /* For.Com_Model */
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
+        TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
     /* For. Com_Collider */
@@ -84,6 +91,17 @@ HRESULT CMonster_Blob::Add_Components()
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+        return E_FAIL;
+
+    /* For. Com_RigidCollider */
+    CBounding_OBB::BOUNDING_OBB_DESC		RigidDesc{};
+
+    // 로컬상의 정보를 셋팅한다.
+    RigidDesc.vSize = _float3(1.f, 2.f, 1.f);
+    RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
+
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
         return E_FAIL;
 
     return S_OK;
@@ -160,7 +178,7 @@ void CMonster_Blob::Collision_Event(Engine::CGameObject* pGameObject)
 {
     __super::Collision_Event(pGameObject);
 
-    if (OBJ_PLAYER == pGameObject->Get_ObjectType() && STATE_ATTACK == m_eState)
+    if (OBJ_PLAYER == pGameObject->Get_ObjectType() && true == m_isAttackFrame)
     {
         // 패링 상태 아닐 때 공격
         if (false == dynamic_cast<CPlayer*>(pGameObject)->isParrying())

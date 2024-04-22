@@ -33,7 +33,7 @@ private:
 	_float					m_fLookTime = { 1.f };
 
 	_float					m_fAccChangeTime = { 0.f };
-	_float					m_fChangeTime = { 0.4f };
+	_float					m_fChangeTime = { 0.5f };
 
 	_vector					m_vTargetPosition = {};
 

@@ -5,10 +5,11 @@
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
 
-#include "Map_Object.h"
 #include "Player.h"
-
 #include "Monster.h"
+
+#include "Map_Object.h"
+#include "Object_Chest.h"
 
 #include "Editor.h"
 #include "Map.h"
@@ -188,11 +189,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFreeDesc.fNear = 0.1f;
 	tCameraFreeDesc.fFar = 1000.0f;
 
-	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
-	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
+	//tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
+	//tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
 
-	//tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
-	//tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
+	tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
+	tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
 
 	tCameraFreeDesc.fSpeedPerSec = 6.f;
 	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
@@ -316,9 +317,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
 	//		return E_FAIL;
 	////}
-	
-	//// Desc
-	//CMonster::Monster_Desc tDesc = {};
+	//
+	////// Desc
+	////CMonster::Monster_Desc tDesc = {};
+	//tDesc = {};
 	//_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
 	//wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
 	//tDesc.strModelComTag = wstr1;
@@ -329,43 +331,46 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	//		return E_FAIL;
 	////}
 
-	/*CMonster::Monster_Desc tDesc = {};
-	_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
-	wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
-	tDesc.strModelComTag = wstr2;
+	////CMonster::Monster_Desc tDesc = {};
+	//tDesc = {};
+	//_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
+	//wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
+	//tDesc.strModelComTag = wstr2;
 
-	for (size_t i = 0; i < 3; ++i)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
-			return E_FAIL;
-	}*/
+	//for (size_t i = 0; i < 3; ++i)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
+	//		return E_FAIL;
+	//}
 
-	/*CMonster::Monster_Desc tDesc = {};
-	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
-	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	tDesc.strModelComTag = wstr3;
+	////CMonster::Monster_Desc tDesc = {};
+	//tDesc = {};
+	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
+	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	//tDesc.strModelComTag = wstr3;
 
-	for (size_t i = 0; i < 1; ++i)
-	{
-		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
-			return E_FAIL;
-	}*/
+	////for (size_t i = 0; i < 1; ++i)
+	////{
+	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
+	//		return E_FAIL;
+	////}
 
-	/*CMonster::Monster_Desc tDesc = {};
-	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_Frog";
-	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	tDesc.strModelComTag = wstr3;
+	///*CMonster::Monster_Desc tDesc = {};
+	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_Frog";
+	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	//tDesc.strModelComTag = wstr3;
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Frog"), &tDesc)))
-		return E_FAIL;*/
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Frog"), &tDesc)))
+	//	return E_FAIL;*/
 
-	/*CMonster::Monster_Desc tDesc = {};
-	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_Guard";
-	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	tDesc.strModelComTag = wstr3;
+	////CMonster::Monster_Desc tDesc = {};
+	//tDesc = {};
+	//_char szModelTag4[MAX_PATH] = "Prototype_Component_Model_Monster_Guard";
+	//wstring wstr4(&szModelTag4[0], &szModelTag4[MAX_PATH]);
+	//tDesc.strModelComTag = wstr4;
 
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Guard"), &tDesc)))
-		return E_FAIL;*/
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Guard"), &tDesc)))
+	//	return E_FAIL;
 	
 	
 
@@ -393,11 +398,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect(const wstring & strLayerTag)
 	/*if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Particle_Blue"))))
 		return E_FAIL;*/
 
-	for (size_t i = 0; i < 20; i++)
+	/*for (size_t i = 0; i < 20; i++)
 	{
 		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_BlendEffect"))))
 			return E_FAIL;
-	}
+	}*/
 
 	return S_OK;
 }
@@ -468,7 +473,36 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Object(const wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"))))
+	/*CObject_Chest::CHEST_DESC tDesc = {};
+	tDesc.vPosition = _vector{ -65.f, 2.5f, 68.f, 1.f };
+	tDesc.eType = CItem::TYPE_WEAPON;
+	tDesc.eItem = CItem::ITEM_STICK;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+		return E_FAIL;	
+
+	tDesc = {};
+	tDesc.vPosition = _vector{ -76.f, 2.5f, 90.f, 1.f };
+	tDesc.eType = CItem::TYPE_WEAPON;
+	tDesc.eItem = CItem::ITEM_SHIELD;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+		return E_FAIL;
+
+	tDesc = {};
+	tDesc.vPosition = _vector{ -37.f, 2.5f, 66.f, 1.f };
+	tDesc.eType = CItem::TYPE_WEAPON;
+	tDesc.eItem = CItem::ITEM_SWORD;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+		return E_FAIL;
+
+	tDesc = {};
+	tDesc.vPosition = _vector{ -4.4f, 2.5f, 73.f, 1.f };
+	tDesc.eType = CItem::TYPE_WEAPON;
+	tDesc.eItem = CItem::ITEM_WAND;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+		return E_FAIL;*/
+
+	// Telescope
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Object_Telescope"), TEXT("Prototype_GameObject_Object_Telescope"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -483,6 +517,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const wstring& strLayerTag)
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Slot"), TEXT("Prototype_GameObject_UI_Slot"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Obtain"), TEXT("Prototype_GameObject_UI_Obtain"))))
 		return E_FAIL;
 
 	return S_OK;

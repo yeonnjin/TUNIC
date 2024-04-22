@@ -34,15 +34,15 @@ void CCowBot_State_Idle::OnStateUpdate(_float fTimeDelta)
             m_fIdleTime = 0.f;
         }
         // 일정 시간이 지나면 기본 상태를 멈추고 이동 상태로 들어감
-        else
-        {
-            m_fIdleTime += fTimeDelta;
-            if (m_fIdleTime >= m_fRandomTime)
-            {
-                m_pMonster->Change_State(CMonster_CowBot::STATE_WALK);
-                m_fIdleTime = 0.f;
-            }
-        }
+        //else
+        //{
+        //    m_fIdleTime += fTimeDelta;
+        //    if (m_fIdleTime >= m_fRandomTime)
+        //    {
+        //        m_pMonster->Change_State(CMonster_CowBot::STATE_WALK);
+        //        m_fIdleTime = 0.f;
+        //    }
+        //}
     }   
 }
 

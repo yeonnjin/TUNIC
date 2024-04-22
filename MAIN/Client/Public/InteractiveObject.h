@@ -16,7 +16,7 @@ BEGIN(Client)
 class CInteractiveObject abstract: public CGameObject
 {
 public:
-	enum INTERACTIVE { INTERACTIVE_CHEST, INTERACTIVE_TELESCOPE, INTERACTIVE_END };
+	enum INTERACTIVE { INTERACTIVE_CHEST, INTERACTIVE_ITEM, INTERACTIVE_TELESCOPE, INTERACTIVE_END };
 
 protected:
 	CInteractiveObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -34,16 +34,19 @@ public:
 	virtual HRESULT Render() override;
 
 protected:
-	INTERACTIVE	m_eInteractiveType = { INTERACTIVE_END };
+	INTERACTIVE		m_eInteractiveType = { INTERACTIVE_END };
+
+	_matrix			m_ColliderMatrix = {};
 
 protected:
-	CAnimator*	m_pModelCom = { nullptr };
-	CShader*	m_pShaderCom = { nullptr };
-	CCollider*	m_pColliderCom = { nullptr };
+	CAnimator*		m_pModelCom = { nullptr };
+	CShader*		m_pShaderCom = { nullptr };
+	CCollider*		m_pColliderCom = { nullptr };
 
 protected:
 	virtual HRESULT	Add_Components();
 	virtual HRESULT	Bind_ShaderResources();
+	virtual void	Compute_ColliderMatrix();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

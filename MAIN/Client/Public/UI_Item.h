@@ -10,11 +10,16 @@ public:
 	{
 		_uint		iTextureIndex;
 		_float2		vPosition;
+		_float		fSize = { 64.f };
 	}UIITEM_DESC;
 
 private:
 	CUI_Item(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CUI_Item() = default;
+
+public:
+	void	Set_isUsing(_bool isUsing) { m_isUsing = isUsing; }
+	void	Set_TextureIndex(_uint iTextureIndex);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -29,6 +34,8 @@ private:
 	virtual HRESULT	Set_UIInfo();
 
 private:
+	_bool		m_isUsing = { true };
+
 	_float2		m_vPosition = {};
 	_float		m_fSize = { 64.f };
 

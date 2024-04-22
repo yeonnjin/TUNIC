@@ -7,15 +7,6 @@ BEGIN(Client)
 
 class CUI_Inventory final : public CUI
 {
-public:
-	//typedef struct UIInventory_Desc
-	//{
-	//	_uint iRow;
-	//	_uint iColumn;
-	//	_uint iTextureRow;
-	//	_uint iTextureColumn;
-	//}UIINVENTORY_DESC;
-
 private:
 	CUI_Inventory(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CUI_Inventory() = default;

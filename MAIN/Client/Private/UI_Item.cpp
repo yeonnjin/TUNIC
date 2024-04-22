@@ -6,6 +6,11 @@ CUI_Item::CUI_Item(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 }
 
+void CUI_Item::Set_TextureIndex(_uint iTextureIndex)
+{
+    m_UIDescs[0].iBindTextureIndex = iTextureIndex;
+}
+
 HRESULT CUI_Item::Initialize_Prototype()
 {
     return S_OK;
@@ -24,6 +29,7 @@ HRESULT CUI_Item::Initialize(void* pArg)
         UIITEM_DESC* pDesc = (UIITEM_DESC*)pArg;
         m_iBindTextureIndex = pDesc->iTextureIndex;
         m_vPosition = pDesc->vPosition;
+        m_fSize = pDesc->fSize;
     }
 
     if (FAILED(Set_UIInfo()))
@@ -42,7 +48,8 @@ HRESULT CUI_Item::Tick(_float fTimeDelta)
 
 void CUI_Item::Late_Tick(_float fTimeDelta)
 {
-    __super::Late_Tick(fTimeDelta);
+    if(true == m_isUsing)
+        __super::Late_Tick(fTimeDelta);
 }
 
 HRESULT CUI_Item::Render()

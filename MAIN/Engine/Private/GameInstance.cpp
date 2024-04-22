@@ -433,6 +433,22 @@ void CGameInstance::Check_Collision_Groups(CCollision_Manager::GROUP eCollisionG
 	m_pCollision_Manager->Check_Collision_Groups(eCollisionGroupA, eCollisionGroupB);
 }
 
+HRESULT CGameInstance::Add_RigidGroup(CGameObject* pGameObject)
+{
+	if (nullptr == m_pCollision_Manager)
+		return E_FAIL;
+
+	return m_pCollision_Manager->Add_RigidGroup(pGameObject);
+}
+
+void CGameInstance::Check_Rigid_Groups()
+{
+	if (nullptr == m_pCollision_Manager)
+		return;
+
+	m_pCollision_Manager->Check_Rigid_Groups();
+}
+
 /* For.Camera_Manager */
 HRESULT CGameInstance::Add_Camera(const wstring& strCameraTag, CCamera* pCamera)
 {

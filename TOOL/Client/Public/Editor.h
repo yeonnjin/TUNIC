@@ -59,7 +59,7 @@ private:
 	string			WStringToString(wstring& wstr);
 
 private: // GIZMO
-	_bool					m_isUsingPicking = { true };
+	_bool					m_isUsingPicking = { false };
 	_bool					m_isUsingGizmo = { false };
 	_int					m_iTargetIndex = { -1 };
 	CTransform*				m_pGizmoTransform = { nullptr };

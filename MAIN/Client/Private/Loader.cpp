@@ -36,7 +36,9 @@
 #include "Guard_Weapon_Spear.h"
 
 // OBJECT
+#include "Item.h"
 #include "Object_Chest.h"
+#include "Object_Telescope.h"
 
 // NPC
 #include "NPC_Merchant.h"
@@ -46,6 +48,8 @@
 #include "UI_Inventory.h"
 #include "UI_Item.h"
 #include "UI_Slot.h"
+#include "UI_Purchase.h"
+#include "UI_Obtain.h"
 
 #include "BlendEffect.h"
 #include "Sky.h"
@@ -197,12 +201,17 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* Prototype_Component_Texture_UI_Inventory */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Inventory"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Inven%d.png"), 5))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Inven%d.png"), 6))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_UI_Item */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Item"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Item/Item%d.png"), 11))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Item/Item%d.png"), 13))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_UI_Shop */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Shop"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Shop/Shop%d.png"), 4))))
 		return E_FAIL;
 
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
@@ -211,9 +220,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
-	/* Prototype_Component_Navigation_Load */ // Nav_Librarian, Nav_FOXGOD, Nav_Beach
+	/* Prototype_Component_Navigation_Load */ // Nav_Librarian, Nav_FOXGOD, Nav_Beach, Nav_Shop
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_FOXGOD.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_Shop.dat")))))
 		return E_FAIL;
 
 	/* Prototype_Component_VIBuffer_Instance_Rect */
@@ -462,9 +471,19 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	// OBJECT =======================================================================================
 
+	/* For.Prototype_GameObject_Object_Item */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Item"),
+		CItem::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Object_Chest */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Chest"),
 		CObject_Chest::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Object_Telescope */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Telescope"),
+		CObject_Telescope::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// NPC ==========================================================================================
@@ -496,6 +515,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CUI_Slot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_UI_Purchase */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Purchase"),
+		CUI_Purchase::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UI_Obtain */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Obtain"),
+		CUI_Obtain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// MODEL ========================================================================================
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
@@ -513,6 +542,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Slash_Horizon.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Orb.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Items.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Telescope.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach0.dat");

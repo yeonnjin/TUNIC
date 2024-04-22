@@ -226,6 +226,7 @@
     <ClInclude Include="..\Public\Monster_Spinner.h" />
     <ClInclude Include="..\Public\NPC_Merchant.h" />
     <ClInclude Include="..\Public\Object_Chest.h" />
+    <ClInclude Include="..\Public\Object_Telescope.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
     <ClInclude Include="..\Public\Particle_Red.h" />
     <ClInclude Include="..\Public\Player.h" />
@@ -257,6 +258,7 @@
     <ClInclude Include="..\Public\UI_Inventory.h" />
     <ClInclude Include="..\Public\UI_Item.h" />
     <ClInclude Include="..\Public\UI_Obtain.h" />
+    <ClInclude Include="..\Public\UI_Purchase.h" />
     <ClInclude Include="..\Public\UI_Slot.h" />
     <ClInclude Include="..\Public\UI_Stat.h" />
     <ClInclude Include="..\Public\Weapon_Shield.h" />
@@ -345,6 +347,7 @@
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
     <ClCompile Include="..\Private\NPC_Merchant.cpp" />
     <ClCompile Include="..\Private\Object_Chest.cpp" />
+    <ClCompile Include="..\Private\Object_Telescope.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
     <ClCompile Include="..\Private\Particle_Red.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
@@ -376,6 +379,7 @@
     <ClCompile Include="..\Private\UI_Inventory.cpp" />
     <ClCompile Include="..\Private\UI_Item.cpp" />
     <ClCompile Include="..\Private\UI_Obtain.cpp" />
+    <ClCompile Include="..\Private\UI_Purchase.cpp" />
     <ClCompile Include="..\Private\UI_Slot.cpp" />
     <ClCompile Include="..\Private\UI_Stat.cpp" />
     <ClCompile Include="..\Private\Weapon_Shield.cpp" />

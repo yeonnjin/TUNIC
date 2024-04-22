@@ -290,10 +290,10 @@ void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
 
 		m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 
-#ifdef _DEBUG
-		//for (auto& pColliderCom : m_pColliderCom)
-		m_pGameInstance->Add_DebugComponent(m_pColliderCom);
-#endif
+//#ifdef _DEBUG
+//		//for (auto& pColliderCom : m_pColliderCom)
+//		m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+//#endif
 	}
 }
 

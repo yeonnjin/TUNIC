@@ -4,6 +4,7 @@
 #include "UI_Inventory.h"
 #include "UI_Item.h"
 #include "UI_Slot.h"
+#include "UI_Obtain.h"
 
 #include "Item.h"
 
@@ -20,6 +21,9 @@ void CInventory::Add_Item(CItem* pItem)
 
     // 이미 있는 아이템인 경우 : 기존 아이템의 개수 증가, 
     // TODO: 숫자 카운트 증가
+
+    m_pUIObtain->Set_Using(true, eItem);
+
     for (size_t i = 0; i < m_iNumItems[eType].size(); i++)
     {
         if (eItem == m_Items[eType][i]->Get_Item())
@@ -139,6 +143,9 @@ HRESULT CInventory::Initialize()
     m_pUISlot = dynamic_cast<CUI_Slot*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Slot")));
     Safe_AddRef(m_pUISlot);
 
+    m_pUIObtain = dynamic_cast<CUI_Obtain*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Obtain")));
+    Safe_AddRef(m_pUIObtain);
+
     for (size_t i = 0; i < CItem::TYPE_END; i++)
     {
         m_Items[i].resize(m_iMaxItem, nullptr);
@@ -194,7 +201,10 @@ void CInventory::Free()
     for (auto& pUIItem : m_pUIItems)
         Safe_Release(pUIItem);
 
+    m_pUIItems.clear();
+
     Safe_Release(m_pGameInstance);
     Safe_Release(m_pUIInventory);
     Safe_Release(m_pUISlot);
+    Safe_Release(m_pUIObtain);
 }

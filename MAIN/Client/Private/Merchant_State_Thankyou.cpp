@@ -9,8 +9,14 @@ CMerchant_State_Thankyou::CMerchant_State_Thankyou(CNPC_Merchant* pNPC, CPlayer*
     m_pNPC = pNPC;
     m_pPlayer = pPlayer;
 
+    //Safe_AddRef(m_pNPC);
+    //Safe_AddRef(m_pPlayer);
+
     m_pNPCTransform = dynamic_cast<CTransform*>(m_pNPC->Get_Component(g_strTransformTag));
     m_pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
+
+    //Safe_AddRef(m_pNPCTransform);
+    //Safe_AddRef(m_pPlayerTransform);
 }
 
 void CMerchant_State_Thankyou::OnStateEnter()
@@ -44,4 +50,9 @@ CMerchant_State_Thankyou* CMerchant_State_Thankyou::Create(CNPC_Merchant* pNPC, 
 void CMerchant_State_Thankyou::Free()
 {
     __super::Free();
+
+    //Safe_Release(m_pNPC);
+    //Safe_Release(m_pPlayer);
+    //Safe_Release(m_pNPCTransform);
+    //Safe_Release(m_pPlayerTransform);
 }

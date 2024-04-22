@@ -44,7 +44,8 @@ HRESULT CMonster_Spinner::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(-10.f + rand() % 20, 0.5f, rand() % 20, 1.f);
+    _float4 vPosition = _float4(-35.f, 2.5f, 86.f, 1.f);
+    //_float4 vPosition = _float4(-10.f + rand() % 20, 0.5f, rand() % 20, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_HIDDEN);
