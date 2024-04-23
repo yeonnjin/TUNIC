@@ -89,8 +89,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 	// FOXGOD : _float4(0.f, 0.2f, 0.f, 1.f);
 	// BEACH :  _float4(-75.f, 3.f, 68.f, 1.f); _float4(-66.f, 2.f, 62.f, 1.f); 
 	// LIBRARIAN : _float4(3.f, 0.2f, 50.f, 1.f);
-	// SHOP : _float4(0.f, 17.f, 8.f, 1.f);
-	_float4 vPosition = _float4(-75.f, 3.f, 68.f, 1.f);
+	// SHOP : _float4(0.f, 17.f, 8.f, 1.f); _float4(0.f, 17.f, 38.f, 1.f);
+	_float4 vPosition = _float4(0.f, 17.f, 38, 1.f);
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -98,7 +98,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_pModelCom->Set_Animation_Transform(m_pTransformCom);
 	Set_Animation();
 
-	m_iHP = 7;
+	m_iMaxHP = m_iHP = 7;
 	m_pUI_Stat = dynamic_cast<CUI_Stat*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_UI_Stat")));
 	if (nullptr == m_pUI_Stat)
 		return E_FAIL;

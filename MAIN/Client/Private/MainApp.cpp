@@ -36,8 +36,10 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_Prototype_Component_For_Static()))
 		return E_FAIL;
 
+#ifdef _DEBUG
 	if (FAILED(Ready_Fonts()))
 		return E_FAIL;
+#endif // _DEBUG
 
 	if (FAILED(Open_Level(LEVEL_GAMEPLAY)))
 		return E_FAIL;

@@ -45,7 +45,7 @@ private:
 private:
 	class CGameInstance*	m_pGameInstance = { nullptr };
 	class CUI_Inventory*	m_pUIInventory = { nullptr };
-	vector<class CUI_Item*> m_pUIItems;
+	vector<class CUI_Item*> m_pUIItems[CItem::TYPE_END];
 	class CUI_Slot*			m_pUISlot = { nullptr };
 	class CUI_Obtain*		m_pUIObtain = { nullptr };
 

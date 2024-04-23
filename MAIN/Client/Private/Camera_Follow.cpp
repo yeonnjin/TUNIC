@@ -6,14 +6,12 @@
 
 CCamera_Follow::CCamera_Follow(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CCamera{ pDevice, pContext }
-    , m_pEasing{ CEasing::Get_Instance() }
 {
-   //Safe_AddRef(m_pEasing);
 }
 
 CCamera_Follow::CCamera_Follow(const CCamera_Follow& rhs)
     : CCamera{ rhs }
-    , m_pEasing{ rhs.m_pEasing }
+    , m_pEasing{ CEasing::Get_Instance()}
 {
     Safe_AddRef(m_pEasing);
 }
@@ -178,5 +176,6 @@ void CCamera_Follow::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pEasing);
+    if(true == m_isClone)
+        Safe_Release(m_pEasing);
 }

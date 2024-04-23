@@ -10,6 +10,7 @@ CCamera::CCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CCamera::CCamera(const CCamera & rhs)
 	: CGameObject(rhs)
 {
+	m_isClone = true;
 }
 
 _fvector CCamera::Get_Position()

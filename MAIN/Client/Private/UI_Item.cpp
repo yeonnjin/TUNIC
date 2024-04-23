@@ -11,6 +11,12 @@ void CUI_Item::Set_TextureIndex(_uint iTextureIndex)
     m_UIDescs[0].iBindTextureIndex = iTextureIndex;
 }
 
+void CUI_Item::Set_Position(_float2 vPosition)
+{
+    m_vPosition = vPosition;
+    m_pUITransformComs[0]->Set_State(CTransform::STATE_POSITION, _vector{g_iWinSizeX * -0.5f + m_vPosition.x, g_iWinSizeY * 0.5f - m_vPosition.y, 0.5f, 1.f});
+}
+
 HRESULT CUI_Item::Initialize_Prototype()
 {
     return S_OK;

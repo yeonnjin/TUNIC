@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Item.h"
 
+#include "Player.h"
 #include "NPC_Merchant.h"
 
 CItem::CItem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -10,12 +11,59 @@ CItem::CItem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CItem::CItem(const CItem& rhs)
     : CInteractiveObject{ rhs }
+    , m_eItemType{ rhs.m_eItemType }
+    , m_eItem{ rhs.m_eItem }
+    , m_iTextureIndex{ rhs.m_iTextureIndex }
 {
 }
 
 _bool CItem::Get_isOK()
 {
     return m_pNPC->Get_isOK();
+}
+
+HRESULT CItem::Use_Item()
+{
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")));
+
+    if (ITEM_HP == m_eItem)
+    {
+        _uint iHP = pPlayer->Get_HP();
+        _uint iMaxHP = pPlayer->Get_MaxHP();
+        // 이미 풀일 때 : 아이템 사용 실패
+        if (iMaxHP <= iHP)
+            return E_FAIL;
+        // 회복 가능한 양보다 회복될 양이 많을 때 : 최대 게이지로
+        else if(m_iPlusHP >= iMaxHP - iHP)
+        {
+            pPlayer->Set_HP(iMaxHP - iHP);
+        }
+        // 일반 상태일 때 : + 회복양
+        else
+        {
+            pPlayer->Set_HP(m_iPlusHP);
+        }
+    }
+    else if (ITEM_MP == m_eItem)
+    {
+        _float fMP = pPlayer->Get_MP();
+        _float fMaxMP = pPlayer->Get_MaxMP();
+        // 이미 풀일 때 : 아이템 사용 실패
+        if (fMaxMP <= fMP)
+            return E_FAIL;
+        // 회복 가능한 양보다 회복될 양이 많을 때 : 최대 게이지로
+        else if (m_fPlusMP >= fMaxMP - fMP)
+        {
+            pPlayer->Set_MP(fMaxMP - fMP);
+        }
+        // 일반 상태일 때 : + 회복양
+        else
+        {
+            pPlayer->Set_MP(m_fPlusMP);
+        }
+    }
+
+    return S_OK;
 }
 
 void CItem::Set_ShopItem(CNPC_Merchant* pNPC)
@@ -36,7 +84,7 @@ CItem* CItem::Buy_Item(_uint* iNumCubic)
     {
         *iNumCubic -= m_iPrice;
         m_pNPC->Buy_Item(this);
-        return this;
+        return dynamic_cast<CItem*>(CItem::Clone(nullptr));
     }
 
     return nullptr;

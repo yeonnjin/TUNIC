@@ -85,6 +85,7 @@ public:
 
 	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
 	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
+	void			Set_MP(_float fMPPlus) { m_fMP += fMPPlus; }
 	void			Set_ChestOpen() { m_isChestOpen = true; }
 
 	// Get
@@ -94,6 +95,9 @@ public:
 	_bool			isParrying() { return m_isParrying; }
 
 	_float			Get_SP() { return m_fSP; }
+	_float			Get_MP() { return m_fMP; }
+	_uint			Get_MaxHP() { return m_iMaxHP; }
+	_float			Get_MaxMP() { return m_fMaxMP; }
 
 	DIR				Get_Dir() { return m_eDir; }
 	_vector			Get_Look() { return XMVector3Normalize(m_vLook); }
@@ -136,6 +140,7 @@ private:
 	_vector								m_vLook = {};
 
 private:
+	_uint								m_iMaxHP = { 7 };
 	_float								m_fSP = { 4.f };
 	_float								m_fMaxSP = { 4.f };
 	_float								m_fMP = { 4.f };

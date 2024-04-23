@@ -44,6 +44,7 @@ public:
 	void		Set_Item(ITEM eItem) { m_eItem = eItem; }
 
 	void		Plus_Count(_bool isPlus) { m_iCount += (true == isPlus) ? 1 : -1; };
+	HRESULT		Use_Item();
 
 	// SHOP
 	void		Set_ShopItem(class CNPC_Merchant* pNPC);
@@ -74,6 +75,9 @@ private:
 
 	_uint					m_iCount = { 1 };
 	_uint					m_iPrice = { 1000 };
+
+	_uint					m_iPlusHP = { 1 };
+	_float					m_fPlusMP = { 1.f };
 
 private:
 	wstring					m_strModelComTag = {};

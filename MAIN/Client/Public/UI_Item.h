@@ -20,6 +20,7 @@ private:
 public:
 	void	Set_isUsing(_bool isUsing) { m_isUsing = isUsing; }
 	void	Set_TextureIndex(_uint iTextureIndex);
+	void	Set_Position(_float2 vPosition);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

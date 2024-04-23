@@ -120,6 +120,8 @@ void CGameObject::Compute_Damage_CoolTime(_float fTimeDelta)
 }
 
 _float CGameObject::Get_Speed()
+
+
 {
 	return m_pTransformCom->Get_SpeedPerSec();
 }

@@ -220,6 +220,7 @@ HRESULT CGameInstance::Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, CGam
 	return m_pRenderer->Add_RenderGroup(eRenderGroup, pRenderObject);	
 }
 
+#ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugComponent(CComponent* pRenderComponent)
 {
 	if (nullptr == m_pRenderer)
@@ -227,6 +228,7 @@ HRESULT CGameInstance::Add_DebugComponent(CComponent* pRenderComponent)
 
 	return m_pRenderer->Add_DebugComponent(pRenderComponent);
 }
+#endif
 
 /* For.Level_Manager */
 HRESULT CGameInstance::Open_Level(_uint iNewLevelID, CLevel * pNewLevel)

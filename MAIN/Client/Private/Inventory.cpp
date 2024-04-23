@@ -30,11 +30,13 @@ void CInventory::Add_Item(CItem* pItem)
         {
             m_Items[eType][i]->Plus_Count(true);
             m_iNumItems[eType][i] += 1;
+            Safe_Release(pItem);
             return;
         }
     }
 
     // 새로운 아이템인 경우 : 사이즈 내에서 가능
+
     if (m_iMaxItem > m_iNumItems[eType].size())
     {
         m_Items[eType][m_iNumItems[eType].size()] = pItem;
@@ -45,7 +47,7 @@ void CInventory::Add_Item(CItem* pItem)
         if (nullptr == pUIItem)
             return;
 
-        m_pUIItems.emplace_back(pUIItem);
+        m_pUIItems[eType].emplace_back(pUIItem);
         m_iNumItems[eType].push_back(1);
     }
 }
@@ -116,9 +118,7 @@ void CInventory::Select_Item()
             }
         }
         // 맨 오른쪽 아이템일 때, 아랫 줄 첫번째 아이템으로 이동
-        else if (m_iMaxItem - 1 == m_iSelectColumn && CItem::TYPE_END - 1
-            
-            > m_iSelectRow)
+        else if (m_iMaxItem - 1 == m_iSelectColumn && CItem::TYPE_END - 1 > m_iSelectRow)
         {
             for (size_t i = 0 ; i <= m_iMaxItem - 1; i++)
             {
@@ -133,6 +133,41 @@ void CInventory::Select_Item()
     }
 
     m_pUIInventory->Set_Select(m_iSelectRow, m_iSelectColumn);
+
+    // 아이템 사용
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN) && m_iSelectRow == CItem::TYPE_USE)
+    {
+        if (S_OK == m_Items[m_iSelectRow][m_iSelectColumn]->Use_Item())
+        {
+            m_iNumItems[m_iSelectRow][m_iSelectColumn] -= 1;
+            if (0 == m_iNumItems[m_iSelectRow][m_iSelectColumn])
+            {
+                // v.erase(v.begin() + 5);
+
+                m_iNumItems[m_iSelectRow].erase(m_iNumItems[m_iSelectRow].begin() + m_iSelectColumn);
+
+                auto iter = m_pUIItems[m_iSelectRow].begin() + m_iSelectColumn;
+                Safe_Release(*iter);
+                m_pUIItems[m_iSelectRow].erase(m_pUIItems[m_iSelectRow].begin() + m_iSelectColumn);
+
+                auto it = m_Items[m_iSelectRow].begin() + m_iSelectColumn;
+                Safe_Release(*it);
+
+                // 뒤에 아이템들 당겨오기
+                for (size_t i = m_iSelectColumn; i < m_iMaxItem; i++)
+                {
+                    if (nullptr == m_Items[m_iSelectRow][i + 1])
+                        break;
+                    else
+                    {
+                        m_Items[m_iSelectRow][i] = m_Items[m_iSelectRow][i + 1];
+                        m_Items[m_iSelectRow][i + 1] = nullptr;
+                        m_pUIItems[m_iSelectRow][i]->Set_Position(m_pUIInventory->Get_Position(m_iSelectRow, i));
+                    }
+                }
+            }
+        }
+    }
 }
 
 HRESULT CInventory::Initialize()
@@ -170,8 +205,11 @@ void CInventory::Tick(_float fTimeDelta)
     {
         Select_Item();
         
-        for (auto& pItem : m_pUIItems)
-            pItem->Late_Tick(fTimeDelta);
+        for(size_t i = 0 ; i < CItem::TYPE_END; i++)
+        {
+            for (auto& pItem : m_pUIItems[i])
+                pItem->Late_Tick(fTimeDelta);
+        }
     }
 }
 
@@ -198,10 +236,13 @@ void CInventory::Free()
         m_Items[i].clear();
     }
 
-    for (auto& pUIItem : m_pUIItems)
-        Safe_Release(pUIItem);
+    for (size_t i = 0; i < CItem::TYPE_END; i++)
+    {
+        for (auto& pUIItem : m_pUIItems[i])
+            Safe_Release(pUIItem);
 
-    m_pUIItems.clear();
+        m_pUIItems[i].clear();
+    }
 
     Safe_Release(m_pGameInstance);
     Safe_Release(m_pUIInventory);

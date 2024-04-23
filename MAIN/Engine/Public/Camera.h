@@ -52,6 +52,7 @@ protected:
 	_float				m_fFar = { 0.0f };
 
 	_bool				m_isExit = { false };
+	_bool				m_isClone = { false };
 
 protected:
 	HRESULT Bind_PipeLines();
