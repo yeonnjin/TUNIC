@@ -13,8 +13,8 @@ CPlayer_State_Attack_Stick::CPlayer_State_Attack_Stick(CPlayer* pPlayer, CPlayer
 void CPlayer_State_Attack_Stick::OnStateEnter()
 {
 	m_pPlayer->Set_Blending(true, CPlayer::ANIM_SWING_STICK1);
-	//m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), true);
     m_pWeapon->Set_isAttackFrame(false);
+    m_iKey = m_pWeapon->Get_Key();
 }
 
 void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
@@ -23,7 +23,7 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     m_pWeapon->Set_isAttackFrame(false);
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 다음 콤보
-    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
     {
         ++m_iCombo;
         m_fComboTime = 0.f;
@@ -42,7 +42,11 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1))
     {
         m_fComboTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+
+        IF_PLAYER_ISMOVE
+            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        else
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 
     // 두 번째 콤보 공격 가능 프레임 : 20 ~ 33
@@ -58,7 +62,11 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+
+        IF_PLAYER_ISMOVE
+            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        else
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
     }
 }
 
@@ -66,7 +74,6 @@ void CPlayer_State_Attack_Stick::OnStateExit()
 {
     m_iCombo = 0;
     m_fComboTime = 0.f;
-    //m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), false);
 }
 
 CPlayer_State_Attack_Stick* CPlayer_State_Attack_Stick::Create(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)

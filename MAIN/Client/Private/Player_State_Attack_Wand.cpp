@@ -14,6 +14,7 @@ void CPlayer_State_Attack_Wand::OnStateEnter()
 {
     m_pPlayer->Set_Blending(true, CPlayer::ANIM_USE_WANDBOW);
     m_pPlayer->Set_MP_Minus(m_fMP);
+    //m_iKey = m_pWeapon->Get_Key();
 }
 
 void CPlayer_State_Attack_Wand::OnStateUpdate(_float fTimeDelta)

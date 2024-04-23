@@ -13,7 +13,9 @@ CCamera_Follow::CCamera_Follow(const CCamera_Follow& rhs)
     : CCamera{ rhs }
     , m_pEasing{ CEasing::Get_Instance()}
 {
+#ifndef _DEBUG
     Safe_AddRef(m_pEasing);
+#endif // _DEBUG   
 }
 
 HRESULT CCamera_Follow::Initialize_Prototype()
@@ -82,25 +84,6 @@ HRESULT CCamera_Follow::Tick(_float fTimeDelta)
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCamPosition);
 
     __super::Bind_PipeLines();
-
-    // TODO: 나중에 지우기
-    static _float fRadian = 60.f;
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_M, KEY_PRESS))
-    {
-        /*m_vCamDistance.m128_f32[1] += 1.f;
-        m_vCamDistance.m128_f32[2] -= 1.f;*/
-        fRadian -= 1.f;
-    }
-
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_N, KEY_PRESS))
-    {
-        /*m_vCamDistance.m128_f32[1] -= 1.f;
-        m_vCamDistance.m128_f32[2] += 1.f;*/
-
-        fRadian += 1.f;
-    }
-
-    m_fFovy = XMConvertToRadians(fRadian);
 
     return S_OK;
 }

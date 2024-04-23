@@ -214,6 +214,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Shop/Shop%d.png"), 4))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_UI_Slot */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Slot"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Slot/Slot%d.png"), 4))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
@@ -546,11 +551,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Telescope.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach0.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach0.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach_FIN.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Shop.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Shop.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");

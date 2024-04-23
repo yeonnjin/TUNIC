@@ -13,8 +13,8 @@ CPlayer_State_Attack_Sword::CPlayer_State_Attack_Sword(CPlayer* pPlayer, CPlayer
 void CPlayer_State_Attack_Sword::OnStateEnter()
 {
     m_pPlayer->Set_Blending(true, CPlayer::ANIM_SWING_SWORD1);
-    //m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Sword"), true);
     m_pWeapon->Set_isAttackFrame(false);
+    m_iKey = m_pWeapon->Get_Key();
 }
 
 void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
@@ -23,7 +23,7 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     m_pWeapon->Set_isAttackFrame(false);
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 2번째 콤보
-    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD1) && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD1) && m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
     {
         ++m_iCombo;
         m_fComboTime = 0.f;
@@ -51,7 +51,7 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     }
 
     // 두 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 3번째 콤보
-    if (1 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD2) && m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
+    if (1 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD2) && m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
     {
         ++m_iCombo;
         m_fComboTime = 0.f;
@@ -87,6 +87,7 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     }
 
     // 세 번째 콤보가 끝나면 상태 종료
+    // TODO: 발 종종 모션 고치기 (해당 프레임에서 상태 변경)
     if (2 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD3))
     {
         m_iCombo = 0;
@@ -109,7 +110,6 @@ void CPlayer_State_Attack_Sword::OnStateExit()
     m_iCombo = 0;
     m_fComboTime = 0.f;
     m_pWeapon->Set_isAttackFrame(false);
-    //m_pPlayer->Set_Weapon_Render(TEXT("Part_Player_Weapon_Sword"), false);
 }
 
 CPlayer_State_Attack_Sword* CPlayer_State_Attack_Sword::Create(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)

@@ -15,7 +15,9 @@ CCamera_LockOn::CCamera_LockOn(const CCamera_LockOn& rhs)
 	: CCamera{ rhs }
     , m_pEasing{ CEasing::Get_Instance() }
 {
+#ifndef _DEBUG
     Safe_AddRef(m_pEasing);
+#endif // _DEBUG   
 }
 
 HRESULT CCamera_LockOn::Initialize_Prototype()

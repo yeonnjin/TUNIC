@@ -18,6 +18,9 @@ public:
 	// 상태 변경 시 호출
 	virtual void OnStateExit() override;
 
+private:
+	_bool	m_isNextCombo = { false };
+
 public:
 	static CPlayer_State_Attack_Sword* Create(class CPlayer* pPlayer, class CPlayer_Weapon* pWeapon);
 	virtual void Free() override;

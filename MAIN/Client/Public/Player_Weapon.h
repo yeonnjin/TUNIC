@@ -29,9 +29,11 @@ protected:
 
 public:
 	CPlayer::WEAPON		Get_Weapon() { return m_eWeapon; }
+	_uint				Get_Key() { return m_iKey; }
 
 	void				Set_isUsing(_bool isUsing) { m_isUsing = isUsing; }
 	void				Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
+	void				Set_Key(_uint iKey) { m_iKey = iKey; }
 	
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -44,6 +46,7 @@ protected:
 	CPlayer::WEAPON		m_eWeapon = {};
 	_bool				m_isUsing = { false };
 	_bool				m_isAttackFrame = { false };
+	_uint				m_iKey = { 0 };
 
 protected:
 	CModel*				m_pModelCom = { nullptr };

@@ -24,6 +24,7 @@
 
 // UI
 #include "UI_Stat.h"
+#include "UI_Obtain.h"
 #include "Inventory.h"
 
 // Interactive
@@ -90,7 +91,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	// BEACH :  _float4(-75.f, 3.f, 68.f, 1.f); _float4(-66.f, 2.f, 62.f, 1.f); 
 	// LIBRARIAN : _float4(3.f, 0.2f, 50.f, 1.f);
 	// SHOP : _float4(0.f, 17.f, 8.f, 1.f); _float4(0.f, 17.f, 38.f, 1.f);
-	_float4 vPosition = _float4(0.f, 17.f, 38, 1.f);
+	_float4 vPosition = _float4(-75.f, 3.f, 68.f, 1.f);
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -117,11 +118,13 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		return E_FAIL;
 
 	Set_Dir();
-	Set_Weapon();
+
+	CUI_Obtain* pUIObtain = dynamic_cast<CUI_Obtain*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Obtain")));
+	m_isObtain = pUIObtain->Get_Using();
 	
 	// State_Machine
 	m_pModelCom->Update_State(fTimeDelta);
-	if(false == m_isUsingInventory && false == m_isUsingShop)
+	if(false == m_isUsingInventory && false == m_isUsingShop && false == m_isObtain)
 		Update_State();
 	Update_Camera();
 
@@ -164,46 +167,28 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		PartObject.second->Tick(fTimeDelta);
 
 	// Inventory
-	if (false == m_isUsingShop && true == m_pGameInstance->Get_DIKeyState(DIK_TAB, KEY_DOWN))
-	{
-		m_isUsingInventory = !m_isUsingInventory;
-		m_pInventory->Set_Using(m_isUsingInventory);
+	if (false == m_isUsingShop && true == m_pGameInstance->Get_DIKeyState(DIK_TAB, KEY_DOWN) && STATE_DODGE != m_eState)
+	{	
+		if (false == m_isObtain)
+		{
+			m_isUsingInventory = !m_isUsingInventory;
+			m_pInventory->Set_Using(m_isUsingInventory);
+			Change_State(STATE_IDLE);
+		}
 	}
 	m_pInventory->Tick(fTimeDelta);
 
 	m_isInteractive = false;
 
-	/*static _uint iType = 0;
-	static _uint iItem = 0;
+	/*static _bool isCompute = false;
 
-	if (true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD1, KEY_DOWN))
-	{
-		++iType;
-	}
-
-	if (true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD2, KEY_DOWN))
-	{
-		++iItem;
-	}
-
-	if(true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD3, KEY_DOWN))
-	{
-		CItem* pItem = CItem::Create();
-		pItem->Set_ItemType((CItem::ITEM_TYPE)iType);
-		pItem->Set_Item((CItem::ITEM)iItem);
-		
-		m_pInventory->Add_Item(pItem);
-	}*/
-
-	static _bool isCompute = false;
-
-	/*if(true == m_pGameInstance->Get_DIKeyState(DIK_Y, KEY_DOWN))
+	if(true == m_pGameInstance->Get_DIKeyState(DIK_Y, KEY_DOWN))
 	{
 		isCompute = true;		
-	}*/
+	}
 
 	if(true == isCompute)
-		Compute_Height();
+		Compute_Height();*/
 
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 	m_pGameInstance->Add_RigidGroup(this);
@@ -270,29 +255,6 @@ void CPlayer::Update_State()
 		{
 			Change_State(STATE_MOVE);			
 		}
-
-		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-		{
-			switch (m_eWeapon)
-			{
-			case WEAPON_STICK:
-				Change_State(STATE_ATTACK_STICK);
-				break;
-			case WEAPON_SWORD:
-				Change_State(STATE_ATTACK_SWORD);
-				break;
-			case WEAPON_SHOTGUN:
-				Change_State(STATE_ATTACK_SHOTGUN);
-				break;
-			case WEAPON_WAND:
-				if (m_fMP > 0.8f)
-					Change_State(STATE_ATTACK_WAND);
-			case WEAPON_END:
-				break;
-			default:
-				break;
-			}
-		}
 		 
 		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
@@ -303,8 +265,8 @@ void CPlayer::Update_State()
 		if (m_pGameInstance->Get_DIKeyState(DIK_O, KEY_DOWN))
 			Change_State(STATE_SLEEP);
 
-		if (m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN))
-			Change_State(STATE_DAMAGE);
+		/*if (m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN))
+			Change_State(STATE_DAMAGE);*/
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
@@ -321,29 +283,6 @@ void CPlayer::Update_State()
 			Change_State(STATE_IDLE);
 		}
 
-		if (m_pGameInstance->Get_DIMouseState(DIMKS_LBUTTON, KEY_DOWN))
-		{
-			switch (m_eWeapon)
-			{
-			case WEAPON_STICK:
-				Change_State(STATE_ATTACK_STICK);
-				break;
-			case WEAPON_SWORD:
-				Change_State(STATE_ATTACK_SWORD);
-				break;
-			case WEAPON_SHOTGUN:
-				Change_State(STATE_ATTACK_SHOTGUN);
-				break;
-			case WEAPON_WAND:
-				if(m_fMP >= 0.8f)
-					Change_State(STATE_ATTACK_WAND);	
-				break;
-			case WEAPON_END:
-				break;
-			default:
-				break;
-			}
-		}
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
@@ -369,6 +308,56 @@ void CPlayer::Update_State()
 		break;
 	default:
 		break;
+	}
+
+	if (false == m_isUsingInventory)
+	{
+		if (m_pGameInstance->Get_DIKeyState(DIK_J, KEY_DOWN) ||
+			m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN) ||
+			m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
+		{
+			if (WEAPON_END != m_eWeapon)
+			{
+				CPlayer_Weapon* pWeapon = Find_Weapon(m_eWeapon);
+				if (nullptr == pWeapon)
+					return;
+
+				pWeapon->Set_isUsing(false);
+			}
+
+			if (m_pGameInstance->Get_DIKeyState(DIK_J, KEY_DOWN))
+			{
+				m_eWeapon = (WEAPON)(m_pInventory->Get_Weapon(DIK_J));
+				Set_Weapon(DIK_J);
+			}
+			else if (m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN))
+			{
+				m_eWeapon = (WEAPON)(m_pInventory->Get_Weapon(DIK_K));
+				Set_Weapon(DIK_K);
+			}
+			else if (m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN))
+			{
+				m_eWeapon = (WEAPON)(m_pInventory->Get_Weapon(DIK_L));
+				Set_Weapon(DIK_L);
+			}
+
+			switch (m_eWeapon)
+			{
+			case WEAPON_STICK:
+				Change_State(STATE_ATTACK_STICK);
+				break;
+			case WEAPON_SWORD:
+				Change_State(STATE_ATTACK_SWORD);
+				break;
+			case WEAPON_WAND:
+				if (m_fMP > 0.8f)
+					Change_State(STATE_ATTACK_WAND);
+			case WEAPON_END:
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
 
@@ -421,31 +410,6 @@ void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 
 	dynamic_cast<CPlayer_Weapon*>(pWeapon)->Set_isUsing(isRender);
 }
-
-//_bool CPlayer::isAttack()
-//{
-//	if (m_eAnimationIndex == ANIM_SWING_SWORD1)
-//	{
-//		_uint iIndex = m_pModelCom->Get_Current_Frame(ANIM_SWING_SWORD1);
-//		if (15 <= iIndex && 40 >= iIndex)
-//			return true;
-//	}
-//	else if(m_eAnimationIndex == ANIM_SWING_SWORD2)
-//	{
-//		_uint iIndex = m_pModelCom->Get_Current_Frame(ANIM_SWING_SWORD2);
-//		if (5 <= iIndex && 25 >= iIndex)
-//			return true;
-//	}
-//	else if (m_eAnimationIndex == ANIM_SWING_SWORD3)
-//	{
-//		_uint iIndex = m_pModelCom->Get_Current_Frame(ANIM_SWING_SWORD3);
-//		if (15 <= iIndex && 55 >= iIndex)
-//			return true;
-//	}
-//
-//
-//	return false;
-//}
 
 HRESULT CPlayer::Add_Components()
 {
@@ -718,51 +682,15 @@ void CPlayer::Set_Dir()
 	}
 }
 
-void CPlayer::Set_Weapon()
+void CPlayer::Set_Weapon(_uint iKey)
 {
-	if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
-	{
-		m_eWeapon = WEAPON_STICK;
-		static _bool isStick = false;
-		isStick = !isStick;
-		if (true == isStick)
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), true);
-		else
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Stick"), false);
-	}
+	CPlayer_Weapon* pWeapon = Find_Weapon(m_eWeapon);
+	if (nullptr == pWeapon)
+		return;
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
-	{
-		m_eWeapon = WEAPON_SWORD;
-		static _bool isSword = false;
-		isSword = !isSword;
-		if (true == isSword)
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Sword"), true);
-		else
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Sword"), false);
-	}
+	pWeapon->Set_Key(iKey);
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
-	{
-		m_eWeapon = WEAPON_SHOTGUN;
-		static _bool isShotgun = false;
-		isShotgun = !isShotgun;
-		if (true == isShotgun)
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), true);
-		else
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shotgun"), false);
-	}
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
-	{
-		m_eWeapon = WEAPON_WAND;
-		static _bool isWandbow = false;
-		isWandbow = !isWandbow;
-		if (true == isWandbow)
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wand"), true);
-		else
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Wand"), false);
-	}
+	pWeapon->Set_isUsing(true);
 	
 	static _bool isShield = false;
 	if (m_pGameInstance->Get_DIKeyState(DIK_B, KEY_DOWN))
@@ -778,8 +706,6 @@ void CPlayer::Set_Weapon()
 		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second);
 	else if(WEAPON_SWORD == m_eWeapon)
 		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second);
-	else if (WEAPON_SHOTGUN == m_eWeapon)
-		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second);
 
 	if(true == isShield)
 		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, m_PartObjects.find(TEXT("Part_Player_Weapon_Shield"))->second);
@@ -897,6 +823,18 @@ void CPlayer::Compute_Height()
 	tDesc.vPosition = vWorldPos;
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Particle_Red"), &tDesc)))
 		return;*/
+}
+
+CPlayer_Weapon* CPlayer::Find_Weapon(WEAPON eWeapon)
+{
+	for (auto iter = m_PartObjects.begin(); iter != m_PartObjects.end(); ++iter)
+	{
+		CPlayer_Weapon* pWeapon = dynamic_cast<CPlayer_Weapon*>(iter->second);
+		if (pWeapon->Get_Weapon() == eWeapon)
+			return pWeapon;
+	}
+
+	return nullptr;
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -270,6 +270,7 @@ HRESULT CPlayer_Weapon::Tick(_float fTimeDelta)
 		__super::Tick(fTimeDelta);
 
 		m_pColliderCom->Tick(XMLoadFloat4x4(&m_WorldMatrix));
+		m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER_WEAPON, this);
 	}
 
 	return S_OK;
@@ -290,10 +291,10 @@ void CPlayer_Weapon::Late_Tick(_float fTimeDelta)
 
 		m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 
-//#ifdef _DEBUG
-//		//for (auto& pColliderCom : m_pColliderCom)
-//		m_pGameInstance->Add_DebugComponent(m_pColliderCom);
-//#endif
+#ifdef _DEBUG
+		//for (auto& pColliderCom : m_pColliderCom)
+		m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+#endif
 	}
 }
 

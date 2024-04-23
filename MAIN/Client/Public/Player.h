@@ -44,7 +44,7 @@ public:
 	};
 
 	enum WEAPON { 
-		WEAPON_STICK, WEAPON_SWORD, WEAPON_SHOTGUN, WEAPON_WAND, WEAPON_SHIELD, WEAPON_END 
+		WEAPON_STICK, WEAPON_SWORD, WEAPON_WAND, WEAPON_SHIELD, WEAPON_END 
 	};
 
 	enum DIR { 
@@ -132,6 +132,7 @@ private:
 	_bool								m_isInteractive = { false };
 	_bool								m_isChestOpen = { false };
 	_bool								m_isUsingShop = { false };
+	_bool								m_isObtain = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
@@ -172,20 +173,21 @@ private:
 	class CInventory*					m_pInventory = { nullptr };
 
 private:
-	void			Update_State();
-	void			Update_Camera();
+	void							Update_State();
+	void							Update_Camera();
 	
 private:
-	HRESULT			Add_Components();
-	HRESULT			Add_PartObjects();
-	HRESULT			Add_States();
-	HRESULT			Bind_ShaderResources();
-	void			Set_Animation();
-	void			Set_Dir();
-	void			Set_Weapon();
-	CTransform*		Set_LockOn_Target();
-	void			Compute_Stat_Gauge(_float fTimeDelta);
-	void			Compute_Height();
+	HRESULT							Add_Components();
+	HRESULT							Add_PartObjects();
+	HRESULT							Add_States();
+	HRESULT							Bind_ShaderResources();
+	void							Set_Animation();
+	void							Set_Dir();
+	void							Set_Weapon(_uint iKey);
+	CTransform*						Set_LockOn_Target();
+	void							Compute_Stat_Gauge(_float fTimeDelta);
+	void							Compute_Height();
+	class CPlayer_Weapon*			Find_Weapon(WEAPON eWeapon);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

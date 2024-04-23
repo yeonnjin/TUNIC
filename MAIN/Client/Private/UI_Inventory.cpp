@@ -174,23 +174,6 @@ HRESULT CUI_Inventory::Set_UIInfo()
     tDesc.eShader = UI_STAT;
     m_UIDescs.emplace_back(tDesc);
 
-    //// 3 - ITEM
-    //pTransform = CTransform::Create(m_pDevice, m_pContext);
-    //if (nullptr == pTransform)
-    //    return E_FAIL;
-
-    //fSizeX = 211.f;
-    //fSizeY = 106.f;
-    //pTransform->Set_Scaled(fSizeX, fSizeY, 1.f);
-    //pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + 1173.f, g_iWinSizeY * 0.5f - 97.f, 0.f, 1.f });
-    //m_pUITransformComs.emplace_back(pTransform);
-
-    //tDesc = {};
-    //tDesc.iBindTextureIndex = 3;
-    //tDesc.iBindTransformIndex = 3;
-    //tDesc.eShader = UI_STAT;
-    //m_UIDescs.emplace_back(tDesc);
-
 
     // POSITION
     _uint iMaxItem = 4;
@@ -212,19 +195,6 @@ HRESULT CUI_Inventory::Set_UIInfo()
                 m_vPositions[i][j] = { fMinSizeX + j * fDistanceX, fUtileY + i * fDistanceY };
         }
     }
-
-    /*m_PosUtiles.push_back(_float2{ 128.f, 262.f });
-    m_PosUtiles.push_back(_float2{ 226.f, 262.f });
-
-    m_PosUses.push_back(_float2{ 128.f, 525.f });
-    m_PosUses.push_back(_float2{ 226.f, 525.f });
-    m_PosUses.push_back(_float2{ 324.f, 525.f });
-    m_PosUses.push_back(_float2{ 422.f, 525.f });
-
-    m_PosWeapons.push_back(_float2{ 128.f, 672.f });
-    m_PosWeapons.push_back(_float2{ 226.f, 672.f });
-    m_PosWeapons.push_back(_float2{ 324.f, 672.f });
-    m_PosWeapons.push_back(_float2{ 422.f, 672.f });*/
 
     return S_OK;
 }

@@ -6,12 +6,25 @@
 #include "UI_Slot.h"
 #include "UI_Obtain.h"
 
-#include "Item.h"
+#include "Player.h"
 
 CInventory::CInventory()
     : m_pGameInstance{ CGameInstance::Get_Instance() }
 {
     Safe_AddRef(m_pGameInstance);
+}
+
+_uint CInventory::Get_Weapon(_uint iKey)
+{
+    CUI_Slot::SLOT eSlot;
+    if (DIK_J == iKey)
+        eSlot = CUI_Slot::SLOT_J;
+    else if(DIK_K == iKey)
+        eSlot = CUI_Slot::SLOT_K;
+    else if (DIK_L == iKey)
+        eSlot = CUI_Slot::SLOT_L;
+
+    return m_pUISlot->Get_Weapon(eSlot);
 }
 
 void CInventory::Add_Item(CItem* pItem)
@@ -135,6 +148,7 @@ void CInventory::Select_Item()
     m_pUIInventory->Set_Select(m_iSelectRow, m_iSelectColumn);
 
     // 아이템 사용
+    // TYPE_USE
     if (true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN) && m_iSelectRow == CItem::TYPE_USE)
     {
         if (S_OK == m_Items[m_iSelectRow][m_iSelectColumn]->Use_Item())
@@ -167,6 +181,22 @@ void CInventory::Select_Item()
                 }
             }
         }
+    }
+    // TYPE_WEAPON
+    // SLOT_J
+    else if (true == m_pGameInstance->Get_DIKeyState(DIK_J, KEY_DOWN) && m_iSelectRow == CItem::TYPE_WEAPON)
+    {
+        m_pUISlot->Set_Slot(CUI_Slot::SLOT_J, (CPlayer::WEAPON)Set_WeaponIndex(m_Items[m_iSelectRow][m_iSelectColumn]->Get_Item()));
+    }
+    // SLOT_K
+    else if (true == m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN) && m_iSelectRow == CItem::TYPE_WEAPON)
+    {
+        m_pUISlot->Set_Slot(CUI_Slot::SLOT_K, (CPlayer::WEAPON)Set_WeaponIndex(m_Items[m_iSelectRow][m_iSelectColumn]->Get_Item()));
+    }
+    // SLOT_L
+    else if (true == m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN) && m_iSelectRow == CItem::TYPE_WEAPON)
+    {
+        m_pUISlot->Set_Slot(CUI_Slot::SLOT_L, (CPlayer::WEAPON)Set_WeaponIndex(m_Items[m_iSelectRow][m_iSelectColumn]->Get_Item()));
     }
 }
 
@@ -210,6 +240,21 @@ void CInventory::Tick(_float fTimeDelta)
             for (auto& pItem : m_pUIItems[i])
                 pItem->Late_Tick(fTimeDelta);
         }
+    }
+}
+
+_uint CInventory::Set_WeaponIndex(CItem::ITEM eItem)
+{
+    switch (eItem)
+    {
+    case Client::CItem::ITEM_STICK:
+        return CPlayer::WEAPON_STICK;
+    case Client::CItem::ITEM_SWORD:
+        return CPlayer::WEAPON_SWORD;
+    case Client::CItem::ITEM_WAND:
+        return CPlayer::WEAPON_WAND;
+    default:
+        break;
     }
 }
 

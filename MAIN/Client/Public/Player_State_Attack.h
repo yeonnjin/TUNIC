@@ -25,6 +25,7 @@ protected:
 	_uint					m_iCombo = { 0 };
 	_uint					m_iMaxCombo = { 0 };
 	_float					m_fComboTime = { 0.f };
+	_uint					m_iKey = { 0 };
 
 public:
 	virtual void Free() override;
