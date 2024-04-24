@@ -22,8 +22,12 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     m_fComboTime += fTimeDelta;
     m_pWeapon->Set_isAttackFrame(false);
 
+    // 콤보 키 입력 횟수 확인
+    if (0.4f < m_fComboTime && true == m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
+        ++m_iNumKeyInput;
+
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 2번째 콤보
-    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD1) && m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
+    if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD1) && 0 < m_iNumKeyInput)
     {
         ++m_iCombo;
         m_fComboTime = 0.f;
@@ -38,8 +42,8 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
             m_pWeapon->Set_isAttackFrame(true);
     }
 
-    // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료w
-    if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD1))
+    // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
+    if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD1) && 1 > m_iNumKeyInput)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
@@ -48,10 +52,10 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::STATE_MOVE);
         else
             m_pPlayer->Change_State(CPlayer::STATE_IDLE);
-    }
+    }                                                                   
 
     // 두 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 3번째 콤보
-    if (1 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD2) && m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
+    if (1 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD2) && 1 < m_iNumKeyInput)
     {
         ++m_iCombo;
         m_fComboTime = 0.f;
@@ -67,7 +71,7 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     }
 
     // 두 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
-    if (1 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD2))
+    if (1 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_SWORD2) && 2 > m_iNumKeyInput)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
@@ -92,6 +96,7 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
+        m_iNumKeyInput = 0;
         
         IF_PLAYER_ISMOVE
             m_pPlayer->Change_State(CPlayer::STATE_MOVE);
@@ -109,6 +114,8 @@ void CPlayer_State_Attack_Sword::OnStateExit()
 {
     m_iCombo = 0;
     m_fComboTime = 0.f;
+    m_iNumKeyInput = 0;
+
     m_pWeapon->Set_isAttackFrame(false);
 }
 

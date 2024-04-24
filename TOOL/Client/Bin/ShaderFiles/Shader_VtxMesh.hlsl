@@ -89,8 +89,8 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vColor = vector(((g_vLightDiffuse * vDiffuse) * saturate(In.vShade)).rgb, 1.f)
                         + (g_vLightSpecular * g_vMtrlSpecular) * In.fSpecular;
     
-    if (0.3f >= Out.vColor.a)
-        discard;
+    //if (0.3f >= Out.vColor.a)
+    //    discard;
     
     return Out;
 }

@@ -20,6 +20,7 @@ public:
 
 private:
 	_bool	m_isNextCombo = { false };
+	_uint	m_iNumKeyInput = { 0 };
 
 public:
 	static CPlayer_State_Attack_Sword* Create(class CPlayer* pPlayer, class CPlayer_Weapon* pWeapon);

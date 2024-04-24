@@ -61,6 +61,7 @@ public:
 	HRESULT					Set_Animation_isLoop(_uint iAnimIndex, _bool isLoop);
 	void					Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot);
 	void					Set_TargetTransform(CTransform* pTargetTransform);
+	void					Set_AnimationData_Initialize(_uint iAnimIndex);
 		
 	void					Set_Blend_Time(_uint iAnimIndex, _float fBlendTime);
 	void					Set_Frame_Tick(_uint iAnimIndex, _uint iStartFrame, _uint iEndFrame, _float fTickWeight);

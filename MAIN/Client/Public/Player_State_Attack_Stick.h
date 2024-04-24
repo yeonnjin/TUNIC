@@ -18,6 +18,9 @@ public:
 	// 상태 변경 시 호출
 	virtual void OnStateExit() override;
 
+private:
+	_uint	m_iNumKeyInput = { 0 };
+
 public:
 	static CPlayer_State_Attack_Stick* Create(class CPlayer* pPlayer, class CPlayer_Weapon* pWeapon);
 	virtual void Free() override;

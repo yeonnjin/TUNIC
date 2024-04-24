@@ -44,7 +44,7 @@ public:
 	};
 
 	enum WEAPON { 
-		WEAPON_STICK, WEAPON_SWORD, WEAPON_WAND, WEAPON_SHIELD, WEAPON_END 
+		WEAPON_STICK, WEAPON_SWORD, WEAPON_WAND, WEAPON_SHIELD, WEAPON_DASH, WEAPON_END 
 	};
 
 	enum DIR { 
@@ -79,9 +79,11 @@ public:
 	void			Set_Level(_uint iLevel) { m_iLevel = iLevel; }
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
+	void			Set_AnimationData_Initialize(ANIMATION eAnimIndex) { m_pModelCom->Set_AnimationData_Initialize(eAnimIndex); }
 	void			Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender);
 	void			Set_Parrying(_bool isParrying) { m_isParrying = isParrying; }
 	void			Set_LockOn(LOCKON eLockOn) { m_eLockOn = eLockOn; }
+	void			Set_UtileItem(WEAPON eWeapon);
 
 	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
 	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
@@ -93,6 +95,7 @@ public:
 	_bool			isMove() { return m_eState == STATE_IDLE ? false : true; }
 	_bool			isAttack() { return m_eState == STATE_ATTACK_STICK || m_eState == STATE_ATTACK_SWORD || m_eState == STATE_ATTACK_SHOTGUN ? true : false; }
 	_bool			isParrying() { return m_isParrying; }
+	//_bool			isAttacking() { return m_isAttcking; }
 
 	_float			Get_SP() { return m_fSP; }
 	_float			Get_MP() { return m_fMP; }
@@ -125,7 +128,7 @@ private:
 	
 	_bool								m_isBlend = { false };
 	_bool								m_isParrying = { false };
-	_bool								m_isAttackFrame = { false };
+	//_bool								m_isAttackFrame = { false };
 	_bool								m_isCanChange = { true };
 	//_bool								m_isChanged = { false };
 	_bool								m_isUsingInventory = { false };
@@ -133,6 +136,7 @@ private:
 	_bool								m_isChestOpen = { false };
 	_bool								m_isUsingShop = { false };
 	_bool								m_isObtain = { false };
+	//_bool								m_isAttcking = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };

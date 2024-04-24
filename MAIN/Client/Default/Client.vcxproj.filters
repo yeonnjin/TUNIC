@@ -382,6 +382,9 @@
     <Filter Include="02.GameObjects\Interactive\Telescope">
       <UniqueIdentifier>{539257c3-cdfe-4a40-bdf9-4f75987a649c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Interactive">
+      <UniqueIdentifier>{c9257a0a-7e9d-41be-985e-fc41746df9f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -720,6 +723,9 @@
     <ClInclude Include="..\Public\Object_Telescope.h">
       <Filter>02.GameObjects\Interactive\Telescope</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UI_Interactive.h">
+      <Filter>02.GameObjects\UI\Interactive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1039,6 +1045,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Object_Telescope.cpp">
       <Filter>02.GameObjects\Interactive\Telescope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Interactive.cpp">
+      <Filter>02.GameObjects\UI\Interactive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

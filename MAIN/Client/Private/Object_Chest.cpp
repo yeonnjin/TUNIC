@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Object_Chest.h"
 
+#include "UI_Interactive.h"
+
 CObject_Chest::CObject_Chest(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CInteractiveObject{ pDevice, pContext }
 {
@@ -214,4 +216,8 @@ void CObject_Chest::Free()
 
 void CObject_Chest::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    __super::Collision_Event(pGameObject);
+
+    if (false == m_isClose)
+        m_pUIInteractive->Set_Using(false);
 }

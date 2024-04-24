@@ -56,6 +56,8 @@ private:
 	HRESULT Bind_ShaderResources();
 	HRESULT Ready_MapObj_File();
 
+	void	Turn_Pivot(_vector vPivot, _vector vAxis, _float fAngle);
+
 public:
 	static CMap* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;

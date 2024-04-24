@@ -27,6 +27,19 @@ _uint CInventory::Get_Weapon(_uint iKey)
     return m_pUISlot->Get_Weapon(eSlot);
 }
 
+_bool CInventory::Get_HaveItem(CItem::ITEM eItem)
+{
+    for (size_t i = 0; i < m_iMaxItem; i++)
+    {
+        if (nullptr != m_Items[CItem::TYPE_UTILE][i])
+        {
+            if (eItem == m_Items[CItem::TYPE_UTILE][i]->Get_Item())
+                return true;
+        }
+    }
+    return false;
+}
+
 void CInventory::Add_Item(CItem* pItem)
 {
     CItem::ITEM_TYPE eType = pItem->Get_ItemType();
@@ -68,9 +81,9 @@ void CInventory::Add_Item(CItem* pItem)
 void CInventory::Select_Item()
 {
     // 방향키를 눌렀을 때, 해당 방향에 아이템이 있으면 이동
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_DOWN) && 0 < m_iSelectRow)
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_UP, KEY_DOWN) && CItem::TYPE_USE < m_iSelectRow)
     {
-        for (size_t i = 1; i < m_iSelectRow + 1; i++)
+        for (size_t i = 1; i < m_iSelectRow; i++)
         {
             if (nullptr != m_Items[m_iSelectRow - i][m_iSelectColumn])
             {
@@ -104,9 +117,9 @@ void CInventory::Select_Item()
             }
         }
         // 맨 왼쪽 아이템일 때, 윗 줄 마지막 아이템으로 이동
-        else if(0 == m_iSelectColumn && 0 < m_iSelectRow)
+        else if(0 == m_iSelectColumn && CItem::TYPE_USE < m_iSelectRow)
         {
-            for (size_t i = m_iMaxItem - 1 ; i >= 0; i--)
+            for (size_t i = m_iMaxItem - 1 ; i > 0; i--)
             {
                 if (nullptr != m_Items[m_iSelectRow - 1][i])
                 {

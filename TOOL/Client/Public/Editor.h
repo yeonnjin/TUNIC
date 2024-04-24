@@ -40,6 +40,11 @@ private:
 	HRESULT			Load_Nav_Mesh();
 	void			Tool_Nav_Mesh();
 
+	// PUZZLE
+	void			Tool_Puzzle();
+	HRESULT			Make_Puzzle_Dot();
+
+
 	// MODEL_LIST
 	HRESULT			Load_Model();
 	void			Tool_Model_List();

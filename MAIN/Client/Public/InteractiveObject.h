@@ -24,24 +24,25 @@ protected:
 	virtual ~CInteractiveObject() = default;
 
 public:
-	INTERACTIVE		Get_InteractiveType() { return m_eInteractiveType; }
+	INTERACTIVE				Get_InteractiveType() { return m_eInteractiveType; }
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT			Initialize_Prototype() override;
+	virtual HRESULT			Initialize(void* pArg) override;
+	virtual HRESULT			Tick(_float fTimeDelta) override;
+	virtual void			Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT			Render() override;
 
 protected:
-	INTERACTIVE		m_eInteractiveType = { INTERACTIVE_END };
+	INTERACTIVE				m_eInteractiveType = { INTERACTIVE_END };
 
-	_matrix			m_ColliderMatrix = {};
+	_matrix					m_ColliderMatrix = {};
 
 protected:
-	CAnimator*		m_pModelCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
-	CCollider*		m_pColliderCom = { nullptr };
+	CAnimator*				m_pModelCom = { nullptr };
+	CShader*				m_pShaderCom = { nullptr };
+	CCollider*				m_pColliderCom = { nullptr };
+	class CUI_Interactive*	m_pUIInteractive = { nullptr };
 
 protected:
 	virtual HRESULT	Add_Components();

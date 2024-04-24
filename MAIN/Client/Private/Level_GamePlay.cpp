@@ -417,7 +417,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	// Prototype_Component_Model_Map_Beach
 	// Prototype_Component_Model_Map_Librarian
 	// Prototype_Component_Model_Map_Shop
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Beach";
+	// Prototype_Component_Model_Map_Puzzle
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Puzzle";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
@@ -482,7 +483,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Object(const wstring& strLayerTag)
 
 	tDesc = {};
 	tDesc.vPosition = _vector{ -76.f, 2.5f, 90.f, 1.f };
-	tDesc.eType = CItem::TYPE_WEAPON;
+	tDesc.eType = CItem::TYPE_UTILE;
 	tDesc.eItem = CItem::ITEM_SHIELD;
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
 		return E_FAIL;

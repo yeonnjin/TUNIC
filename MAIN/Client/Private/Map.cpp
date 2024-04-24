@@ -18,7 +18,11 @@ HRESULT CMap::Initialize_Prototype()
 
 HRESULT CMap::Initialize(void* pArg)
 {
-    if (FAILED(__super::Initialize(pArg)))
+    CGameObject::GAMEOBJECT_DESC tDesc{};
+    tDesc.fRotationPerSec = XMConvertToRadians(90.f);
+    tDesc.fSpeedPerSec = 3.f;
+
+    if (FAILED(__super::Initialize(&tDesc)))
         return E_FAIL;
 
     MAP_DESC* pDesc = (MAP_DESC*)pArg;
@@ -39,12 +43,25 @@ HRESULT CMap::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    //m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));        
+
     return S_OK;
 }
 
 HRESULT CMap::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
+
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_PRESS))
+    {
+        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f, 0.f }, fTimeDelta);
+        //Turn_Pivot(_vector{ 0.f, 0.f, -60.f }, _vector{ 0.f, 1.f, 0.f, 0.f }, fTimeDelta);
+    }
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_X, KEY_PRESS))
+    {
+        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f, 0.f }, -1.f * fTimeDelta);
+        //Turn_Pivot(_vector{ 0.f, 0.f, 60.f }, _vector{ 0.f, 1.f, 0.f, 0.f }, -1.f * fTimeDelta);
+    }
 
     m_pNavigationCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
@@ -55,9 +72,9 @@ void CMap::Late_Tick(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_FIELD, this);
 
-//#ifdef _DEBUG
-//    m_pGameInstance->Add_DebugComponent(m_pNavigationCom);
-//#endif
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pNavigationCom);
+#endif
 }
 
 HRESULT CMap::Render()
@@ -134,6 +151,27 @@ HRESULT CMap::Ready_MapObj_File()
     delete[] buffer;
 
     return S_OK;
+}
+
+void CMap::Turn_Pivot(_vector vPivot, _vector vAxis, _float fAngle)
+{
+    // 회전축의 원점으로 이동
+    _matrix TranslationMatrix = XMMatrixTranslation(-vPivot.m128_f32[0], -vPivot.m128_f32[1], -vPivot.m128_f32[2]);
+
+    // Y축 회전
+    _matrix RotationMatrix = XMMatrixRotationAxis(vAxis, fAngle);
+
+    // 원래 회전 축으로 이동
+    _matrix OriginMatrix = XMMatrixTranslation(vPivot.m128_f32[0], vPivot.m128_f32[1], vPivot.m128_f32[2]);
+
+    // 행렬 조합
+    _matrix FinalMatrix = TranslationMatrix * RotationMatrix * OriginMatrix;
+
+    // 최종 변환 행렬을 맵에 적용
+    _vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+    vPosition = XMVector3TransformCoord(vPosition, FinalMatrix);
+    m_pTransformCom->Turn(vAxis, fAngle);
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 }
 
 CMap* CMap::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

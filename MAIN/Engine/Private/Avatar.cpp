@@ -62,6 +62,11 @@ void CAvatar::Set_isUseTransformaion(_bool isUse)
 		pBone->Set_isUseTransformaion(isUse);
 }
 
+void CAvatar::Set_AnimationData_Initialize(_uint iAnimIndex)
+{
+	m_Animations[iAnimIndex]->Set_AnimationData_Initialize();
+}
+
 CBone* CAvatar::Get_Bone_Ptr(_uint iBoneIndex) const
 {
 	auto iter = m_Bones.begin();

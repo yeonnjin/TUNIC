@@ -22,8 +22,11 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     m_fComboTime += fTimeDelta;
     m_pWeapon->Set_isAttackFrame(false);
 
+    if (0.2f < m_fComboTime && true == m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
+        ++m_iNumKeyInput;
+
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 했을 때 : 다음 콤보
-    if (0 == m_iCombo && 0.2f < m_fComboTime && false == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && m_pGameInstance->Get_DIKeyState(m_iKey, KEY_DOWN))
+    if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && 0 < m_iNumKeyInput)
     {
         ++m_iCombo;
         m_fComboTime = 0.f;
@@ -39,8 +42,9 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     }
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
-    if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1))
+    if (0 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK1) && 1 > m_iNumKeyInput)
     {
+        m_iCombo = 0;
         m_fComboTime = 0.f;
 
         IF_PLAYER_ISMOVE
@@ -58,10 +62,13 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
     }
 
     // 두 번째 콤보가 끝나면 상태 종료
-    if (1 == m_iCombo && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_SWING_STICK2))
+    if (1 == m_iCombo && 37 == m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_STICK2))
     {
         m_iCombo = 0;
         m_fComboTime = 0.f;
+        m_iNumKeyInput = 0;
+
+        m_pPlayer->Set_AnimationData_Initialize(CPlayer::ANIM_SWING_STICK2);
 
         IF_PLAYER_ISMOVE
             m_pPlayer->Change_State(CPlayer::STATE_MOVE);
@@ -74,6 +81,9 @@ void CPlayer_State_Attack_Stick::OnStateExit()
 {
     m_iCombo = 0;
     m_fComboTime = 0.f;
+    m_iNumKeyInput = 0;
+
+    m_pWeapon->Set_isAttackFrame(false);
 }
 
 CPlayer_State_Attack_Stick* CPlayer_State_Attack_Stick::Create(CPlayer* pPlayer, CPlayer_Weapon* pWeapon)

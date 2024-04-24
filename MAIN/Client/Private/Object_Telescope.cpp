@@ -156,6 +156,7 @@ void CObject_Telescope::Free()
 
 void CObject_Telescope::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    __super::Collision_Event(pGameObject);
 }
 
 void CObject_Telescope::Damage_Event()

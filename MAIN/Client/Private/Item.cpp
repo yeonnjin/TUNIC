@@ -298,6 +298,7 @@ void CItem::Free()
 
 void CItem::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    __super::Collision_Event(pGameObject);
 }
 
 void CItem::Damage_Event()

@@ -15,6 +15,7 @@ public:
 public:
 	_uint*	Get_NumCubic() { return	&m_iNumCubic; }
 	_uint	Get_Weapon(_uint iKey);
+	_bool	Get_HaveItem(CItem::ITEM eItem);
 
 	void	Add_Item(class CItem* pItem);
 	void	Add_Cubic(_uint iNumCubic) { m_iNumCubic += iNumCubic; }
@@ -32,7 +33,7 @@ private:
 
 	_uint	m_iMaxItem = { 4 };
 
-	_uint	m_iSelectRow = { 0 };
+	_uint	m_iSelectRow = { 1 };
 	_uint	m_iSelectColumn = { 0 };
 
 private:

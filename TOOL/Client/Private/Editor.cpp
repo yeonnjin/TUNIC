@@ -14,9 +14,9 @@
 #include <fstream>
 //#include "Texture.h"
 
-#define DATAPATH "../Bin/Resources/Data/Map/Map_Beach.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Object_Telescope.dat"
-#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Shop.dat"
+#define DATAPATH "../Bin/Resources/Data/Map/Map_Puzzle.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Map_Puzzle.dat"
+#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Puzzle.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1201,6 +1201,10 @@ void CEditor::Tool_Nav_Mesh()
 	// delete, clear
 
 	// sliding
+}
+
+void CEditor::Tool_Puzzle()
+{
 }
 
 void CEditor::Tool_Map_File()

@@ -242,7 +242,8 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Librarian
 	// Prototype_Component_Model_Map_Shop
-	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
+	// Prototype_Component_Model_Map_Puzzle
+	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_Puzzle");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map"), TEXT("Prototype_GameObject_Map"), &tMapDesc)))
 		return E_FAIL;	
 
@@ -288,12 +289,12 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
 	//	return E_FAIL;
 
-	CMap_Object::MAPOBJ_DESC tObjDesc = {};
-	tObjDesc.isLoad = false;
-	tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
-	tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Telescope");
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
-		return E_FAIL;
+	//CMap_Object::MAPOBJ_DESC tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Telescope");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
 
 
 	// WEAPON =================================================================================================================================================== 

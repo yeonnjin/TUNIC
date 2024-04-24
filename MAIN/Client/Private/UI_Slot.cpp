@@ -47,6 +47,9 @@ HRESULT CUI_Slot::Initialize(void* pArg)
     if (FAILED(Set_UIInfo()))
         return E_FAIL;
 
+    for (size_t i = 0; i < SLOT_END; i++)
+        m_eSlotWeapon[i] = CPlayer::WEAPON_END;
+
     return S_OK;
 }
 

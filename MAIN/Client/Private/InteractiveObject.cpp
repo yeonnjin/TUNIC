@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "InteractiveObject.h"
+#include "UI_Interactive.h"
 
 CInteractiveObject::CInteractiveObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
@@ -31,6 +32,12 @@ HRESULT CInteractiveObject::Initialize(void* pArg)
 
     m_eType = OBJ_INTERACTIVE;
 
+    CUI_Interactive::UI_INTERACTIVE_DESC tDesc{};
+    tDesc.pTargetTransform = m_pTransformCom;
+    m_pUIInteractive = dynamic_cast<CUI_Interactive*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Interactive"), &tDesc));
+    if (nullptr == m_pUIInteractive)
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -38,7 +45,9 @@ HRESULT CInteractiveObject::Tick(_float fTimeDelta)
 {
     if (E_FAIL == __super::Tick(fTimeDelta))
         return E_FAIL;
-
+   
+    m_pUIInteractive->Set_Using(false);
+    m_pUIInteractive->Tick(fTimeDelta);
 
     return S_OK;
 }
@@ -46,6 +55,7 @@ HRESULT CInteractiveObject::Tick(_float fTimeDelta)
 void CInteractiveObject::Late_Tick(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+    m_pUIInteractive->Late_Tick(fTimeDelta);
 
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pColliderCom);
@@ -114,8 +124,13 @@ void CInteractiveObject::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
     Safe_Release(m_pColliderCom);
+    Safe_Release(m_pUIInteractive);
 }
 
 void CInteractiveObject::Collision_Event(Engine::CGameObject* pGameObject)
 {
+    if (OBJ_PLAYER == pGameObject->Get_ObjectType())
+    {
+        m_pUIInteractive->Set_Using(true, m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION));
+    }
 }

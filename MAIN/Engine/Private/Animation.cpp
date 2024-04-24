@@ -54,8 +54,8 @@ void CAnimation::Set_AnimationData_Initialize()
 {
     m_fTrackPosition = 0.f;
 
-    /*for (auto& iIndex : m_CurrentKeyFrameIndices)
-        iIndex = 0;*/
+    for (auto& iIndex : m_CurrentKeyFrameIndices)
+        iIndex = 0;
 
     m_isFinished = false;
 }

@@ -57,6 +57,8 @@ HRESULT CMonster_Guard::Initialize(void* pArg)
 
     m_iHP = 3;
 
+    m_eRigid = RIGID_BLOCK;
+
     return S_OK;
 }
 

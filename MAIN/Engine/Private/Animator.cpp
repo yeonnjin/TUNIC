@@ -199,6 +199,14 @@ void CAnimator::Set_TargetTransform(CTransform* pTargetTransform)
 	m_pAnimator_Controller->Set_Animation_Transform(pTargetTransform);
 }
 
+void CAnimator::Set_AnimationData_Initialize(_uint iAnimIndex)
+{
+	if (nullptr == m_pAvatar)
+		return;
+
+	return m_pAvatar->Set_AnimationData_Initialize(iAnimIndex);
+}
+
 void CAnimator::Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot)
 {
 	if (nullptr == m_pAnimator_Controller)

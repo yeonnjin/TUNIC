@@ -104,7 +104,7 @@ void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
         }
     }
     
-    if (true == m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_UP))
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_SEMICOLON, KEY_UP))
     {
         IF_PLAYER_ISMOVE
             m_pPlayer->Change_State(CPlayer::STATE_MOVE);
