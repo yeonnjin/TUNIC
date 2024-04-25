@@ -134,6 +134,16 @@ public:
 	void Go_R(_float fTimeDelta);
 	void Go_FR(_float fTimeDelta);
 
+	void Puzzle_Straight(_float fTimeDelta, _vector vLookDir);
+	void Puzzle_Backward(_float fTimeDelta, _vector vLookDir);
+	void Puzzle_Left(_float fTimeDelta, _vector vLookDir);
+	void Puzzle_Right(_float fTimeDelta, _vector vLookDir);
+
+	void Puzzle_FL(_float fTimeDelta, _vector vLookDir);
+	void Puzzle_FR(_float fTimeDelta, _vector vLookDir);
+	void Puzzle_BL(_float fTimeDelta, _vector vLookDir);
+	void Puzzle_BR(_float fTimeDelta, _vector vLookDir);
+
 private:
 	_float4x4		m_WorldMatrix;
 	_float			m_fSpeedPerSec = { 0.f };

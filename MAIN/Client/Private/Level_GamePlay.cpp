@@ -189,14 +189,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFreeDesc.fNear = 0.1f;
 	tCameraFreeDesc.fFar = 1000.0f;
 
-	//tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
-	//tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
+	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
+	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
 
-	tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
-	tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
+	//tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
+	//tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
 
-	tCameraFreeDesc.fSpeedPerSec = 6.f;
-	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	//tCameraFreeDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+	//tCameraFreeDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+	tCameraFreeDesc.fSpeedPerSec = 12.f;
+	tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(10.0f);
 
 	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc));
 	if (nullptr == pCamera)
@@ -237,6 +240,27 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 		return E_FAIL;
 
 	m_pGameInstance->Add_Camera(TEXT("Camera_LockOn"), pCamera);
+
+	// Camera_LockOn
+	CCamera::CAMERA_DESC		tCameraPuzzleDesc{};
+	tCameraPuzzleDesc.fFovy = XMConvertToRadians(60.0f);
+	tCameraPuzzleDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	tCameraPuzzleDesc.fNear = 0.1f;
+	tCameraPuzzleDesc.fFar = 1000.0f;
+	//tCameraPuzzleDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+	//tCameraPuzzleDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+
+	tCameraPuzzleDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+	tCameraPuzzleDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+	tCameraPuzzleDesc.fSpeedPerSec = 3.f;
+	tCameraPuzzleDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+	pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Puzzle"), &tCameraPuzzleDesc));
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	m_pGameInstance->Add_Camera(TEXT("Camera_Puzzle"), pCamera);
 
 
 	m_pGameInstance->Change_Camera(TEXT("Camera_Free"));

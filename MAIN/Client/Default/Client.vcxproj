@@ -170,6 +170,7 @@
     <ClInclude Include="..\Public\Camera_Follow.h" />
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_LockOn.h" />
+    <ClInclude Include="..\Public\Camera_Puzzle.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\CowBot_State_Attack.h" />
     <ClInclude Include="..\Public\CowBot_State_Damage.h" />
@@ -235,6 +236,7 @@
     <ClInclude Include="..\Public\Player_State_Attack_Stick.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Sword.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Wand.h" />
+    <ClInclude Include="..\Public\Player_State_Climb.h" />
     <ClInclude Include="..\Public\Player_State_Damage.h" />
     <ClInclude Include="..\Public\Player_State_Defense.h" />
     <ClInclude Include="..\Public\Player_State_Dodge.h" />
@@ -242,6 +244,7 @@
     <ClInclude Include="..\Public\Player_State_LockOn.h" />
     <ClInclude Include="..\Public\Player_State_Move.h" />
     <ClInclude Include="..\Public\Player_State_Open.h" />
+    <ClInclude Include="..\Public\Player_State_Puzzle.h" />
     <ClInclude Include="..\Public\Player_State_Sleep.h" />
     <ClInclude Include="..\Public\Player_Weapon.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -293,6 +296,7 @@
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_LockOn.cpp" />
+    <ClCompile Include="..\Private\Camera_Puzzle.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Attack.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Damage.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Die.cpp" />
@@ -357,6 +361,7 @@
     <ClCompile Include="..\Private\Player_State_Attack_Stick.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Sword.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Wand.cpp" />
+    <ClCompile Include="..\Private\Player_State_Climb.cpp" />
     <ClCompile Include="..\Private\Player_State_Damage.cpp" />
     <ClCompile Include="..\Private\Player_State_Defense.cpp" />
     <ClCompile Include="..\Private\Player_State_Dodge.cpp" />
@@ -364,6 +369,7 @@
     <ClCompile Include="..\Private\Player_State_LockOn.cpp" />
     <ClCompile Include="..\Private\Player_State_Move.cpp" />
     <ClCompile Include="..\Private\Player_State_Open.cpp" />
+    <ClCompile Include="..\Private\Player_State_Puzzle.cpp" />
     <ClCompile Include="..\Private\Player_State_Sleep.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

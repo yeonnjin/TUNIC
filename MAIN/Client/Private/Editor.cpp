@@ -210,6 +210,7 @@ void CEditor::Free()
 
 	/*if(nullptr != m_pGizmoTransform)
 		Safe_Release(m_pGizmoTransform);*/
+
 }
 #pragma endregion
 

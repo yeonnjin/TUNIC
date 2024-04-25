@@ -57,6 +57,7 @@ private:
 	HRESULT Ready_MapObj_File();
 
 	void	Turn_Pivot(_vector vPivot, _vector vAxis, _float fAngle);
+	void	Compute_Angle(_float fTimeDelta);
 
 public:
 	static CMap* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

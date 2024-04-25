@@ -18,6 +18,8 @@
 #include "Player_State_Dodge.h"
 #include "Player_State_Defense.h"
 #include "Player_State_Open.h"
+#include "Player_State_Puzzle.h"
+#include "Player_State_Climb.h"
 
 // Camera
 #include "Camera_LockOn.h"
@@ -92,7 +94,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	// LIBRARIAN : _float4(3.f, 0.2f, 50.f, 1.f);
 	// SHOP : _float4(0.f, 17.f, 8.f, 1.f); _float4(0.f, 17.f, 38.f, 1.f);
 	// PUZZLE : _float4(-0.2f, 0.02f, 51.f, 1.f);
-	_float4 vPosition = _float4(-0.2f, 0.02f, 51.f, 1.f);
+	_float4 vPosition = _float4( 0.f, 0.02f, -51.f, 1.f);
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -135,18 +137,21 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		m_isCanChange = true;
 	}
 
-	// Blending
-	if (true == m_isBlend)
+	if(false == m_isStop)
 	{
-		if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+		// Blending
+		if (true == m_isBlend)
 		{
-			m_isBlend = false;
-			m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
-			m_eAnimationIndex = m_eBlendAnimIndex;
+			if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+			{
+				m_isBlend = false;
+				m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
+				m_eAnimationIndex = m_eBlendAnimIndex;
+			}
 		}
-	}	
-	else
-		m_pModelCom->Play_Animation(fTimeDelta);
+		else
+			m_pModelCom->Play_Animation(fTimeDelta);
+	}
 
 	// Collider
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
@@ -154,11 +159,11 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
 	// Navigation
-	/*if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
+	if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 	}
-	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);*/
+	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
 	// Stat
 	Compute_Stat_Gauge(fTimeDelta);
@@ -193,6 +198,9 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 	m_pGameInstance->Add_RigidGroup(this);
+
+	//if (true == m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+	//	m_isPuzzle = !m_isPuzzle;
 
 	return S_OK;
 }
@@ -272,6 +280,16 @@ void CPlayer::Update_State()
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
 
+		if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+			Change_State(STATE_PUZZLE);
+
+		break;
+
+	case STATE_PUZZLE:
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
+			Change_State(STATE_IDLE);
+
 		break;
 
 	case STATE_MOVE:
@@ -310,6 +328,11 @@ void CPlayer::Update_State()
 	default:
 		break;
 	}
+
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_X, KEY_DOWN))
+		Change_State(STATE_CLIMB);
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
+		Change_State(STATE_IDLE);
 
 	if (false == m_isUsingInventory)
 	{
@@ -591,6 +614,8 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
 	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
 	m_pModelCom->Add_State(STATE_OPEN, CPlayer_State_Open::Create(this));
+	m_pModelCom->Add_State(STATE_PUZZLE, CPlayer_State_Puzzle::Create(this));
+	m_pModelCom->Add_State(STATE_CLIMB, CPlayer_State_Climb::Create(this));
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
 
@@ -627,6 +652,7 @@ void CPlayer::Set_Animation()
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_LEFT, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_RIGHT, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_SHIELD, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_CLIMB, true);
 
 	// ROOT
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK1, true);
@@ -640,6 +666,9 @@ void CPlayer::Set_Animation()
 	m_pModelCom->Set_Animation_isRoot(ANIM_STAGGER, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE, true);
 	m_pModelCom->Set_Animation_isRoot(ANIM_DODGE_GARBAGE, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_CLIMB_ON, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_CLIMB_OFF, true);
+	m_pModelCom->Set_Animation_isRoot(ANIM_CLIMB, true);
 
 	// BLEND TIME
 	m_pModelCom->Set_Blend_Time(ANIM_SWING_STICK1, 0.2f);

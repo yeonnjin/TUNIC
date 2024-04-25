@@ -124,9 +124,6 @@
     <Filter Include="02.GameObjects\Player\Weapon\Sword">
       <UniqueIdentifier>{1ca5e47e-68cc-43d7-b6d0-0332e9e87a29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\Weapon\Shotgun">
-      <UniqueIdentifier>{ae16a37f-172c-41af-8511-4857cd544f9b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Player\Weapon\Shield">
       <UniqueIdentifier>{7cd24b3c-5788-4510-98f1-660c0e43517c}</UniqueIdentifier>
     </Filter>
@@ -384,6 +381,15 @@
     </Filter>
     <Filter Include="02.GameObjects\UI\Interactive">
       <UniqueIdentifier>{c9257a0a-7e9d-41be-985e-fc41746df9f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Puzzle">
+      <UniqueIdentifier>{967a295c-e77c-4088-931f-8ce8b29d2700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Puzzle">
+      <UniqueIdentifier>{edf908d2-2283-4ba4-8750-fd3990e5a5cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Climb">
+      <UniqueIdentifier>{86043aba-57c0-4d85-abaf-632715767442}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -726,6 +732,15 @@
     <ClInclude Include="..\Public\UI_Interactive.h">
       <Filter>02.GameObjects\UI\Interactive</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Camera_Puzzle.h">
+      <Filter>02.GameObjects\Camera\Puzzle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Puzzle.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Puzzle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Climb.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Climb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1048,6 +1063,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI_Interactive.cpp">
       <Filter>02.GameObjects\UI\Interactive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Puzzle.cpp">
+      <Filter>02.GameObjects\Camera\Puzzle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Puzzle.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Puzzle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Climb.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Climb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

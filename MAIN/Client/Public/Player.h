@@ -39,7 +39,7 @@ public:
 	enum STATE { 
 		STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, 
 		STATE_ATTACK_SHOTGUN, STATE_ATTACK_WAND, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE,
-		STATE_OPEN,
+		STATE_OPEN, STATE_PUZZLE, STATE_CLIMB,
 		STATE_END
 	};
 
@@ -84,6 +84,7 @@ public:
 	void			Set_Parrying(_bool isParrying) { m_isParrying = isParrying; }
 	void			Set_LockOn(LOCKON eLockOn) { m_eLockOn = eLockOn; }
 	void			Set_UtileItem(WEAPON eWeapon);
+	void			Set_StopAnimation(_bool isStop) { m_isStop = isStop; }
 
 	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
 	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
@@ -95,6 +96,7 @@ public:
 	_bool			isMove() { return m_eState == STATE_IDLE ? false : true; }
 	_bool			isAttack() { return m_eState == STATE_ATTACK_STICK || m_eState == STATE_ATTACK_SWORD || m_eState == STATE_ATTACK_SHOTGUN ? true : false; }
 	_bool			isParrying() { return m_isParrying; }
+	//_bool			isPuzzle() { return m_isPuzzle; }
 	//_bool			isAttacking() { return m_isAttcking; }
 
 	_float			Get_SP() { return m_fSP; }
@@ -137,6 +139,8 @@ private:
 	_bool								m_isUsingShop = { false };
 	_bool								m_isObtain = { false };
 	//_bool								m_isAttcking = { false };
+	//_bool								m_isPuzzle = { false };
+	_bool								m_isStop = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
@@ -177,21 +181,21 @@ private:
 	class CInventory*					m_pInventory = { nullptr };
 
 private:
-	void							Update_State();
-	void							Update_Camera();
+	void								Update_State();
+	void								Update_Camera();
 	
 private:
-	HRESULT							Add_Components();
-	HRESULT							Add_PartObjects();
-	HRESULT							Add_States();
-	HRESULT							Bind_ShaderResources();
-	void							Set_Animation();
-	void							Set_Dir();
-	void							Set_Weapon(_uint iKey);
-	CTransform*						Set_LockOn_Target();
-	void							Compute_Stat_Gauge(_float fTimeDelta);
-	void							Compute_Height();
-	class CPlayer_Weapon*			Find_Weapon(WEAPON eWeapon);
+	HRESULT								Add_Components();
+	HRESULT								Add_PartObjects();
+	HRESULT								Add_States();
+	HRESULT								Bind_ShaderResources();
+	void								Set_Animation();
+	void								Set_Dir();
+	void								Set_Weapon(_uint iKey);
+	CTransform*							Set_LockOn_Target();
+	void								Compute_Stat_Gauge(_float fTimeDelta);
+	void								Compute_Height();
+	class CPlayer_Weapon*				Find_Weapon(WEAPON eWeapon);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

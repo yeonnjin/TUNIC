@@ -69,9 +69,11 @@
 #include "Particle_Blue.h"
 #include "Particle_Red.h"
 
+// Camera
 #include "Camera_Free.h"
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
+#include "Camera_Puzzle.h"
 
 #include <fstream>
 
@@ -348,21 +350,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CSky::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Camera_Free */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Free"),
-		CCamera_Free::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Camera_Follow */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Follow"),
-		CCamera_Follow::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For.Prototype_GameObject_Camera_LockOn */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_LockOn"),
-		CCamera_LockOn::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	/* For.Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
@@ -504,6 +491,28 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CNPC_Merchant::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	// CAMERA =======================================================================================
+
+	/* For.Prototype_GameObject_Camera_Free */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Free"),
+		CCamera_Free::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_Follow */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Follow"),
+		CCamera_Follow::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_LockOn */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_LockOn"),
+		CCamera_LockOn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_Puzzle */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Puzzle"),
+		CCamera_Puzzle::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// UI ===========================================================================================
 
 	/* For.Prototype_GameObject_UI_Stat */
@@ -567,7 +576,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
 	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Shop.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Puzzle.dat");
+	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Puzzle_Origin.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");

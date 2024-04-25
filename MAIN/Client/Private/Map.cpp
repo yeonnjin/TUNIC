@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Map.h"
 
+#include "Player.h"
+
 CMap::CMap(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
@@ -52,16 +54,7 @@ HRESULT CMap::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
 
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_PRESS))
-    {
-        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f, 0.f }, fTimeDelta);
-        //Turn_Pivot(_vector{ 0.f, 0.f, -60.f }, _vector{ 0.f, 1.f, 0.f, 0.f }, fTimeDelta);
-    }
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_X, KEY_PRESS))
-    {
-        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f, 0.f }, -1.f * fTimeDelta);
-        //Turn_Pivot(_vector{ 0.f, 0.f, 60.f }, _vector{ 0.f, 1.f, 0.f, 0.f }, -1.f * fTimeDelta);
-    }
+    //Compute_Angle(fTimeDelta);
 
     m_pNavigationCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
@@ -172,6 +165,19 @@ void CMap::Turn_Pivot(_vector vPivot, _vector vAxis, _float fAngle)
     vPosition = XMVector3TransformCoord(vPosition, FinalMatrix);
     m_pTransformCom->Turn(vAxis, fAngle);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CMap::Compute_Angle(_float fTimeDelta)
+{
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")));
+    _vector vPlayerPosition = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
+    vPlayerPosition.m128_f32[1] = 0.f;
+    _vector vDir = _vector{ 0.f, 0.f, 1.f, 0.f };
+
+    _float fAngle = XMConvertToRadians(90.f);
+    _float fDotAngle = acosf(XMVector3Dot(XMVector3Normalize(vPlayerPosition), vDir).m128_f32[0]);
+    if(0.f != fDotAngle)
+        m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f, 0.f } , fDotAngle);
 }
 
 CMap* CMap::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -73,6 +73,8 @@ void CMainApp::Tick(_float fTimeDelta)
 		m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
 	else if (true == m_pGameInstance->Get_DIKeyState(DIK_H, KEY_DOWN))
 		m_pGameInstance->Change_Camera(TEXT("Camera_Follow"));
+	else if (true == m_pGameInstance->Get_DIKeyState(DIK_F, KEY_DOWN))
+		m_pGameInstance->Change_Camera(TEXT("Camera_Puzzle"));
 
 	// Engine : Late Tick
 	m_pGameInstance->Late_Tick_Engine(fTimeDelta);	
