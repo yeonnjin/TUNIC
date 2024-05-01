@@ -54,14 +54,14 @@ HRESULT CWeapon_Sword::Render()
 HRESULT CWeapon_Sword::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
     _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Weapon_Sword";
     wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, wstr,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
@@ -72,7 +72,7 @@ HRESULT CWeapon_Sword::Add_Components()
     ColliderDesc.vSize = _float3(0.4f, 1.8f, 0.4f);
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 

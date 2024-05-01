@@ -28,24 +28,17 @@ HRESULT CMap::Initialize(void* pArg)
         return E_FAIL;
 
     MAP_DESC* pDesc = (MAP_DESC*)pArg;
-
-    // 맵 오브젝트 로드 시
-    if (true == pDesc->isLoad)
-    {
-        m_pTransformCom->Set_WorldMatrix(pDesc->TransformMatrix);
-    }
-    // 피킹 시
-    else
-    {
-        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
-    }
-
+ 
     m_strModelComTag = pDesc->strModelComTag;
+    m_eLevel = pDesc->eLevel;
 
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));        
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+
+    if(true == pDesc->isRotation)
+        m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));        
 
     return S_OK;
 }
@@ -94,17 +87,17 @@ HRESULT CMap::Render()
 HRESULT CMap::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMeshMap"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxMeshMap"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
+    if (FAILED(__super::Add_Component(m_eLevel, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
     /* For.Com_Navigation */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+    if (FAILED(__super::Add_Component(m_eLevel, TEXT("Prototype_Component_Navigation"),
         TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom)))
         return E_FAIL;
     

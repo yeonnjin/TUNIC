@@ -74,19 +74,20 @@ HRESULT CMonster_Librarian::Initialize(void* pArg)
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
     Set_Animation();
 
-    _float4 vPosition = _float4(-7.f, 0.5f, -7.f, 1.f);
+    _float4 vPosition = _float4(-4.8f, 0.1f, -6.5f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_iHP = 2;
     m_fDamageCoolTime = 0.2f;
+    m_eRigid = RIGID_BLOCK;
 
     return S_OK;
 }
 
 HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
 {
-    if (FAILED(__super::Tick(fTimeDelta)))
-        return E_FAIL;
+   /* if (FAILED(__super::Tick(fTimeDelta)))
+        return E_FAIL;*/
 
    /* static _uint iIndex = 22;
     if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
@@ -99,8 +100,37 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
 
     m_pModelCom->Play_Animation(fTimeDelta);  */   
 
+   if (true == m_isDead)
+        return E_FAIL;
+
+   // State_Machine
+   m_pModelCom->Update_State(fTimeDelta);
+   Update_State();
+
+   // Blending
+   if (true == m_isBlend)
+   {
+       if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
+       {
+           m_isBlend = false;
+           m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
+           m_eAnimationIndex = m_eBlendAnimIndex;
+
+       }
+   }
+   else
+       m_pModelCom->Play_Animation(fTimeDelta);
+
     for (auto& PartObject : m_PartObjects)
         PartObject.second->Tick(fTimeDelta);
+
+    m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+    m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
+    m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
+
+    m_pGameInstance->Add_RigidGroup(this);
 
     return S_OK;
 }
@@ -132,8 +162,15 @@ HRESULT CMonster_Librarian::Add_Components()
     ColliderDesc.vSize = _float3(1.8f, 8.f, 1.8f);
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+        return E_FAIL;
+
+    /* For.Com_Navigation */
+    CNavigation::NAVIGATION_DESC			NavigationDesc{};
+    NavigationDesc.iCurrentIndex = 40;
+    if (FAILED(__super::Add_Component(LEVEL_BOSS, TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
         return E_FAIL;
 
     return S_OK;

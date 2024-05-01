@@ -115,14 +115,14 @@ HRESULT CObject_Chest::Render()
 HRESULT CObject_Chest::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
     _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Object_Chest";
     wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+    if (FAILED(__super::Add_Component(LEVEL_BEACH, wstr,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
@@ -133,7 +133,7 @@ HRESULT CObject_Chest::Add_Components()
     ColliderDesc.vSize = _float3(2.f, 2.f, 2.f);
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 
@@ -144,7 +144,7 @@ HRESULT CObject_Chest::Add_Components()
     RigidDesc.vSize = _float3(2.f, 2.f, 2.f);
     RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
         return E_FAIL;
 

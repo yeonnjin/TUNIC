@@ -82,7 +82,7 @@ HRESULT CMonster_Bat::Add_Components()
     ColliderDesc.fRadius = 1.2f;
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_SPHERE"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 

@@ -161,21 +161,19 @@ HRESULT CNPC_Merchant::Render()
 
 void CNPC_Merchant::Update_State()
 {
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_5, KEY_DOWN))
-        Change_State(STATE_THANKYOU);
 }
 
 HRESULT CNPC_Merchant::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
     _char szModelTag[MAX_PATH] = "Prototype_Component_Model_NPC_Merchant";
     wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+    if (FAILED(__super::Add_Component(LEVEL_SHOP, wstr,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 

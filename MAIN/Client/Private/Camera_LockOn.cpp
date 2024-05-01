@@ -253,13 +253,6 @@ void CCamera_LockOn::OnExit()
 
     m_fRadian = XMConvertToRadians(60.f);
     m_fFovy = XMConvertToRadians(60.f);  
-
-   /* if (true == m_pPlayer->isMove())
-        m_pPlayer->Set_Blending(true, CPlayer::ANIM_WALK_FORWARD);
-    else
-        m_pPlayer->Change_State(CPlayer::STATE_IDLE);*/
-
-    
 }
 
 void CCamera_LockOn::Set_Distance()

@@ -113,14 +113,14 @@ HRESULT CLibrarian_Effect_Orb::Render()
 HRESULT CLibrarian_Effect_Orb::Add_Components()
 {
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
 	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Orb";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
+	if (FAILED(__super::Add_Component(LEVEL_BOSS, wstr,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -132,7 +132,7 @@ HRESULT CLibrarian_Effect_Orb::Add_Components()
 	ColliderDesc.fRadius = 0.6f;
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_SPHERE"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 

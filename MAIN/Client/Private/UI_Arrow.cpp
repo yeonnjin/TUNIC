@@ -53,6 +53,7 @@ void CUI_Arrow::Input_Arrow(ARROW eArrow)
 
 	// ∏¬√Ë¿ª ∂ß
 	m_eAnswer = ANSWER_OK;
+
 	return;
 }
 
@@ -75,10 +76,12 @@ HRESULT CUI_Arrow::Initialize(void* pArg)
 	Set_Answer();
 
 	m_pEasing = CEasing::Get_Instance();
-
-#ifndef _DEBUG
+	m_isClone = true;
 	Safe_AddRef(m_pEasing);
-#endif // _DEBUG  
+
+//#ifndef _DEBUG
+//	Safe_AddRef(m_pEasing);
+//#endif // _DEBUG  
 
 	return S_OK;
 }
@@ -131,7 +134,7 @@ HRESULT CUI_Arrow::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Arrow"),
+	if (FAILED(__super::Add_Component(LEVEL_PUZZLE, TEXT("Prototype_Component_Texture_UI_Arrow"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
@@ -320,5 +323,6 @@ void CUI_Arrow::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pEasing);
+	if(true == m_isClone)
+		Safe_Release(m_pEasing);
 }

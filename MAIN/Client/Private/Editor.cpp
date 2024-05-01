@@ -42,7 +42,8 @@ HRESULT CEditor::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pPlayer = (CPlayer*)m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0);
-	//m_pTargetObject = (CMonster_Spinner*)m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), 0);
+	//m_pTargetObject = (CMonster_Spinner*)m_pGameInstance->Get_GameObject(
+	// , TEXT("Layer_Monster"), 0);
 
 	return S_OK;
 }

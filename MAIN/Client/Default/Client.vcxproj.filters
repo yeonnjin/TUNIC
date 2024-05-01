@@ -421,20 +421,20 @@
     <Filter Include="01.Levels\TUNIC">
       <UniqueIdentifier>{f8371271-87af-449a-8cf9-9bc62fa68511}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\TUNIC\LEVEL_MENU">
+    <Filter Include="01.Levels\TUNIC\0_Menu">
       <UniqueIdentifier>{f6e0685c-3622-4859-945e-933e03cffabc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\TUNIC\LEVEL_BEACH">
+    <Filter Include="01.Levels\TUNIC\1_Beach">
       <UniqueIdentifier>{6de2e0ff-5b39-41c6-8635-0668e162bf63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\TUNIC\LEVEL_SHOP">
-      <UniqueIdentifier>{20151947-ea0e-40c6-96f5-c567ae9448f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\TUNIC\LEVEL_PUZZLE">
+    <Filter Include="01.Levels\TUNIC\3_Puzzle">
       <UniqueIdentifier>{53b88f12-bad9-44c1-a810-f2559abe20d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\TUNIC\LEVEL_BOSS">
+    <Filter Include="01.Levels\TUNIC\4_Boss">
       <UniqueIdentifier>{394ad50f-90b7-43cc-84a2-e9b164c86c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC\2_Shop">
+      <UniqueIdentifier>{20151947-ea0e-40c6-96f5-c567ae9448f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -808,7 +808,19 @@
       <Filter>02.GameObjects\Camera\Telescope</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Menu.h">
-      <Filter>01.Levels\TUNIC\LEVEL_MENU</Filter>
+      <Filter>01.Levels\TUNIC\0_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Beach.h">
+      <Filter>01.Levels\TUNIC\1_Beach</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Puzzle.h">
+      <Filter>01.Levels\TUNIC\3_Puzzle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Shop.h">
+      <Filter>01.Levels\TUNIC\2_Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Boss.h">
+      <Filter>01.Levels\TUNIC\4_Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1164,7 +1176,19 @@
       <Filter>02.GameObjects\Camera\Telescope</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Menu.cpp">
-      <Filter>01.Levels\TUNIC\LEVEL_MENU</Filter>
+      <Filter>01.Levels\TUNIC\0_Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Beach.cpp">
+      <Filter>01.Levels\TUNIC\1_Beach</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Puzzle.cpp">
+      <Filter>01.Levels\TUNIC\3_Puzzle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Shop.cpp">
+      <Filter>01.Levels\TUNIC\2_Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Boss.cpp">
+      <Filter>01.Levels\TUNIC\4_Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

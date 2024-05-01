@@ -42,9 +42,15 @@ private:
 	HRESULT Loading_For_Logo();
 	HRESULT Loading_For_GamePlay();
 
+	HRESULT Loading_For_Menu();
+	HRESULT Loading_For_Beach();
+	HRESULT Loading_For_Shop();
+	HRESULT Loading_For_Puzzle();
+	HRESULT Loading_For_Boss();
+
 private:
-	HRESULT Load_NonAnim_Model(const string& strDataPath);
-	HRESULT Load_Anim_Model(const string& strDataPath);
+	HRESULT Load_NonAnim_Model(const string& strDataPath, LEVEL eLevel);
+	HRESULT Load_Anim_Model(const string& strDataPath, LEVEL eLevel);
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID);

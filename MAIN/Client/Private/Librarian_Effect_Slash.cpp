@@ -47,7 +47,6 @@ HRESULT CLibrarian_Effect_Slash::Initialize(void* pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vStartPosition);
 
-
 	return S_OK;
 }
 
@@ -83,7 +82,17 @@ HRESULT CLibrarian_Effect_Slash::Render()
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+	_uint iNumMeshes{};
+
+	if (true == m_isVertical)
+	{
+		iNumMeshes = m_pModelCom->Get_NumMeshes();
+	}
+	else
+	{
+		iNumMeshes = m_pModelCom_Horizon->Get_NumMeshes();
+	}
+	
 	for (size_t i = 0; i < iNumMeshes; ++i)
 	{
 		if(true == m_isVertical)
@@ -91,52 +100,57 @@ HRESULT CLibrarian_Effect_Slash::Render()
 			if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
 				return E_FAIL;
 
-			/*if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_NormalTexture", i, TEX_NORMALS)))
-				return E_FAIL;*/
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+
+			m_pModelCom->Render(i);
 		}
 		else
 		{
 			if (FAILED(m_pModelCom_Horizon->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
 				return E_FAIL;
 
-			/*if (FAILED(m_pModelCom_Horizon->Bind_ShaderResource(m_pShaderCom, "g_NormalTexture", i, TEX_NORMALS)))
-				return E_FAIL;*/
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+
+			m_pModelCom_Horizon->Render(i);
 		}
-
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		m_pModelCom->Render(i);
 	}
+
 	return S_OK;
 }
 
 HRESULT CLibrarian_Effect_Slash::Add_Components()
 {
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxMesh"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash";
-	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr,
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
-	_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash_Horizon";
-	wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, wstr1,
-		TEXT("Com_Model_Horizon"), (CComponent**)&m_pModelCom_Horizon)))
-		return E_FAIL;
+	if (true == m_isVertical)
+	{
+		_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash";
+		wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+		if (FAILED(__super::Add_Component(LEVEL_BOSS, wstr,
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+	else
+	{
+		_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Boss_Librarian_Effect_Slash_Horizon";
+		wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+		if (FAILED(__super::Add_Component(LEVEL_BOSS, wstr1,
+			TEXT("Com_Model_Horizon"), (CComponent**)&m_pModelCom_Horizon)))
+			return E_FAIL;
+	}
 
 	/* Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
 
 	/* 로컬상의 정보를 셋팅한다. */
 
-	if (m_isVertical)
+	if (true == m_isVertical)
 	{
 		ColliderDesc.vSize = _float3(3.f, 20.f, 6.f);
 		ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
@@ -147,7 +161,7 @@ HRESULT CLibrarian_Effect_Slash::Add_Components()
 		ColliderDesc.vCenter = _float3(0.f, 0.f, ColliderDesc.vSize.z * -0.5f);
 	}
 	
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 

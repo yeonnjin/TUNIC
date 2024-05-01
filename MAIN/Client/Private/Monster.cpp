@@ -30,6 +30,7 @@ HRESULT CMonster::Initialize(void* pArg)
     {
         MONSTER_DESC* pDesc = (MONSTER_DESC*)pArg;
         m_strModelComTag = pDesc->strModelComTag;
+        m_eLevel = pDesc->eLevel;
     }
 
     if (FAILED(Add_Components()))
@@ -141,12 +142,12 @@ HRESULT CMonster::Render()
 HRESULT CMonster::Add_Components()
 {
     /* For.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
         return E_FAIL;
 
     /* For.Com_Model */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
+    if (FAILED(__super::Add_Component(m_eLevel, m_strModelComTag,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
         return E_FAIL;
 
@@ -157,7 +158,7 @@ HRESULT CMonster::Add_Components()
     RigidDesc.vSize = _float3(2.f, 2.f, 2.f);
     RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
         return E_FAIL;
 

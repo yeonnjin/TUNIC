@@ -17,7 +17,6 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Level_Static(); 
 	HRESULT Ready_Layer_BackGround(const wstring& strLayerTag);
 	HRESULT Ready_Layer_UI();
 

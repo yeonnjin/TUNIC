@@ -64,7 +64,7 @@ HRESULT CObject_ColliderBox::Add_Components()
     RigidDesc.vSize = m_vSize;
     RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
         return E_FAIL;
 

@@ -18,10 +18,11 @@ public:
 public:
 	typedef struct Map_Desc : public CGameObject::GAMEOBJECT_DESC
 	{
-		_bool			isLoad;
+		_bool			isRotation;
 		_float3			vPosition;
 		_float4x4		TransformMatrix;
 		wstring			strModelComTag;
+		LEVEL			eLevel;
 	}MAP_DESC;
 
 private:
@@ -42,6 +43,7 @@ public:
 
 private:
 	wstring			m_strModelComTag;
+	LEVEL			m_eLevel = { LEVEL_END };
 
 private:
 	CModel*			m_pModelCom = { nullptr };

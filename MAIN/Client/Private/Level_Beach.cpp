@@ -1,0 +1,393 @@
+#include "stdafx.h"
+#include "Level_Beach.h"
+
+#include "GameInstance.h"
+#include "Level_Loading.h"
+
+#include "Player.h"
+#include "Monster.h"
+#include "Map.h"
+
+#include "Object_Chest.h"
+
+#include "Camera.h"
+#include "Camera_Free.h"
+#include "Camera_Follow.h"
+#include "Camera_LockOn.h"
+
+CLevel_Beach::CLevel_Beach(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+    : CLevel{ pDevice, pContext }
+{
+}
+
+HRESULT CLevel_Beach::Initialize()
+{
+    if (FAILED(__super::Initialize()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Lights()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_UI()))
+        return E_FAIL;
+
+    if (FAILED(Ready_LandObject()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Map(TEXT("Layer_Map"))))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Object(TEXT("Layer_Object"))))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Camera()))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+void CLevel_Beach::Tick(_float fTimeDelta)
+{
+    __super::Tick(fTimeDelta);
+
+    if (GetKeyState(VK_RETURN) & 0x8000)
+    {
+        if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SHOP))))
+            return;
+    }
+}
+
+HRESULT CLevel_Beach::Render()
+{
+    if (FAILED(__super::Render()))
+        return E_FAIL;
+
+    SetWindowText(g_hWnd, TEXT("LEVEL : BEACH"));
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Lights()
+{
+    LIGHT_DESC			LightDesc{};
+
+    LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
+    LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+
+    LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+    LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+    if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
+
+    LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+    LightDesc.vPosition = _float4(20.f, 3.f, 20.f, 1.f);
+    LightDesc.fRange = 10.f;
+
+    LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+    LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 1.f);
+    LightDesc.vSpecular = _float4(1.f, 0.4f, 0.4f, 1.f);
+    if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
+
+    LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+    LightDesc.vPosition = _float4(30.f, 3.f, 20.f, 1.f);
+    LightDesc.fRange = 10.f;
+
+    LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
+    LightDesc.vAmbient = _float4(0.2f, 0.4f, 0.2f, 1.f);
+    LightDesc.vSpecular = _float4(0.4f, 1.f, 0.4f, 1.f);
+    if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_LandObject()
+{
+    if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_Player(const wstring& strLayerTag)
+{
+    // Desc
+    CPlayer::PLAYER_DESC tDesc = {};
+    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Player";
+    wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+    tDesc.strModelComTag = wstr;
+
+    // Clone
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"), &tDesc)))
+        return E_FAIL;
+
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")));
+    pPlayer->Set_Level(LEVEL_BEACH);
+    if(FAILED(pPlayer->Set_Navigation(LEVEL_BEACH)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_Monster(const wstring& strLayerTag)
+{
+    // BLOB
+    CMonster::Monster_Desc tDesc = {};
+    _char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
+    wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
+    tDesc.strModelComTag = wstr2;
+    tDesc.eLevel = LEVEL_BEACH;
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
+        return E_FAIL;
+
+	// SPINNER
+    tDesc = {};
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
+	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+	tDesc.strModelComTag = wstr;
+    tDesc.eLevel = LEVEL_BEACH;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
+		return E_FAIL;
+
+    // COWBOT
+	tDesc = {};
+	_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
+	wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	tDesc.strModelComTag = wstr3;	
+    tDesc.eLevel = LEVEL_BEACH;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
+		return E_FAIL;
+
+    // GUARD
+	tDesc = {};
+	_char szModelTag4[MAX_PATH] = "Prototype_Component_Model_Monster_Guard";
+	wstring wstr4(&szModelTag4[0], &szModelTag4[MAX_PATH]);
+	tDesc.strModelComTag = wstr4;
+    tDesc.eLevel = LEVEL_BEACH;
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Monster_Guard"), &tDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_Map(const wstring& strLayerTag)
+{
+    CMap::MAP_DESC tDesc = {};
+    tDesc.isRotation = true;
+    tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Beach";
+    wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
+    tDesc.strModelComTag = wstr;
+    tDesc.eLevel = LEVEL_BEACH;
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Map"), &tDesc)))
+        return E_FAIL;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_BackGround(const wstring& strLayerTag)
+{
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Sky"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_UI()
+{
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Stat"), TEXT("Prototype_GameObject_UI_Stat"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Inventory"), TEXT("Prototype_GameObject_UI_Inventory"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Slot"), TEXT("Prototype_GameObject_UI_Slot"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Obtain"), TEXT("Prototype_GameObject_UI_Obtain"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_Object(const wstring& strLayerTag)
+{
+    // CHEST
+    CObject_Chest::CHEST_DESC tDesc = {};
+    tDesc.vPosition = _vector{ 76.f, 2.5f, -65.f, 1.f };
+    tDesc.eType = CItem::TYPE_WEAPON;
+    tDesc.eItem = CItem::ITEM_STICK;
+    tDesc.isRotation = true;
+    tDesc.fAngle = 90.f;
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+        return E_FAIL;
+
+    tDesc = {};
+    tDesc.vPosition = _vector{ 74.f, 4.f, -98.f, 1.f };
+    tDesc.eType = CItem::TYPE_UTILE;
+    tDesc.eItem = CItem::ITEM_SHIELD;
+    tDesc.isRotation = true;
+    tDesc.fAngle = 90.f;
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+        return E_FAIL;
+
+    tDesc = {};
+    tDesc.vPosition = _vector{ 28.f, 2.1f, -69.f, 1.f };
+    tDesc.eType = CItem::TYPE_WEAPON;
+    tDesc.eItem = CItem::ITEM_SWORD;
+    tDesc.isRotation = true;
+    tDesc.fAngle = -90.f;
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+        return E_FAIL;
+
+    tDesc = {};
+    tDesc.vPosition = _vector{ 4.2f, 1.5f, -72.f, 1.f };
+    tDesc.eType = CItem::TYPE_WEAPON;
+    tDesc.eItem = CItem::ITEM_WAND;
+    tDesc.isRotation = true;
+    tDesc.fAngle = 90.f;
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
+        return E_FAIL;
+
+    // TELESCOPE
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, TEXT("Layer_Object_Telescope"), TEXT("Prototype_GameObject_Object_Telescope"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Beach::Ready_Layer_Camera()
+{
+    // Camera_Free
+    CCamera_Free::CAMERA_FREE_DESC tCameraFreeDesc{};
+    tCameraFreeDesc.fMouseSensor = 0.5f;
+    tCameraFreeDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraFreeDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraFreeDesc.fNear = 0.1f;
+    tCameraFreeDesc.fFar = 1000.0f;
+
+    //tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
+    //tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
+
+    tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
+    tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
+
+    //tCameraFreeDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+    //tCameraFreeDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+    tCameraFreeDesc.fSpeedPerSec = 12.f;
+    tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Free"), &tCameraFreeDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_Free"), pCamera);
+
+    // Camera_Follow
+    CCamera_Follow::CAMERA_FOLLOW_DESC		tCameraFollowDesc{};
+    tCameraFollowDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraFollowDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraFollowDesc.fNear = 0.1f;
+    tCameraFollowDesc.fFar = 1000.0f;
+    tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+    tCameraFollowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+    tCameraFollowDesc.fSpeedPerSec = 3.f;
+    tCameraFollowDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Follow"), &tCameraFollowDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_Follow"), pCamera);
+
+    // Camera_LockOn
+    CCamera_LockOn::CAMERA_LOCKON_DESC		tCameraLockOnDesc{};
+    tCameraLockOnDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraLockOnDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraLockOnDesc.fNear = 0.1f;
+    tCameraLockOnDesc.fFar = 1000.0f;
+    tCameraLockOnDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+    tCameraLockOnDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+    tCameraLockOnDesc.fSpeedPerSec = 3.f;
+    tCameraLockOnDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_LockOn"), &tCameraLockOnDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_LockOn"), pCamera);
+
+    // Camera_Puzzle
+    CCamera::CAMERA_DESC		tCameraPuzzleDesc{};
+    tCameraPuzzleDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraPuzzleDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraPuzzleDesc.fNear = 0.1f;
+    tCameraPuzzleDesc.fFar = 1000.0f;
+    //tCameraPuzzleDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+    //tCameraPuzzleDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+
+    tCameraPuzzleDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+    tCameraPuzzleDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+    tCameraPuzzleDesc.fSpeedPerSec = 3.f;
+    tCameraPuzzleDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Puzzle"), &tCameraPuzzleDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_Puzzle"), pCamera);
+
+    // Camera_Top
+    CCamera::CAMERA_DESC		tCameraTopDesc{};
+    tCameraTopDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraTopDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraTopDesc.fNear = 0.1f;
+    tCameraTopDesc.fFar = 1000.0f;
+
+    tCameraTopDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+    tCameraTopDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+    tCameraTopDesc.fSpeedPerSec = 3.f;
+    tCameraTopDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Top"), &tCameraTopDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_Top"), pCamera);
+
+
+    m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
+
+    m_pGameInstance->Set_Camera_Level(LEVEL_BEACH);
+
+    return S_OK;
+}
+
+CLevel_Beach* CLevel_Beach::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+    CLevel_Beach* pInstance = new CLevel_Beach(pDevice, pContext);
+
+    if (FAILED(pInstance->Initialize()))
+    {
+        MSG_BOX(TEXT("Failed To Create : CLevel_Beach"));
+
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+void CLevel_Beach::Free()
+{
+    __super::Free();
+}

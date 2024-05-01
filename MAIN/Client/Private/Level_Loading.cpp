@@ -9,6 +9,13 @@
 
 #include "Level_Tool_Map.h"
 
+#include "Level_Menu.h"
+#include "Level_Beach.h"
+#include "Level_Shop.h"
+#include "Level_Puzzle.h"
+#include "Level_Boss.h"
+
+
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -47,6 +54,21 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 			case LEVEL_GAMEPLAY:
 				pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
 				break;
+			case LEVEL_MENU:
+				pLevel = CLevel_Menu::Create(m_pDevice, m_pContext);
+				break;
+			case LEVEL_BEACH:
+				pLevel = CLevel_Beach::Create(m_pDevice, m_pContext);
+				break;
+			case LEVEL_SHOP:
+				pLevel = CLevel_Shop::Create(m_pDevice, m_pContext);
+				break;
+			case LEVEL_PUZZLE:
+				pLevel = CLevel_Puzzle::Create(m_pDevice, m_pContext);
+				break;
+			case LEVEL_BOSS:
+				pLevel = CLevel_Boss::Create(m_pDevice, m_pContext);
+				break;
 			}
 
 			if (nullptr == pLevel)
@@ -70,12 +92,12 @@ HRESULT CLevel_Loading::Render()
 
 HRESULT CLevel_Loading::Ready_Layer_BackGround()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CLevel_Loading::Ready_Layer_UI()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 CLevel_Loading * CLevel_Loading::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eNextLevelID)

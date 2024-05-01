@@ -105,7 +105,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	Set_Animation();
 
 	m_iMaxHP = m_iHP = 7;
-	m_pUI_Stat = dynamic_cast<CUI_Stat*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_UI_Stat")));
+	m_pUI_Stat = dynamic_cast<CUI_Stat*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Stat")));
 	if (nullptr == m_pUI_Stat)
 		return E_FAIL;
 	Safe_AddRef(m_pUI_Stat);
@@ -164,10 +164,13 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	}
 	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
-	// Height
-	_float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
-	m_vPrePosition.m128_f32[1] = fHeight;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+	// Height : 사다리 타는 중이 아닐 때만
+	if(STATE_CLIMB != m_eState)
+	{
+		_float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
+		m_vPrePosition.m128_f32[1] = fHeight;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+	}
 
 	// Stat
 	Compute_Stat_Gauge(fTimeDelta);
@@ -442,6 +445,47 @@ void CPlayer::Change_State(STATE eState)
 	}
 }	
 
+HRESULT CPlayer::Set_Navigation(_uint iLevel)
+{
+	/* For.Com_Navigation */
+	if(nullptr != m_pNavigationCom)
+	{
+		Safe_Release(m_pNavigationCom);
+		Delete_Component(TEXT("Com_Navigation"));
+	}
+
+	CNavigation::NAVIGATION_DESC			NavigationDesc{};
+	NavigationDesc.iCurrentIndex = 0;
+	if (FAILED(__super::Add_Component(iLevel, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+		return E_FAIL;
+
+	_float4 vPosition{};
+
+	switch (iLevel)
+	{
+	case LEVEL_BEACH:
+		vPosition = _float4(65.f, 2.f, -62.f, 1.f);
+		break;
+	case LEVEL_SHOP:
+		vPosition = _float4(0.f, 17.f, 8.f, 1.f);
+		break;
+	case LEVEL_PUZZLE:
+		vPosition = _float4(-0.2f, 0.02f, -51.f, 1.f);
+		break;
+	case LEVEL_BOSS:
+		vPosition = _float4(0.f, 0.2f, 54.f, 1.f);
+		break;
+	default:
+		break;
+	}
+
+	m_vPrePosition = XMLoadFloat4(&vPosition);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+	return S_OK;
+}
+
 void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 {
 	CPartObject* pWeapon = m_PartObjects.find(strWeaponTag)->second;
@@ -463,12 +507,12 @@ void CPlayer::Set_UtileItem(WEAPON eWeapon)
 HRESULT CPlayer::Add_Components()
 {
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, m_strModelComTag,
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, m_strModelComTag,
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
@@ -486,7 +530,7 @@ HRESULT CPlayer::Add_Components()
 	ColliderDesc.vSize = _float3(1.7f, 2.f, 1.7f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
@@ -497,16 +541,16 @@ HRESULT CPlayer::Add_Components()
 	RigidDesc.vSize = _float3(1.7f, 2.f, 1.7f);
 	RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
 		return E_FAIL;
 
-	/* For.Com_Navigation */
-	CNavigation::NAVIGATION_DESC			NavigationDesc{};
-	NavigationDesc.iCurrentIndex = 0;
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-		return E_FAIL;
+	///* For.Com_Navigation */
+	//CNavigation::NAVIGATION_DESC			NavigationDesc{};
+	//NavigationDesc.iCurrentIndex = 0;
+	//if (FAILED(__super::Add_Component(LEVEL_BEACH, TEXT("Prototype_Component_Navigation"),
+	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+	//	return E_FAIL;
 	
 	return S_OK;
 }
@@ -972,23 +1016,25 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 				m_isUsingShop = true;
 				CItem* pItem = dynamic_cast<CItem*>(pObject);
 				pItem->Select_Item();
+			
+				if (true == m_isUsingShop && true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
+				{
+					// 아이템 샀을 때
+					if (true == pItem->Get_isOK())
+					{
+						CItem* pItemBuy = pItem->Buy_Item(m_pInventory->Get_NumCubic());
+						if (nullptr == pItemBuy)
+							return;
+						m_pInventory->Add_Item(pItemBuy);
+					}
+					// 취소 했을 때
+					else
+					{
+						pItem->Exit_Shop();
+					}
 
-				// 아이템 샀을 때
-				if (true == m_isUsingShop && true == pItem->Get_isOK() && true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN))
-				{
-					Change_State(STATE_IDLE);
-					CItem* pItemBuy = pItem->Buy_Item(m_pInventory->Get_NumCubic());
-					if (nullptr == pItemBuy)
-						return;
-					m_pInventory->Add_Item(pItemBuy);
-					m_isUsingShop = false;
-				}
-				// 취소 했을 때
-				else if (true == m_isUsingShop && false == pItem->Get_isOK() && true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN))
-				{
 					Change_State(STATE_IDLE);
 					m_isUsingShop = false;
-					pItem->Exit_Shop();
 				}
 			}
 			else if (CInteractiveObject::INTERACTIVE_LADDER == eInteractiveType)

@@ -89,14 +89,14 @@ HRESULT CMonster_Spinner::Add_Components()
     ColliderDesc.fRadius = 1.8f;
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_SPHERE"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 
     /* For.Com_Navigation */
     CNavigation::NAVIGATION_DESC			NavigationDesc{};
     NavigationDesc.iCurrentIndex = 112;
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+    if (FAILED(__super::Add_Component(LEVEL_BEACH, TEXT("Prototype_Component_Navigation"),
         TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
         return E_FAIL;
 

@@ -75,7 +75,7 @@ HRESULT CUI_Purchase::Add_Components()
         return E_FAIL;
 
     /* For.Com_Texture */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Shop"),
+    if (FAILED(__super::Add_Component(LEVEL_SHOP, TEXT("Prototype_Component_Texture_UI_Shop"),
         TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
         return E_FAIL;
 
