@@ -44,8 +44,8 @@ HRESULT CMonster_Spinner::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(-35.f, 2.5f, 86.f, 1.f);
-    //_float4 vPosition = _float4(-10.f + rand() % 20, 0.5f, rand() % 20, 1.f);
+    //_float4 vPosition = _float4(-35.f, 2.5f, 86.f, 1.f);
+    _float4 vPosition = _float4(33.f, 4.f, -86.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_HIDDEN);
@@ -68,17 +68,6 @@ HRESULT CMonster_Spinner::Tick(_float fTimeDelta)
 void CMonster_Spinner::Late_Tick(_float fTimeDelta)
 {
     __super::Late_Tick(fTimeDelta);
-
-    static _float fTest = 0.f;
-    if (true == m_isCollision)
-    {
-        fTest += fTimeDelta;
-        if (fTest >0.5f)
-        {
-            fTest = 0.f;
-            m_isCollision = false;
-        }
-    }
 }
 
 HRESULT CMonster_Spinner::Render()
@@ -102,6 +91,13 @@ HRESULT CMonster_Spinner::Add_Components()
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+        return E_FAIL;
+
+    /* For.Com_Navigation */
+    CNavigation::NAVIGATION_DESC			NavigationDesc{};
+    NavigationDesc.iCurrentIndex = 112;
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
         return E_FAIL;
 
     return S_OK;

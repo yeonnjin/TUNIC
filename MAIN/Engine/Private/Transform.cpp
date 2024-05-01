@@ -138,7 +138,7 @@ void CTransform::Look_At_For_LandOject(_fvector vAt, _bool isReverse)
 void CTransform::Look_At_Dir(_fvector vDir, _bool isUp)
 {
     _float3 vScaled = Get_Scaled();
-    _vector vLook = XMVector3Normalize(vDir) * vScaled.z;
+    _vector vLook = XMVector3Normalize(vDir) /** vScaled.z*/;
 
     _vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
     _vector vRight = XMVector3Cross(vUp, XMVector3Normalize(vLook));
@@ -437,6 +437,7 @@ void CTransform::Puzzle_Straight(_float fTimeDelta, _vector vLookDir)
     _vector vPosition = Get_State_Vector(STATE_POSITION);
 
     vPosition -= XMVector3Normalize(vLookDir) * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -448,6 +449,7 @@ void CTransform::Puzzle_Backward(_float fTimeDelta, _vector vLookDir)
     _vector vPosition = Get_State_Vector(STATE_POSITION);
 
     vPosition += XMVector3Normalize(vLookDir) * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -461,6 +463,7 @@ void CTransform::Puzzle_Left(_float fTimeDelta, _vector vLookDir)
     _vector vRight = XMVector3Normalize(XMVector3Cross(vNormal, vLookDir));
 
     vPosition += vRight * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -474,6 +477,7 @@ void CTransform::Puzzle_Right(_float fTimeDelta, _vector vLookDir)
     _vector vRight = XMVector3Normalize(XMVector3Cross(vNormal, vLookDir));
 
     vPosition -= vRight * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -489,6 +493,7 @@ void CTransform::Puzzle_FL(_float fTimeDelta, _vector vLookDir)
     _vector vTargetDir = XMVector3Normalize(vLookDir * -1.f + vRight);
 
     vPosition += vTargetDir * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -504,6 +509,7 @@ void CTransform::Puzzle_FR(_float fTimeDelta, _vector vLookDir)
     _vector vTargetDir = XMVector3Normalize(vLookDir + vRight);
 
     vPosition += vTargetDir * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -519,6 +525,7 @@ void CTransform::Puzzle_BL(_float fTimeDelta, _vector vLookDir)
     _vector vTargetDir = XMVector3Normalize(vLookDir * -1.f + vRight * -1.f);
 
     vPosition += vTargetDir * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 
@@ -534,6 +541,7 @@ void CTransform::Puzzle_BR(_float fTimeDelta, _vector vLookDir)
     _vector vTargetDir = XMVector3Normalize(vLookDir + vRight * -1.f);
 
     vPosition += vTargetDir * m_fSpeedPerSec * fTimeDelta;
+    vPosition.m128_f32[3] = 1.f;
 
     Set_State(STATE_POSITION, vPosition);
 

@@ -58,6 +58,13 @@ void CAnimation::Set_AnimationData_Initialize()
         iIndex = 0;
 
     m_isFinished = false;
+    //m_isReverse = false; 
+}
+
+void CAnimation::Set_AnimationData_Reverse()
+{
+    m_fTrackPosition = m_fDuration;
+    m_isReverse = true;
 }
 
 void CAnimation::Invalidate_Blending(const vector<class CBone*>& Bones, _bool isLoop)
@@ -90,6 +97,35 @@ void CAnimation::Invalidate_TransformationMatrix(_float fTimeDelta, const vector
             m_isFinished = true;
             // 반복 상태일 때 초기화
             m_fTrackPosition = 0.f;
+        }
+    }
+
+    for (_uint i = 0; i < m_iNumChannels; ++i)
+    {
+        /* 이 뼈의 생태 행렬을 만들어서 CBone의 TransformationMatrix를 바꿈 */
+        m_Channels[i]->Invalidate_TransformationMatrix(Bones, m_fTrackPosition, &m_CurrentKeyFrameIndices[i]);
+    }
+}
+
+void CAnimation::Invalidate_TransformationMatrix_Reverse(_float fTimeDelta, const vector<class CBone*>& Bones)
+{
+    m_isFinished = false;
+
+    m_fTrackPosition -= m_fTicksPerSecond * m_KeyFrameTickWeights[m_CurrentKeyFrameIndices[m_iMaxKeyFrameChannel]] * fTimeDelta;
+
+    if (0 >= m_fTrackPosition)
+    {
+        // 반복 상태가 아닐 때
+        if (false == m_isLoop)
+        {
+            m_isFinished = true;
+            return;
+        }
+        else
+        {
+            m_isFinished = true;
+            // 반복 상태일 때 초기화
+            m_fTrackPosition = m_fDuration;
         }
     }
 

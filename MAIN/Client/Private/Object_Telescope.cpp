@@ -21,7 +21,7 @@ HRESULT CObject_Telescope::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    _float4 vPosition = { 4.4f, 1.f, 114.f, 1.f };
+    _float4 vPosition = { -5.f, 1.4f, -113.f, 1.f };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     Compute_ColliderMatrix();

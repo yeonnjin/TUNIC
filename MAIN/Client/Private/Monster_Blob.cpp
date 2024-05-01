@@ -36,8 +36,8 @@ HRESULT CMonster_Blob::Initialize(void* pArg)
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(-76.f + rand() % 3, 2.5f, 76.f + rand() % 3, 1.f);
-    //_float4 vPosition = _float4(5.f + rand() % 6, 0.5f, rand() % 6 + 1.f, 1.f);
+    //_float4 vPosition = _float4(-76.f + rand() % 3, 2.5f, 76.f + rand() % 3, 1.f);
+    _float4 vPosition = _float4(74.f, 2.f, -85.f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_IDLE);
@@ -46,6 +46,7 @@ HRESULT CMonster_Blob::Initialize(void* pArg)
     Set_Animation();
 
     m_iHP = 2;
+    
 
     return S_OK;
 }
@@ -102,6 +103,13 @@ HRESULT CMonster_Blob::Add_Components()
 
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
+        return E_FAIL;
+
+    /* For.Com_Navigation */
+    CNavigation::NAVIGATION_DESC			NavigationDesc{};
+    NavigationDesc.iCurrentIndex = 37;
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
         return E_FAIL;
 
     return S_OK;

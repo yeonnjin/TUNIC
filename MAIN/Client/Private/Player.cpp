@@ -20,6 +20,7 @@
 #include "Player_State_Open.h"
 #include "Player_State_Puzzle.h"
 #include "Player_State_Climb.h"
+#include "Player_State_Top.h"
 
 // Camera
 #include "Camera_LockOn.h"
@@ -32,6 +33,7 @@
 // Interactive
 #include "Item.h"
 #include "Object_Chest.h"
+#include "Object_Ladder.h"
 
 // TEST
 //#include "Particle_Red.h"
@@ -90,11 +92,11 @@ HRESULT CPlayer::Initialize(void* pArg)
 	m_fDamageCoolTime = 1.f;
 
 	// FOXGOD : _float4(0.f, 0.2f, 0.f, 1.f);
-	// BEACH :  _float4(-75.f, 3.f, 68.f, 1.f); _float4(-66.f, 2.f, 62.f, 1.f); 
+	// BEACH :  _float4(-62.f, 2.f, 62.f, 1.f); _float4(65.f, 2.f, -62.f, 1.f); 
 	// LIBRARIAN : _float4(3.f, 0.2f, 50.f, 1.f);
 	// SHOP : _float4(0.f, 17.f, 8.f, 1.f); _float4(0.f, 17.f, 38.f, 1.f);
 	// PUZZLE : _float4(-0.2f, 0.02f, 51.f, 1.f);
-	_float4 vPosition = _float4( 0.f, 0.02f, -51.f, 1.f);
+	_float4 vPosition =  _float4(65.f, 2.f, -62.f, 1.f);
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -122,6 +124,7 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 
 	Set_Dir();
 
+	// UI_Obtain
 	CUI_Obtain* pUIObtain = dynamic_cast<CUI_Obtain*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Obtain")));
 	m_isObtain = pUIObtain->Get_Using();
 	
@@ -131,15 +134,16 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		Update_State();
 	Update_Camera();
 
+	// Change_Time
 	m_fAccChageTime += fTimeDelta;
 	if (false == m_isCanChange && m_fAccChageTime > m_fChangeTime)
 	{
 		m_isCanChange = true;
 	}
 
+	// Play_Animation
 	if(false == m_isStop)
 	{
-		// Blending
 		if (true == m_isBlend)
 		{
 			if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
@@ -153,17 +157,17 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 			m_pModelCom->Play_Animation(fTimeDelta);
 	}
 
-	// Collider
-	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
-
-	m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
-
 	// Navigation
 	if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 	}
 	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+	// Height
+	_float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
+	m_vPrePosition.m128_f32[1] = fHeight;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 
 	// Stat
 	Compute_Stat_Gauge(fTimeDelta);
@@ -184,23 +188,15 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	}
 	m_pInventory->Tick(fTimeDelta);
 
+	// Interactive
 	m_isInteractive = false;
 
-	/*static _bool isCompute = false;
-
-	if(true == m_pGameInstance->Get_DIKeyState(DIK_Y, KEY_DOWN))
-	{
-		isCompute = true;		
-	}
-
-	if(true == isCompute)
-		Compute_Height();*/
-
+	// Collider
+	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+	m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 	m_pGameInstance->Add_RigidGroup(this);
 
-	//if (true == m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
-	//	m_isPuzzle = !m_isPuzzle;
 
 	return S_OK;
 }
@@ -333,6 +329,8 @@ void CPlayer::Update_State()
 		Change_State(STATE_CLIMB);
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
 		Change_State(STATE_IDLE);
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_V, KEY_DOWN))
+		Change_State(STATE_TOP);
 
 	if (false == m_isUsingInventory)
 	{
@@ -475,12 +473,20 @@ HRESULT CPlayer::Add_Components()
 		return E_FAIL;
 
 	/* For. Com_Collider */
-	CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
+	/*CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
 	
 	ColliderDesc.fRadius = 0.8f;
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius + 0.6f , 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
+		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;*/
+
+	CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
+	ColliderDesc.vSize = _float3(1.7f, 2.f, 1.7f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
@@ -605,17 +611,16 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_IDLE, CPlayer_State_Idle::Create(this));
 	m_pModelCom->Add_State(STATE_SLEEP, CPlayer_State_Sleep::Create(this));
 	m_pModelCom->Add_State(STATE_MOVE, CPlayer_State_Move::Create(this));
-	//m_pModelCom->Add_State(STATE_LOCKON, CPlayer_State_LockOn::Create(this));
 	m_pModelCom->Add_State(STATE_ATTACK_STICK, CPlayer_State_Attack_Stick::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Stick"))->second)));
 	m_pModelCom->Add_State(STATE_ATTACK_SWORD, CPlayer_State_Attack_Sword::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Sword"))->second)));
 	m_pModelCom->Add_State(STATE_ATTACK_WAND, CPlayer_State_Attack_Wand::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Wand"))->second)));
-	//m_pModelCom->Add_State(STATE_ATTACK_SHOTGUN, CPlayer_State_Attack_Shotgun::Create(this, dynamic_cast<CPlayer_Weapon*>(m_PartObjects.find(TEXT("Part_Player_Weapon_Shotgun"))->second)));
 	m_pModelCom->Add_State(STATE_DAMAGE, CPlayer_State_Damage::Create(this));
 	m_pModelCom->Add_State(STATE_DODGE, CPlayer_State_Dodge::Create(this));
 	m_pModelCom->Add_State(STATE_DEFENSE, CPlayer_State_Defense::Create(this));
 	m_pModelCom->Add_State(STATE_OPEN, CPlayer_State_Open::Create(this));
 	m_pModelCom->Add_State(STATE_PUZZLE, CPlayer_State_Puzzle::Create(this));
 	m_pModelCom->Add_State(STATE_CLIMB, CPlayer_State_Climb::Create(this));
+	m_pModelCom->Add_State(STATE_TOP, CPlayer_State_Top::Create(this));
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
 
@@ -653,6 +658,7 @@ void CPlayer::Set_Animation()
 	m_pModelCom->Set_Animation_isLoop(ANIM_WALK_RIGHT, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_SHIELD, true);
 	m_pModelCom->Set_Animation_isLoop(ANIM_CLIMB, true);
+	m_pModelCom->Set_Animation_isLoop(ANIM_FALLING, true);
 
 	// ROOT
 	m_pModelCom->Set_Animation_isRoot(ANIM_SWING_STICK1, true);
@@ -751,16 +757,6 @@ void CPlayer::Set_Weapon(_uint iKey)
 	pWeapon->Set_Key(iKey);
 
 	pWeapon->Set_isUsing(true);
-	
-	/*static _bool isShield = false;
-	if (m_pGameInstance->Get_DIKeyState(DIK_B, KEY_DOWN))
-	{		
-		isShield = !isShield;
-		if (true == isShield)
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shield"), true);
-		else
-			Set_Weapon_Render(TEXT("Part_Player_Weapon_Shield"), false);
-	}*/
 }
 
 CTransform* CPlayer::Set_LockOn_Target()
@@ -944,7 +940,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 	{
 		m_isInteractive = true;
 
-		if(true == m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN) || true == m_isChestOpen || true == m_isUsingShop)
+		if(true == m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN) || true == m_isChestOpen || true == m_isUsingShop || STATE_CLIMB == m_eState)
 		{
 			CInteractiveObject* pObject = dynamic_cast<CInteractiveObject*>(pGameObject);
 
@@ -993,6 +989,32 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					Change_State(STATE_IDLE);
 					m_isUsingShop = false;
 					pItem->Exit_Shop();
+				}
+			}
+			else if (CInteractiveObject::INTERACTIVE_LADDER == eInteractiveType)
+			{
+				CObject_Ladder* pLadder = dynamic_cast<CObject_Ladder*>(pObject);
+				m_isUpper = pLadder->Get_isUpper();
+				if(STATE_CLIMB != m_eState)
+					Change_State(STATE_CLIMB);
+				// 등산 상태일 때
+				else if (false == m_isArrive && STATE_CLIMB == m_eState)
+				{
+					// 올라가고 있었는데 내려가는 충돌 박스를 만났을 때 : 다 올라옴
+					if (CLIMB_UPPER == m_eClimb && false == m_isUpper)
+					{
+						m_isArrive = true;
+						m_iLadderIndex = pLadder->Get_Index();
+
+						if (true == pLadder->Get_isEnd())
+							m_isEndLadder = true;
+					}
+					// 내려가고 있었는데 올라가는 충돌 박스를 만났을 때 : 다 내려옴
+					else if (CLIMB_LOWER == m_eClimb && true == m_isUpper)
+					{
+						m_isArrive = true;
+						m_iLadderIndex = pLadder->Get_Index();
+					}
 				}
 			}
 		}

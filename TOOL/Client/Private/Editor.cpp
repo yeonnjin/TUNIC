@@ -15,8 +15,8 @@
 //#include "Texture.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_Puzzle.dat"
-#define MODELPATH "../Bin/Resources/Data/Model/Map_Puzzle.dat"
-#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Puzzle.dat"
+#define MODELPATH "../Bin/Resources/Data/Model/Map_Beach.dat"
+#define NAVPATH "../Bin/Resources/Data/Navigation/Nav_Beach_FIN.dat"
 #pragma region Initial
 
 CEditor::CEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

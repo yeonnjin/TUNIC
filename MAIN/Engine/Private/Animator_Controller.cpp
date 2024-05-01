@@ -20,9 +20,14 @@ CAnimator_Controller::CAnimator_Controller(ID3D11Device* pDevice, ID3D11DeviceCo
 
 HRESULT CAnimator_Controller::Play_Animation(_float fTimeDelta)
 {
-	(*m_pAnimations)[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, *m_pBones);
-
-	//_matrix Reverse = XMMatrixRotationY(XMConvertToRadians(180.f));
+	if(false == (*m_pAnimations)[m_iCurrentAnimIndex]->Get_isReverse())
+	{
+		(*m_pAnimations)[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix(fTimeDelta, *m_pBones);
+	}
+	else
+	{
+		(*m_pAnimations)[m_iCurrentAnimIndex]->Invalidate_TransformationMatrix_Reverse(fTimeDelta, *m_pBones);
+	}
 
 	for (auto& pBone : *m_pBones)
 		pBone->Invalidate_CombinedTransformationMatrix(*m_pBones, /*Reverse*/ XMMatrixIdentity()/*XMLoadFloat4x4(&m_TransformationMatrix)*/);

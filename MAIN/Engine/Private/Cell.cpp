@@ -92,6 +92,20 @@ _bool CCell::Compare_Points(_fvector vSrcPoint, _fvector vDstPoint)
 	return false;
 }
 
+_float CCell::Compute_Height(_fvector vPosition, _fmatrix TerrainWorldMatrix)
+{
+	_vector		vPoints[3];
+
+	for (size_t i = 0; i < POINT_END; i++)
+		vPoints[i] = XMVector3TransformCoord(XMLoadFloat3(&m_vPoints[i]), TerrainWorldMatrix);
+
+	 _vector vPlane = XMPlaneFromPoints(vPoints[0], vPoints[1], vPoints[2]);
+
+	 /* ax + by + cz + d = 0 */
+	/* y = (-ax - cz - d) / b*/
+	 return (-vPlane.m128_f32[0] * vPosition.m128_f32[0] - vPlane.m128_f32[2] * vPosition.m128_f32[2] - vPlane.m128_f32[3]) / vPlane.m128_f32[1];
+}
+
 HRESULT CCell::Initialize(const _float3* pPoints, _uint iIndex)
 {
 	memcpy(m_vPoints, pPoints, sizeof(_float3) * POINT_END);

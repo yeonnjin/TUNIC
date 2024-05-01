@@ -10,6 +10,8 @@
 
 #include "Map_Object.h"
 #include "Object_Chest.h"
+#include "Object_ColliderBox.h"
+#include "Object_Ladder.h"
 
 #include "Editor.h"
 #include "Map.h"
@@ -189,11 +191,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 	tCameraFreeDesc.fNear = 0.1f;
 	tCameraFreeDesc.fFar = 1000.0f;
 
-	tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
-	tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
+	//tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
+	//tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
 
-	//tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
-	//tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
+	tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
+	tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
 
 	//tCameraFreeDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
 	//tCameraFreeDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
@@ -241,7 +243,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 
 	m_pGameInstance->Add_Camera(TEXT("Camera_LockOn"), pCamera);
 
-	// Camera_LockOn
+	// Camera_Puzzle
 	CCamera::CAMERA_DESC		tCameraPuzzleDesc{};
 	tCameraPuzzleDesc.fFovy = XMConvertToRadians(60.0f);
 	tCameraPuzzleDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
@@ -261,6 +263,25 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const wstring & strLayerTag)
 		return E_FAIL;
 
 	m_pGameInstance->Add_Camera(TEXT("Camera_Puzzle"), pCamera);
+
+	// Camera_Top
+	CCamera::CAMERA_DESC		tCameraTopDesc{};
+	tCameraTopDesc.fFovy = XMConvertToRadians(60.0f);
+	tCameraTopDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	tCameraTopDesc.fNear = 0.1f;
+	tCameraTopDesc.fFar = 1000.0f;
+
+	tCameraTopDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+	tCameraTopDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+	tCameraTopDesc.fSpeedPerSec = 3.f;
+	tCameraTopDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+	pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Top"), &tCameraTopDesc));
+	if (nullptr == pCamera)
+		return E_FAIL;
+
+	m_pGameInstance->Add_Camera(TEXT("Camera_Top"), pCamera);
 
 
 	m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
@@ -335,64 +356,64 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const wstring& strLayerTag)
 	//_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Monster_Spinner";
 	//wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	//tDesc.strModelComTag = wstr;
-
+	//
 	////for (size_t i = 0; i < 2; ++i)
 	////{
 	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Spinner"), &tDesc)))
 	//		return E_FAIL;
 	////}
 	//
-	////// Desc
-	////CMonster::Monster_Desc tDesc = {};
-	//tDesc = {};
-	//_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
-	//wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
-	//tDesc.strModelComTag = wstr1;
-
-	////for (size_t i = 0; i < 2; ++i)
-	////{
-	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
-	//		return E_FAIL;
-	////}
-
+	//////// Desc
+	//////CMonster::Monster_Desc tDesc = {};
+	////tDesc = {};
+	////_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
+	////wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
+	////tDesc.strModelComTag = wstr1;
+	//
+	//////for (size_t i = 0; i < 2; ++i)
+	//////{
+	////	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
+	////		return E_FAIL;
+	//////}
+	//
 	////CMonster::Monster_Desc tDesc = {};
 	//tDesc = {};
 	//_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Monster_Blob_Normal";
 	//wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
 	//tDesc.strModelComTag = wstr2;
-
-	//for (size_t i = 0; i < 3; ++i)
-	//{
+	//
+	////for (size_t i = 0; i < 2; ++i)
+	////{
 	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Blob"), &tDesc)))
 	//		return E_FAIL;
-	//}
-
+	////}
+	//
 	////CMonster::Monster_Desc tDesc = {};
 	//tDesc = {};
 	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_CowBot";
 	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
 	//tDesc.strModelComTag = wstr3;
-
+	//
 	////for (size_t i = 0; i < 1; ++i)
 	////{
 	//	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_CowBot"), &tDesc)))
 	//		return E_FAIL;
 	////}
-
-	///*CMonster::Monster_Desc tDesc = {};
-	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_Frog";
-	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	//tDesc.strModelComTag = wstr3;
-
-	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Frog"), &tDesc)))
-	//	return E_FAIL;*/
-
+	//
+	/////*CMonster::Monster_Desc tDesc = {};
+	////_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Monster_Frog";
+	////wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
+	////tDesc.strModelComTag = wstr3;
+	//
+	////if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Frog"), &tDesc)))
+	////	return E_FAIL;*/
+	//
 	////CMonster::Monster_Desc tDesc = {};
 	//tDesc = {};
 	//_char szModelTag4[MAX_PATH] = "Prototype_Component_Model_Monster_Guard";
 	//wstring wstr4(&szModelTag4[0], &szModelTag4[MAX_PATH]);
 	//tDesc.strModelComTag = wstr4;
-
+	//
 	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Monster_Guard"), &tDesc)))
 	//	return E_FAIL;
 	
@@ -437,12 +458,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 	CMap::MAP_DESC tDesc = {};
 	tDesc.isLoad = false;
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
-	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Beach
+	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Librarian
 	// Prototype_Component_Model_Map_Shop
 	// Prototype_Component_Model_Map_Puzzle
-	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Puzzle";
+	_char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Beach";
 	wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
 	tDesc.strModelComTag = wstr;
 	//tDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
@@ -499,36 +520,138 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_Object(const wstring& strLayerTag)
 {
 	CObject_Chest::CHEST_DESC tDesc = {};
-	tDesc.vPosition = _vector{ -65.f, 2.5f, 68.f, 1.f };
+	tDesc.vPosition = _vector{ 76.f, 2.5f, -65.f, 1.f };
 	tDesc.eType = CItem::TYPE_WEAPON;
 	tDesc.eItem = CItem::ITEM_STICK;
+	tDesc.isRotation = true;
+	tDesc.fAngle = 90.f;
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
 		return E_FAIL;	
 
 	tDesc = {};
-	tDesc.vPosition = _vector{ -76.f, 2.5f, 90.f, 1.f };
+	tDesc.vPosition = _vector{ 74.f, 4.f, -98.f, 1.f };
 	tDesc.eType = CItem::TYPE_UTILE;
 	tDesc.eItem = CItem::ITEM_SHIELD;
+	tDesc.isRotation = true;
+	tDesc.fAngle = 90.f;
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
 		return E_FAIL;
 
 	tDesc = {};
-	tDesc.vPosition = _vector{ -37.f, 2.5f, 66.f, 1.f };
+	tDesc.vPosition = _vector{ 28.f, 2.1f, -69.f, 1.f };
 	tDesc.eType = CItem::TYPE_WEAPON;
 	tDesc.eItem = CItem::ITEM_SWORD;
+	tDesc.isRotation = true;
+	tDesc.fAngle = -90.f;
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
 		return E_FAIL;
 
 	tDesc = {};
-	tDesc.vPosition = _vector{ -4.4f, 2.5f, 73.f, 1.f };
+	tDesc.vPosition = _vector{ 4.2f, 1.5f, -72.f, 1.f };
 	tDesc.eType = CItem::TYPE_WEAPON;
 	tDesc.eItem = CItem::ITEM_WAND;
+	tDesc.isRotation = true;
+	tDesc.fAngle = 90.f;
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, strLayerTag, TEXT("Prototype_GameObject_Object_Chest"), &tDesc)))
 		return E_FAIL;
 
 	// Telescope
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Object_Telescope"), TEXT("Prototype_GameObject_Object_Telescope"))))
 		return E_FAIL;
+
+	// ColliderBox
+	vector<_vector> vColliderPosition;
+	vColliderPosition.push_back(_vector{ 6.9f, 0.02f, -50.4f });
+	vColliderPosition.push_back(_vector{ 6.8f, 0.02f, -64.4f });
+	vColliderPosition.push_back(_vector{ 6.923f, 5.020f, -64.538f });
+	vColliderPosition.push_back(_vector{ 6.878f, 10.020f, -50.734f });
+	vColliderPosition.push_back(_vector{ -6.816f, 5.020f, -50.650f });
+	vColliderPosition.push_back(_vector{ -6.937f, 10.020f, -64.521f });
+	vColliderPosition.push_back(_vector{ -6.954f, 15.020f, -64.480f });
+	vColliderPosition.push_back(_vector{ -6.983f, 15.020f, -50.594f });
+	vColliderPosition.push_back(_vector{ 6.834f, 15.020f, -50.665f });
+	vColliderPosition.push_back(_vector{ 6.830f, 20.020f, -50.678f });
+
+	vColliderPosition.push_back(_vector{ -0.094f, 0.02f, -61.900f });
+	vColliderPosition.push_back(_vector{ 4.392f, 5.020f, -57.407f }); // 11
+	vColliderPosition.push_back(_vector{ -0.094f, 5.020f, -53.144f });
+	vColliderPosition.push_back(_vector{ -4.419f, 5.020f, -57.552f }); // 13
+	vColliderPosition.push_back(_vector{ -0.094f, 10.020f, -61.880f });
+	vColliderPosition.push_back(_vector{ 4.267f, 15.020f, -57.533f }); // 15
+	vColliderPosition.push_back(_vector{ -0.094f, 20.020f, -53.295f }); 
+
+	vColliderPosition.push_back(_vector{ -0.094f, 7.000f, -63.332f });
+	vColliderPosition.push_back(_vector{ 5.774f, 12.000f, -57.407f }); // 18
+	vColliderPosition.push_back(_vector{ -0.094f, 12.000f, -51.688f });
+	vColliderPosition.push_back(_vector{ -5.825f, 12.000f, -57.552f }); // 20
+	vColliderPosition.push_back(_vector{ -0.094f, 17.000f, -63.281f });
+	vColliderPosition.push_back(_vector{ 5.714f, 22.000f, -57.533f }); // 22
+	vColliderPosition.push_back(_vector{ -0.094f, 27.000f, -51.720f }); 
+
+	vColliderPosition.push_back(_vector{ 0.f, 25.020f, -58.f }); // 24
+
+	for (size_t i = 0; i < vColliderPosition.size(); i++)
+	{
+		CObject_ColliderBox::COLLIDERBOX_DESC tColliderBoxDesc{};
+		tColliderBoxDesc.vPosition = vColliderPosition[i];
+
+		if (i < 10)
+			tColliderBoxDesc.isRotation = true;
+		else if(24 == i)
+			tColliderBoxDesc.vSize = { 2.f, 2.f, 2.f };
+		else
+		{
+			tColliderBoxDesc.vSize = { 2.f, 1.f, 1.f };
+
+			if(11 == i || 13 == i || 15 == i || 18 == i || 20 == i || 22 == i)
+			{
+				tColliderBoxDesc.isRotation = true;
+				tColliderBoxDesc.fAngle = 90.f;
+			}
+		}
+
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Object_ColliderBox"), TEXT("Prototype_GameObject_Object_ColliderBox"), &tColliderBoxDesc)))
+			return E_FAIL;
+	}
+
+	// Ladder
+	vector<_vector> vLadderPosition;
+
+	vLadderPosition.push_back(_vector{ -0.094f, 0.02f, -63.072f });
+	vLadderPosition.push_back(_vector{ -0.094f, 5.220f, -62.332f });
+
+	vLadderPosition.push_back(_vector{ 5.692f, 5.020f, -57.407f });
+	vLadderPosition.push_back(_vector{ 4.774f, 10.220f, -57.407f });
+
+	vLadderPosition.push_back(_vector{ -0.094f, 5.020f, -51.644f });
+	vLadderPosition.push_back(_vector{ -0.094f, 10.220f, -52.688f });
+
+	vLadderPosition.push_back(_vector{ -5.919f, 5.020f, -57.552f });
+	vLadderPosition.push_back(_vector{ -4.825f, 10.220f, -57.552f });
+
+	vLadderPosition.push_back(_vector{ -0.094f, 10.020f, -63.280f });
+	vLadderPosition.push_back(_vector{ -0.094f, 15.220f, -62.281f });
+
+	vLadderPosition.push_back(_vector{ 5.667f, 15.020f, -57.533f });
+	vLadderPosition.push_back(_vector{ 4.714f, 20.220f, -57.533f });
+
+	vLadderPosition.push_back(_vector{ -0.094f, 20.020f, -51.995f });
+	vLadderPosition.push_back(_vector{ -0.094f, 25.220f, -52.720f });
+
+	for (size_t i = 0; i < vLadderPosition.size(); i++)
+	{
+		CObject_Ladder::LADDER_DESC tLadderDesc{};
+		tLadderDesc.vPosition = vLadderPosition[i];
+		tLadderDesc.isUpper = i % 2 == 0 ? true : false;
+		tLadderDesc.isRotation = (i % 4 == 2 || i % 4 == 3) ? true : false;
+		tLadderDesc.iIndex = i;
+
+		if (13 == i)
+			tLadderDesc.isEnd = true;
+
+		if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Object_Ladder"), TEXT("Prototype_GameObject_Object_Ladder"), &tLadderDesc)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -545,6 +668,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const wstring& strLayerTag)
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Obtain"), TEXT("Prototype_GameObject_UI_Obtain"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_UI_Arrow"), TEXT("Prototype_GameObject_UI_Arrow"))))
 		return E_FAIL;
 
 	return S_OK;

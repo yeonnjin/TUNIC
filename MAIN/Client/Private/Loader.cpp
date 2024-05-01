@@ -39,6 +39,8 @@
 #include "Item.h"
 #include "Object_Chest.h"
 #include "Object_Telescope.h"
+#include "Object_ColliderBox.h"
+#include "Object_Ladder.h"
 
 // NPC
 #include "NPC_Merchant.h"
@@ -51,6 +53,7 @@
 #include "UI_Purchase.h"
 #include "UI_Obtain.h"
 #include "UI_Interactive.h"
+#include "UI_Arrow.h"
 
 #include "BlendEffect.h"
 #include "Sky.h"
@@ -59,13 +62,14 @@
 #include "Navigation.h"
 
 
-
+// ETC
 #include "Map.h"
 #include "Map_Object.h"
 #include "Test_Object.h"
 #include "Editor.h"
 #include "Animator.h"
 
+// PARTICLE
 #include "Particle_Blue.h"
 #include "Particle_Red.h"
 
@@ -74,6 +78,7 @@
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
 #include "Camera_Puzzle.h"
+#include "Camera_Top.h"
 
 #include <fstream>
 
@@ -227,6 +232,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Interactive/Interactive%d.png")))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_UI_Arrow */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI_Arrow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Puzzle/Arrow%d.png"), 4))))
+		return E_FAIL;
+
 	m_strLoadingText = TEXT("컴포넌트를(을) 로딩 중 입니다.");
 	/* Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
@@ -235,7 +245,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* Prototype_Component_Navigation_Load */ // Nav_Librarian, Nav_FOXGOD, Nav_Beach, Nav_Shop, Nav_Puzzle
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_Puzzle.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Data/Navigation/Nav_Beach.dat")))))
 		return E_FAIL;
 
 	/* Prototype_Component_VIBuffer_Instance_Rect */
@@ -484,6 +494,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CObject_Telescope::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Object_ColliderBox */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_ColliderBox"),
+		CObject_ColliderBox::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Object_Ladder*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Ladder"),
+		CObject_Ladder::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// NPC ==========================================================================================
 
 	/* For.Prototype_GameObject_NPC_Merchant */
@@ -511,6 +531,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Camera_Puzzle */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Puzzle"),
 		CCamera_Puzzle::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_Top */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Top"),
+		CCamera_Top::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// UI ===========================================================================================
@@ -550,10 +575,33 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CUI_Interactive::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_UI_Arrow */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Arrow"),
+		CUI_Arrow::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// MODEL ========================================================================================
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
 
+	/* MAP */
+	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_FOXGOD.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Librarian.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Shop.dat");
+	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Puzzle.dat");
+
+	/* ANIM OBJECT */
+	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Guard.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/Object_Chest.dat");
+	Load_Anim_Model("../Bin/Resources/Data/Model/NPC_Merchant.dat");
+
+	/* NONANIM OBJECT*/
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Stick.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Shield.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Sword.dat");
@@ -569,21 +617,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Orb.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Items.dat");
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Telescope.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian_Effect_Beam.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach0.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach_FIN.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_FOXGOD.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Librarian.dat");
-	//Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Shop.dat");
-	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Puzzle_Origin.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Player.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Frog.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Monster_Guard.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Librarian.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/Object_Chest.dat");
-	Load_Anim_Model("../Bin/Resources/Data/Model/NPC_Merchant.dat");
 
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
 

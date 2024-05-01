@@ -171,6 +171,8 @@
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_LockOn.h" />
     <ClInclude Include="..\Public\Camera_Puzzle.h" />
+    <ClInclude Include="..\Public\Camera_Telescope.h" />
+    <ClInclude Include="..\Public\Camera_Top.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\CowBot_State_Attack.h" />
     <ClInclude Include="..\Public\CowBot_State_Damage.h" />
@@ -196,6 +198,7 @@
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
+    <ClInclude Include="..\Public\Level_Menu.h" />
     <ClInclude Include="..\Public\Librarian_Effect_Beam.h" />
     <ClInclude Include="..\Public\Librarian_Effect_Orb.h" />
     <ClInclude Include="..\Public\Librarian_Effect_Slash.h" />
@@ -227,6 +230,8 @@
     <ClInclude Include="..\Public\Monster_Spinner.h" />
     <ClInclude Include="..\Public\NPC_Merchant.h" />
     <ClInclude Include="..\Public\Object_Chest.h" />
+    <ClInclude Include="..\Public\Object_ColliderBox.h" />
+    <ClInclude Include="..\Public\Object_Ladder.h" />
     <ClInclude Include="..\Public\Object_Telescope.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
     <ClInclude Include="..\Public\Particle_Red.h" />
@@ -246,6 +251,8 @@
     <ClInclude Include="..\Public\Player_State_Open.h" />
     <ClInclude Include="..\Public\Player_State_Puzzle.h" />
     <ClInclude Include="..\Public\Player_State_Sleep.h" />
+    <ClInclude Include="..\Public\Player_State_Telescope.h" />
+    <ClInclude Include="..\Public\Player_State_Top.h" />
     <ClInclude Include="..\Public\Player_Weapon.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -258,6 +265,7 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
     <ClInclude Include="..\Public\UI.h" />
+    <ClInclude Include="..\Public\UI_Arrow.h" />
     <ClInclude Include="..\Public\UI_Interactive.h" />
     <ClInclude Include="..\Public\UI_Inventory.h" />
     <ClInclude Include="..\Public\UI_Item.h" />
@@ -297,6 +305,8 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_LockOn.cpp" />
     <ClCompile Include="..\Private\Camera_Puzzle.cpp" />
+    <ClCompile Include="..\Private\Camera_Telescope.cpp" />
+    <ClCompile Include="..\Private\Camera_Top.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Attack.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Damage.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Die.cpp" />
@@ -321,6 +331,7 @@
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
+    <ClCompile Include="..\Private\Level_Menu.cpp" />
     <ClCompile Include="..\Private\Librarian_Effect_Beam.cpp" />
     <ClCompile Include="..\Private\Librarian_Effect_Orb.cpp" />
     <ClCompile Include="..\Private\Librarian_Effect_Slash.cpp" />
@@ -352,6 +363,8 @@
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
     <ClCompile Include="..\Private\NPC_Merchant.cpp" />
     <ClCompile Include="..\Private\Object_Chest.cpp" />
+    <ClCompile Include="..\Private\Object_ColliderBox.cpp" />
+    <ClCompile Include="..\Private\Object_Ladder.cpp" />
     <ClCompile Include="..\Private\Object_Telescope.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
     <ClCompile Include="..\Private\Particle_Red.cpp" />
@@ -371,6 +384,8 @@
     <ClCompile Include="..\Private\Player_State_Open.cpp" />
     <ClCompile Include="..\Private\Player_State_Puzzle.cpp" />
     <ClCompile Include="..\Private\Player_State_Sleep.cpp" />
+    <ClCompile Include="..\Private\Player_State_Telescope.cpp" />
+    <ClCompile Include="..\Private\Player_State_Top.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -383,6 +398,7 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Test_Object.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
+    <ClCompile Include="..\Private\UI_Arrow.cpp" />
     <ClCompile Include="..\Private\UI_Interactive.cpp" />
     <ClCompile Include="..\Private\UI_Inventory.cpp" />
     <ClCompile Include="..\Private\UI_Item.cpp" />

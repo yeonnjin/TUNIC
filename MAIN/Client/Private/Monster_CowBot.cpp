@@ -46,7 +46,7 @@ HRESULT CMonster_CowBot::Initialize(void* pArg)
 	if (FAILED(Add_States()))
 		return E_FAIL;
 
-	_float4 vPosition = _float4(18.f, 2.5f, 83.f, 1.f);
+	_float4 vPosition = _float4(-16.f, 2.f, -86.f, 1.f);
 	//_float4 vPosition = _float4(-2.f + rand() % 6, 0.5f, rand() % 6 + 5.f, 1.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
@@ -112,6 +112,13 @@ HRESULT CMonster_CowBot::Add_Components()
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
 		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+		return E_FAIL;
+
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NavigationDesc{};
+	NavigationDesc.iCurrentIndex = 270;
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
 		return E_FAIL;
 
 	return S_OK;

@@ -120,8 +120,6 @@ void CGameObject::Compute_Damage_CoolTime(_float fTimeDelta)
 }
 
 _float CGameObject::Get_Speed()
-
-
 {
 	return m_pTransformCom->Get_SpeedPerSec();
 }
@@ -138,7 +136,8 @@ void CGameObject::Rigid_Event(CGameObject* pGameObject)
 	// 나 -> 상대
 	_vector vCollisionDir = vObjectPosition - vPosition;
 	vCollisionDir.m128_f32[1] = 0.f;
-	vCollisionDir = XMVector4Normalize(vCollisionDir);
+	vCollisionDir.m128_f32[3] = 0.f;
+	vCollisionDir = XMVector3Normalize(vCollisionDir);
 
 	float deltaTime = 0.016f; // 예: 60fps의 경우
 

@@ -29,6 +29,7 @@ public:
 	void	Set_Frame_Tick(_uint iStartFrame, _uint iEndFrame, _float fTickWeight);
 
 	void	Set_AnimationData_Initialize();
+	void	Set_AnimationData_Reverse();
 
 	void	Invalidate_Blending(const vector<class CBone*>& Bones, _bool isLoop);
 
@@ -39,6 +40,7 @@ public:
 
 	_bool			Get_isRoot() { return m_isRoot; }
 	_bool			Get_isLoop() { return m_isLoop; }
+	_bool			Get_isReverse() { return m_isReverse; }
 
 	_float			Get_BlendTime() { return m_fBlendTime; }
 	_uint			Get_NumChannels() { return m_iNumChannels; }
@@ -46,8 +48,9 @@ public:
 	class CChannel* Get_Channel(_uint iChannelIndex) { return m_Channels[iChannelIndex]; }
 
 public:
-	HRESULT Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);
-	void	Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones);
+	HRESULT			Initialize(ANIMFILE* pAnimFile, const vector<class CBone*>& Bones);
+	void			Invalidate_TransformationMatrix(_float fTimeDelta, const vector<class CBone*>& Bones);
+	void			Invalidate_TransformationMatrix_Reverse(_float fTimeDelta, const vector<class CBone*>& Bones);
 
 private:
 	_char						m_szName[MAX_PATH] = { "" };
@@ -68,6 +71,7 @@ private:
 	_bool						m_isCloned = { false };
 	_bool						m_isLoop = { false };
 	_bool						m_isRoot = { false };
+	_bool						m_isReverse = { false };
 
 	_float						m_fBlendTime = { 0.2f };
 	

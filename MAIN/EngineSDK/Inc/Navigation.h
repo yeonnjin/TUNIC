@@ -22,6 +22,8 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	void			Tick(_fmatrix WorldMatrix);
 	_bool			isMove(_fvector vPosition);
+	_float			Compute_Height(_fvector vPosition, _float fOffset = 0.f);
+
 #ifdef _DEBUG
 public:
 	virtual HRESULT Render();

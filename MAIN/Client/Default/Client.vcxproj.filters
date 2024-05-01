@@ -13,12 +13,6 @@
     <Filter Include="01.Levels\Loading">
       <UniqueIdentifier>{783aa7d0-e4a9-47f3-b857-f5b824dad2b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\Logo">
-      <UniqueIdentifier>{7fa67ac9-2f2d-435f-bf35-849f5cbedd3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\GamePlay">
-      <UniqueIdentifier>{8b1d5579-1fb9-493c-96b9-62d618153e5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\Loading\Loader">
       <UniqueIdentifier>{17ab5a45-d880-40f6-b518-e747936c79d3}</UniqueIdentifier>
     </Filter>
@@ -48,12 +42,6 @@
     </Filter>
     <Filter Include="02.GameObjects\Player">
       <UniqueIdentifier>{f3647f79-23fb-4882-b99c-50fc1d97408a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\GamePlay\ImGui">
-      <UniqueIdentifier>{f7a982f9-8768-47df-b8b3-62f7a1b3ea73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\GamePlay\ImGui\Editor">
-      <UniqueIdentifier>{c935ff74-7069-4514-b0ef-3bab9e8aa64d}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\Player\Weapon">
       <UniqueIdentifier>{ecf585f8-593b-4b94-8226-a7c24e325de0}</UniqueIdentifier>
@@ -385,11 +373,68 @@
     <Filter Include="02.GameObjects\Camera\Puzzle">
       <UniqueIdentifier>{967a295c-e77c-4088-931f-8ce8b29d2700}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\State\Player_State_Puzzle">
+    <Filter Include="02.GameObjects\Interactive\ColliderBox">
+      <UniqueIdentifier>{ff9984cc-244c-4e56-8da2-82f813454897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Ladder">
+      <UniqueIdentifier>{c023dd7a-cc52-4a4f-b671-0516d9ada9ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Top">
+      <UniqueIdentifier>{4bbb0626-b70b-4e83-9f6f-5232026270a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Map_Puzzle">
+      <UniqueIdentifier>{e9d0a0a2-d694-4227-b374-4fcb26d9013a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Map_Puzzle\Player_State_Puzzle">
       <UniqueIdentifier>{edf908d2-2283-4ba4-8750-fd3990e5a5cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\Player\State\Player_State_Climb">
+    <Filter Include="02.GameObjects\Player\State\Map_Puzzle\Player_State_Climb">
       <UniqueIdentifier>{86043aba-57c0-4d85-abaf-632715767442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Map_Puzzle\Player_State_Top">
+      <UniqueIdentifier>{feaa12ec-593d-472b-b839-4c3e970ad904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Arrow">
+      <UniqueIdentifier>{4c8deedf-59a5-4b06-a851-443489c4d880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Telescope">
+      <UniqueIdentifier>{47d6d0d6-3589-4873-a752-7b2c0ba81bd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Telescope">
+      <UniqueIdentifier>{3fceaaf6-6472-419b-a8d8-7d0fd7616e85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Origin">
+      <UniqueIdentifier>{729288d5-d5f1-448a-baf9-bc00f60af498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Origin\Logo">
+      <UniqueIdentifier>{7fa67ac9-2f2d-435f-bf35-849f5cbedd3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Origin\GamePlay">
+      <UniqueIdentifier>{8b1d5579-1fb9-493c-96b9-62d618153e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Origin\GamePlay\ImGui">
+      <UniqueIdentifier>{f7a982f9-8768-47df-b8b3-62f7a1b3ea73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Origin\GamePlay\ImGui\Editor">
+      <UniqueIdentifier>{c935ff74-7069-4514-b0ef-3bab9e8aa64d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC">
+      <UniqueIdentifier>{f8371271-87af-449a-8cf9-9bc62fa68511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC\LEVEL_MENU">
+      <UniqueIdentifier>{f6e0685c-3622-4859-945e-933e03cffabc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC\LEVEL_BEACH">
+      <UniqueIdentifier>{6de2e0ff-5b39-41c6-8635-0668e162bf63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC\LEVEL_SHOP">
+      <UniqueIdentifier>{20151947-ea0e-40c6-96f5-c567ae9448f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC\LEVEL_PUZZLE">
+      <UniqueIdentifier>{53b88f12-bad9-44c1-a810-f2559abe20d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\TUNIC\LEVEL_BOSS">
+      <UniqueIdentifier>{394ad50f-90b7-43cc-84a2-e9b164c86c9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -406,13 +451,13 @@
       <Filter>00.MainApp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_GamePlay.h">
-      <Filter>01.Levels\GamePlay</Filter>
+      <Filter>01.Levels\Origin\GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01.Levels\Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Logo.h">
-      <Filter>01.Levels\Logo</Filter>
+      <Filter>01.Levels\Origin\Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Loader.h">
       <Filter>01.Levels\Loading\Loader</Filter>
@@ -445,7 +490,7 @@
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Editor.h">
-      <Filter>01.Levels\GamePlay\ImGui\Editor</Filter>
+      <Filter>01.Levels\Origin\GamePlay\ImGui\Editor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_Weapon.h">
       <Filter>02.GameObjects\Player\Weapon</Filter>
@@ -736,10 +781,34 @@
       <Filter>02.GameObjects\Camera\Puzzle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_State_Puzzle.h">
-      <Filter>02.GameObjects\Player\State\Player_State_Puzzle</Filter>
+      <Filter>02.GameObjects\Player\State\Map_Puzzle\Player_State_Puzzle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_State_Climb.h">
-      <Filter>02.GameObjects\Player\State\Player_State_Climb</Filter>
+      <Filter>02.GameObjects\Player\State\Map_Puzzle\Player_State_Climb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_ColliderBox.h">
+      <Filter>02.GameObjects\Interactive\ColliderBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_Ladder.h">
+      <Filter>02.GameObjects\Interactive\Ladder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Top.h">
+      <Filter>02.GameObjects\Player\State\Map_Puzzle\Player_State_Top</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Top.h">
+      <Filter>02.GameObjects\Camera\Top</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Arrow.h">
+      <Filter>02.GameObjects\UI\Arrow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Telescope.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Telescope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Telescope.h">
+      <Filter>02.GameObjects\Camera\Telescope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Menu.h">
+      <Filter>01.Levels\TUNIC\LEVEL_MENU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -750,13 +819,13 @@
       <Filter>00.MainApp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_GamePlay.cpp">
-      <Filter>01.Levels\GamePlay</Filter>
+      <Filter>01.Levels\Origin\GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01.Levels\Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Logo.cpp">
-      <Filter>01.Levels\Logo</Filter>
+      <Filter>01.Levels\Origin\Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Loader.cpp">
       <Filter>01.Levels\Loading\Loader</Filter>
@@ -783,7 +852,7 @@
       <Filter>02.GameObjects\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Editor.cpp">
-      <Filter>01.Levels\GamePlay\ImGui\Editor</Filter>
+      <Filter>01.Levels\Origin\GamePlay\ImGui\Editor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_Weapon.cpp">
       <Filter>02.GameObjects\Player\Weapon</Filter>
@@ -1068,10 +1137,34 @@
       <Filter>02.GameObjects\Camera\Puzzle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Puzzle.cpp">
-      <Filter>02.GameObjects\Player\State\Player_State_Puzzle</Filter>
+      <Filter>02.GameObjects\Player\State\Map_Puzzle\Player_State_Puzzle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_State_Climb.cpp">
-      <Filter>02.GameObjects\Player\State\Player_State_Climb</Filter>
+      <Filter>02.GameObjects\Player\State\Map_Puzzle\Player_State_Climb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_ColliderBox.cpp">
+      <Filter>02.GameObjects\Interactive\ColliderBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_Ladder.cpp">
+      <Filter>02.GameObjects\Interactive\Ladder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Top.cpp">
+      <Filter>02.GameObjects\Player\State\Map_Puzzle\Player_State_Top</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Top.cpp">
+      <Filter>02.GameObjects\Camera\Top</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Arrow.cpp">
+      <Filter>02.GameObjects\UI\Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Telescope.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Telescope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Telescope.cpp">
+      <Filter>02.GameObjects\Camera\Telescope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Menu.cpp">
+      <Filter>01.Levels\TUNIC\LEVEL_MENU</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

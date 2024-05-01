@@ -512,9 +512,6 @@
     <ClInclude Include="..\Public\Animation.h">
       <Filter>01. Utility\02. Components\05%29 Model\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Channel.h">
-      <Filter>01. Utility\02. Components\05%29 Model\Animation\Channel</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Picking.h">
       <Filter>01. Utility\06. Picking</Filter>
     </ClInclude>
@@ -649,6 +646,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Frustum.h">
       <Filter>01. Utility\12. Frustum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Channel.h">
+      <Filter>01. Utility\02. Components\05%29 Model\Animation\Channel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

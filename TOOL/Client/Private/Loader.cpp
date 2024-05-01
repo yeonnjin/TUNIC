@@ -349,11 +349,11 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/effigy (merge).fbx", TEXT("Prototype_Component_Model_Flower"), TransformMatrix))))
 	//	return E_FAIL;
 
-	///* For.Prototype_Component_Model_Map_Beach */
-	//TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_FIN.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Model_Map_Beach */
+	TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_Remove.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
+		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Map_FOXGOD */
 	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
@@ -367,11 +367,11 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map6/Terrain.fbx", TEXT("Prototype_Component_Model_Map_Shop"), TransformMatrix))))
 	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Map_Puzzle */
-	TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Puzzle"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map5/Puzzle_Map.fbx", TEXT("Prototype_Component_Model_Map_Puzzle"), TransformMatrix))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Map_Puzzle */
+	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Puzzle"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map5/Puzzle_Map.fbx", TEXT("Prototype_Component_Model_Map_Puzzle"), TransformMatrix))))
+	//	return E_FAIL;
 
 	///* For.Prototype_Component_Model_Map_Librarian */
 	//TransformMatrix =  XMMatrixIdentity();

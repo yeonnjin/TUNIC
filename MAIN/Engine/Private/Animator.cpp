@@ -159,6 +159,14 @@ HRESULT CAnimator::Play_Animation(_float fTimeDelta)
 	return m_pAnimator_Controller->Play_Animation(fTimeDelta);
 }
 
+//HRESULT CAnimator::Play_Animation_Reverse(_float fTimeDelta)
+//{
+//	if (nullptr == m_pAnimator_Controller)
+//		return E_FAIL;
+//
+//	return m_pAnimator_Controller->Play_Animation_Reverse(fTimeDelta);
+//}
+
 HRESULT CAnimator::Set_Animation_Index(_uint iAnimIndex)
 {
 	if (nullptr == m_pAnimator_Controller)
@@ -205,6 +213,14 @@ void CAnimator::Set_AnimationData_Initialize(_uint iAnimIndex)
 		return;
 
 	return m_pAvatar->Set_AnimationData_Initialize(iAnimIndex);
+}
+
+void CAnimator::Set_AnimationData_Reverse(_uint iAnimIndex)
+{
+	if (nullptr == m_pAvatar)
+		return;
+
+	return m_pAvatar->Set_AnimationData_Reverse(iAnimIndex);
 }
 
 void CAnimator::Set_Animation_isRoot(_uint iAnimIndex, _bool isRoot)

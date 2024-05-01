@@ -243,7 +243,7 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	// Prototype_Component_Model_Map_Librarian
 	// Prototype_Component_Model_Map_Shop
 	// Prototype_Component_Model_Map_Puzzle
-	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_Puzzle");
+	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_Beach");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map"), TEXT("Prototype_GameObject_Map"), &tMapDesc)))
 		return E_FAIL;	
 

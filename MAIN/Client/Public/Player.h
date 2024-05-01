@@ -39,7 +39,7 @@ public:
 	enum STATE { 
 		STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, 
 		STATE_ATTACK_SHOTGUN, STATE_ATTACK_WAND, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE,
-		STATE_OPEN, STATE_PUZZLE, STATE_CLIMB,
+		STATE_OPEN, STATE_PUZZLE, STATE_CLIMB, STATE_TOP,
 		STATE_END
 	};
 
@@ -55,6 +55,7 @@ public:
 	enum STATUS { STATUS_HURT, STATUS_STAGGER, STATUS_PARRY, STATUS_END };
 	enum DODGE { DODGE_ROLL, DODGE_FAST, DODGE_DASH, DODGE_END };
 	enum LOCKON { LOCK_ON_FIND, LOCK_ON_NONE, LOCK_OFF, LOCK_END };
+	enum CLIMB { CLIMB_ENTER, CLIMB_UPPER, CLIMB_LOWER, CLIMB_END };
 
 	/*enum STATE {
 		STATE_IDLE = 0x01,
@@ -80,16 +81,22 @@ public:
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
 	void			Set_AnimationData_Initialize(ANIMATION eAnimIndex) { m_pModelCom->Set_AnimationData_Initialize(eAnimIndex); }
+	void			Set_Play_Animation_Reverse(ANIMATION eAnimIndex) { m_pModelCom->Set_AnimationData_Reverse(eAnimIndex); }
 	void			Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender);
 	void			Set_Parrying(_bool isParrying) { m_isParrying = isParrying; }
 	void			Set_LockOn(LOCKON eLockOn) { m_eLockOn = eLockOn; }
 	void			Set_UtileItem(WEAPON eWeapon);
+
 	void			Set_StopAnimation(_bool isStop) { m_isStop = isStop; }
+	void			Set_Climb(CLIMB eClimb) { m_eClimb = eClimb; }
+	void			Set_Arrive(_bool isArrive) { m_isArrive = isArrive; }
 
 	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
 	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
 	void			Set_MP(_float fMPPlus) { m_fMP += fMPPlus; }
 	void			Set_ChestOpen() { m_isChestOpen = true; }
+	void			Set_LadderUpper(_bool isUpper) { m_isUpper = isUpper; }
+	//void			Set_Climb() { m_isClimb; }
 
 	// Get
 	//STATE			Get_State() { return m_eState; }
@@ -98,6 +105,9 @@ public:
 	_bool			isParrying() { return m_isParrying; }
 	//_bool			isPuzzle() { return m_isPuzzle; }
 	//_bool			isAttacking() { return m_isAttcking; }
+	_bool			isUpper() { return m_isUpper; }
+	_bool			isArrive() { return m_isArrive; }
+	_bool			isEndLadder() { return m_isEndLadder; }
 
 	_float			Get_SP() { return m_fSP; }
 	_float			Get_MP() { return m_fMP; }
@@ -110,9 +120,12 @@ public:
 	STATUS			Get_Status() { return m_eStatus; }
 	DODGE			Get_Dodge() { return m_eDodge; }
 	LOCKON			Get_LockOn() { return m_eLockOn; }
+	CLIMB			Get_Climb() { return m_eClimb; }
+
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
 	CTransform*		Get_LockOn_Transform() { return m_pLookOnTransform; }
 	_uint			Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
+	_uint			Get_Ladder_Index() { return m_iLadderIndex; }
 
 	// State
 	void			Change_State(STATE eState);
@@ -142,6 +155,10 @@ private:
 	//_bool								m_isPuzzle = { false };
 	_bool								m_isStop = { false };
 
+	_bool								m_isUpper = { false };
+	_bool								m_isArrive = { false };
+	_bool								m_isEndLadder = { false };
+
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
 
@@ -158,6 +175,8 @@ private:
 	_float								m_fAccSPTime = { 0.f };
 	_float								m_fSPTime = { 2.f };
 
+	_uint								m_iLadderIndex = { 0 };
+
 private:
 	ANIMATION							m_eAnimationIndex = { ANIM_END };
 	ANIMATION							m_eBlendAnimIndex = { ANIM_END };
@@ -167,6 +186,7 @@ private:
 	DODGE								m_eDodge = { DODGE_END };
 	WEAPON								m_eWeapon = { WEAPON_END };
 	LOCKON								m_eLockOn = { LOCK_END };
+	CLIMB								m_eClimb = { CLIMB_END };
 
 private:
 	wstring								m_strModelComTag = {};

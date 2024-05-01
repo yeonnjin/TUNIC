@@ -15,6 +15,8 @@ public:
 	HRESULT				Change_Camera(const wstring& strCameraTag, void* pArg = nullptr);
 	
 	_float				Get_Camera_Far();
+	CCamera*			Get_Camera(const wstring& strCameraTag);
+
 	HRESULT				Set_Exit(const wstring& strCameraTag, _bool isExit);
 	void				Set_Camera_Level(_uint iLevel);
 

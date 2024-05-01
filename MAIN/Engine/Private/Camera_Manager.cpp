@@ -44,6 +44,11 @@ _float CCamera_Manager::Get_Camera_Far()
     return m_pCurCamera->Get_CamFar();
 }
 
+CCamera* CCamera_Manager::Get_Camera(const wstring& strCameraTag)
+{
+    return Find_Camera(strCameraTag);
+}
+
 HRESULT CCamera_Manager::Set_Exit(const wstring& strCameraTag, _bool isExit)
 {
     CCamera* pExitCamera = Find_Camera(strCameraTag);

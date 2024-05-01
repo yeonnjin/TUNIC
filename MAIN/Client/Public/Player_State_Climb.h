@@ -20,10 +20,20 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	class CPlayer* m_pPlayer = { nullptr };
+	class CPlayer*		m_pPlayer = { nullptr };
 
-	_bool	m_isStart = { true };
-	_bool	m_isClimb = { false };
+	_bool				m_isStart = { true };
+	_bool				m_isStartEndClimb = { false };
+	_bool				m_isEndClimb = { false };
+	_bool				m_isEndLadder = { false };
+
+	_float				m_fBlendAccTime = { 0.f };
+	_float				m_fBlendTime = { 0.21f };
+
+	CPlayer::ANIMATION	m_eAnimation = { CPlayer::ANIM_END };
+
+private:
+	void				Compute_Dir();
 
 public:
 	static CPlayer_State_Climb* Create(class CPlayer* pPlayer);

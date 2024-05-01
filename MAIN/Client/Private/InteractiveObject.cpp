@@ -112,8 +112,12 @@ HRESULT CInteractiveObject::Bind_ShaderResources()
 
 void CInteractiveObject::Compute_ColliderMatrix()
 {
+    _vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+    _vector vLook = XMVector3Normalize(m_pTransformCom->Get_State_Vector(CTransform::STATE_LOOK));
+    vPosition -= vLook;
+
     _matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix();
-    WorldMatrix.r[3].m128_f32[2] -= 1.2f;
+    memcpy(&WorldMatrix.r[3], &vPosition, sizeof(_vector));
     m_ColliderMatrix = WorldMatrix;
 }
 

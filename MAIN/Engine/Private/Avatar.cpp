@@ -67,6 +67,11 @@ void CAvatar::Set_AnimationData_Initialize(_uint iAnimIndex)
 	m_Animations[iAnimIndex]->Set_AnimationData_Initialize();
 }
 
+void CAvatar::Set_AnimationData_Reverse(_uint iAnimIndex)
+{
+	m_Animations[iAnimIndex]->Set_AnimationData_Reverse();
+}
+
 CBone* CAvatar::Get_Bone_Ptr(_uint iBoneIndex) const
 {
 	auto iter = m_Bones.begin();

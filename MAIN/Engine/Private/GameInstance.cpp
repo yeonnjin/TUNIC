@@ -476,6 +476,14 @@ _float CGameInstance::Get_Camera_Far()
 	return m_pCamera_Manager->Get_Camera_Far();
 }
 
+CCamera* CGameInstance::Get_Camera(const wstring& strCameraTag)
+{
+	if (nullptr == m_pCamera_Manager)
+		return nullptr;
+
+	return m_pCamera_Manager->Get_Camera(strCameraTag);
+}
+
 void CGameInstance::Set_Camera_Level(_uint iLevel)
 {
 	if (nullptr == m_pCamera_Manager)

@@ -133,6 +133,11 @@ _bool CNavigation::isMove(_fvector vPosition)
 	}
 }
 
+_float CNavigation::Compute_Height(_fvector vPosition, _float fOffset)
+{
+	return  m_Cells[m_iCurrentIndex]->Compute_Height(vPosition, XMLoadFloat4x4(&m_WorldMatrix)) + fOffset;
+}
+
 #ifdef _DEBUG
 HRESULT CNavigation::Render()
 {

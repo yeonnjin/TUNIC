@@ -28,6 +28,7 @@ public:
 public:
 	_bool	isIn(_fvector vPosition, _fmatrix TerrainWorldMatrix, _int* pNeighborIndex);
 	_bool	Compare_Points(_fvector vSrcPoint, _fvector vDstPoint);
+	_float	Compute_Height(_fvector vPosition, _fmatrix TerrainWorldMatrix);
 
 public:
 	HRESULT Initialize(const _float3* pPoints, _uint iIndex);

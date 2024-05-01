@@ -24,6 +24,7 @@ public:
 	void						Set_ParentBoneIndex(_int iIndex);
 	void						Set_isUseTransformaion(_bool isUse);
 	void						Set_AnimationData_Initialize(_uint iAnimIndex);
+	void						Set_AnimationData_Reverse(_uint iAnimIndex);
 
 	// Get
 	vector<CAnimation*>*		Get_Animations_Ptr() { return &m_Animations; }

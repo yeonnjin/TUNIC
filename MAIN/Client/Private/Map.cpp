@@ -45,7 +45,7 @@ HRESULT CMap::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    //m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));        
+    m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));        
 
     return S_OK;
 }

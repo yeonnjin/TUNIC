@@ -30,7 +30,8 @@ public:
 		_vector				vPosition;
 		CItem::ITEM_TYPE	eType;
 		CItem::ITEM			eItem;
-		
+		_bool				isRotation;
+		_float				fAngle;
 	}CHEST_DESC;
 
 private:
@@ -55,6 +56,9 @@ private:
 	_bool			m_isClose = { true };
 	_bool			m_isFinished = { false };
 	_bool			m_isBlend = { false };
+	_bool			m_isRotation = { false };
+
+	_float			m_fAngle = { 0.f };
 
 	ANIMATION		m_eAnimationIndex = { ANIM_END };
 	ANIMATION		m_eBlendAnimIndex = { ANIM_END };

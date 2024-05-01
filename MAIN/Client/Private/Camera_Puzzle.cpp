@@ -32,11 +32,12 @@ HRESULT CCamera_Puzzle::Tick(_float fTimeDelta)
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")));
 	_vector vPlayerPosition = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
-	_vector vOrigin = _vector{ 0.f, vPlayerPosition.m128_f32[1] - 1.f, -58.f, 1.f};
+	_vector vOrigin = _vector{ 0.f, vPlayerPosition.m128_f32[1], -58.f, 1.f};
 	_vector vDir = XMVector3Normalize(vPlayerPosition - vOrigin);
 	_float fDistance = 30.f;
 
 	_vector vTargetPosition = vOrigin + vDir * fDistance;
+	vTargetPosition.m128_f32[1] = vPlayerPosition.m128_f32[1] + 4.f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vTargetPosition);
 	m_pTransformCom->Look_At(vPlayerPosition);

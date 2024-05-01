@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CAnimator;
 class CShader;
 class CCollider;
+class CNavigation;
 END
 
 BEGIN(Client)
@@ -51,12 +52,15 @@ protected:
 	_float			m_fAccCollisionCoolTime = { 0.f };
 	_float			m_fCollisionCoolTime = { 0.5f };
 
+	_vector			m_vPrePosition = {};
+
 protected:
 	wstring			m_strModelComTag = {};
 	CAnimator*		m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };
 	CCollider*		m_pRigidColliderCom = { nullptr };
+	CNavigation*	m_pNavigationCom = { nullptr };
 
 protected:
 	virtual HRESULT	Add_Components();

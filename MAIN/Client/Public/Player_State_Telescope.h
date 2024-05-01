@@ -5,11 +5,11 @@
 
 BEGIN(Client)
 
-class CPlayer_State_Puzzle final : public CState
+class CPlayer_State_Telescope final : public CState
 {
 private:
-	CPlayer_State_Puzzle(class CPlayer* pPlayer);
-	virtual ~CPlayer_State_Puzzle() = default;
+	CPlayer_State_Telescope(class CPlayer* pPlayer);
+	virtual ~CPlayer_State_Telescope() = default;
 
 public:
 	// 상태 진입 시 최초에 한 번만 호출
@@ -20,24 +20,11 @@ public:
 	virtual void OnStateExit() override;
 
 private:
-	_bool			m_isMove = { false };
-	_bool			m_isPreMove = { false };
-
-	_float			m_fHeight[14] = {};
-
-	vector<_vector> m_vAxis;
-
-private:
 	class CPlayer* m_pPlayer = { nullptr };
 
-private:
-	void	Set_Height();
-	void	Set_Axis();
-
 public:
-	static CPlayer_State_Puzzle* Create(class CPlayer* pPlayer);
+	static CPlayer_State_Telescope* Create(class CPlayer* pPlayer);
 	virtual void Free() override;
-
 };
 
 END

@@ -34,6 +34,8 @@ HRESULT CObject_Chest::Initialize(void* pArg)
 
         m_pItem->Set_ItemType(pDesc->eType);
         m_pItem->Set_Item(pDesc->eItem);
+        m_isRotation = pDesc->isRotation;
+        m_fAngle = pDesc->fAngle;
     }
     
     //_float4 vPosition = _float4(0.f, 0.2f, 0.f, 1.f);
@@ -44,6 +46,9 @@ HRESULT CObject_Chest::Initialize(void* pArg)
 
     m_eInteractiveType = INTERACTIVE_CHEST;
     m_eRigid = RIGID_BLOCK;
+
+    if (true == m_isRotation)
+        m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(m_fAngle));
 
     Compute_ColliderMatrix();
 
@@ -61,29 +66,6 @@ HRESULT CObject_Chest::Tick(_float fTimeDelta)
 {
     if (E_FAIL == __super::Tick(fTimeDelta))
         return E_FAIL;
-
-    /*static _uint iIndex = 0;
-    if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
-    {
-        iIndex++;
-        if (iIndex > 1)
-            iIndex = 0;
-        m_pModelCom->Set_Animation_Index(iIndex);
-    }*/
-
-
-
-    //// Blending
-    //if (true == m_isBlend)
-    //{
-    //    if (S_OK == m_pModelCom->Blending_Animation(m_eBlendAnimIndex, fTimeDelta))
-    //    {
-    //        m_isBlend = false;
-    //        m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
-    //        m_eAnimationIndex = m_eBlendAnimIndex;
-    //    }
-    //}
-    //else
 
     if (true == m_isFirstFrame)
     {
@@ -118,7 +100,6 @@ void CObject_Chest::Late_Tick(_float fTimeDelta)
     __super::Late_Tick(fTimeDelta);
 
 #ifdef _DEBUG
-    //m_pGameInstance->Add_DebugComponent(m_pColliderCom);
     m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
 #endif
 }

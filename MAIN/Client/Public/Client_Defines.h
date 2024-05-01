@@ -4,7 +4,8 @@
 
 namespace Client
 {
-	enum LEVEL {	LEVEL_STATIC = 0, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY = 3, LEVEL_END };
+	enum LEVEL {	LEVEL_STATIC = 0, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY = 3, 
+					LEVEL_MENU, LEVEL_BEACH, LEVEL_SHOP, LEVEL_PUZZLE, LEVEL_BOSS, LEVEL_END };
 
 	const unsigned int	g_iWinSizeX = 1280;
 	const unsigned int	g_iWinSizeY = 720;

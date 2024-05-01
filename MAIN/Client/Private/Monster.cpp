@@ -74,6 +74,18 @@ HRESULT CMonster::Tick(_float fTimeDelta)
     else
         m_pModelCom->Play_Animation(fTimeDelta);
 
+    // Navigation
+    if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
+    {
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+    }
+    m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+    // Height
+    _float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
+    m_vPrePosition.m128_f32[1] = fHeight;
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+
     m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
     m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
@@ -180,6 +192,7 @@ void CMonster::Free()
     Safe_Release(m_pModelCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pRigidColliderCom);
+    Safe_Release(m_pNavigationCom);
 }
 
 void CMonster::Collision_Event(Engine::CGameObject* pGameObject)
