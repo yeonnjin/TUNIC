@@ -70,6 +70,7 @@ protected:
 
 protected:
 	HRESULT			Add_Component(_uint iLevelIndex, const wstring& strPrototypeTag, const wstring& strComponentTag, class CComponent** ppOut, void* pArg = nullptr);
+	HRESULT			Delete_Component(const wstring& strComponentTag);
 	void			Compute_Damage_CoolTime(_float fTimeDelta);
 	virtual void	Damage_Event() {}
 

@@ -456,8 +456,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Map(const wstring& strLayerTag)
 {
 	// TODO:맵 생성시 네비 태그 같이 전달
 	CMap::MAP_DESC tDesc = {};
-	tDesc.isLoad = false;
-	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	//tDesc.isLoad = false;
+	//tDesc.vPosition = _float3(0.f, 0.f, 0.f);
 	// Prototype_Component_Model_Map_Beach
 	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Librarian

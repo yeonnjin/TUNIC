@@ -32,6 +32,7 @@ public:
 
 private:
 	_bool			m_isUsing = { true };
+	_bool			m_isClone = { false };
 
 	_float			m_fSize = { 76.f };
 

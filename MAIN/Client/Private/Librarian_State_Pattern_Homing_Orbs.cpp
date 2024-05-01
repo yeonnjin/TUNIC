@@ -17,7 +17,7 @@ CLibrarian_State_Pattern_Homing_Orbs::CLibrarian_State_Pattern_Homing_Orbs(CMons
         m_Orbs.push_back(pOrb);
         Safe_AddRef(pOrb);
         pOrb->Set_Index(i);
-        m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Librarian_Effect"), pOrb);
+        m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Librarian_Effect"), pOrb);
     }
 }
 

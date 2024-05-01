@@ -11,15 +11,12 @@
 CPlayer_State_Top::CPlayer_State_Top(CPlayer* pPlayer)
 {
     m_pPlayer = pPlayer;
-    m_pUIArrow = dynamic_cast<CUI_Arrow*>(m_pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_UI_Arrow")));
-    Safe_AddRef(m_pUIArrow);
+    Set_Axis();
     m_pEasing = CEasing::Get_Instance();
 
 #ifndef _DEBUG
     Safe_AddRef(m_pEasing);
 #endif // _DEBUG  
-
-    Set_Axis();
 }
 
 void CPlayer_State_Top::OnStateEnter()
@@ -31,6 +28,9 @@ void CPlayer_State_Top::OnStateEnter()
     // 3. Á¤´ä : ¿Þ, À§ / ¿À, À§ / ¿À, ¾Æ / ¿À, À§ / ¿À, À§ / ¿Þ, ¿Þ / ¿Þ , À§ / ¿À, À§
 
     m_pGameInstance->Change_Camera(TEXT("Camera_Top"));
+
+    m_pUIArrow = dynamic_cast<CUI_Arrow*>(m_pGameInstance->Get_GameObject(LEVEL_PUZZLE, TEXT("Layer_UI_Arrow")));
+    Safe_AddRef(m_pUIArrow);
 }
 
 void CPlayer_State_Top::OnStateUpdate(_float fTimeDelta)

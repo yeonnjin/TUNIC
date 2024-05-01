@@ -78,6 +78,7 @@ private:
 public:
 	// Set
 	void			Set_Level(_uint iLevel) { m_iLevel = iLevel; }
+	HRESULT			Set_Navigation(_uint iLevel);
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
 	void			Set_AnimationData_Initialize(ANIMATION eAnimIndex) { m_pModelCom->Set_AnimationData_Initialize(eAnimIndex); }

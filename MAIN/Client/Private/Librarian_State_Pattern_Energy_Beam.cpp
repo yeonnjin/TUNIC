@@ -19,7 +19,7 @@ CLibrarian_State_Pattern_Energy_Beam::CLibrarian_State_Pattern_Energy_Beam(CMons
     CLibrarian_Effect_Beam* pBeam = dynamic_cast<CLibrarian_Effect_Beam*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Librarian_Attack_Beam")));
     m_pBeam = pBeam;
     Safe_AddRef(pBeam);
-    m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Librarian_Effect"), pBeam);
+    m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Librarian_Effect"), pBeam);
 }
 
 void CLibrarian_State_Pattern_Energy_Beam::OnStateEnter()

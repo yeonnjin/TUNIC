@@ -183,6 +183,19 @@ void CGameObject::Rigid_Event(CGameObject* pGameObject)
 	}
 }
 
+HRESULT CGameObject::Delete_Component(const wstring& strComponentTag)
+{
+	auto	iter = m_Components.find(strComponentTag);
+	if (iter == m_Components.end())
+		return E_FAIL;
+
+	Safe_Release(iter->second);
+
+	m_Components.erase(iter);
+
+	return S_OK;
+}
+
 void CGameObject::Free()
 {
 	__super::Free();

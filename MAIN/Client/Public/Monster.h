@@ -19,6 +19,7 @@ public:
 	{
 		_float4x4		TransformMatrix;
 		wstring			strModelComTag;
+		LEVEL			eLevel;
 	}MONSTER_DESC;
 
 protected:
@@ -53,6 +54,8 @@ protected:
 	_float			m_fCollisionCoolTime = { 0.5f };
 
 	_vector			m_vPrePosition = {};
+
+	LEVEL			m_eLevel = { LEVEL_END };
 
 protected:
 	wstring			m_strModelComTag = {};

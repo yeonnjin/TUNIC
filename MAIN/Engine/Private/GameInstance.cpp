@@ -181,7 +181,7 @@ HRESULT CGameInstance::Clear(_uint iClearLevelIndex)
 	m_pObject_Manager->Clear(iClearLevelIndex);
 
 	/* 컴포넌트 원형 */
-	m_pComponent_Manager->Clear(iClearLevelIndex);
+ 	m_pComponent_Manager->Clear(iClearLevelIndex);
 
 
 	return S_OK;

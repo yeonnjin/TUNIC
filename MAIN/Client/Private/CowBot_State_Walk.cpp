@@ -38,8 +38,15 @@ void CCowBot_State_Walk::OnStateEnter()
         m_vTargetPosition.m128_f32[2] = 75.f;
 
     /* 목표 방향 설정 */
-    m_vTargetDir = XMVector3Normalize(m_vEnterPosition - m_vTargetPosition);
-    _vector vLookDir = XMVector3Normalize(m_pMonsterTransform->Get_State_Vector(CTransform::STATE_LOOK));
+    m_vTargetDir = m_vEnterPosition - m_vTargetPosition;
+    m_vTargetDir.m128_f32[1] = 0.f;
+    m_vTargetDir.m128_f32[3] = 0.f;
+    m_vTargetDir = XMVector3Normalize(m_vTargetDir);
+    _vector vLookDir = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_LOOK);
+    vLookDir.m128_f32[1] = 0.f;
+    vLookDir.m128_f32[3] = 0.f;
+    vLookDir = XMVector3Normalize(vLookDir);
+
     if (false == XMVector3Equal(m_vTargetDir, vLookDir))
         m_isLook = false;
 }

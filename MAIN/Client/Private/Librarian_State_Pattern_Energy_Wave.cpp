@@ -42,7 +42,7 @@ void CLibrarian_State_Pattern_Energy_Wave::OnStateUpdate(_float fTimeDelta)
         tDesc.vLookDir = vMonsterPosition - vPlayerPosition;
         tDesc.isVertical = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? true : false;
 
-        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Librarian_Effect"), TEXT("Prototype_GameObject_Librarian_Attack_Slash"), &tDesc)))
+        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Librarian_Effect"), TEXT("Prototype_GameObject_Librarian_Attack_Slash"), &tDesc)))
             return;
 
         m_isSlash = true;
