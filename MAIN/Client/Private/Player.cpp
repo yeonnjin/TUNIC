@@ -1017,7 +1017,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 				CItem* pItem = dynamic_cast<CItem*>(pObject);
 				pItem->Select_Item();
 			
-				if (true == m_isUsingShop && true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
+				if (true == m_isUsingShop && true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN))
 				{
 					// 아이템 샀을 때
 					if (true == pItem->Get_isOK())
@@ -1062,6 +1062,11 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 						m_iLadderIndex = pLadder->Get_Index();
 					}
 				}
+			}
+			else if (CInteractiveObject::INTERACTIVE_TELESCOPE == eInteractiveType)
+			{
+				m_pGameInstance->Change_Camera(TEXT("Camera_Telescope"));
+				Change_State(STATE_IDLE);
 			}
 		}
 	}

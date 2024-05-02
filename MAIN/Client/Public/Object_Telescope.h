@@ -26,11 +26,12 @@ private:
 private:
 	CModel*					m_pModelCom = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
-	CCollider*				m_pColliderCom = { nullptr };
+	CCollider*				m_pRigidColliderCom = { nullptr };
 
 private:
 	virtual		HRESULT		Add_Components();
 	virtual		HRESULT		Bind_ShaderResources();
+	virtual		void		Compute_ColliderMatrix();
 
 
 public:

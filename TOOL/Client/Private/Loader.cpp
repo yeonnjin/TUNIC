@@ -349,17 +349,17 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/effigy (merge).fbx", TEXT("Prototype_Component_Model_Flower"), TransformMatrix))))
 	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Map_Beach */
-	TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_Remove.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
-		return E_FAIL;
-
-	///* For.Prototype_Component_Model_Map_FOXGOD */
-	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
+	///* For.Prototype_Component_Model_Map_Beach */
+	//TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_Remove.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
 	//	return E_FAIL;
+
+	/* For.Prototype_Component_Model_Map_FOXGOD */
+	TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
+		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Map_Shop */
 	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
@@ -482,6 +482,11 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		return E_FAIL;*/
 
 	/* For.Prototype_Component_Model_Map_Object */
+
+	//TransformMatrix = XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Weapon_Stick"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Stick/stick.fbx", TEXT("Prototype_Component_Model_Weapon_Stick"), TransformMatrix))))
+	//	return E_FAIL;
 	
 	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Object"),
@@ -507,6 +512,11 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Wandbow/Beam/Beam.fbx", TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"), TransformMatrix))))
 		return E_FAIL;*/
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Wandbow/Effect/Fire2.fbx", TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"), TransformMatrix))))
+		return E_FAIL;
 
 	///* For.Prototype_Component_Model_Fox */
 	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));

@@ -125,6 +125,9 @@ void CCamera_Follow::OnEnter(void* pArg)
 
 void CCamera_Follow::OnExit()
 {
+    m_fMoveTime = 0.f;
+    m_fIdleTime = 0.f;
+    m_fLookTime = 0.f;
 }
 
 CCamera_Follow* CCamera_Follow::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

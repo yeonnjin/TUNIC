@@ -30,7 +30,7 @@ private:
 
 	// PLAYER
 	void			Tool_PlayerInfo();
-	
+	void			Tool_CameraInfo();
 
 
 

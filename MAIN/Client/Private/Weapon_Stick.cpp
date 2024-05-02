@@ -59,7 +59,7 @@ HRESULT CWeapon_Stick::Add_Components()
         return E_FAIL;
 
     /* For.Com_Model */
-    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Map_Object";
+    _char szModelTag[MAX_PATH] = "Prototype_Component_Model_Weapon_Stick";
     wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
     if (FAILED(__super::Add_Component(LEVEL_STATIC, wstr,
         TEXT("Com_Model"), (CComponent**)&m_pModelCom)))

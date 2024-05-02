@@ -79,6 +79,7 @@
 #include "Camera_LockOn.h"
 #include "Camera_Puzzle.h"
 #include "Camera_Top.h"
+#include "Camera_Telescope.h"
 
 #include <fstream>
 
@@ -780,6 +781,11 @@ HRESULT CLoader::Loading_For_Menu()
 	/* For.Prototype_GameObject_Camera_Top */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Top"),
 		CCamera_Top::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_Telescope */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Telescope"),
+		CCamera_Telescope::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// UI ===========================================================================================

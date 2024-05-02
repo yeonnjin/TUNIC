@@ -81,7 +81,7 @@ HRESULT CGuard_Weapon_Shield::Render()
         if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(2)))
+        if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
 
         m_pModelCom->Render(i);
@@ -123,7 +123,7 @@ HRESULT CGuard_Weapon_Shield::Bind_ShaderResources()
     if (nullptr == m_pShaderCom)
         return E_FAIL;
 
-    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;

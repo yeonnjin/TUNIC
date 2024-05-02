@@ -46,6 +46,9 @@ HRESULT CLevel_Beach::Initialize()
     if (FAILED(Ready_Layer_Camera()))
         return E_FAIL;
 
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, TEXT("Layer_Editor"), TEXT("Prototype_GameObject_Editor"))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -53,7 +56,7 @@ void CLevel_Beach::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
 
-    if (GetKeyState(VK_RETURN) & 0x8000)
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SHOP))))
             return;
@@ -190,6 +193,8 @@ HRESULT CLevel_Beach::Ready_Layer_Map(const wstring& strLayerTag)
     tDesc.eLevel = LEVEL_BEACH;
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Map"), &tDesc)))
         return E_FAIL;
+
+    return S_OK;
 }
 
 HRESULT CLevel_Beach::Ready_Layer_BackGround(const wstring& strLayerTag)
@@ -297,8 +302,13 @@ HRESULT CLevel_Beach::Ready_Layer_Camera()
     tCameraFollowDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     tCameraFollowDesc.fNear = 0.1f;
     tCameraFollowDesc.fFar = 1000.0f;
-    tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
-    tCameraFollowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+
+    tCameraFollowDesc.vEye = _float4(65.f, 15.f, -75.f, 1.f);
+    tCameraFollowDesc.vAt = _float4(65.f, 2.f, -62.f, 1.f);
+
+    //tCameraFollowDesc.vEye = _float4(0.f, 13.f, -13.f, 1.f);
+    //tCameraFollowDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+
     tCameraFollowDesc.fSpeedPerSec = 3.f;
     tCameraFollowDesc.fRotationPerSec = XMConvertToRadians(10.0f);
 
@@ -364,6 +374,25 @@ HRESULT CLevel_Beach::Ready_Layer_Camera()
         return E_FAIL;
 
     m_pGameInstance->Add_Camera(TEXT("Camera_Top"), pCamera);
+
+    // Camera_Telescope
+    CCamera::CAMERA_DESC		tCameraTelescopeDesc{};
+    tCameraTelescopeDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraTelescopeDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraTelescopeDesc.fNear = 0.1f;
+    tCameraTelescopeDesc.fFar = 1000.0f;
+
+    tCameraTelescopeDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+    tCameraTelescopeDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+    tCameraTelescopeDesc.fSpeedPerSec = 3.f;
+    tCameraTelescopeDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Telescope"), &tCameraTelescopeDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_Telescope"), pCamera);
 
 
     m_pGameInstance->Change_Camera(TEXT("Camera_Free"));

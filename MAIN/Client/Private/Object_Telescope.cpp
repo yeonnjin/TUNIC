@@ -24,29 +24,38 @@ HRESULT CObject_Telescope::Initialize(void* pArg)
     _float4 vPosition = { -5.f, 1.4f, -113.f, 1.f };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
+    m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));
+
     Compute_ColliderMatrix();
 
-    m_eInteractiveType = INTERACTIVE_ITEM;
+    m_eInteractiveType = INTERACTIVE_TELESCOPE;
+    m_eRigid = RIGID_BLOCK;
 
     return S_OK;
 }
 
 HRESULT CObject_Telescope::Tick(_float fTimeDelta)
 {
+    __super::Tick(fTimeDelta);
+
     m_pColliderCom->Tick(m_ColliderMatrix);
 
+    m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+
     m_pGameInstance->Add_Group(CCollision_Manager::GROUP_INTERACTIVE, this);
+
+    m_pGameInstance->Add_RigidGroup(this);
 
     return S_OK;
 }
 
 void CObject_Telescope::Late_Tick(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+    __super::Late_Tick(fTimeDelta);
 
-    //#ifdef _DEBUG
-//        m_pGameInstance->Add_DebugComponent(m_pColliderCom);
-//#endif
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
+#endif
 }
 
 HRESULT CObject_Telescope::Render()
@@ -95,6 +104,17 @@ HRESULT CObject_Telescope::Add_Components()
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 
+    /* For. Com_RigidCollider */
+    CBounding_OBB::BOUNDING_OBB_DESC		RigidDesc{};
+
+    // 로컬상의 정보를 셋팅한다.
+    RigidDesc.vSize = _float3(2.f, 2.f, 2.f);
+    RigidDesc.vCenter = _float3(0.f, RigidDesc.vSize.y * 0.5f, 0.f);
+
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -115,6 +135,17 @@ HRESULT CObject_Telescope::Bind_ShaderResources()
         return E_FAIL;
 
     return S_OK;
+}
+
+void CObject_Telescope::Compute_ColliderMatrix()
+{
+    _vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+    _vector vLook = XMVector3Normalize(m_pTransformCom->Get_State_Vector(CTransform::STATE_LOOK));
+    vPosition += vLook;
+
+    _matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+    memcpy(&WorldMatrix.r[3], &vPosition, sizeof(_vector));
+    m_ColliderMatrix = WorldMatrix;
 }
 
 CObject_Telescope* CObject_Telescope::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -152,6 +183,7 @@ void CObject_Telescope::Free()
     Safe_Release(m_pModelCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pColliderCom);
+    Safe_Release(m_pRigidColliderCom);
 }
 
 void CObject_Telescope::Collision_Event(Engine::CGameObject* pGameObject)

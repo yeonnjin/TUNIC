@@ -16,6 +16,8 @@
 #include "Model.h"
 #include "Player.h"
 #include "Monster_Spinner.h"
+#include "Camera_Free.h"
+#include "Camera_Telescope.h"
 
 #define DATAPATH "../Bin/Resources/Data/Map/Map_12_1.dat"
 #define MODELPATH "../Bin/Resources/Data/Model/Player.dat"
@@ -101,6 +103,7 @@ void CEditor::Frame_Tab()
 		if (ImGui::BeginTabItem("[PLAYER]"))
 		{
 			Tool_PlayerInfo();
+			Tool_CameraInfo();
 			ImGui::EndTabItem();
 		}
 
@@ -160,6 +163,41 @@ void CEditor::Tool_PlayerInfo()
 	ImGui::SameLine();
 	ImGui::Text(m_pPlayer->Get_isDamage() ? "DAMAGE" : "NONE");
 
+}
+
+void CEditor::Tool_CameraInfo()
+{
+	ImGui::Separator();
+
+	_float4 vCamPosition = m_pGameInstance->Get_CamPosition_Float4();
+
+	ImGui::Separator();
+	CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(m_pGameInstance->Get_Camera(TEXT("Camera_Free")));
+	CTransform* pTransform = dynamic_cast<CTransform*>(pCamera->Get_Component(g_strTransformTag));
+	_float4 vLook = pTransform->Get_State_Float4(CTransform::STATE_LOOK);
+
+	ImGui::Text("POSITION");
+	ImGui::Text("X : %f", vCamPosition.x);
+	ImGui::Text("Y : %f", vCamPosition.y);
+	ImGui::Text("Z : %f", vCamPosition.z);
+
+	ImGui::Separator();
+
+	CCamera_Telescope* pTelescopeCamera = dynamic_cast<CCamera_Telescope*>(m_pGameInstance->Get_Camera(TEXT("Camera_Telescope")));
+	CTransform* pTelescopeTransform = dynamic_cast<CTransform*>(pTelescopeCamera->Get_Component(g_strTransformTag));
+	_float4 vTelescopeLook = pTelescopeTransform->Get_State_Float4(CTransform::STATE_LOOK);
+
+	ImGui::Text("FREE LOOK");
+	ImGui::Text("LOOK_X : %f", vLook.x);
+	ImGui::Text("LOOK_Y : %f", vLook.y);
+	ImGui::Text("LOOK_Z : %f", vLook.z);
+
+	ImGui::Separator();
+
+	ImGui::Text("TELESCOPE LOOK");
+	ImGui::Text("Telescope - LOOK_X : %f", vTelescopeLook.x);
+	ImGui::Text("Telescope - LOOK_Y : %f", vTelescopeLook.y);
+	ImGui::Text("Telescope - LOOK_Z : %f", vTelescopeLook.z);
 }
 
 // ============================================================================================
