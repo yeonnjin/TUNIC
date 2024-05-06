@@ -13,6 +13,8 @@
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
 
+#include <tchar.h>
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
@@ -83,7 +85,7 @@ HRESULT CMainApp::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	wsprintf(m_szFont, TEXT("Æ©´Ð"));
+	wsprintf(m_szFont, TEXT("TUNIC"));
 #endif // _DEBUG
 
 	m_pGameInstance->Begin_Draw(_float4(0.f, 0.f, 1.f, 1.f));
@@ -91,7 +93,7 @@ HRESULT CMainApp::Render()
 	m_pGameInstance->Draw();	
 
 #ifdef _DEBUG
-	m_pGameInstance->Render_Font(TEXT("Font_Default"), m_szFont, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f), 0.f);
+	m_pGameInstance->Render_Font(TEXT("Font_Odin_30"), m_szFont, _float2(0.f, 0.f), XMVectorSet(1.f, 0.f, 0.f, 1.f), 0.f);
 #endif // _DEBUG
 
 	m_pGameInstance->End_Draw();
@@ -101,8 +103,14 @@ HRESULT CMainApp::Render()
 
 HRESULT CMainApp::Ready_Fonts()
 {
-	// MakeSpriteFont "HY±Ã¼­B" /FontSize:30 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 140.spritefont
-	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Default"), TEXT("../Bin/Resources/Fonts/140.spritefont"))))
+	// MakeSpriteFont "Odin Rounded" /FontSize:28 /FastPack Odin_28.spritefont
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_30"), TEXT("../Bin/Resources/Fonts/Odin_30.spritefont"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_35"), TEXT("../Bin/Resources/Fonts/Odin_35.spritefont"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_25"), TEXT("../Bin/Resources/Fonts/Odin_25.spritefont"))))
 		return E_FAIL;
 
 	return S_OK;

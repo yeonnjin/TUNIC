@@ -19,6 +19,8 @@ public:
 private:
 	HRESULT Ready_Layer_BackGround(const wstring& strLayerTag);
 	HRESULT Ready_Layer_UI();
+	HRESULT Ready_Layer_Player();
+	HRESULT Ready_Layer_Camera();
 
 public:
 	static CLevel_Menu* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

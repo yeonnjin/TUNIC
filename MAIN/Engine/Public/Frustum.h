@@ -21,9 +21,9 @@ public:
 	_bool		isIn_WorldSpace(_fvector vWorldPos, _float fRange);
 
 private:
-	_float3		m_vOriginPoints[8];
-	_float3		m_vWorldPoints[8];
-	_float4		m_vWorldPlanes[6];
+	_float3		m_vOriginPoints[8] = {};
+	_float3		m_vWorldPoints[8] = {};
+	_float4		m_vWorldPlanes[6] = {};
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };

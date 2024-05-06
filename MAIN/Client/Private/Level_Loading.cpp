@@ -42,7 +42,7 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 
 	if (true == m_pLoader->isFinished())
 	{
-		if (GetKeyState(VK_SPACE) & 0x8000)
+		if (true == m_pGameInstance->Get_DIKeyState(DIK_RSHIFT, KEY_DOWN))
 		{
 			CLevel*		pLevel = { nullptr };
 

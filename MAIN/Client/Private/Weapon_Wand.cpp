@@ -59,10 +59,26 @@ void CWeapon_Wand::Late_Tick(_float fTimeDelta)
 
 HRESULT CWeapon_Wand::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+    if (FAILED(Bind_ShaderResources()))
+        return E_FAIL;
 
-	return S_OK;
+    if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", 0, TEX_DIFFUSE)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Begin(0)))
+        return E_FAIL;
+
+    m_pModelCom->Render(0);
+
+    if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", 1, TEX_DIFFUSE)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Begin(1)))
+        return E_FAIL;
+
+    m_pModelCom->Render(1);
+
+    return S_OK;
 }
 
 HRESULT CWeapon_Wand::Add_Components()
@@ -96,6 +112,9 @@ HRESULT CWeapon_Wand::Add_Components()
 HRESULT CWeapon_Wand::Bind_ShaderResources()
 {
     if (FAILED(__super::Bind_ShaderResources()))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vMtrlDiffuse", &m_vMtrlDiffuse, sizeof(_vector))))
         return E_FAIL;
 
     return S_OK;

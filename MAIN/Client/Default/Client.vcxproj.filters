@@ -436,6 +436,18 @@
     <Filter Include="01.Levels\TUNIC\2_Shop">
       <UniqueIdentifier>{20151947-ea0e-40c6-96f5-c567ae9448f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Summon_Bat">
+      <UniqueIdentifier>{448efd84-08b8-4aa2-a92f-9f816de169de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\Weapon\Laurel">
+      <UniqueIdentifier>{c0024a42-548b-4656-aab5-9ccfb8253db0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory\UI_Font">
+      <UniqueIdentifier>{08300fcf-1446-45be-95e6-979014996d9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Gem">
+      <UniqueIdentifier>{40386f52-b126-43cf-8f35-6a29143341b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -822,6 +834,18 @@
     <ClInclude Include="..\Public\Level_Boss.h">
       <Filter>01.Levels\TUNIC\4_Boss</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Summon_Bat.h">
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Summon_Bat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Laurel.h">
+      <Filter>02.GameObjects\Player\Weapon\Laurel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Font.h">
+      <Filter>02.GameObjects\UI\Inventory\UI_Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_Gem.h">
+      <Filter>02.GameObjects\Interactive\Gem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1189,6 +1213,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_Boss.cpp">
       <Filter>01.Levels\TUNIC\4_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Summon_Bat.cpp">
+      <Filter>02.GameObjects\Monster\Boss\Librarian\State\Librarian_State_Pattern\Librarian_State_Pattern_Summon_Bat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Laurel.cpp">
+      <Filter>02.GameObjects\Player\Weapon\Laurel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Font.cpp">
+      <Filter>02.GameObjects\UI\Inventory\UI_Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_Gem.cpp">
+      <Filter>02.GameObjects\Interactive\Gem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

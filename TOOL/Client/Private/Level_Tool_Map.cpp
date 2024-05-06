@@ -114,11 +114,11 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
 	//	return E_FAIL;
 	
-	CTest_Object::TEST_DESC tDesc = {};
+	/*CTest_Object::TEST_DESC tDesc = {};
 	tDesc.vPosition = _float3(0.f, 0.f, 0.f);
 	tDesc.strModelComTag = TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT("Layer_Map_Object"), TEXT("Prototype_GameObject_Test_Object"), &tDesc)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	// Boss ==================================================================================================================================================
 	//CTest_Object::TEST_DESC tDesc = {};
@@ -307,6 +307,14 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Telescope");
 	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
 	//	return E_FAIL;
+	
+	CMap_Object::MAPOBJ_DESC tObjDesc = {};
+	tObjDesc.isLoad = false;
+	tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
+	tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Gem");
+	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+		return E_FAIL;
+
 
 
 	// WEAPON =================================================================================================================================================== 

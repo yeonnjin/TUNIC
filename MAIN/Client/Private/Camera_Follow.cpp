@@ -35,13 +35,14 @@ HRESULT CCamera_Follow::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    m_pTargetTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_Player"), g_strTransformTag, 0));
+    //m_pTargetTransform = (CTransform*)(m_pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_Player"), g_strTransformTag, 0));
 
 
     m_vCamDistance = CAM_DISTANCE;
     // m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION) - /*m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION);*/ _vector{ 0.f, 0.2f, 0.f, 1.f };
 
     m_pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player"), 0));
+    m_pTargetTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
 
     _vector vCamPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
     _vector vTargetPosition = /*m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION);*/ _vector{ 0.f, 0.2f, 0.f, 1.f };

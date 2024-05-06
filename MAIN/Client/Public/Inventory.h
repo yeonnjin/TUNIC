@@ -50,6 +50,7 @@ private:
 	vector<class CUI_Item*> m_pUIItems[CItem::TYPE_END];
 	class CUI_Slot*			m_pUISlot = { nullptr };
 	class CUI_Obtain*		m_pUIObtain = { nullptr };
+	vector<class CUI_Font*> m_pUIFonts;
 
 private:
 	_uint					Set_WeaponIndex(CItem::ITEM eItem);

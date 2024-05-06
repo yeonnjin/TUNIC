@@ -37,7 +37,7 @@ HRESULT CMonster::Initialize(void* pArg)
         return E_FAIL;
 
     m_eType = OBJ_MONSTER;
-    m_eRigid = RIGID_PUSH;
+    m_eRigid = RIGID_BLOCK;
 
     return S_OK;
 }

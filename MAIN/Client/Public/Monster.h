@@ -28,52 +28,54 @@ protected:
 	virtual ~CMonster() = default;
 
 public:
-	_bool			isMove() { return m_isMove; }
-	_bool			isCollision() { return m_isCollision; }
+	_bool				isMove() { return m_isMove; }
+	_bool				isCollision() { return m_isCollision; }
 
-	_uint			Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
-	void			Set_isMove(_bool isMove) { m_isMove = isMove; }
+	_uint				Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
+	_uint				Get_GemCount() { return m_iGemCount; }
+	void				Set_isMove(_bool isMove) { m_isMove = isMove; }
 
 public:	
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual HRESULT		Tick(_float fTimeDelta) override;
+	virtual void		Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT		Render() override;
 
 protected:
-	_bool			m_isBlend = { false };
-	_bool			m_isMove = { false };
-	_bool			m_isCollision = { false };
+	_bool				m_isBlend = { false };
+	_bool				m_isMove = { false };
+	_bool				m_isCollision = { false };
 
-	_uint			m_eAnimationIndex = { 0 };
-	_uint			m_eBlendAnimIndex = { 0 };
-	_uint			m_eState = { 0 };
+	_uint				m_eAnimationIndex = { 0 };
+	_uint				m_eBlendAnimIndex = { 0 };
+	_uint				m_eState = { 0 };
+	_uint				m_iGemCount = { 0 };
 
-	_float			m_fAccCollisionCoolTime = { 0.f };
-	_float			m_fCollisionCoolTime = { 0.5f };
+	_float				m_fAccCollisionCoolTime = { 0.f };
+	_float				m_fCollisionCoolTime = { 0.5f };
 
-	_vector			m_vPrePosition = {};
+	_vector				m_vPrePosition = {};
 
-	LEVEL			m_eLevel = { LEVEL_END };
-
-protected:
-	wstring			m_strModelComTag = {};
-	CAnimator*		m_pModelCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
-	CCollider*		m_pColliderCom = { nullptr };
-	CCollider*		m_pRigidColliderCom = { nullptr };
-	CNavigation*	m_pNavigationCom = { nullptr };
+	LEVEL				m_eLevel = { LEVEL_END };
 
 protected:
-	virtual HRESULT	Add_Components();
-	virtual HRESULT	Bind_ShaderResources();
+	wstring				m_strModelComTag = {};
+	CAnimator*			m_pModelCom = { nullptr };
+	CShader*			m_pShaderCom = { nullptr };
+	CCollider*			m_pColliderCom = { nullptr };
+	CCollider*			m_pRigidColliderCom = { nullptr };
+	CNavigation*		m_pNavigationCom = { nullptr };
 
-	virtual HRESULT	Add_States() = 0;
-	virtual void	Update_State() = 0;
-	virtual void	Set_Animation() = 0;
+protected:
+	virtual HRESULT		Add_Components();
+	virtual HRESULT		Bind_ShaderResources();
 
-	//void			Compute_Collision_CoolTime(_float fTimeDelta);
+	virtual HRESULT		Add_States() = 0;
+	virtual void		Update_State() = 0;
+	virtual void		Set_Animation() = 0;
+
+	//void				Compute_Collision_CoolTime(_float fTimeDelta);
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

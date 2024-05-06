@@ -7,6 +7,13 @@ BEGIN(Client)
 class CMonster_Bat final: public CMonster
 {
 public:
+	typedef struct Monster_Bat_Desc : public CMonster::Monster_Desc
+	{
+		_vector			vPosition;
+		_uint			iNavigationIndex;
+	}MONSTER_BAT_DESC;
+
+public:
 	enum ANIMATION {
 		ANIM_ATTACK, ANIM_FLINCH, ANIM_IDLE, ANIM_SLEEPING, ANIM_WAKEUP, ANIM_END
 	};
@@ -37,6 +44,10 @@ public:
 	virtual HRESULT	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+
+private:
+	_uint			m_iNavigationIndex = { 0 };
 
 private:
 	HRESULT			Add_Components();

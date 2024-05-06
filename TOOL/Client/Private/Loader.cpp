@@ -513,10 +513,10 @@ HRESULT CLoader::Loading_For_Tool_Map()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Wandbow/Beam/Beam.fbx", TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"), TransformMatrix))))
 		return E_FAIL;*/
 
-	TransformMatrix = XMMatrixIdentity();
+	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Wandbow/Effect/Fire2.fbx", TEXT("Prototype_Component_Model_Weapon_Wandbow_Beam"), TransformMatrix))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	///* For.Prototype_Component_Model_Fox */
 	//TransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -554,6 +554,11 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Object_Telescope"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Telescope/Telescope.fbx", TEXT("Prototype_Component_Model_Object_Telescope"), TransformMatrix))))
 	//	return E_FAIL; 
+
+	TransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Object_Gem"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Gem/Gem.fbx", TEXT("Prototype_Component_Model_Object_Gem"), TransformMatrix))))
+		return E_FAIL; 
 
 
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");

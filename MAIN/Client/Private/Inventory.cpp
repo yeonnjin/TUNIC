@@ -5,6 +5,7 @@
 #include "UI_Item.h"
 #include "UI_Slot.h"
 #include "UI_Obtain.h"
+#include "UI_Font.h"
 
 #include "Player.h"
 
@@ -45,24 +46,26 @@ void CInventory::Add_Item(CItem* pItem)
     CItem::ITEM_TYPE eType = pItem->Get_ItemType();
     CItem::ITEM      eItem = pItem->Get_Item();
 
-    // 이미 있는 아이템인 경우 : 기존 아이템의 개수 증가, 
+    // 소비 아이템일 때, 이미 있는 아이템인 경우 : 기존 아이템의 개수 증가
     // TODO: 숫자 카운트 증가
 
     m_pUIObtain->Set_Using(true, eItem);
 
-    for (size_t i = 0; i < m_iNumItems[eType].size(); i++)
+    if(CItem::TYPE_USE == eType)
     {
-        if (eItem == m_Items[eType][i]->Get_Item())
+        for (size_t i = 0; i < m_iNumItems[eType].size(); i++)
         {
-            m_Items[eType][i]->Plus_Count(true);
-            m_iNumItems[eType][i] += 1;
-            Safe_Release(pItem);
-            return;
+            if (eItem == m_Items[eType][i]->Get_Item())
+            {
+                m_Items[eType][i]->Plus_Count(true);
+                m_iNumItems[eType][i] += 1;
+                Safe_Release(pItem);
+                return;
+            }
         }
     }
 
     // 새로운 아이템인 경우 : 사이즈 내에서 가능
-
     if (m_iMaxItem > m_iNumItems[eType].size())
     {
         m_Items[eType][m_iNumItems[eType].size()] = pItem;
@@ -75,6 +78,18 @@ void CInventory::Add_Item(CItem* pItem)
 
         m_pUIItems[eType].emplace_back(pUIItem);
         m_iNumItems[eType].push_back(1);
+
+        if (CItem::TYPE_USE == eType)
+        {
+            CUI_Font::UI_FONT_DESC tFontDesc{};
+            tFontDesc.vPosition = m_pUIInventory->Get_Position((_uint)eType, m_iNumItems[eType].size());
+            tFontDesc.pCount = pItem->Get_Count_Ptr();
+            CUI_Font* pUIFont = dynamic_cast<CUI_Font*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Font"), &tFontDesc));
+            if (nullptr == pUIFont)
+                return;
+
+            m_pUIFonts.emplace_back(pUIFont);
+        }
     }
 }
 
@@ -253,6 +268,9 @@ void CInventory::Tick(_float fTimeDelta)
             for (auto& pItem : m_pUIItems[i])
                 pItem->Late_Tick(fTimeDelta);
         }
+
+        for (auto& pFont: m_pUIFonts)
+            pFont->Late_Tick(fTimeDelta);
     }
 }
 
@@ -301,6 +319,11 @@ void CInventory::Free()
 
         m_pUIItems[i].clear();
     }
+
+    for (auto& pUIFont : m_pUIFonts)
+        Safe_Release(pUIFont);
+
+    m_pUIFonts.clear();
 
     Safe_Release(m_pGameInstance);
     Safe_Release(m_pUIInventory);

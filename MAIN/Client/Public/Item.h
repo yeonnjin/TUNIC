@@ -39,6 +39,7 @@ public:
 	ITEM_TYPE	Get_ItemType() { return m_eItemType; }
 	ITEM		Get_Item() { return m_eItem; }
 	_bool		Get_isOK();
+	_uint*		Get_Count_Ptr() { return &m_iCount; }
 
 	void		Set_ItemType(ITEM_TYPE eType) { m_eItemType = eType; }
 	void		Set_Item(ITEM eItem) { m_eItem = eItem; }

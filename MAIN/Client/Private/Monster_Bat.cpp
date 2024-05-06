@@ -31,14 +31,16 @@ HRESULT CMonster_Bat::Initialize_Prototype()
 
 HRESULT CMonster_Bat::Initialize(void* pArg)
 {
+    MONSTER_BAT_DESC* pDesc = (MONSTER_BAT_DESC*)pArg;
+    m_iNavigationIndex = pDesc->iNavigationIndex;
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
     if (FAILED(Add_States()))
         return E_FAIL;
 
-    _float4 vPosition = _float4(10.f + rand() % 6, 0.5f, rand() % 6, 1.f);
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPosition);
 
     m_pModelCom->Set_Animation_Index(ANIM_SLEEPING);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
@@ -86,6 +88,13 @@ HRESULT CMonster_Bat::Add_Components()
         TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
         return E_FAIL;
 
+    /* For.Com_Navigation */
+    CNavigation::NAVIGATION_DESC			NavigationDesc{};
+    NavigationDesc.iCurrentIndex = m_iNavigationIndex;
+    if (FAILED(__super::Add_Component(LEVEL_BOSS, TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -104,8 +113,8 @@ HRESULT CMonster_Bat::Add_States()
     m_pModelCom->Add_State(STATE_SLEEP, CBat_State_Sleep::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_ATTACK, CBat_State_Attack::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_DAMAGE, CBat_State_Damage::Create(this, pPlayer));
-    m_pModelCom->Change_State(STATE_SLEEP);
-    m_eState = STATE_SLEEP;
+    m_pModelCom->Change_State(STATE_IDLE);
+    m_eState = STATE_IDLE;
 
     return S_OK;
 }

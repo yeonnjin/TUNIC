@@ -184,7 +184,7 @@ private:
 	STATE								m_eState = { STATE_END };
 	DIR									m_eDir = { DIR_END };
 	STATUS								m_eStatus = { STATUS_HURT };	// πŸ¿Ã∆Æ?
-	DODGE								m_eDodge = { DODGE_END };
+	DODGE								m_eDodge = { DODGE_ROLL };
 	WEAPON								m_eWeapon = { WEAPON_END };
 	LOCKON								m_eLockOn = { LOCK_END };
 	CLIMB								m_eClimb = { CLIMB_END };

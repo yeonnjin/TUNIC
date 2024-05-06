@@ -36,6 +36,7 @@ HRESULT CUI_Item::Initialize(void* pArg)
         m_iBindTextureIndex = pDesc->iTextureIndex;
         m_vPosition = pDesc->vPosition;
         m_fSize = pDesc->fSize;
+        m_isObtain = pDesc->isObtain;
     }
 
     if (FAILED(Set_UIInfo()))
@@ -55,7 +56,7 @@ HRESULT CUI_Item::Tick(_float fTimeDelta)
 void CUI_Item::Late_Tick(_float fTimeDelta)
 {
     if(true == m_isUsing)
-        __super::Late_Tick(fTimeDelta);
+      __super::Late_Tick(fTimeDelta);
 }
 
 HRESULT CUI_Item::Render()

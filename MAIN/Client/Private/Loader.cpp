@@ -12,6 +12,7 @@
 #include "Weapon_Wand.h"
 #include "Effect_WandBeam.h"
 #include "Weapon_Shield.h"
+#include "Weapon_Laurel.h"
 
 // MONSTER
 #include "Monster.h"
@@ -54,6 +55,7 @@
 #include "UI_Obtain.h"
 #include "UI_Interactive.h"
 #include "UI_Arrow.h"
+#include "UI_Font.h"
 
 #include "BlendEffect.h"
 #include "Sky.h"
@@ -626,6 +628,11 @@ HRESULT CLoader::Loading_For_Menu()
 		CWeapon_Shield::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Part_Player_Weapon_Dash */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Part_Player_Weapon_Dash"),
+		CWeapon_Laurel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// MONSTER ======================================================================================
 
 	/* For.Prototype_GameObject_Monster_Spinner */
@@ -830,6 +837,11 @@ HRESULT CLoader::Loading_For_Menu()
 		CUI_Arrow::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_UI_Font */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Font"),
+		CUI_Font::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// MODEL ========================================================================================
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
@@ -882,6 +894,7 @@ HRESULT CLoader::Loading_For_Beach()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Model_Cow_Weapon.dat", LEVEL_BEACH);
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Monster_Guard_Weapon.dat", LEVEL_BEACH);
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Telescope.dat", LEVEL_BEACH);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Gem.dat", LEVEL_BEACH);
 
 	// FINISH =======================================================================================
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");

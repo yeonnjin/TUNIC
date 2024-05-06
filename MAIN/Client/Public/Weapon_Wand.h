@@ -24,6 +24,8 @@ public:
 private:
 	_vector m_vDir = {};
 
+	_vector m_vMtrlDiffuse = { 1.f, 0.785f, 0.811f, 1.f };
+
 private:
 	HRESULT Add_Components();
 	HRESULT Bind_ShaderResources();

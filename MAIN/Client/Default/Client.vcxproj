@@ -216,6 +216,7 @@
     <ClInclude Include="..\Public\Librarian_State_Pattern_Homing_Orbs.h" />
     <ClInclude Include="..\Public\Librarian_State_Pattern_Lightning_Warp.h" />
     <ClInclude Include="..\Public\Librarian_State_Pattern_Lunge_Swipe.h" />
+    <ClInclude Include="..\Public\Librarian_State_Pattern_Summon_Bat.h" />
     <ClInclude Include="..\Public\Librarian_Weapon.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\public\MainApp.h" />
@@ -235,6 +236,7 @@
     <ClInclude Include="..\Public\NPC_Merchant.h" />
     <ClInclude Include="..\Public\Object_Chest.h" />
     <ClInclude Include="..\Public\Object_ColliderBox.h" />
+    <ClInclude Include="..\Public\Object_Gem.h" />
     <ClInclude Include="..\Public\Object_Ladder.h" />
     <ClInclude Include="..\Public\Object_Telescope.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
@@ -270,6 +272,7 @@
     <ClInclude Include="..\Public\Test_Object.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\Public\UI_Arrow.h" />
+    <ClInclude Include="..\Public\UI_Font.h" />
     <ClInclude Include="..\Public\UI_Interactive.h" />
     <ClInclude Include="..\Public\UI_Inventory.h" />
     <ClInclude Include="..\Public\UI_Item.h" />
@@ -277,6 +280,7 @@
     <ClInclude Include="..\Public\UI_Purchase.h" />
     <ClInclude Include="..\Public\UI_Slot.h" />
     <ClInclude Include="..\Public\UI_Stat.h" />
+    <ClInclude Include="..\Public\Weapon_Laurel.h" />
     <ClInclude Include="..\Public\Weapon_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Stick.h" />
     <ClInclude Include="..\Public\Weapon_Sword.h" />
@@ -353,6 +357,7 @@
     <ClCompile Include="..\Private\Librarian_State_Pattern_Homing_Orbs.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Pattern_Lightning_Warp.cpp" />
     <ClCompile Include="..\Private\Librarian_State_Pattern_Lunge_Swipe.cpp" />
+    <ClCompile Include="..\Private\Librarian_State_Pattern_Summon_Bat.cpp" />
     <ClCompile Include="..\Private\Librarian_Weapon.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
@@ -372,6 +377,7 @@
     <ClCompile Include="..\Private\NPC_Merchant.cpp" />
     <ClCompile Include="..\Private\Object_Chest.cpp" />
     <ClCompile Include="..\Private\Object_ColliderBox.cpp" />
+    <ClCompile Include="..\Private\Object_Gem.cpp" />
     <ClCompile Include="..\Private\Object_Ladder.cpp" />
     <ClCompile Include="..\Private\Object_Telescope.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
@@ -407,6 +413,7 @@
     <ClCompile Include="..\Private\Test_Object.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\Private\UI_Arrow.cpp" />
+    <ClCompile Include="..\Private\UI_Font.cpp" />
     <ClCompile Include="..\Private\UI_Interactive.cpp" />
     <ClCompile Include="..\Private\UI_Inventory.cpp" />
     <ClCompile Include="..\Private\UI_Item.cpp" />
@@ -414,6 +421,7 @@
     <ClCompile Include="..\Private\UI_Purchase.cpp" />
     <ClCompile Include="..\Private\UI_Slot.cpp" />
     <ClCompile Include="..\Private\UI_Stat.cpp" />
+    <ClCompile Include="..\Private\Weapon_Laurel.cpp" />
     <ClCompile Include="..\Private\Weapon_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Stick.cpp" />
     <ClCompile Include="..\Private\Weapon_Sword.cpp" />

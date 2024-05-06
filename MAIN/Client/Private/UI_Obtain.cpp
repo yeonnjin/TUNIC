@@ -35,6 +35,7 @@ HRESULT CUI_Obtain::Initialize(void* pArg)
     tDesc.iTextureIndex = 0;
     tDesc.vPosition = {640.f, 242.f};
     tDesc.fSize = 164.f;
+    tDesc.isObtain = true;
     m_pUIItem = dynamic_cast<CUI_Item*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Item"), &tDesc));
     if (nullptr == m_pUIItem)
         return E_FAIL;

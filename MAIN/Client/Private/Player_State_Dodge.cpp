@@ -10,28 +10,6 @@ CPlayer_State_Dodge::CPlayer_State_Dodge(CPlayer* pPlayer)
 
 void CPlayer_State_Dodge::OnStateEnter()
 {
-    //m_eDodge = m_pPlayer->Get_Dodge();
-
-    //switch (m_eDodge)
-    //{
-    //case CPlayer::DODGE_ROLL:
-    //    m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
-    //    m_eAnim = CPlayer::ANIM_DODGE;
-    //    break;
-    //case CPlayer::DODGE_FAST:   // 마나 없을 때 나가는거
-    //    m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
-    //    m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
-    //    break;
-    //case CPlayer::DODGE_DASH:   // 애니메이션 변경 X, 텔포 느낌
-    //    m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
-    //    m_eAnim = CPlayer::ANIM_HYPERDASH;
-    //    break;
-    //case Client::CPlayer::DODGE_END:
-    //    break;
-    //default:
-    //    break;
-    //}
-
     CPlayer::LOCKON eLockOn = m_pPlayer->Get_LockOn();
 
     //CPlayer::DIR eDir = m_pPlayer->Get_Dir();
@@ -47,30 +25,70 @@ void CPlayer_State_Dodge::OnStateEnter()
     }
 
     _float fPlayerSP = m_pPlayer->Get_SP();
-    if (fPlayerSP >= m_fSP)
+
+    m_eDodge = m_pPlayer->Get_Dodge();
+
+    if(CPlayer::DODGE_ROLL == m_eDodge)
     {
-        m_pPlayer->Set_SP_Minus(m_fSP);
-        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
-        m_eAnim = CPlayer::ANIM_DODGE;
+        // 기력이 충분할 때 
+        if (fPlayerSP >= m_fSP)
+        {
+            m_pPlayer->Set_SP_Minus(m_fSP);
+            m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
+            m_eAnim = CPlayer::ANIM_DODGE;
+        }
+        // 기력이 없을 때
+        else
+        {
+            m_pPlayer->Set_SP_Minus(fPlayerSP);
+            m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
+            m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+        }
     }
-    else
+    else if (CPlayer::DODGE_DASH == m_eDodge)
     {
-        m_pPlayer->Set_SP_Minus(fPlayerSP);
-        m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
-        m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+        // 기력이 충분할 때 
+        if (fPlayerSP >= m_fSP)
+        {
+            m_pPlayer->Set_SP_Minus(m_fDashSP);
+            m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
+            m_eAnim = CPlayer::ANIM_HYPERDASH;
+        }
+        // 기력이 없을 때
+        else
+        {
+            m_pPlayer->Set_SP_Minus(fPlayerSP);
+            m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
+            m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+        }
     }
 }
 
 void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 {
+    // 일반 닷지 상태일 때
     // 0 ~ 40 : 공격 면역
-    if(CPlayer::ANIM_DODGE == m_eAnim)
+    if (CPlayer::ANIM_DODGE == m_eAnim)
     {
         _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
         if (0 <= iFrame && 40 >= iFrame)
             m_pPlayer->Set_isImmune(true);
         else
             m_pPlayer->Set_isImmune(false);
+    }
+
+    // 하이퍼 대쉬 상태일 때
+    // 0 ~ 20 : 공격 면역
+    if (CPlayer::ANIM_HYPERDASH == m_eAnim)
+    {
+        _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
+        if (0 <= iFrame && 20 >= iFrame)
+            m_pPlayer->Set_isImmune(true);
+        else
+            m_pPlayer->Set_isImmune(false);
+
+        CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
+        pPlayerTransform->Go_Straight(fTimeDelta * -5.f);
     }
 
     if (true == m_pPlayer->Get_isFinished(m_eAnim))

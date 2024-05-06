@@ -7,6 +7,7 @@
 #include "Librarian_State_Pattern_Lunge_Swipe.h"
 #include "Librarian_State_Pattern_Homing_Orbs.h"
 #include "Librarian_State_Pattern_Energy_Beam.h"
+#include "Librarian_State_Pattern_Summon_Bat.h"
 
 #include "Librarian_State_Entry.h"
 #include "Librarian_State_Idle.h"
@@ -200,10 +201,12 @@ HRESULT CMonster_Librarian::Add_PartObjects()
 
 HRESULT CMonster_Librarian::Add_Patterns()
 {
-    // 번개
-    m_States.push(STATE_PATTERN_ENERGY_WAVE);
-    m_States.push(STATE_PATTERN_LIGHTNING_WARP);
     // 에너지 웨이브
+    m_States.push(STATE_PATTERN_ENERGY_WAVE);
+    // 번개
+    m_States.push(STATE_PATTERN_LIGHTNING_WARP);
+    // 박쥐 소환
+    m_States.push(STATE_PATTERN_SUMMON_BAT);
     // 런지 
     m_States.push(STATE_PATTERN_LUNGE_SWIPE);
     // 에너지 빔
@@ -230,6 +233,7 @@ HRESULT CMonster_Librarian::Add_States()
     m_pModelCom->Add_State(STATE_PATTERN_LUNGE_SWIPE, CLibrarian_State_Pattern_Lunge_Swipe::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_PATTERN_HOMING_ORBS, CLibrarian_State_Pattern_Homing_Orbs::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_PATTERN_ENERGY_BEAM, CLibrarian_State_Pattern_Energy_Beam::Create(this, pPlayer));
+    m_pModelCom->Add_State(STATE_PATTERN_SUMMON_BAT, CLibrarian_State_Pattern_Summon_Bat::Create(this, pPlayer));
 
     m_pModelCom->Add_State(STATE_ENTRY, CLibrarian_State_Entry::Create(this, pPlayer));
     m_pModelCom->Add_State(STATE_IDLE, CLibrarian_State_Idle::Create(this, pPlayer));
@@ -259,6 +263,8 @@ void CMonster_Librarian::Update_State()
         else if (m_pGameInstance->Get_DIKeyState(DIK_5, KEY_DOWN))
             Change_State(STATE_PATTERN_ENERGY_BEAM);
         else if (m_pGameInstance->Get_DIKeyState(DIK_6, KEY_DOWN))
+            Change_State(STATE_PATTERN_SUMMON_BAT);
+        else if (m_pGameInstance->Get_DIKeyState(DIK_7, KEY_DOWN))
             Change_State(STATE_MELEE);
         break;
 

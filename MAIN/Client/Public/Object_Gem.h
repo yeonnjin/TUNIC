@@ -5,12 +5,12 @@
 
 BEGIN(Client)
 
-class CObject_Telescope final : public CInteractiveObject
+class CObject_Gem final: public CInteractiveObject
 {
 public:
-	CObject_Telescope(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CObject_Telescope(const CObject_Telescope& rhs);
-	virtual ~CObject_Telescope() = default;
+	CObject_Gem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CObject_Gem(const CObject_Gem& rhs);
+	virtual ~CObject_Gem() = default;
 
 public:
 
@@ -22,11 +22,11 @@ public:
 	virtual		HRESULT		Render() override;
 
 private:
+	_vector					m_vMtrlDiffuse = { 1.f, 0.696f, 0.f, 1.f };
 
 private:
 	CModel*					m_pModelCom = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
-	CCollider*				m_pRigidColliderCom = { nullptr };
 
 private:
 	virtual		HRESULT		Add_Components();
@@ -34,13 +34,12 @@ private:
 	virtual		void		Compute_ColliderMatrix();
 
 public:
-	static CObject_Telescope* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CObject_Gem* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 
 	// CMonster을(를) 통해 상속됨
 	void Collision_Event(Engine::CGameObject* pGameObject) override;
-	void Damage_Event() override;
 };
 
 END

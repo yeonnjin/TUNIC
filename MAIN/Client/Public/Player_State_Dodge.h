@@ -21,6 +21,7 @@ public:
 
 private:
 	_float	m_fSP = { 0.8f };
+	_float	m_fDashSP = { 0.5f };
 
 	_vector m_vPreRight = {};
 	_vector m_vPreUp = {};

@@ -166,7 +166,7 @@ HRESULT CGameInstance::Draw()
 
 HRESULT CGameInstance::End_Draw()
 {
-	return m_pGraphic_Device->Present();;
+	return m_pGraphic_Device->Present();
 }
 
 HRESULT CGameInstance::Clear(_uint iClearLevelIndex)

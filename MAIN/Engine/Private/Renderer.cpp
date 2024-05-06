@@ -135,6 +135,9 @@ HRESULT CRenderer::Render()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
+	if (FAILED(Render_Font()))
+		return E_FAIL;
+
 #ifdef _DEBUG
 	if (FAILED(Render_Debug()))
 		return E_FAIL;
@@ -245,6 +248,19 @@ HRESULT CRenderer::Render_UI()
 		Safe_Release(pRenderObject);
 	}
 	m_RenderObjects[RENDER_UI].clear();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Font()
+{
+	for (auto& pRenderObject : m_RenderObjects[RENDER_FONT])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+		Safe_Release(pRenderObject);
+	}
+	m_RenderObjects[RENDER_FONT].clear();
 
 	return S_OK;
 }

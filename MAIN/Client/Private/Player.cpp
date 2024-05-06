@@ -44,7 +44,8 @@
 #define SWORDBONE 28
 #define WANDBONE 28
 #define SHOTGUNBONE 45
-// stick - 29 / sword - 45 / shield - 24 / Shotgun - 45?
+#define DASHBONE 79
+// stick - 29 / sword - 45 / shield - 24 / Shotgun - 45? /  Dash - 79
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -122,6 +123,15 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	if (E_FAIL == __super::Tick(fTimeDelta))
 		return E_FAIL;
 
+	// TEST
+	if (true == m_pGameInstance->Get_DIKeyState(DIK_B, KEY_DOWN))
+	{
+		if (DODGE_DASH == m_eDodge)
+			m_eDodge = DODGE_ROLL;
+		else if(DODGE_ROLL == m_eDodge)
+			m_eDodge = DODGE_DASH;
+	}
+
 	Set_Dir();
 
 	// UI_Obtain
@@ -158,18 +168,24 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	}
 
 	// Navigation
-	if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
+	if(LEVEL_MENU != m_iLevel)
 	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
-	}
-	m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+		if (false == m_pNavigationCom->isMove(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION)))
+		{
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+		}
+		m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
-	// Height : 사다리 타는 중이 아닐 때만
-	if(STATE_CLIMB != m_eState)
-	{
-		_float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
-		m_vPrePosition.m128_f32[1] = fHeight;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+		// Height : 사다리 타는 중이 아닐 때만
+		if (STATE_CLIMB != m_eState)
+		{
+			_float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
+			if(false == isnan(fHeight))
+			{
+				m_vPrePosition.m128_f32[1] = fHeight;
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+			}
+		}
 	}
 
 	// Stat
@@ -266,7 +282,7 @@ void CPlayer::Update_State()
 		 
 		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
-			m_eDodge = DODGE_ROLL;
+			//m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
 		}
 
@@ -307,7 +323,7 @@ void CPlayer::Update_State()
 
 		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
-			m_eDodge = DODGE_ROLL;
+			//m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_LCONTROL, KEY_DOWN))
@@ -599,40 +615,6 @@ HRESULT CPlayer::Add_PartObjects()
 
 	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Wand"), pWeaponObject);
 
-	///* For. Part_Player_Weapon_Shotgun */
-	//pWeaponObject = { nullptr };
-	//tDesc = {};
-
-	//tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
-	//tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(SHOTGUNBONE);
-	//_char szModelTag2[MAX_PATH] = "Prototype_Component_Model_Weapon_Shotgun";
-	//wstring wstr2(&szModelTag2[0], &szModelTag2[MAX_PATH]);
-	//tDesc.strModelComTag = wstr2;
-	//tDesc.eWeapon = WEAPON_SHOTGUN;
-
-	//pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
-	//if (nullptr == pWeaponObject)
-	//	return E_FAIL;
-
-	//m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shotgun"), pWeaponObject);
-
-	///* For. Part_Player_Weapon_Wandbow */
-	//pWeaponObject = { nullptr };
-	//tDesc = {};
-
-	//tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
-	//tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(WANDBONE);
-	//_char szModelTag3[MAX_PATH] = "Prototype_Component_Model_Weapon_Wandbow";
-	//wstring wstr3(&szModelTag3[0], &szModelTag3[MAX_PATH]);
-	//tDesc.strModelComTag = wstr3;
-	//tDesc.eWeapon = WEAPON_WAND;
-
-	//pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon"), &tDesc));
-	//if (nullptr == pWeaponObject)
-	//	return E_FAIL;
-
-	//m_PartObjects.emplace(TEXT("Part_Player_Weapon_Wandbow"), pWeaponObject);
-
 	/* For. Part_Player_Weapon_Shield */
 	pWeaponObject = { nullptr };
 	tDesc = {};
@@ -646,6 +628,19 @@ HRESULT CPlayer::Add_PartObjects()
 		return E_FAIL;
 
 	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Shield"), pWeaponObject);
+
+	/* For. Part_Player_Weapon_Dash */
+	pWeaponObject = { nullptr };
+	tDesc = {};
+
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	tDesc.pSocketBone = m_pModelCom->Get_Bone_Ptr(DASHBONE);
+	tDesc.eWeapon = WEAPON_DASH;
+	pWeaponObject = dynamic_cast<CPartObject*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Part_Player_Weapon_Dash"), &tDesc));
+	if (nullptr == pWeaponObject)
+		return E_FAIL;
+
+	m_PartObjects.emplace(TEXT("Part_Player_Weapon_Dash"), pWeaponObject);
 
 	return S_OK;
 }
@@ -733,6 +728,7 @@ void CPlayer::Set_Animation()
 	m_pModelCom->Set_Frame_Tick(ANIM_DODGE, 0, 15, 1.4f);
 	m_pModelCom->Set_Frame_Tick(ANIM_DODGE, 35, 51, 60.f);
 	m_pModelCom->Set_Frame_Tick(ANIM_DODGE_GARBAGE, 31, 37, 50.f);
+	m_pModelCom->Set_Frame_Tick(ANIM_HYPERDASH, 0, 2, 5.f);
 	//m_pModelCom->Set_Frame_Tick(ANIM_SWING_STICK2, 36, 39, 80.f);
 	m_pModelCom->Set_Frame_Tick(ANIM_SWING_SWORD3, 60, 67, 50.f);
 
@@ -1003,11 +999,10 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 						m_pInventory->Add_Item(pItem);
 						m_isChestOpen = false;
 
+						// 방패
 						CItem::ITEM eItem = pItem->Get_Item();
 						if (CItem::ITEM_SHIELD == eItem)
 							Set_UtileItem(WEAPON_SHIELD);
-						else if (CItem::ITEM_DASH == eItem)
-							Set_UtileItem(WEAPON_DASH);
 					}
 				}
 			}
@@ -1026,6 +1021,14 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 						if (nullptr == pItemBuy)
 							return;
 						m_pInventory->Add_Item(pItemBuy);
+
+						// 대쉬
+						CItem::ITEM eItem = pItem->Get_Item();
+						if (CItem::ITEM_DASH == eItem)
+						{
+							Set_UtileItem(WEAPON_DASH);
+							m_eDodge = DODGE_DASH;
+						}
 					}
 					// 취소 했을 때
 					else
