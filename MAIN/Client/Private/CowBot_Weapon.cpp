@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CowBot_Weapon.h"
 
+#include "Player.h"
 #include "Bone.h"
 
 CCowBot_Weapon::CCowBot_Weapon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -190,5 +191,10 @@ void CCowBot_Weapon::Free()
 void CCowBot_Weapon::Collision_Event(Engine::CGameObject* pGameObject)
 {
     if (true == m_isAttackFrame && OBJ_PLAYER == pGameObject->Get_ObjectType())
-        pGameObject->Set_isDamage(true);
+    {
+        if (false == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
+        {
+            dynamic_cast<CPlayer*>(pGameObject)->Set_isDamage(true);
+        }
+    }    
 }

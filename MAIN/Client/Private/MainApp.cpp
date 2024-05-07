@@ -218,9 +218,24 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Slot/Slot%d.png"), 4))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_UI_Potion */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Potion"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Potion/Potion%d.png"), 2))))
+		return E_FAIL;
+
 	/* Prototype_Component_Texture_UI_Interactive */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Interactive"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Interactive/Interactive%d.png")))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_UI_Aggro */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Aggro"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Aggro/Aggro%d.png")))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_UI_LockOn */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_LockOn"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LockOn/LockOn%d.png")))))
 		return E_FAIL;
 
 	return	S_OK;

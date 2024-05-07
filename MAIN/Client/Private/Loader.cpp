@@ -42,6 +42,7 @@
 #include "Object_Telescope.h"
 #include "Object_ColliderBox.h"
 #include "Object_Ladder.h"
+#include "Object_Gem.h"
 
 // NPC
 #include "NPC_Merchant.h"
@@ -51,11 +52,14 @@
 #include "UI_Inventory.h"
 #include "UI_Item.h"
 #include "UI_Slot.h"
+#include "UI_Potion.h"
 #include "UI_Purchase.h"
 #include "UI_Obtain.h"
 #include "UI_Interactive.h"
 #include "UI_Arrow.h"
 #include "UI_Font.h"
+#include "UI_Aggro.h"
+#include "UI_LockOn.h"
 
 #include "BlendEffect.h"
 #include "Sky.h"
@@ -756,6 +760,11 @@ HRESULT CLoader::Loading_For_Menu()
 		CObject_Ladder::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Object_Gem*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Gem"),
+		CObject_Gem::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// NPC ==========================================================================================
 
 	/* For.Prototype_GameObject_NPC_Merchant */
@@ -817,6 +826,11 @@ HRESULT CLoader::Loading_For_Menu()
 		CUI_Slot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_UI_Potion */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Potion"),
+		CUI_Potion::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_UI_Purchase */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Purchase"),
 		CUI_Purchase::Create(m_pDevice, m_pContext))))
@@ -840,6 +854,16 @@ HRESULT CLoader::Loading_For_Menu()
 	/* For.Prototype_GameObject_UI_Font */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Font"),
 		CUI_Font::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UI_Aggro */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Aggro"),
+		CUI_Aggro::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UI_LockOn */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_LockOn"),
+		CUI_LockOn::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// MODEL ========================================================================================

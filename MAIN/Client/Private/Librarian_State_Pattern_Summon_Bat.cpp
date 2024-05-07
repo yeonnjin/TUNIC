@@ -61,7 +61,7 @@ void CLibrarian_State_Pattern_Summon_Bat::OnStateUpdate(_float fTimeDelta)
             {
                 tDesc.vPosition = m_vPositions[i];
                 tDesc.iNavigationIndex = m_vIndices[i];
-                if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Monster_Bat"), TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
+                if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
                     return;
             }
 

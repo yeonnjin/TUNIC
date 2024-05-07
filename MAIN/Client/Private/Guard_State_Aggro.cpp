@@ -19,6 +19,7 @@ CGuard_State_Aggro::CGuard_State_Aggro(CMonster_Guard* pMonster, CPlayer* pPlaye
 
 void CGuard_State_Aggro::OnStateEnter()
 {
+    m_pMonster->Set_isAggro(true);
 	m_pMonster->Set_Blending(true, CMonster_Guard::ANIM_AGGRO);
 
     /* 목표 방향 설정 */
@@ -85,6 +86,8 @@ void CGuard_State_Aggro::OnStateExit()
 
     m_fAccChangeTime = 0.f;
     m_fAccLookTime = 0.f;
+
+    m_pMonster->Set_isAggro(false);
 }
 
 CGuard_State_Aggro* CGuard_State_Aggro::Create(CMonster_Guard* pMonster, CPlayer* pPlayer)

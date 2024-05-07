@@ -23,6 +23,7 @@ public:
 	void			Tick(_fmatrix WorldMatrix);
 	_bool			isMove(_fvector vPosition);
 	_float			Compute_Height(_fvector vPosition, _float fOffset = 0.f);
+	_uint			Get_CurrentIndex() { return m_iCurrentIndex; }
 
 #ifdef _DEBUG
 public:

@@ -4,6 +4,7 @@
 #include "UI_Inventory.h"
 #include "UI_Item.h"
 #include "UI_Slot.h"
+#include "UI_Potion.h"
 #include "UI_Obtain.h"
 #include "UI_Font.h"
 
@@ -38,7 +39,13 @@ _bool CInventory::Get_HaveItem(CItem::ITEM eItem)
                 return true;
         }
     }
+
     return false;
+}
+
+_bool CInventory::Get_isPotionMax()
+{
+    return m_pUIPotion->Get_isMax();
 }
 
 void CInventory::Add_Item(CItem* pItem)
@@ -47,8 +54,6 @@ void CInventory::Add_Item(CItem* pItem)
     CItem::ITEM      eItem = pItem->Get_Item();
 
     // 소비 아이템일 때, 이미 있는 아이템인 경우 : 기존 아이템의 개수 증가
-    // TODO: 숫자 카운트 증가
-
     m_pUIObtain->Set_Using(true, eItem);
 
     if(CItem::TYPE_USE == eType)
@@ -63,6 +68,12 @@ void CInventory::Add_Item(CItem* pItem)
                 return;
             }
         }
+    }
+
+    // 포션일 때
+    if (CItem::ITEM_POTION == eItem)
+    {
+
     }
 
     // 새로운 아이템인 경우 : 사이즈 내에서 가능
@@ -91,6 +102,16 @@ void CInventory::Add_Item(CItem* pItem)
             m_pUIFonts.emplace_back(pUIFont);
         }
     }
+}
+
+void CInventory::Add_Potion()
+{
+    m_pUIPotion->Add_Potion();
+}
+
+void CInventory::Use_Potion()
+{
+    m_pUIPotion->Use_Potion();
 }
 
 void CInventory::Select_Item()
@@ -177,11 +198,12 @@ void CInventory::Select_Item()
 
     // 아이템 사용
     // TYPE_USE
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN) && m_iSelectRow == CItem::TYPE_USE)
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN) && m_iSelectRow == CItem::TYPE_USE && 0 != m_iNumItems[m_iSelectRow][m_iSelectColumn])
     {
         if (S_OK == m_Items[m_iSelectRow][m_iSelectColumn]->Use_Item())
         {
             m_iNumItems[m_iSelectRow][m_iSelectColumn] -= 1;
+            m_Items[m_iSelectRow][m_iSelectColumn]->Plus_Count(false);
             if (0 == m_iNumItems[m_iSelectRow][m_iSelectColumn])
             {
                 // v.erase(v.begin() + 5);
@@ -195,6 +217,10 @@ void CInventory::Select_Item()
                 auto it = m_Items[m_iSelectRow].begin() + m_iSelectColumn;
                 Safe_Release(*it);
 
+                auto Fontiter = m_pUIFonts.begin() + m_iSelectColumn;
+                Safe_Release(*Fontiter);
+                m_pUIFonts.erase(Fontiter);
+
                 // 뒤에 아이템들 당겨오기
                 for (size_t i = m_iSelectColumn; i < m_iMaxItem; i++)
                 {
@@ -205,6 +231,7 @@ void CInventory::Select_Item()
                         m_Items[m_iSelectRow][i] = m_Items[m_iSelectRow][i + 1];
                         m_Items[m_iSelectRow][i + 1] = nullptr;
                         m_pUIItems[m_iSelectRow][i]->Set_Position(m_pUIInventory->Get_Position(m_iSelectRow, i));
+                        m_pUIFonts[i]->Set_Position_Minus();
                     }
                 }
             }
@@ -236,6 +263,9 @@ HRESULT CInventory::Initialize()
     m_pUISlot = dynamic_cast<CUI_Slot*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Slot")));
     Safe_AddRef(m_pUISlot);
 
+    m_pUIPotion = dynamic_cast<CUI_Potion*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Potion")));
+    Safe_AddRef(m_pUIPotion);
+
     m_pUIObtain = dynamic_cast<CUI_Obtain*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Obtain")));
     Safe_AddRef(m_pUIObtain);
 
@@ -244,11 +274,15 @@ HRESULT CInventory::Initialize()
         m_Items[i].resize(m_iMaxItem, nullptr);
     }
 
-    /*for (size_t i = 0; i < CItem::TYPE_END; i++)
-    {
-        for (auto& pItem : m_Items[i])
-            pItem = CItem::Create();
-    }*/
+    CUI_Font::UI_FONT_DESC tFontDesc{};
+    tFontDesc.vPosition = _float2(225.f, 90.f);
+    tFontDesc.pCount = &m_iNumCubic;
+    m_pUIFont_Gem = dynamic_cast<CUI_Font*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Font"), &tFontDesc));
+
+    tFontDesc = {};
+    tFontDesc.vPosition = _float2(225.f, 130.f);
+    tFontDesc.pCount = &m_iNumBreak;
+    m_pUIFont_Break = dynamic_cast<CUI_Font*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Font"), &tFontDesc));
 
     return S_OK;
 }
@@ -269,8 +303,15 @@ void CInventory::Tick(_float fTimeDelta)
                 pItem->Late_Tick(fTimeDelta);
         }
 
-        for (auto& pFont: m_pUIFonts)
-            pFont->Late_Tick(fTimeDelta);
+
+        for (size_t i = 0; i < m_pUIFonts.size(); i++)
+        {
+            if (nullptr != m_pUIFonts[i])
+                m_pUIFonts[i]->Late_Tick(fTimeDelta);
+        }
+
+        m_pUIFont_Gem->Late_Tick(fTimeDelta);
+        m_pUIFont_Break->Late_Tick(fTimeDelta);
     }
 }
 
@@ -328,5 +369,8 @@ void CInventory::Free()
     Safe_Release(m_pGameInstance);
     Safe_Release(m_pUIInventory);
     Safe_Release(m_pUISlot);
+    Safe_Release(m_pUIPotion);
     Safe_Release(m_pUIObtain);
+    Safe_Release(m_pUIFont_Gem);
+    Safe_Release(m_pUIFont_Break);
 }

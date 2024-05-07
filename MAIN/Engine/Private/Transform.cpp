@@ -54,6 +54,15 @@ void CTransform::Go_Look(_float fTimeDelta, _fvector vLook)
     Set_State(STATE_POSITION, vPosition);
 }
 
+void CTransform::Go_LookDir_Position(_float fX)
+{
+    _vector vPosition = Get_State_Vector(STATE_POSITION);
+    _vector vLook = Get_State_Vector(STATE_LOOK);
+
+    vPosition += XMVector3Normalize(vLook) * fX;
+    Set_State(STATE_POSITION, vPosition);
+}
+
 void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 {
     _vector vPosition = Get_State_Vector(STATE_POSITION);

@@ -448,6 +448,15 @@
     <Filter Include="02.GameObjects\Interactive\Gem">
       <UniqueIdentifier>{40386f52-b126-43cf-8f35-6a29143341b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\Inventory\Potion">
+      <UniqueIdentifier>{739d377a-33b8-4b75-acdc-9e6c5a49513c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Aggro">
+      <UniqueIdentifier>{4a1f8b7c-b885-4911-82c1-84e776863911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\LockOn">
+      <UniqueIdentifier>{6970e48c-5c6f-4bef-9199-20b788a73843}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -846,6 +855,15 @@
     <ClInclude Include="..\Public\Object_Gem.h">
       <Filter>02.GameObjects\Interactive\Gem</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UI_Potion.h">
+      <Filter>02.GameObjects\UI\Inventory\Potion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Aggro.h">
+      <Filter>02.GameObjects\UI\Aggro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_LockOn.h">
+      <Filter>02.GameObjects\UI\LockOn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1225,6 +1243,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Object_Gem.cpp">
       <Filter>02.GameObjects\Interactive\Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Potion.cpp">
+      <Filter>02.GameObjects\UI\Inventory\Potion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Aggro.cpp">
+      <Filter>02.GameObjects\UI\Aggro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_LockOn.cpp">
+      <Filter>02.GameObjects\UI\LockOn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

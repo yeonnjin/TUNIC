@@ -12,6 +12,7 @@ CSpinner_State_Attack::CSpinner_State_Attack(CMonster_Spinner* pMonster, CPlayer
 
 void CSpinner_State_Attack::OnStateEnter()
 {
+    m_pMonster->Set_isAggro(true);
     m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_START_SPIN);
     m_pMonster->Set_isMove(true);
     m_vPrePosition = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
@@ -32,6 +33,8 @@ void CSpinner_State_Attack::OnStateUpdate(_float fTimeDelta)
         {
             m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_FORWARD);
             m_isAttack = true;
+            m_pMonster->Set_isAttackFrame(true);
+            m_pMonster->Set_isAggro(false);
         }
 
         m_fAccChangeTime += fTimeDelta;
@@ -42,12 +45,6 @@ void CSpinner_State_Attack::OnStateUpdate(_float fTimeDelta)
     {
         pMonsterTransform->Look_At_For_LandOject(vPlayerPosition, true);
     }
-
-    //// 몬스터끼리 충돌 상태일 떄 : 지정된 룩 방향으로 이동
-    //if (true == m_pMonster->isCollision())
-    //{
-
-    //}
 
     // 플레이어와의 거리가 일정 이상이면 IDLE
     _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
@@ -76,6 +73,8 @@ void CSpinner_State_Attack::OnStateExit()
 
     m_fAccSpinTime = 0.f;
     m_fAccChangeTime = 0.f;
+
+    m_pMonster->Set_isAttackFrame(false);
 }
 
 CSpinner_State_Attack* CSpinner_State_Attack::Create(CMonster_Spinner* pMonster, CPlayer* pPlayer)

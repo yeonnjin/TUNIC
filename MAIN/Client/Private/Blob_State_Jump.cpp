@@ -12,6 +12,7 @@ CBlob_State_Jump::CBlob_State_Jump(CMonster_Blob* pMonster, CPlayer* pPlayer)
 
 void CBlob_State_Jump::OnStateEnter()
 {
+    m_pMonster->Set_isAggro(true);
     m_pMonster->Set_Blending(true, CMonster_Blob::ANIM_JUMP);
 }
 
@@ -46,6 +47,7 @@ void CBlob_State_Jump::OnStateUpdate(_float fTimeDelta)
 void CBlob_State_Jump::OnStateExit()
 {
     m_fAccJumpTime = 0.f;
+    m_pMonster->Set_isAggro(false);
 }
 
 CBlob_State_Jump* CBlob_State_Jump::Create(CMonster_Blob* pMonster, CPlayer* pPlayer)

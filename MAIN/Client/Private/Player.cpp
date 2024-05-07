@@ -27,6 +27,7 @@
 
 // UI
 #include "UI_Stat.h"
+#include "UI_LockOn.h"
 #include "UI_Obtain.h"
 #include "Inventory.h"
 
@@ -110,6 +111,11 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (nullptr == m_pUI_Stat)
 		return E_FAIL;
 	Safe_AddRef(m_pUI_Stat);
+
+	m_pUI_LockOn = dynamic_cast<CUI_LockOn*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_LockOn")));
+	if (nullptr == m_pUI_LockOn)
+		return E_FAIL;
+	Safe_AddRef(m_pUI_LockOn);
 
 	m_pInventory = CInventory::Create();
 	if (nullptr == m_pInventory)
@@ -417,21 +423,32 @@ void CPlayer::Update_State()
 			if(true == m_pInventory->Get_HaveItem(CItem::ITEM_SHIELD))
 				Change_State(STATE_DEFENSE);
 		}
+
+		if (true == m_pGameInstance->Get_DIKeyState(DIK_P, KEY_DOWN))
+		{
+			m_pInventory->Use_Potion();
+		}
 	}
 }
 
 void CPlayer::Update_Camera()
 {
+	// 락 온
 	if ((LOCK_OFF == m_eLockOn || LOCK_END == m_eLockOn) && true == m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_DOWN))
 	{
 		CTransform* pLockOnTransform = Set_LockOn_Target();
+
+		// 타겟을 찾았을 때
 		if (nullptr != pLockOnTransform)
 		{
 			CCamera_LockOn::CAMERA_LOCKON_DESC tDesc{};
 			tDesc.vTargetTransform = pLockOnTransform;
 			m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"), &tDesc);
 			m_eLockOn = LOCK_ON_FIND;
+
+			m_pUI_LockOn->Set_Using(true, pLockOnTransform);
 		}
+		// 논타겟
 		else
 		{
 			m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"));
@@ -439,8 +456,12 @@ void CPlayer::Update_Camera()
 		}
 	}
 
+	// 락 오프
 	if((LOCK_ON_FIND == m_eLockOn || LOCK_ON_NONE == m_eLockOn )&& true == m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, KEY_UP))
 	{
+		if (LOCK_ON_FIND == m_eLockOn)
+			m_pUI_LockOn->Set_Using(false);
+
 		m_pGameInstance->Set_Exit(TEXT("Camera_LockOn"), true);
 		m_eLockOn = LOCK_OFF;
 
@@ -518,6 +539,16 @@ void CPlayer::Set_UtileItem(WEAPON eWeapon)
 		return;
 
 	pWeapon->Set_isUsing(true);
+}
+
+void CPlayer::Set_Gem()
+{
+	m_pInventory->Add_Cubic(200);
+}
+
+void CPlayer::Set_LockOff()
+{
+	m_pUI_LockOn->Set_Using(false);
 }
 
 HRESULT CPlayer::Add_Components()
@@ -970,6 +1001,7 @@ void CPlayer::Free()
 	Safe_Release(m_pLookOnTransform);
 
 	Safe_Release(m_pUI_Stat);
+	Safe_Release(m_pUI_LockOn);
 	Safe_Release(m_pInventory);
 }
 
@@ -1006,6 +1038,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					}
 				}
 			}
+			// 아이템 구매
 			else if (CInteractiveObject::INTERACTIVE_ITEM == eInteractiveType)
 			{
 				m_isUsingShop = true;
@@ -1017,18 +1050,33 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					// 아이템 샀을 때
 					if (true == pItem->Get_isOK())
 					{
-						CItem* pItemBuy = pItem->Buy_Item(m_pInventory->Get_NumCubic());
-						if (nullptr == pItemBuy)
-							return;
-						m_pInventory->Add_Item(pItemBuy);
-
-						// 대쉬
 						CItem::ITEM eItem = pItem->Get_Item();
-						if (CItem::ITEM_DASH == eItem)
+
+						if (CItem::ITEM_POTION == eItem)
 						{
-							Set_UtileItem(WEAPON_DASH);
-							m_eDodge = DODGE_DASH;
+							if (true == m_pInventory->Get_isPotionMax())
+								return;
+
+							CItem* pItemBuy = pItem->Buy_Item(m_pInventory->Get_NumCubic());
+							if (nullptr == pItemBuy)
+								return;
+
+							m_pInventory->Add_Potion();
 						}
+						else
+						{
+							CItem* pItemBuy = pItem->Buy_Item(m_pInventory->Get_NumCubic());
+							if (nullptr == pItemBuy)
+								return;
+							m_pInventory->Add_Item(pItemBuy);
+
+							// 대쉬
+							if (CItem::ITEM_DASH == eItem)
+							{
+								Set_UtileItem(WEAPON_DASH);
+								m_eDodge = DODGE_DASH;
+							}
+						}				
 					}
 					// 취소 했을 때
 					else
@@ -1040,6 +1088,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					m_isUsingShop = false;
 				}
 			}
+			// 사다리
 			else if (CInteractiveObject::INTERACTIVE_LADDER == eInteractiveType)
 			{
 				CObject_Ladder* pLadder = dynamic_cast<CObject_Ladder*>(pObject);
@@ -1066,6 +1115,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					}
 				}
 			}
+			// 망원경
 			else if (CInteractiveObject::INTERACTIVE_TELESCOPE == eInteractiveType)
 			{
 				m_pGameInstance->Change_Camera(TEXT("Camera_Telescope"));

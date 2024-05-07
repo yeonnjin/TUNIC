@@ -24,6 +24,7 @@ void CSpinner_State_Hidden::OnStateUpdate(_float fTimeDelta)
     {
         m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_EMERGE);
         m_isEmerge = true;
+        m_pMonster->Set_isAggro(true);
     }
 
     if (true == m_isEmerge && true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_EMERGE))

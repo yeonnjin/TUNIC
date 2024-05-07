@@ -30,6 +30,10 @@ HRESULT CMonster_Blob::Initialize_Prototype()
 
 HRESULT CMonster_Blob::Initialize(void* pArg)
 {
+    m_fUIHeight = 2.f;
+    m_iHP = 2;
+    m_iGemCount = 3;
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -44,9 +48,6 @@ HRESULT CMonster_Blob::Initialize(void* pArg)
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
     m_pModelCom->Set_isUseTransformaion(true);
     Set_Animation();
-
-    m_iHP = 2;
-    
 
     return S_OK;
 }
@@ -87,7 +88,7 @@ HRESULT CMonster_Blob::Add_Components()
     /* For. Com_Collider */
     CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
 
-    ColliderDesc.fRadius = 1.2f;
+    ColliderDesc.fRadius = 2.f;
     ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius, 0.f);
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_SPHERE"),
@@ -199,5 +200,8 @@ void CMonster_Blob::Collision_Event(Engine::CGameObject* pGameObject)
 void CMonster_Blob::Damage_Event()
 {
     if (0 >= m_iHP)
+    {
         m_isDead = true;
+        Clone_Gem();
+    }
 }

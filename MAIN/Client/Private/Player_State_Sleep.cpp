@@ -18,7 +18,7 @@ void CPlayer_State_Sleep::OnStateUpdate(_float fTimeDelta)
 {
     static _bool isGetUp = false;
 
-    if (m_pGameInstance->Get_DIKeyState(DIK_P, KEY_DOWN))
+    if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
     {        
         isGetUp = true;
         m_pPlayer->Set_Blending(true, CPlayer::ANIM_WAKEUP);

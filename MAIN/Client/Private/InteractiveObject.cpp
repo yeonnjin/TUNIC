@@ -21,7 +21,7 @@ HRESULT CInteractiveObject::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC		GameObjectDesc{};
 
-    GameObjectDesc.fSpeedPerSec = 0.f;
+    GameObjectDesc.fSpeedPerSec = (INTERACTIVE_GEM == m_eInteractiveType) ? 7.f : 0.f;
     GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.0f);
 
     if (FAILED(__super::Initialize(&GameObjectDesc)))

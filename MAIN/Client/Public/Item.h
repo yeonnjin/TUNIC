@@ -28,6 +28,7 @@ public:
 		_bool			isPotion = { false };
 		_vector			vMtrlDiffuse = {};
 		ITEM			eItem;
+		_uint			iPrice;
 	}ITEM_DESC;
 
 public:
@@ -56,7 +57,7 @@ public:
 public:
 	virtual		HRESULT		Initialize_Prototype() override;
 	virtual		HRESULT		Initialize(void* pArg) override;
-	virtual		HRESULT		Tick(_float fTimeDelta)override;
+	virtual		HRESULT		Tick(_float fTimeDelta) override;
 	virtual		void		Late_Tick(_float fTimeDelta) override;
 	virtual		HRESULT		Render() override;
 

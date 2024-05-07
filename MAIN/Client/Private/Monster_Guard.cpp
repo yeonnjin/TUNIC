@@ -38,6 +38,10 @@ HRESULT CMonster_Guard::Initialize_Prototype()
 
 HRESULT CMonster_Guard::Initialize(void* pArg)
 {
+    m_fUIHeight = 6.f;
+    m_iHP = 3;
+    m_iGemCount = 9;
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -54,8 +58,6 @@ HRESULT CMonster_Guard::Initialize(void* pArg)
     m_pModelCom->Set_Animation_Index(0);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
     Set_Animation();
-
-    m_iHP = 3;
 
     m_eRigid = RIGID_BLOCK;
 
@@ -211,9 +213,6 @@ void CMonster_Guard::Set_Animation()
     // ROOT
     m_pModelCom->Set_Animation_isRoot(ANIM_BLOCK, true);
     m_pModelCom->Set_Animation_isRoot(ANIM_CHASE, true);
-
-    /*for (size_t i = 0; i < 9; i++)
-        m_pModelCom->Set_Animation_isLoop(i, true);*/
 }
 
 CMonster_Guard* CMonster_Guard::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

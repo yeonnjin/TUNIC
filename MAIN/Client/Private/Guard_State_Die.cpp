@@ -20,6 +20,7 @@ void CGuard_State_Die::OnStateUpdate(_float fTimeDelta)
     if (true == m_pMonster->Get_isFinished(CMonster_Guard::ANIM_DIE))
     {
         m_pMonster->Set_Dead(true);
+        m_pMonster->Clone_Gem();
     }
 }
 

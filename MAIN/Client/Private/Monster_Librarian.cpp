@@ -87,20 +87,6 @@ HRESULT CMonster_Librarian::Initialize(void* pArg)
 
 HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
 {
-   /* if (FAILED(__super::Tick(fTimeDelta)))
-        return E_FAIL;*/
-
-   /* static _uint iIndex = 22;
-    if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
-    {
-        iIndex++;
-        if (iIndex > 35)
-            iIndex = 0;
-        m_pModelCom->Set_Animation_Index(iIndex);
-    }
-
-    m_pModelCom->Play_Animation(fTimeDelta);  */   
-
    if (true == m_isDead)
         return E_FAIL;
 
@@ -116,7 +102,6 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
            m_isBlend = false;
            m_pModelCom->Set_Animation_Index(m_eBlendAnimIndex);
            m_eAnimationIndex = m_eBlendAnimIndex;
-
        }
    }
    else

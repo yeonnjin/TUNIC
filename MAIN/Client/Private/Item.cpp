@@ -110,6 +110,7 @@ HRESULT CItem::Initialize(void* pArg)
         m_isUseMaterial = pDesc->isUseMaterial;
         m_isPotion = pDesc->isPotion;
         m_eItem = pDesc->eItem;
+        m_iPrice = pDesc->iPrice;
 
         if(true == m_isUseMaterial)
             m_vMtrlDiffuse = pDesc->vMtrlDiffuse;
@@ -204,7 +205,7 @@ void CItem::Set_Information()
 
     if (ITEM_SHIELD == m_eItem || ITEM_DASH == m_eItem)
         m_eItemType = TYPE_UTILE;
-    else if (ITEM_HP == m_eItem || ITEM_BOMB == m_eItem || ITEM_ICE == m_eItem /*|| ITEM_POTION == m_eItem*/)
+    else if (ITEM_HP == m_eItem || ITEM_MP == m_eItem /*|| ITEM_BOMB == m_eItem || ITEM_ICE == m_eItem*/ /*|| ITEM_POTION == m_eItem*/)
         m_eItemType = TYPE_USE;
     else if (ITEM_STICK == m_eItem || ITEM_SWORD == m_eItem || ITEM_WAND == m_eItem)
         m_eItemType = TYPE_WEAPON;

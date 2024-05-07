@@ -69,7 +69,7 @@ HRESULT CWeapon_Laurel::Render()
             return E_FAIL;
 
         m_pModelCom->Render(i);
-    }
+    } 
 
     return S_OK;
 }

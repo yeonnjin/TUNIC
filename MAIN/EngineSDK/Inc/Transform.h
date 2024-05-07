@@ -115,6 +115,7 @@ public:
 	void Go_Left(_float fTimeDelta);
 	void Go_Right(_float fTimeDelta);
 	void Go_Look(_float fTimeDelta, _fvector vLook);
+	void Go_LookDir_Position(_float fX);
 	void Look_At(_fvector vAt);
 	void Look_At_For_LandOject(_fvector vAt, _bool isReverse = false);
 	void Look_At_Dir(_fvector vDir, _bool isUp = false);

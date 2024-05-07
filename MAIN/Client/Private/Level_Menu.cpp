@@ -70,10 +70,16 @@ HRESULT CLevel_Menu::Ready_Layer_UI()
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Stat"), TEXT("Prototype_GameObject_UI_Stat"))))
         return E_FAIL;
 
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_LockOn"), TEXT("Prototype_GameObject_UI_LockOn"))))
+        return E_FAIL;
+
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Inventory"), TEXT("Prototype_GameObject_UI_Inventory"))))
         return E_FAIL;
 
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Slot"), TEXT("Prototype_GameObject_UI_Slot"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Potion"), TEXT("Prototype_GameObject_UI_Potion"))))
         return E_FAIL;
 
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Obtain"), TEXT("Prototype_GameObject_UI_Obtain"))))
@@ -230,6 +236,8 @@ HRESULT CLevel_Menu::Ready_Layer_Camera()
     m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
 
     m_pGameInstance->Set_Camera_Level(LEVEL_MENU);
+
+    return S_OK;
 }
 
 CLevel_Menu* CLevel_Menu::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

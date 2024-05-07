@@ -55,6 +55,7 @@ HRESULT CMonster_CowBot::Initialize(void* pArg)
 	Set_Animation();
 
 	m_iHP = 3;
+	m_iGemCount = 7;
 
 	m_eRigid = RIGID_BLOCK;
 

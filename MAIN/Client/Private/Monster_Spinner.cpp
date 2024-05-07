@@ -38,6 +38,10 @@ HRESULT CMonster_Spinner::Initialize_Prototype()
 
 HRESULT CMonster_Spinner::Initialize(void* pArg)
 {
+    m_fUIHeight = 2.5f;
+    m_iHP = 3;
+    m_iGemCount = 5;
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -51,8 +55,6 @@ HRESULT CMonster_Spinner::Initialize(void* pArg)
     m_pModelCom->Set_Animation_Index(ANIM_HIDDEN);
     m_pModelCom->Set_Animation_Transform(m_pTransformCom);
     Set_Animation();
-
-    m_iHP = 3;
 
     return S_OK;
 }
@@ -199,7 +201,7 @@ void CMonster_Spinner::Collision_Event(Engine::CGameObject* pGameObject)
 {
     __super::Collision_Event(pGameObject);
 
-    if(OBJ_PLAYER == pGameObject->Get_ObjectType() && m_eState != STATE_EXPLODE && m_eState != STATE_DAMAGE)
+    if(OBJ_PLAYER == pGameObject->Get_ObjectType() && m_eState != STATE_EXPLODE && m_eState != STATE_DAMAGE && true == m_isAttackFrame)
     {
         // 패링 상태일 떄 : STUN(DAMAGE)
         if (true == dynamic_cast<CPlayer*>(pGameObject)->isParrying())

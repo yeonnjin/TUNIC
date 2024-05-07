@@ -19,6 +19,7 @@ void CSpinner_State_Explode::OnStateUpdate(_float fTimeDelta)
     if (true == m_pMonster->Get_isFinished(CMonster_Spinner::ANIM_EXPLODE))
     {
         m_pMonster->Set_Dead(true);
+        m_pMonster->Clone_Gem();
     }
 }
 

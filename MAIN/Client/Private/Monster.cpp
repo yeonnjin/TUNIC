@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Monster.h"
 
+#include "Object_Gem.h"
+#include "UI_Aggro.h"
+
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
@@ -39,6 +42,13 @@ HRESULT CMonster::Initialize(void* pArg)
     m_eType = OBJ_MONSTER;
     m_eRigid = RIGID_BLOCK;
 
+    CUI_Aggro::UI_AGGRO_DESC tDesc{};
+    tDesc.pTargetTransform = m_pTransformCom;
+    tDesc.fHeight = m_fUIHeight;
+    m_pUIAggro = dynamic_cast<CUI_Aggro*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_UI_Aggro"), &tDesc));
+    if (nullptr == m_pUIAggro)
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -47,19 +57,9 @@ HRESULT CMonster::Tick(_float fTimeDelta)
     if(FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
 
-    /*static _uint iIndex = 0;
-    if (m_pGameInstance->Get_DIKeyState(DIK_I, KEY_DOWN))
-    {
-        iIndex++;
-        if (iIndex > 6)
-            iIndex = 0;
-        m_pModelCom->Set_Animation_Index(iIndex);
-    }*/
-
     // State_Machine
     m_pModelCom->Update_State(fTimeDelta);
     Update_State();
-
 
     // Blending
     if (true == m_isBlend)
@@ -87,13 +87,14 @@ HRESULT CMonster::Tick(_float fTimeDelta)
     m_vPrePosition.m128_f32[1] = fHeight;
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
 
+    // Collider
     m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
-
     m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
-
     m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
-
     m_pGameInstance->Add_RigidGroup(this);
+
+    // UI_Aggro
+    m_pUIAggro->Tick(fTimeDelta);
 
     return S_OK;
 }
@@ -102,12 +103,10 @@ void CMonster::Late_Tick(_float fTimeDelta)
 {
     Compute_Damage_CoolTime(fTimeDelta);
 
-  
+    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
 
-    //if (true == m_pGameInstance->isInFrustum_WorldSpace(m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION), 2.f))
-    //{
-        m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
-    //}
+    m_pUIAggro->Late_Tick(fTimeDelta);
+
 #ifdef _DEBUG
         m_pGameInstance->Add_DebugComponent(m_pColliderCom);
         m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom); 
@@ -185,6 +184,26 @@ HRESULT CMonster::Bind_ShaderResources()
     return S_OK;
 }
 
+void CMonster::Set_isAggro(_bool isAggro)
+{
+    m_pUIAggro->Set_Using(isAggro);
+}
+
+void CMonster::Clone_Gem()
+{
+    for (size_t i = 0; i < m_iGemCount; i++)
+    {
+        CObject_Gem::OBJECT_GEM_DESC tDesc{};
+        tDesc.vPosition = m_vPrePosition;
+        tDesc.iGemCount = m_iGemCount;
+        tDesc.iIndex = i;
+        tDesc.iNavigationIndex = m_pNavigationCom->Get_CurrentIndex();
+
+        if(FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, TEXT("Layer_Object_Gem"), TEXT("Prototype_GameObject_Object_Gem"), &tDesc)))
+            return;
+    }
+}
+
 void CMonster::Free()
 {
     __super::Free();
@@ -194,6 +213,7 @@ void CMonster::Free()
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pRigidColliderCom);
     Safe_Release(m_pNavigationCom);
+    Safe_Release(m_pUIAggro);
 }
 
 void CMonster::Collision_Event(Engine::CGameObject* pGameObject)

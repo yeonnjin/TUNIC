@@ -19,6 +19,7 @@ CCowBot_State_Run::CCowBot_State_Run(CMonster_CowBot* pMonster, CPlayer* pPlayer
 
 void CCowBot_State_Run::OnStateEnter()
 {
+    m_pMonster->Set_isAggro(true);
     m_pMonster->Set_Blending(true, CMonster_CowBot::ANIM_RUN);
 
     /* 목표 방향 설정 */
@@ -88,6 +89,8 @@ void CCowBot_State_Run::OnStateExit()
 
     m_fAccLookTime = 0.f;
     m_fAccChangeTime = 0.f;
+
+    m_pMonster->Set_isAggro(false);
 }
 
 CCowBot_State_Run* CCowBot_State_Run::Create(CMonster_CowBot* pMonster, CPlayer* pPlayer)

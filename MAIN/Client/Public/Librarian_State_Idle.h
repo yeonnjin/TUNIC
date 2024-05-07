@@ -47,7 +47,7 @@ private:
 	_float		m_fHeightTime = { 3.f };
 
 	_float		m_fAccIdleTime = { 0.f };
-	_float		m_fIdleTime = { 3.f };
+	_float		m_fIdleTime = { 5.f };
 
 	_float		m_fAccLookTime = { 0.f };
 	_float		m_fLookTime = { 3.f };

@@ -202,6 +202,7 @@ HRESULT CNPC_Merchant::Add_Items()
     tDesc.strModelComTag = wstr;
     tDesc.isUseMaterial = false;
     tDesc.eItem = CItem::ITEM_HP;
+    tDesc.iPrice = 100;
     CItem* pItem = dynamic_cast<CItem*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Object_Item"), &tDesc));
     if (nullptr == pItem)
         return E_FAIL;
@@ -217,6 +218,7 @@ HRESULT CNPC_Merchant::Add_Items()
     tDesc.strModelComTag = wstr1;
     tDesc.isUseMaterial = false;
     tDesc.eItem = CItem::ITEM_MP;
+    tDesc.iPrice = 100;
     pItem = dynamic_cast<CItem*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Object_Item"), &tDesc));
     if (nullptr == pItem)
         return E_FAIL;
@@ -233,6 +235,7 @@ HRESULT CNPC_Merchant::Add_Items()
     tDesc.isUseMaterial = true;
     tDesc.vMtrlDiffuse = { 0.858f, 0.504f, 1.f, 1.f };
     tDesc.eItem = CItem::ITEM_DASH;
+    tDesc.iPrice = 2000;
     pItem = dynamic_cast<CItem*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Object_Item"), &tDesc));
     if (nullptr == pItem)
         return E_FAIL;
@@ -250,6 +253,7 @@ HRESULT CNPC_Merchant::Add_Items()
     tDesc.isPotion = true;
     tDesc.vMtrlDiffuse = { 1.f, 0.303f, 0.433f, 1.f };
     tDesc.eItem = CItem::ITEM_POTION;
+    tDesc.iPrice = 1000;
     pItem = dynamic_cast<CItem*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Object_Item"), &tDesc));
     if (nullptr == pItem)
         return E_FAIL;

@@ -53,7 +53,7 @@ void CCowBot_State_Attack::OnStateUpdate(_float fTimeDelta)
         // 첫 번째 콤보 공격 가능 프레임 : 34 ~ 40
         if (false == m_isCombo)
         {
-            _uint iFrame = m_pPlayer->Get_Current_Frame(CMonster_CowBot::ANIM_ATTACK);
+            _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_CowBot::ANIM_ATTACK);
             if (34 <= iFrame && 40 >= iFrame)
                 m_pWeapon->Set_isAttackFrame(true);
         }
@@ -73,7 +73,7 @@ void CCowBot_State_Attack::OnStateUpdate(_float fTimeDelta)
         // 두 번째 콤보 공격 가능 프레임 : 20 ~ 26
         if (true == m_isCombo)
         {
-            _uint iFrame = m_pPlayer->Get_Current_Frame(CMonster_CowBot::ANIM_BACKSWIPE);
+            _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_CowBot::ANIM_BACKSWIPE);
             if (20 <= iFrame && 26 >= iFrame)
                 m_pWeapon->Set_isAttackFrame(true);
         }

@@ -99,6 +99,9 @@ public:
 	void			Set_LadderUpper(_bool isUpper) { m_isUpper = isUpper; }
 	//void			Set_Climb() { m_isClimb; }
 
+	void			Set_Gem();
+	void			Set_LockOff();
+
 	// Get
 	//STATE			Get_State() { return m_eState; }
 	_bool			isMove() { return m_eState == STATE_IDLE ? false : true; }
@@ -199,6 +202,7 @@ private:
 	CTransform*							m_pLookOnTransform = { nullptr };
 
 	class CUI_Stat*						m_pUI_Stat = { nullptr };
+	class CUI_LockOn*					m_pUI_LockOn = { nullptr };
 	class CInventory*					m_pInventory = { nullptr };
 
 private:

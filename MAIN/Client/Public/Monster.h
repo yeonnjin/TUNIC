@@ -33,7 +33,11 @@ public:
 
 	_uint				Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
 	_uint				Get_GemCount() { return m_iGemCount; }
+
 	void				Set_isMove(_bool isMove) { m_isMove = isMove; }
+	void				Set_isAggro(_bool isAggro);
+
+	void				Clone_Gem();
 
 public:	
 	virtual HRESULT		Initialize_Prototype() override;
@@ -55,6 +59,8 @@ protected:
 	_float				m_fAccCollisionCoolTime = { 0.f };
 	_float				m_fCollisionCoolTime = { 0.5f };
 
+	_float				m_fUIHeight = { 4.f };
+
 	_vector				m_vPrePosition = {};
 
 	LEVEL				m_eLevel = { LEVEL_END };
@@ -66,6 +72,7 @@ protected:
 	CCollider*			m_pColliderCom = { nullptr };
 	CCollider*			m_pRigidColliderCom = { nullptr };
 	CNavigation*		m_pNavigationCom = { nullptr };
+	class CUI_Aggro*	m_pUIAggro = { nullptr };
 
 protected:
 	virtual HRESULT		Add_Components();
@@ -74,7 +81,6 @@ protected:
 	virtual HRESULT		Add_States() = 0;
 	virtual void		Update_State() = 0;
 	virtual void		Set_Animation() = 0;
-
 	//void				Compute_Collision_CoolTime(_float fTimeDelta);
 
 public:

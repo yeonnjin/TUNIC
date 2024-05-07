@@ -232,7 +232,10 @@ void CCamera_LockOn::OnEnter(void* pArg)
 void CCamera_LockOn::OnExit()
 {
     if (nullptr != m_pTargetTransform)
+    {
         Safe_Release(m_pTargetTransform);
+        m_pPlayer->Set_LockOff();
+    }
 
     m_pTargetTransform = nullptr;
 

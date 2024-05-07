@@ -12,6 +12,7 @@ CBat_State_Attack::CBat_State_Attack(CMonster_Bat* pMonster, CPlayer* pPlayer)
 
 void CBat_State_Attack::OnStateEnter()
 {
+    m_pMonster->Set_isAggro(true);
     m_pMonster->Set_Blending(true, CMonster_Bat::ANIM_ATTACK);
 }
 
@@ -25,6 +26,7 @@ void CBat_State_Attack::OnStateUpdate(_float fTimeDelta)
 
 void CBat_State_Attack::OnStateExit()
 {
+    m_pMonster->Set_isAggro(false);
 }
 
 CBat_State_Attack* CBat_State_Attack::Create(CMonster_Bat* pMonster, CPlayer* pPlayer)

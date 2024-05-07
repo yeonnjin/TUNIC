@@ -43,7 +43,7 @@ HRESULT CWeapon_Wand::Tick(_float fTimeDelta)
         //tDesc.vStartPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
         tDesc.vLookDir = m_vDir;
 
-        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Player_Effect"), TEXT("Prototype_GameObject_Effect_WandBeam"), &tDesc)))
+        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Player_Effect"), TEXT("Prototype_GameObject_Effect_WandBeam"), &tDesc)))
             return E_FAIL;
 
         m_isAttackFrame = false;

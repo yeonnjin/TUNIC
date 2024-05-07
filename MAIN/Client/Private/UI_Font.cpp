@@ -8,6 +8,11 @@ CUI_Font::CUI_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 }
 
+void CUI_Font::Set_Position_Minus()
+{
+    m_vPosition.x -= 90.f;
+}
+
 HRESULT CUI_Font::Initialize_Prototype()
 {
     return S_OK;
