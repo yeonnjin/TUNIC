@@ -6,18 +6,19 @@ CUI_LockOn::CUI_LockOn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 }
 
-void CUI_LockOn::Set_Using(_bool isUsing, CTransform* pTargetTransform)
+void CUI_LockOn::Set_Using(_bool isUsing, CTransform* pTargetTransform, _float fHeight)
 {
     m_isUsing = isUsing;
 
-    if (false == m_isUsing)
+    if (nullptr != m_pTargetTransform)
     {
         Safe_Release(m_pTargetTransform);
-        return;
     }
 
     m_pTargetTransform = pTargetTransform;
     Safe_AddRef(m_pTargetTransform);
+
+    m_fHeight = fHeight;
 }
 
 HRESULT CUI_LockOn::Initialize_Prototype()
@@ -47,6 +48,7 @@ HRESULT CUI_LockOn::Tick(_float fTimeDelta)
     if (true == m_isUsing)
     {
         _vector vPosition = m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        vPosition.m128_f32[1] += m_fHeight;
         _vector vViewPos = XMVector3TransformCoord(vPosition, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW));
         _vector vProjPos = XMVector3TransformCoord(vViewPos, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ));
 

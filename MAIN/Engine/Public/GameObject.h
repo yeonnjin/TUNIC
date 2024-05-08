@@ -68,6 +68,8 @@ protected:
 	_float										m_fAccDamageCoolTime = { 0.f };
 	_float										m_fDamageCoolTime = { 0.5f };
 
+	_float										m_fTimeDelta = { 0.f };
+
 protected:
 	HRESULT			Add_Component(_uint iLevelIndex, const wstring& strPrototypeTag, const wstring& strComponentTag, class CComponent** ppOut, void* pArg = nullptr);
 	HRESULT			Delete_Component(const wstring& strComponentTag);

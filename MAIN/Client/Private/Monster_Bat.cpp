@@ -47,7 +47,7 @@ HRESULT CMonster_Bat::Initialize(void* pArg)
 
     Set_Animation();
 
-    m_iHP = 5;
+    m_iHP = 2;
 
     return S_OK;
 }

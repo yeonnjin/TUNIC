@@ -43,6 +43,7 @@ public:
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
 	void			Set_Damage_AccCoolTime(_float fCoolTime) { m_fAccDamageCoolTime = fCoolTime; }
+	void			Set_isGroggy(_bool isGroggy) { m_isGroggy = isGroggy; }
 
 	// Get
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
@@ -61,11 +62,13 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_bool								m_isGroggy = { false };
 
-
-private:
 	map<const wstring, CPartObject*>	m_PartObjects;
 	queue<STATE>						m_States;
+
+private:
+	class CUI_BossHP*					m_pUIBossHP;
 
 private:
 	HRESULT			Add_Components();

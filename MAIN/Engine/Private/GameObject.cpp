@@ -64,6 +64,8 @@ HRESULT CGameObject::Tick(_float fTimeDelta)
 	if (true == m_isDead)
 		return E_FAIL;
 
+	m_fTimeDelta = fTimeDelta;
+
 	return S_OK;
 }
 
@@ -139,21 +141,19 @@ void CGameObject::Rigid_Event(CGameObject* pGameObject)
 	vCollisionDir.m128_f32[3] = 0.f;
 	vCollisionDir = XMVector3Normalize(vCollisionDir);
 
-	float deltaTime = 0.016f; // 예: 60fps의 경우
-
 	// 밀리지 않는 상태일 때
 	if (RIGID_BLOCK == m_eRigid)
 	{
 		// 상대가 밀리는 상태라면 : 밀기
 		if (RIGID_PUSH == eObjectRigid)
 		{
-			vObjectPosition += vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * deltaTime;
+			vObjectPosition += vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * m_fTimeDelta;
 			pObjectTransform->Set_State(CTransform::STATE_POSITION, vObjectPosition);
 		}
 		// 밀리지 않는 상태라면 : 제자리
 		else if (RIGID_BLOCK == eObjectRigid)
 		{
-			vPosition -= vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * deltaTime;
+			vPosition -= vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * m_fTimeDelta;
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 		}
 	}
@@ -168,16 +168,16 @@ void CGameObject::Rigid_Event(CGameObject* pGameObject)
 		// 상대가 밀리지 않는 상태라면 : 밀리기
 		if (RIGID_BLOCK == eObjectRigid)
 		{
-			vPosition -= vCollisionDir * pObjectTransform->Get_SpeedPerSec() * deltaTime;
+			vPosition -= vCollisionDir * pObjectTransform->Get_SpeedPerSec() * m_fTimeDelta;
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 		}
 		// 상대도 밀리는 상태라면 : 서로 밀기
 		else if(RIGID_PUSH == m_eRigid)
 		{
-			vPosition -= vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * deltaTime;
+			vPosition -= vCollisionDir * m_pTransformCom->Get_SpeedPerSec() * m_fTimeDelta;
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-			vObjectPosition += vCollisionDir * pObjectTransform->Get_SpeedPerSec() * deltaTime;
+			vObjectPosition += vCollisionDir * pObjectTransform->Get_SpeedPerSec() * m_fTimeDelta;
 			pObjectTransform->Set_State(CTransform::STATE_POSITION, vObjectPosition);
 		}
 	}

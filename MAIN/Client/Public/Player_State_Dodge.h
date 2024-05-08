@@ -20,6 +20,8 @@ public:
 	virtual void OnStateExit() override;
 
 private:
+	_bool	m_isEndDash = { false };
+
 	_float	m_fSP = { 0.8f };
 	_float	m_fDashSP = { 0.5f };
 

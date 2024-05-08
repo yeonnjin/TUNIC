@@ -5,6 +5,10 @@
 #include "Monster_Librarian.h"
 #include "Librarian_State_Entry.h"
 
+// TODO:TEST
+#include "Camera_Follow.h"
+#include "Camera_LockOn.h"
+
 CLibrarian_State_Entry::CLibrarian_State_Entry(CMonster_Librarian* pMonster, CPlayer* pPlayer)
 {
     m_pMonster = pMonster;
@@ -60,6 +64,21 @@ void CLibrarian_State_Entry::OnStateExit()
 {
     m_isTrigger = false;
     m_isActive = false;
+
+    // TODO:TEST
+    CCamera_Follow* pCamera = dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_Camera(TEXT("Camera_Follow")));
+    if (nullptr == pCamera)
+        return;
+
+    pCamera->Set_EnterBoss();
+
+    CCamera_LockOn* pLockOnCamera = dynamic_cast<CCamera_LockOn*>(m_pGameInstance->Get_Camera(TEXT("Camera_LockOn")));
+    if (nullptr == pLockOnCamera)
+        return;
+
+    pLockOnCamera->Set_EnterBoss();
+
+    m_pPlayer->Set_EnterBoss();
 }
 
 CLibrarian_State_Entry* CLibrarian_State_Entry::Create(CMonster_Librarian* pMonster, CPlayer* pPlayer)

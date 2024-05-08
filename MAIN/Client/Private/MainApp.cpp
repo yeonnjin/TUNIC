@@ -198,6 +198,12 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	// UI TEXTURE ==================================================================================================
+	
+	/* Prototype_Component_Texture_UI_Loading */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Loading"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/Loading%d.png")))))
+		return E_FAIL;
+	
 	/* Prototype_Component_Texture_UI_Stat */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Stat"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/STAT/STAT%d.png"), 13))))
@@ -236,6 +242,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	/* Prototype_Component_Texture_UI_LockOn */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_LockOn"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/LockOn/LockOn%d.png")))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_UI_BossHP */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_BossHP"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/BossHP/BossHP%d.png"), 5))))
 		return E_FAIL;
 
 	return	S_OK;

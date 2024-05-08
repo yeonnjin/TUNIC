@@ -100,7 +100,7 @@ void CObject_Chest::Late_Tick(_float fTimeDelta)
     __super::Late_Tick(fTimeDelta);
 
 #ifdef _DEBUG
-    m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
+    //m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
 #endif
 }
 

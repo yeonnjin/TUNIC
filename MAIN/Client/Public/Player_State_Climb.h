@@ -27,6 +27,8 @@ private:
 	_bool				m_isEndClimb = { false };
 	_bool				m_isEndLadder = { false };
 
+	_bool				m_isPuzzle = { true };
+
 	_float				m_fBlendAccTime = { 0.f };
 	_float				m_fBlendTime = { 0.21f };
 

@@ -11,6 +11,8 @@
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
 
+#include "UI_Loading.h"
+
 CLevel_Menu::CLevel_Menu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel{ pDevice, pContext }
 {
@@ -42,6 +44,9 @@ void CLevel_Menu::Tick(_float fTimeDelta)
 
     if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
+        CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+        pUILoading->Set_Using(true);
+
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BEACH))))
             return;
     }
@@ -67,6 +72,9 @@ HRESULT CLevel_Menu::Ready_Layer_BackGround(const wstring& strLayerTag)
 
 HRESULT CLevel_Menu::Ready_Layer_UI()
 {
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Loading"), TEXT("Prototype_GameObject_UI_Loading"))))
+        return E_FAIL;
+
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Stat"), TEXT("Prototype_GameObject_UI_Stat"))))
         return E_FAIL;
 
@@ -116,14 +124,11 @@ HRESULT CLevel_Menu::Ready_Layer_Camera()
     tCameraFreeDesc.fNear = 0.1f;
     tCameraFreeDesc.fFar = 1000.0f;
 
-    //tCameraFreeDesc.vEye = _float4(0.f, 16.f, -16.f, 1.f); 
-    //tCameraFreeDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);		
+    //tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
+    //tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
 
-    tCameraFreeDesc.vEye = _float4(-75.f, 13.f, 58.f, 1.f);
-    tCameraFreeDesc.vAt = _float4(-75.f, 3.f, 68.f, 1.f);
-
-    //tCameraFreeDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
-    //tCameraFreeDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+    tCameraFreeDesc.vEye = { 65.f, 13.972946f, -75.f, 1.f };
+    tCameraFreeDesc.vAt = { 65.f, 2.f, -62.f, 1.f };
 
     tCameraFreeDesc.fSpeedPerSec = 12.f;
     tCameraFreeDesc.fRotationPerSec = XMConvertToRadians(10.0f);

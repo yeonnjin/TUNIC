@@ -13,6 +13,8 @@
 
 #include "Camera_Follow.h"
 
+#include "UI_Loading.h"
+
 CLevel_Puzzle::CLevel_Puzzle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel{ pDevice, pContext }
 {
@@ -53,6 +55,9 @@ void CLevel_Puzzle::Tick(_float fTimeDelta)
 
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
+		CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+		pUILoading->Set_Using(true);
+
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BOSS))))
             return;
     }

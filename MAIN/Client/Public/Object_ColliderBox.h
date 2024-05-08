@@ -14,6 +14,7 @@ public:
 		_float3		vSize = { 1.f, 1.f, 1.f };
 		_bool		isRotation = { false };
 		_float		fAngle = { 45.f };
+		_bool		isUseCollider = { false };
 	}COLLIDERBOX_DESC;
 
 public:
@@ -31,6 +32,8 @@ public:
 	virtual		HRESULT		Render() override;
 
 private:
+	_bool		m_isUseCollider = { false };
+
 	_float3		m_vSize = { 1.f, 1.f, 1.f };
 
 private:

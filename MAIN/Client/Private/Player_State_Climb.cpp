@@ -29,6 +29,8 @@ void CPlayer_State_Climb::OnStateEnter()
 
     m_pPlayer->Set_Blending(true, m_eAnimation);
 
+    m_isPuzzle = (LEVEL_PUZZLE == m_pPlayer->Get_Level()) ? true : false;
+
     Compute_Dir();
 }
 
@@ -81,16 +83,26 @@ void CPlayer_State_Climb::OnStateUpdate(_float fTimeDelta)
             // 내려가는 상태였을 때 : 바로 상태 종료
             else
             {
-                m_pPlayer->Change_State(CPlayer::STATE_PUZZLE);
+                if (true == m_isPuzzle)
+                    m_pPlayer->Change_State(CPlayer::STATE_PUZZLE);
+                else
+                    m_pPlayer->Change_State(CPlayer::STATE_IDLE);
             }                    
         }
         // 올라가는 상태였을 때 && 애니메이션이 종료되었을 때
         else if (true == m_isStartEndClimb && true == m_isEndClimb && true == m_pPlayer->Get_isFinished(CPlayer::ANIM_CLIMB_OFF))
         {
-            if (true == m_isEndLadder)
-                m_pPlayer->Change_State(CPlayer::STATE_TOP);
+            if (true == m_isPuzzle)
+            {
+                if (true == m_isEndLadder)
+                    m_pPlayer->Change_State(CPlayer::STATE_TOP);
+                else
+                    m_pPlayer->Change_State(CPlayer::STATE_PUZZLE);
+            }
             else
-                m_pPlayer->Change_State(CPlayer::STATE_PUZZLE);
+            {
+                m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+            }
         }       
         // 도착 전 상태일 때
         else if(false == m_isStartEndClimb)
@@ -147,8 +159,19 @@ void CPlayer_State_Climb::Compute_Dir()
 {
     CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
     _vector vPlayerPosition = pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
-    _vector vOrigin = _vector{ 0.f, vPlayerPosition.m128_f32[1], -58.f, 1.f };
-    _vector vDir = XMVector3Normalize(vPlayerPosition - vOrigin);
+
+    _vector vOrigin, vDir;
+
+    if (true == m_isPuzzle) 
+    {
+        vOrigin = _vector{ 0.f, vPlayerPosition.m128_f32[1], -58.f, 1.f };
+        vDir = XMVector3Normalize(vPlayerPosition - vOrigin);
+    }
+    else
+    {
+        vOrigin = _vector{ 0.f, vPlayerPosition.m128_f32[1], 9.f, 1.f };
+        vDir = XMVector3Normalize(vPlayerPosition - vOrigin);
+    }
 
     pPlayerTransform->Look_At_Dir(vDir);
 }

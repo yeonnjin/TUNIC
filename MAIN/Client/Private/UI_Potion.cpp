@@ -141,7 +141,7 @@ HRESULT CUI_Potion::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(m_fSize, m_fSize, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[0].x, g_iWinSizeY * 0.5f - m_vPositions[0].y, 0.f, 1.f});
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[0].x, g_iWinSizeY * 0.5f - m_vPositions[0].y, 0.1f, 1.f});
     m_pUITransformComs.emplace_back(pTransform);
 
     UI_DESC tDesc = {};
@@ -157,7 +157,7 @@ HRESULT CUI_Potion::Set_UIInfo()
         return E_FAIL;
 
     pTransform->Set_Scaled(m_fSize, m_fSize, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[1].x, g_iWinSizeY * 0.5f - m_vPositions[1].y, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[1].x, g_iWinSizeY * 0.5f - m_vPositions[1].y, 0.1f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};

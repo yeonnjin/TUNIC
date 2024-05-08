@@ -20,6 +20,11 @@ CCamera_LockOn::CCamera_LockOn(const CCamera_LockOn& rhs)
 #endif // _DEBUG   
 }
 
+void CCamera_LockOn::Set_EnterBoss()
+{
+    m_vDistance = _vector{ 0.f, 20.f, -23.f };
+}
+
 HRESULT CCamera_LockOn::Initialize_Prototype()
 {
 	return S_OK;
@@ -189,6 +194,7 @@ HRESULT CCamera_LockOn::Tick(_float fTimeDelta)
             tDesc.vLookAt = vTargetLookAt;
             tDesc.isLockOn = true;
             m_pGameInstance->Change_Camera(TEXT("Camera_Follow"), &tDesc);
+            //m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
         }
     }
 

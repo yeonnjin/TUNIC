@@ -97,10 +97,12 @@ public:
 	void			Set_MP(_float fMPPlus) { m_fMP += fMPPlus; }
 	void			Set_ChestOpen() { m_isChestOpen = true; }
 	void			Set_LadderUpper(_bool isUpper) { m_isUpper = isUpper; }
+	void			Set_EndDash(_bool isEndDash) { m_isEndDash = isEndDash; }
 	//void			Set_Climb() { m_isClimb; }
 
 	void			Set_Gem();
 	void			Set_LockOff();
+	void			Set_EnterBoss() { m_isEnterBoss = true; }
 
 	// Get
 	//STATE			Get_State() { return m_eState; }
@@ -112,6 +114,7 @@ public:
 	_bool			isUpper() { return m_isUpper; }
 	_bool			isArrive() { return m_isArrive; }
 	_bool			isEndLadder() { return m_isEndLadder; }
+	_bool			isEndDash() { return m_isEndDash; }
 
 	_float			Get_SP() { return m_fSP; }
 	_float			Get_MP() { return m_fMP; }
@@ -130,6 +133,7 @@ public:
 	CTransform*		Get_LockOn_Transform() { return m_pLookOnTransform; }
 	_uint			Get_Current_Frame(_uint eAnimationIndex) { return m_pModelCom->Get_Current_Frame(eAnimationIndex); }
 	_uint			Get_Ladder_Index() { return m_iLadderIndex; }
+	_uint			Get_Level() { return m_iLevel; }
 
 	// State
 	void			Change_State(STATE eState);
@@ -162,6 +166,9 @@ private:
 	_bool								m_isUpper = { false };
 	_bool								m_isArrive = { false };
 	_bool								m_isEndLadder = { false };
+	_bool								m_isEndDash = { false };
+	_bool								m_isLockOnBoss = { false };
+	_bool								m_isEnterBoss = { false };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
@@ -221,6 +228,7 @@ private:
 	void								Compute_Stat_Gauge(_float fTimeDelta);
 	void								Compute_Height();
 	class CPlayer_Weapon*				Find_Weapon(WEAPON eWeapon);
+	void								Set_BossLimit();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

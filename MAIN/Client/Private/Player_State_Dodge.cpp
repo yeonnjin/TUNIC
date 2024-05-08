@@ -79,6 +79,7 @@ void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
 
     // 하이퍼 대쉬 상태일 때
     // 0 ~ 20 : 공격 면역
+    CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
     if (CPlayer::ANIM_HYPERDASH == m_eAnim)
     {
         _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
@@ -87,16 +88,35 @@ void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
         else
             m_pPlayer->Set_isImmune(false);
 
-        CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
+        m_isEndDash = m_pPlayer->isEndDash();
+
         pPlayerTransform->Go_Straight(fTimeDelta * -5.f);
     }
 
     if (true == m_pPlayer->Get_isFinished(m_eAnim))
     {
-        IF_PLAYER_ISMOVE
-            m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+        if (true == m_isEndDash)
+        {
+            //24.5
+            _vector vPosition = pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
+            if (vPosition.m128_f32[2] <= 24.5f)
+            {
+                m_isEndDash = false;
+                //m_pPlayer->Set_EndDash(false);
+
+                IF_PLAYER_ISMOVE
+                    m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+                else
+                    m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+            }
+        }
         else
-            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+        {
+            IF_PLAYER_ISMOVE
+                m_pPlayer->Change_State(CPlayer::STATE_MOVE);
+            else
+                m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+        }     
     }
 }
 

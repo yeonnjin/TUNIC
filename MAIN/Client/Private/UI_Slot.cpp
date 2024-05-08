@@ -128,7 +128,7 @@ HRESULT CUI_Slot::Set_UIInfo()
     fSizeX = 365.f;
     fSizeY = 183.f;
     pTransform->Set_Scaled(fSizeX, fSizeY, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + 1143.5f, g_iWinSizeY * 0.5f - 106.5f, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + 1143.5f, g_iWinSizeY * 0.5f - 106.5f, 0.1f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     UI_DESC tDesc = {};
@@ -146,7 +146,7 @@ HRESULT CUI_Slot::Set_UIInfo()
     fSizeX = m_fSize;
     fSizeY = m_fSize;
     pTransform->Set_Scaled(fSizeX, fSizeY, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[SLOT_J].x, g_iWinSizeY * 0.5f - m_vPositions[SLOT_J].y, 0.f, 1.f});
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[SLOT_J].x, g_iWinSizeY * 0.5f - m_vPositions[SLOT_J].y, 0.1f, 1.f});
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -164,7 +164,7 @@ HRESULT CUI_Slot::Set_UIInfo()
     fSizeX = m_fSize;
     fSizeY = m_fSize;
     pTransform->Set_Scaled(fSizeX, fSizeY, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[SLOT_K].x, g_iWinSizeY * 0.5f - m_vPositions[SLOT_K].y, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[SLOT_K].x, g_iWinSizeY * 0.5f - m_vPositions[SLOT_K].y, 0.1f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};
@@ -182,7 +182,7 @@ HRESULT CUI_Slot::Set_UIInfo()
     fSizeX = m_fSize;
     fSizeY = m_fSize;
     pTransform->Set_Scaled(fSizeX, fSizeY, 1.f);
-    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[SLOT_L].x, g_iWinSizeY * 0.5f - m_vPositions[SLOT_L].y, 0.f, 1.f });
+    pTransform->Set_State(CTransform::STATE_POSITION, _vector{ g_iWinSizeX * -0.5f + m_vPositions[SLOT_L].x, g_iWinSizeY * 0.5f - m_vPositions[SLOT_L].y, 0.1f, 1.f });
     m_pUITransformComs.emplace_back(pTransform);
 
     tDesc = {};

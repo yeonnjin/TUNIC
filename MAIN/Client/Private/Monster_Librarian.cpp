@@ -17,6 +17,8 @@
 
 #include "Player.h"
 
+#include "UI_BossHP.h"
+
 #define SWORDBONE 94
 #define SHIELDBONE 18
 
@@ -78,9 +80,17 @@ HRESULT CMonster_Librarian::Initialize(void* pArg)
     _float4 vPosition = _float4(-4.8f, 0.1f, -6.5f, 1.f);
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
-    m_iHP = 2;
+    m_iHP = 7;
     m_fDamageCoolTime = 0.2f;
     m_eRigid = RIGID_BLOCK;
+
+    m_pUIBossHP = dynamic_cast<CUI_BossHP*>(m_pGameInstance->Get_GameObject(LEVEL_BOSS, TEXT("Layer_UI_BossHP")));
+    if (nullptr == m_pUIBossHP)
+        return E_FAIL;
+
+    //Safe_AddRef(m_pUIBossHP);
+
+    m_pUIBossHP->Set_MaxHp(m_iHP);
 
     return S_OK;
 }
@@ -117,6 +127,9 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
     m_pGameInstance->Add_Group(CCollision_Manager::GROUP_MONSTER, this);
 
     m_pGameInstance->Add_RigidGroup(this);
+
+    if(true == m_pGameInstance->Get_DIKeyState(DIK_NUMPAD2, KEY_DOWN))
+        m_pUIBossHP->Set_HPMinus();
 
     return S_OK;
 }
@@ -323,6 +336,8 @@ void CMonster_Librarian::Free()
         Safe_Release(PartObject.second);
 
     m_PartObjects.clear();
+
+    //Safe_Release(m_pUIBossHP);
 }
 
 void CMonster_Librarian::Collision_Event(Engine::CGameObject* pGameObject)
@@ -331,8 +346,13 @@ void CMonster_Librarian::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_Librarian::Damage_Event()
 {
+    m_pUIBossHP->Set_HPMinus();
+
     if (m_iHP > 0)
-        Change_State(STATE_DAMAGE);
+    {
+        if(false == m_isGroggy)
+            Change_State(STATE_DAMAGE);
+    }
     else
         Change_State(STATE_DIE);
 }

@@ -86,6 +86,8 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
     // 3. 꽂은 채로 일정 시간 반복 (주변 번개 공격, 뒤에서는 공격 가능)
     if (3 == m_iPattern)
     {
+        m_pMonster->Set_isGroggy(true);
+
         m_fAccLoopTime += fTimeDelta;
 
         // 3 -> 4
@@ -101,6 +103,8 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)
     if (4 == m_iPattern && true == m_pMonster->Get_isFinished(CMonster_Librarian::ANIM_LIGHTNING_RELEASE))
     {
         m_iPattern = 0;
+
+        m_pMonster->Set_isGroggy(false);
 
         // 애니메이션 종료 시 플레이어가 가까이 있으면 ? 근접공격 : 기본상태 
         _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
@@ -122,6 +126,7 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateExit()
     m_iPattern = 0;
     m_fAccLightningTime = 0.f;
     m_fAccLoopTime = 0.f;
+    m_pMonster->Set_isGroggy(false);
 }
 
 _vector CLibrarian_State_Pattern_Lightning_Warp::Get_Drop_Position()

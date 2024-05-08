@@ -27,6 +27,9 @@ private:
 	virtual ~CCamera_Follow() = default;
 
 public:
+	void				Set_EnterBoss();
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual HRESULT		Tick(_float fTimeDelta) override;
@@ -46,6 +49,8 @@ private:
 	_vector				m_vLookAt = {};
 
 	_bool				m_isLockOn = { false };
+
+	//_uint				m_iLevel = { LEVEL_END };
 
 private:
 	class CEasing*		m_pEasing;

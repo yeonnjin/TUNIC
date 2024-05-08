@@ -15,6 +15,8 @@
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
 
+#include "UI_Loading.h"
+
 CLevel_Beach::CLevel_Beach(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel{ pDevice, pContext }
 {
@@ -58,6 +60,9 @@ void CLevel_Beach::Tick(_float fTimeDelta)
 
     if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
+        CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+        pUILoading->Set_Using(true);
+
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_SHOP))))
             return;
     }
@@ -255,7 +260,8 @@ HRESULT CLevel_Beach::Ready_Layer_Camera()
     CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag));
     _vector vPlayerPosition = pCameraTransform->Get_State_Vector(CTransform::STATE_POSITION);
 
-    _vector vCamPosition = { vPlayerPosition.m128_f32[0], vPlayerPosition.m128_f32[1] + 13.f, vPlayerPosition.m128_f32[2] - 13.f, 1.f };
+    //_vector vCamPosition = { vPlayerPosition.m128_f32[0], vPlayerPosition.m128_f32[1] + 13.f, vPlayerPosition.m128_f32[2] - 13.f, 1.f };
+    _vector vCamPosition = { 65.f, 13.972946f, -75.f, 1.f };
     pCameraTransform->Set_State(CTransform::STATE_POSITION, vCamPosition);
     pCameraTransform->Look_At(vPlayerPosition);
 

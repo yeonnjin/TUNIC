@@ -20,6 +20,7 @@ HRESULT CObject_ColliderBox::Initialize(void* pArg)
 {
     COLLIDERBOX_DESC* pDesc = (COLLIDERBOX_DESC*)pArg;
     m_vSize = pDesc->vSize;
+    m_isUseCollider = pDesc->isUseCollider;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -29,6 +30,7 @@ HRESULT CObject_ColliderBox::Initialize(void* pArg)
         m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f }, XMConvertToRadians(pDesc->fAngle));
 
     m_eRigid = RIGID_BLOCK;
+    m_eInteractiveType = INTERACTIVE_COLLIDER;
 
     return S_OK;
 }
@@ -38,15 +40,22 @@ HRESULT CObject_ColliderBox::Tick(_float fTimeDelta)
     if (E_FAIL == __super::Tick(fTimeDelta))
         return E_FAIL;
 
-    m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+    if (true == m_isUseCollider)
+    {
+        m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
+        m_pGameInstance->Add_Group(CCollision_Manager::GROUP_INTERACTIVE, this);
+    }
 
+    m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
     m_pGameInstance->Add_RigidGroup(this);
 }
 
 void CObject_ColliderBox::Late_Tick(_float fTimeDelta)
 {
 #ifdef _DEBUG
-    m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
+    //if (true == m_isUseCollider)
+    //    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+    //m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
 #endif
 }
 
@@ -57,6 +66,19 @@ HRESULT CObject_ColliderBox::Render()
 
 HRESULT CObject_ColliderBox::Add_Components()
 {
+    if (true == m_isUseCollider)
+    {
+        CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
+
+        // 로컬상의 정보를 셋팅한다.
+        ColliderDesc.vSize = { 2.f, 2.f, 3.f };
+        ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
+
+        if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+            TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+            return E_FAIL;
+    }
+
     /* For. Com_RigidCollider */
     CBounding_OBB::BOUNDING_OBB_DESC		RigidDesc{};
 

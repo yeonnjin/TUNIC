@@ -11,6 +11,11 @@
 
 #include "Camera_Follow.h"
 
+#include "Object_ColliderBox.h"
+#include "Object_Ladder.h"
+
+#include "UI_Loading.h"
+
 CLevel_Boss::CLevel_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel{ pDevice, pContext }
 {
@@ -25,6 +30,12 @@ HRESULT CLevel_Boss::Initialize()
         return E_FAIL;
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_UI()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Object(TEXT("Layer_Object"))))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
@@ -48,6 +59,9 @@ void CLevel_Boss::Tick(_float fTimeDelta)
 
     if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
+        CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+        pUILoading->Set_Using(true);
+
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BEACH))))
             return;
     }
@@ -86,17 +100,8 @@ HRESULT CLevel_Boss::Ready_Layer_Monster(const wstring& strLayerTag)
     wstring wstr(&szModelTag[0], &szModelTag[MAX_PATH]);
     tDesc.strModelComTag = wstr;
     tDesc.eLevel = LEVEL_BOSS;
-    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, strLayerTag, TEXT("Prototype_GameObject_Monster_Librarian"), &tDesc)))
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Boss"), TEXT("Prototype_GameObject_Monster_Librarian"), &tDesc)))
     	return E_FAIL;
-
-    //// MONSTER_BAT
-    //tDesc = {};
-    //_char szModelTag1[MAX_PATH] = "Prototype_Component_Model_Monster_Bat";
-    //wstring wstr1(&szModelTag1[0], &szModelTag1[MAX_PATH]);
-    //tDesc.strModelComTag = wstr1;
-    //tDesc.eLevel = LEVEL_BOSS;
-    //if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, strLayerTag, TEXT("Prototype_GameObject_Monster_Bat"), &tDesc)))
-    //	return E_FAIL;
 
     return S_OK;
 }
@@ -111,6 +116,67 @@ HRESULT CLevel_Boss::Ready_Layer_BackGround(const wstring& strLayerTag)
 
 HRESULT CLevel_Boss::Ready_Layer_UI()
 {
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_UI_BossHP"), TEXT("Prototype_GameObject_UI_BossHP"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Boss::Ready_Layer_Object(const wstring& strLayerTag)
+{
+    // ColliderBox : Trigger
+    vector<_vector> vTriggerPosition;
+    vTriggerPosition.push_back(_vector{ -0.4f, -40.503f, 40.6f });
+
+    CObject_ColliderBox::COLLIDERBOX_DESC tColliderBoxDesc{};
+    tColliderBoxDesc.vPosition = vTriggerPosition[0];
+    tColliderBoxDesc.vSize = { 14.f, 2.f, 3.f };
+    tColliderBoxDesc.isUseCollider = true;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Object_ColliderBox"), TEXT("Prototype_GameObject_Object_ColliderBox"), &tColliderBoxDesc)))
+        return E_FAIL;
+
+    vector<_vector> vColliderPosition;
+    vColliderPosition.push_back(_vector{ 0.031f, -40.911f, 15.098f });
+    vColliderPosition.push_back(_vector{ 0.031f, 20.905f, 15.598f }); // vColliderPosition.push_back(_vector{ 0.031f, -3.905f, 15.598f });
+    vColliderPosition.push_back(_vector{ 0.031f, -4.603f, 11.197f });
+    vColliderPosition.push_back(_vector{ 0.031f, 20.78f, 11.698f }); // vColliderPosition.push_back(_vector{ 0.031f, 1.78f, 11.698f });
+
+    for (size_t i = 0; i < vColliderPosition.size(); i++)
+    {
+        CObject_ColliderBox::COLLIDERBOX_DESC tColliderBoxDesc{};
+        tColliderBoxDesc.vPosition = vColliderPosition[i];
+
+        tColliderBoxDesc.vSize = { 4.f, 1.f, 1.f };
+
+        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, TEXT("Layer_Object_ColliderBox"), TEXT("Prototype_GameObject_Object_ColliderBox"), &tColliderBoxDesc)))
+            return E_FAIL;
+    }
+
+    // Ladder
+    vector<_vector> vLadderPosition;
+
+    vLadderPosition.push_back(_vector{ 0.031f, -40.911f, 16.098f });
+    vLadderPosition.push_back(_vector{ 0.031f, -5.305f, 15.398f });
+
+    vLadderPosition.push_back(_vector{ 0.031f, -4.603f, 12.197f });
+    vLadderPosition.push_back(_vector{ 0.031f, 0.38f, 11.498f });
+
+    for (size_t i = 0; i < vLadderPosition.size(); i++)
+    {
+        CObject_Ladder::LADDER_DESC tLadderDesc{};
+        tLadderDesc.vPosition = vLadderPosition[i];
+        tLadderDesc.isUpper = i % 2 == 0 ? true : false;
+        //tLadderDesc.isRotation = (i % 4 == 2 || i % 4 == 3) ? true : false;
+        tLadderDesc.iIndex = i;
+
+        /*if (13 == i)
+            tLadderDesc.isEnd = true;*/
+
+        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, TEXT("Layer_Object_Ladder"), TEXT("Prototype_GameObject_Object_Ladder"), &tLadderDesc)))
+            return E_FAIL;
+    }
+
     return S_OK;
 }
 
@@ -136,7 +202,9 @@ HRESULT CLevel_Boss::Ready_Layer_Camera()
     CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag));
     _vector vPlayerPosition = pCameraTransform->Get_State_Vector(CTransform::STATE_POSITION);
 
-    _vector vCamPosition = { vPlayerPosition.m128_f32[0], vPlayerPosition.m128_f32[1] + 13.f, vPlayerPosition.m128_f32[2] - 13.f, 1.f };
+    //_vector vPlayerPosition = { 0.f, - 40.250f, 54.f, 1.f };
+    //_vector vCamPosition = {0.f, vPlayerPosition.m128_f32[1] + 13.f, vPlayerPosition.m128_f32[2] + 13.f, 1.f };
+   _vector vCamPosition = { vPlayerPosition.m128_f32[0], vPlayerPosition.m128_f32[1] + 12.8f, vPlayerPosition.m128_f32[2] + 13.f, 1.f };
     pCameraTransform->Set_State(CTransform::STATE_POSITION, vCamPosition);
     pCameraTransform->Look_At(vPlayerPosition);
 

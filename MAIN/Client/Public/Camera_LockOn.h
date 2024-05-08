@@ -24,6 +24,9 @@ private:
 	virtual ~CCamera_LockOn() = default;
 
 public:
+	void				Set_EnterBoss();
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual HRESULT		Tick(_float fTimeDelta) override;

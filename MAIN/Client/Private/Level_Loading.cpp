@@ -15,6 +15,8 @@
 #include "Level_Puzzle.h"
 #include "Level_Boss.h"
 
+#include "UI_Loading.h"
+
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -44,6 +46,12 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 	{
 		if (true == m_pGameInstance->Get_DIKeyState(DIK_RSHIFT, KEY_DOWN))
 		{
+			if (LEVEL_MENU != m_eNextLevelID)
+			{
+				CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+				pUILoading->Set_Using(false);
+			}
+
 			CLevel*		pLevel = { nullptr };
 
 			switch (m_eNextLevelID)
@@ -75,7 +83,7 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				return;
 
 			if (FAILED(m_pGameInstance->Open_Level(m_eNextLevelID, pLevel)))
-				return;			
+				return;						
 		}		
 	}
 }

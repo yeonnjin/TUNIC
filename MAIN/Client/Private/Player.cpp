@@ -215,6 +215,10 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 
 	// Interactive
 	m_isInteractive = false;
+	//m_isEndDash = false;
+
+	if (LEVEL_BOSS == m_iLevel)
+		Set_BossLimit();
 
 	// Collider
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
@@ -446,7 +450,10 @@ void CPlayer::Update_Camera()
 			m_pGameInstance->Change_Camera(TEXT("Camera_LockOn"), &tDesc);
 			m_eLockOn = LOCK_ON_FIND;
 
-			m_pUI_LockOn->Set_Using(true, pLockOnTransform);
+			if(true == m_isLockOnBoss)
+				m_pUI_LockOn->Set_Using(true, pLockOnTransform, 3.f);
+			else
+				m_pUI_LockOn->Set_Using(true, pLockOnTransform);
 		}
 		// ³íÅ¸°Ù
 		else
@@ -780,42 +787,90 @@ void CPlayer::Set_Dir()
 	{
 		m_eDir = DIR_FRONT;
 		m_vLook = { 0.f, 0.f, 1.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_BACK;
+			m_vLook = { 0.f, 0.f, -1.f };
+		}
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS))
 	{
 		m_eDir = DIR_BACK;
 		m_vLook = { 0.f, 0.f, -1.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_FRONT;
+			m_vLook = { 0.f, 0.f, 1.f };
+		}
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
 	{
 		m_eDir = DIR_LEFT;
 		m_vLook = { 1.f, 0.f, 0.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_RIGHT;
+			m_vLook = { -1.f, 0.f, 0.f };
+		}
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 	{
 		m_eDir = DIR_RIGHT;
 		m_vLook = { -1.f, 0.f, 0.f };
+		
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_LEFT;
+			m_vLook = { 1.f, 0.f, 0.f };
+		}
 	}
 	
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
 	{
 		m_eDir = DIR_FL;
 		m_vLook = { 1.f, 0.f, 1.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_BR;
+			m_vLook = { -1.f, 0.f, -1.f };
+		}
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 	{
 		m_eDir = DIR_FR;
 		m_vLook = { -1.f, 0.f, 1.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_BL;
+			m_vLook = { 1.f, 0.f, -1.f };
+		}
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS))
 	{
 		m_eDir = DIR_BL;
 		m_vLook = { 1.f, 0.f, -1.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_FR;
+			m_vLook = { -1.f, 0.f, 1.f };
+		}
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) && m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 	{
 		m_eDir = DIR_BR;
 		m_vLook = { -1.f, 0.f, -1.f };
+
+		if (LEVEL_BOSS == m_iLevel && false == m_isEnterBoss)
+		{
+			m_eDir = DIR_FL;
+			m_vLook = { 1.f, 0.f, 1.f };
+		}
 	}
 }
 
@@ -850,6 +905,21 @@ CTransform* CPlayer::Set_LockOn_Target()
 		{
 			fDistance = fDiff;
 			pTargetTransform = pMonsterTransform;
+			m_isLockOnBoss = false;
+		}
+	}
+
+	if (LEVEL_BOSS == m_iLevel)
+	{
+		CTransform* pMonsterTransform = (CTransform*)(m_pGameInstance->Get_Component(m_iLevel, TEXT("Layer_Boss"), g_strTransformTag));
+		_vector vMonsterPosition = pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
+		_float fDiff = XMVector3Length(vMonsterPosition - vPlayerPosition).m128_f32[0];
+
+		if (fDistance + 10.f > fDiff)
+		{
+			fDistance = fDiff;
+			pTargetTransform = pMonsterTransform;
+			m_isLockOnBoss = true;
 		}
 	}
 
@@ -956,6 +1026,15 @@ CPlayer_Weapon* CPlayer::Find_Weapon(WEAPON eWeapon)
 	return nullptr;
 }
 
+void CPlayer::Set_BossLimit()
+{
+	if (false == m_isEndDash && 42.f > m_vPrePosition.m128_f32[2])
+	{
+		m_vPrePosition.m128_f32[2] = 42.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+	}
+}
+
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CPlayer* pInstance = new CPlayer(pDevice, pContext);
@@ -1012,12 +1091,12 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 	{
 		m_isInteractive = true;
 
+		CInteractiveObject* pObject = dynamic_cast<CInteractiveObject*>(pGameObject);
+		CInteractiveObject::INTERACTIVE eInteractiveType = pObject->Get_InteractiveType();
+
 		if(true == m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN) || true == m_isChestOpen || true == m_isUsingShop || STATE_CLIMB == m_eState)
 		{
-			CInteractiveObject* pObject = dynamic_cast<CInteractiveObject*>(pGameObject);
-
 			// »óÀÚ
-			CInteractiveObject::INTERACTIVE eInteractiveType = pObject->Get_InteractiveType();
 			if (CInteractiveObject::INTERACTIVE_CHEST == eInteractiveType)
 			{
 				CObject_Chest* pChest = dynamic_cast<CObject_Chest*>(pObject);
@@ -1121,9 +1200,13 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 				m_pGameInstance->Change_Camera(TEXT("Camera_Telescope"));
 				Change_State(STATE_IDLE);
 			}
-		}
+			else if (CInteractiveObject::INTERACTIVE_COLLIDER == eInteractiveType)
+			{
+				m_isEndDash = true;
+				Change_State(STATE_DODGE);
+			}
+		}		
 	}
-
 }
 
 void CPlayer::Damage_Event()

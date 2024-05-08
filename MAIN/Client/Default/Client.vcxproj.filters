@@ -457,6 +457,12 @@
     <Filter Include="02.GameObjects\UI\LockOn">
       <UniqueIdentifier>{6970e48c-5c6f-4bef-9199-20b788a73843}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\UI\BossHP">
+      <UniqueIdentifier>{3fc708b1-7568-4232-88dc-6d189b9f0de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Loading">
+      <UniqueIdentifier>{6b7973ec-a918-4dcb-90d7-4a7da57b0e38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -864,6 +870,12 @@
     <ClInclude Include="..\Public\UI_LockOn.h">
       <Filter>02.GameObjects\UI\LockOn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UI_BossHP.h">
+      <Filter>02.GameObjects\UI\BossHP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Loading.h">
+      <Filter>02.GameObjects\UI\Loading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1252,6 +1264,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI_LockOn.cpp">
       <Filter>02.GameObjects\UI\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_BossHP.cpp">
+      <Filter>02.GameObjects\UI\BossHP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Loading.cpp">
+      <Filter>02.GameObjects\UI\Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

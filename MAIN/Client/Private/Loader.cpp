@@ -48,6 +48,7 @@
 #include "NPC_Merchant.h"
 
 // UI
+#include "UI_Loading.h"
 #include "UI_Stat.h"
 #include "UI_Inventory.h"
 #include "UI_Item.h"
@@ -60,6 +61,7 @@
 #include "UI_Font.h"
 #include "UI_Aggro.h"
 #include "UI_LockOn.h"
+#include "UI_BossHP.h"
 
 #include "BlendEffect.h"
 #include "Sky.h"
@@ -806,6 +808,11 @@ HRESULT CLoader::Loading_For_Menu()
 
 	// UI ===========================================================================================
 
+	/* For.Prototype_GameObject_UI_Loading */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Loading"),
+		CUI_Loading::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_UI_Stat */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Stat"),
 		CUI_Stat::Create(m_pDevice, m_pContext))))
@@ -864,6 +871,11 @@ HRESULT CLoader::Loading_For_Menu()
 	/* For.Prototype_GameObject_UI_LockOn */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_LockOn"),
 		CUI_LockOn::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UI_BossHP */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_BossHP"),
+		CUI_BossHP::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// MODEL ========================================================================================
