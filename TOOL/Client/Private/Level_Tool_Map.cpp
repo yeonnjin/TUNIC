@@ -249,15 +249,22 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	// MAP ===================================================================================================================================================
 	CMap::MAP_DESC tMapDesc = {};
 	tMapDesc.isLoad = false;
-	tMapDesc.vPosition = _float3(0.f, 5.f, 0.f);
+	tMapDesc.vPosition = _float3(0.f, 0.f, 0.f);
 	// Prototype_Component_Model_Map_Beach
 	// Prototype_Component_Model_Map_FOXGOD
 	// Prototype_Component_Model_Map_Librarian
 	// Prototype_Component_Model_Map_Shop
 	// Prototype_Component_Model_Map_Puzzle
-	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_FOXGOD");
+	tMapDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_Beach");
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map"), TEXT("Prototype_GameObject_Map"), &tMapDesc)))
 		return E_FAIL;	
+
+	//CMap_Object::MAPOBJ_DESC tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(0.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Map_Beach_WaterBlue");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
 
 
 	// OBJECT ===================================================================================================================================================
@@ -308,12 +315,12 @@ HRESULT CLevel_Tool_Map::Ready_Layer_Object(const wstring& strLayerTag)
 	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
 	//	return E_FAIL;
 	
-	CMap_Object::MAPOBJ_DESC tObjDesc = {};
-	tObjDesc.isLoad = false;
-	tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
-	tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Gem");
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
-		return E_FAIL;
+	//CMap_Object::MAPOBJ_DESC tObjDesc = {};
+	//tObjDesc.isLoad = false;
+	//tObjDesc.vPosition = _float3(4.f, 0.f, 0.f);
+	//tObjDesc.strModelComTag = TEXT("Prototype_Component_Model_Object_Gem");
+	//if (FAILED(m_pGameInstance->Add_Clone(LEVEL_TOOL_MAP, TEXT(/*"Layer_Map_Object"*/"Layer_Map_Object"), TEXT("Prototype_GameObject_Map_Object"), &tObjDesc)))
+	//	return E_FAIL;
 
 
 

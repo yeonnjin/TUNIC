@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "GameObject.h"
+#include "BlendObject.h"
 
 #include "GameInstance.h"
 
@@ -216,13 +217,18 @@ HRESULT CRenderer::Render_NonLight()
 }
 
 
-//_bool Compare(CGameObject* pSour, CGameObject* pDest)
-//{
-//	return ((CGameObject*)pSour)->Get_ViewZ() > ((CGameObject*)pDest)->Get_ViewZ();
-//}
+_bool Compare(CGameObject* pSour, CGameObject* pDest)
+{
+	return ((CBlendObject*)pSour)->Get_ViewZ() > ((CBlendObject*)pDest)->Get_ViewZ();
+}
 
 HRESULT CRenderer::Render_Blend()
 {
+	m_RenderObjects[RENDER_BLEND].sort([](CGameObject* pSour, CGameObject* pDest)->_bool
+	{
+		return ((CBlendObject*)pSour)->Get_ViewZ() > ((CBlendObject*)pDest)->Get_ViewZ();
+	});
+
 	for (auto& pRenderObject : m_RenderObjects[RENDER_BLEND])
 	{
 		if (nullptr != pRenderObject)
@@ -236,11 +242,6 @@ HRESULT CRenderer::Render_Blend()
 
 HRESULT CRenderer::Render_UI()
 {
-	//m_RenderObjects[RENDER_UI].sort([](CGameObject* pSour, CGameObject* pDest)->_bool
-	//	{
-	//		return ((CGameObject*)pSour)->Get_ViewZ() > ((CGameObject*)pDest)->Get_ViewZ();
-	//	});
-
 	for (auto& pRenderObject : m_RenderObjects[RENDER_UI])
 	{
 		if (nullptr != pRenderObject)

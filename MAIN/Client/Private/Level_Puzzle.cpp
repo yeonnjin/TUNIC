@@ -5,6 +5,7 @@
 #include "Level_Loading.h"
 
 #include "Map.h"
+#include "Sky.h"
 
 #include "Player.h"
 
@@ -90,7 +91,10 @@ HRESULT CLevel_Puzzle::Ready_Layer_Map(const wstring& strLayerTag)
 
 HRESULT CLevel_Puzzle::Ready_Layer_BackGround(const wstring& strLayerTag)
 {
-    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, strLayerTag, TEXT("Prototype_GameObject_Sky"))))
+	CSky::SKY_DESC tDesc{};
+	tDesc.strSkyComTag = TEXT("Prototype_Component_Texture_Sky");
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, strLayerTag, TEXT("Prototype_GameObject_Sky"), &tDesc)))
         return E_FAIL;
 
     return S_OK;

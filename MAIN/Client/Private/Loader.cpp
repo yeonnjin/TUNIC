@@ -69,9 +69,13 @@
 #include "Collider.h"
 #include "Navigation.h"
 
+// MAP
+#include "Map.h"
+#include "Map_WaterEdge.h"
+#include "Map_WaterBlue.h"
+#include "Map_WaterDepth.h"
 
 // ETC
-#include "Map.h"
 #include "Map_Object.h"
 #include "Test_Object.h"
 #include "Editor.h"
@@ -730,6 +734,21 @@ HRESULT CLoader::Loading_For_Menu()
 		CMap::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Map_WaterEdge */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_WaterEdge"),
+		CMap_WaterEdge::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Map_WaterBlue */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_WaterBlue"),
+		CMap_WaterBlue::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Map_WaterDepth */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Map_WaterDepth"),
+		CMap_WaterDepth::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
 		CSky::Create(m_pDevice, m_pContext))))
@@ -919,6 +938,9 @@ HRESULT CLoader::Loading_For_Beach()
 
 	/* MAP */
 	Load_NonAnim_Model("../Bin/Resources/Data/Map/Map_Beach.dat", LEVEL_BEACH);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach_WaterEdge.dat", LEVEL_BEACH);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach_WaterBlue.dat", LEVEL_BEACH);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Map_Beach_WaterDepth.dat", LEVEL_BEACH);
 
 	/* ANIM OBJECT */
 	Load_Anim_Model("../Bin/Resources/Data/Model/Monster.dat", LEVEL_BEACH);

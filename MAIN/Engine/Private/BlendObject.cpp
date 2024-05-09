@@ -27,6 +27,8 @@ HRESULT CBlendObject::Initialize(void* pArg)
 
 HRESULT CBlendObject::Tick(_float fTimeDelta)
 {
+    Compute_ViewZ();
+
     return S_OK;
 }
 
@@ -44,6 +46,19 @@ void CBlendObject::Compute_CamDistance()
     _vector vDir = m_pGameInstance->Get_CamPosition_Vector() - m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
     m_fCamDistance = XMVectorGetX(XMVector3Length(vDir));
+}
+
+HRESULT CBlendObject::Compute_ViewZ()
+{
+    _vector		vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+
+    _matrix	    ViewMatrix = m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW);
+
+    vPosition = XMVector3TransformCoord(vPosition, ViewMatrix);
+
+    m_fViewZ = vPosition.m128_f32[2];
+
+    return S_OK;
 }
 
 void CBlendObject::Free()

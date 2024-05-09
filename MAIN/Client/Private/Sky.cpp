@@ -23,9 +23,11 @@ HRESULT CSky::Initialize(void* pArg)
     tDesc.fSpeedPerSec = 10.f;
     tDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
-
     if (FAILED(__super::Initialize(&tDesc)))
         return E_FAIL;
+
+    SKY_DESC* pDesc = (SKY_DESC*)pArg;
+    m_strSkyComTag = pDesc->strSkyComTag;
 
     if (FAILED(Add_Components()))
         return E_FAIL;
@@ -72,8 +74,9 @@ HRESULT CSky::Add_Components()
     /* For.Com_Texture */
     // Prototype_Component_Texture_Sky
     // Prototype_Component_Texture_Sky_Shop
+    // Prototype_Component_Texture_Sky_Boss
 
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, m_strSkyComTag,
         TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
         return E_FAIL;
 
@@ -101,7 +104,7 @@ HRESULT CSky::Bind_ShaderResources()
 
     // 0
     // 2
-    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 2)))
+    if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
         return E_FAIL;
 
     return S_OK;

@@ -1,28 +1,21 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "BlendObject.h"
 
 BEGIN(Engine)
-class CVIBuffer_Cube;
-class CTexture;
+class CModel;
 class CShader;
 END
 
 BEGIN(Client)
 
-class CSky final : public CGameObject
+class CMap_WaterEdge final : public CBlendObject
 {
-public:
-	typedef struct Cky_Desc : public CGameObject::GAMEOBJECT_DESC
-	{
-		wstring		strSkyComTag;
-	}SKY_DESC;
-
 private:
-	CSky(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CSky(const CSky& rhs);
-	virtual ~CSky() = default;
+	CMap_WaterEdge(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CMap_WaterEdge(const CMap_WaterEdge& rhs);
+	virtual ~CMap_WaterEdge() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -32,21 +25,24 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	wstring			m_strSkyComTag;
+	_float			m_fHeight = { 0.f };
+
+	_float			m_fAccTime = { 0.f };
 
 private:
-	CVIBuffer_Cube* m_pVIBufferCom = { nullptr };
-	CTexture*		m_pTextureCom = { nullptr };
+	CModel*			m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
 
 private:
 	HRESULT			Add_Components();
 	HRESULT			Bind_ShaderResources();
+	void			Compute_Height(_float fTimeDelta);
 
 public:
-	static CSky* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CMap_WaterEdge* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
 
 END
+

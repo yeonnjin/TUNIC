@@ -47,8 +47,6 @@ HRESULT CMap::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
 
-    //Compute_Angle(fTimeDelta);
-
     m_pNavigationCom->Tick(m_pTransformCom->Get_WorldMatrix());
 
     return S_OK;
@@ -71,6 +69,8 @@ HRESULT CMap::Render()
     _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
     for (size_t i = 0; i < iNumMeshes; ++i)
     {
+        if (LEVEL_BEACH == m_eLevel && (11 == i || 12 == i))
+            continue;
 
         if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
             return E_FAIL;

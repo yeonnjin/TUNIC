@@ -463,6 +463,18 @@
     <Filter Include="02.GameObjects\UI\Loading">
       <UniqueIdentifier>{6b7973ec-a918-4dcb-90d7-4a7da57b0e38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Map\Beach">
+      <UniqueIdentifier>{47edb77b-75b5-492f-974a-dd38a3b1bb47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\Beach\WaterEdge">
+      <UniqueIdentifier>{b5573edf-1455-4139-9e4f-413c33cd180b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\Beach\WaterBlue">
+      <UniqueIdentifier>{b4c54743-3611-44e1-9bea-6fc6f87fb5ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Map\Beach\WaterDepth">
+      <UniqueIdentifier>{729c193f-82b3-4647-979a-b92cce2df90e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -876,6 +888,15 @@
     <ClInclude Include="..\Public\UI_Loading.h">
       <Filter>02.GameObjects\UI\Loading</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Map_WaterEdge.h">
+      <Filter>02.GameObjects\Map\Beach\WaterEdge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Map_WaterBlue.h">
+      <Filter>02.GameObjects\Map\Beach\WaterBlue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Map_WaterDepth.h">
+      <Filter>02.GameObjects\Map\Beach\WaterDepth</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1270,6 +1291,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI_Loading.cpp">
       <Filter>02.GameObjects\UI\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Map_WaterEdge.cpp">
+      <Filter>02.GameObjects\Map\Beach\WaterEdge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Map_WaterBlue.cpp">
+      <Filter>02.GameObjects\Map\Beach\WaterBlue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Map_WaterDepth.cpp">
+      <Filter>02.GameObjects\Map\Beach\WaterDepth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

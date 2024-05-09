@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Map.h"
+#include "Sky.h"
 
 #include "Object_Chest.h"
 
@@ -87,7 +88,8 @@ HRESULT CLevel_Beach::Ready_Lights()
 
     LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
     LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
-    LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+    //LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
         return E_FAIL;
@@ -189,12 +191,24 @@ HRESULT CLevel_Beach::Ready_Layer_Map(const wstring& strLayerTag)
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Map"), &tDesc)))
         return E_FAIL;
 
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Map_WaterEdge"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Map_WaterBlue"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Map_WaterDepth"))))
+        return E_FAIL;
+
     return S_OK;
 }
 
 HRESULT CLevel_Beach::Ready_Layer_BackGround(const wstring& strLayerTag)
 {
-    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Sky"))))
+    CSky::SKY_DESC tDesc{};
+    tDesc.strSkyComTag = TEXT("Prototype_Component_Texture_Sky");
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BEACH, strLayerTag, TEXT("Prototype_GameObject_Sky"), &tDesc)))
         return E_FAIL;
 
     return S_OK;

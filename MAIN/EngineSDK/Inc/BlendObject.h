@@ -12,6 +12,11 @@ protected:
 	virtual ~CBlendObject() = default;
 
 public:
+	_float Get_ViewZ() const {
+		return m_fViewZ;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 	virtual HRESULT Tick(_float fTimeDelta);
@@ -19,10 +24,12 @@ public:
 	virtual HRESULT Render();
 
 protected:
-	_float	m_fCamDistance = { 0.f };
+	_float			m_fCamDistance = { 0.f };
+	_float			m_fViewZ = { 0.f };
 
 protected:
-	void	Compute_CamDistance();
+	void			Compute_CamDistance();
+	HRESULT			Compute_ViewZ();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

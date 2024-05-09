@@ -349,17 +349,35 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/effigy (merge).fbx", TEXT("Prototype_Component_Model_Flower"), TransformMatrix))))
 	//	return E_FAIL;
 
-	///* For.Prototype_Component_Model_Map_Beach */
+	/* For.Prototype_Component_Model_Map_Beach */
+	TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_NoWater.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
+		return E_FAIL;
+
+	///* For.Prototype_Component_Model_Map_Beach_WaterEdge */
 	//TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Map_Beach_Remove.fbx", TEXT("Prototype_Component_Model_Map_Beach"), TransformMatrix))))
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach_WaterEdge"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Water/Map_Beach_Water.fbx", TEXT("Prototype_Component_Model_Map_Beach_WaterEdge"), TransformMatrix))))
 	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Map_FOXGOD */
-	TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Map_Beach_WaterEdge */
+	//TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach_WaterBlue"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Water/map_beach_water_blue.fbx", TEXT("Prototype_Component_Model_Map_Beach_WaterBlue"), TransformMatrix))))
+	//	return E_FAIL;
+
+	///* For.Prototype_Component_Model_Map_Beach_WaterEdge */
+	//TransformMatrix = /*XMMatrixScaling(100.f, 100.f, 100.f);*/XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_Beach_WaterDepth"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map/Water/map_beach_water_depth.fbx", TEXT("Prototype_Component_Model_Map_Beach_WaterDepth"), TransformMatrix))))
+	//	return E_FAIL;
+
+	///* For.Prototype_Component_Model_Map_FOXGOD */
+	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Map_FOXGOD"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Map3/Fox_God_map2.fbx", TEXT("Prototype_Component_Model_Map_FOXGOD"), TransformMatrix))))
+	//	return E_FAIL;
 
 	///* For.Prototype_Component_Model_Map_Shop */
 	//TransformMatrix = /*XMMatrixScaling(0.3f, 0.3f, 0.3f);*/ XMMatrixIdentity();
@@ -555,10 +573,10 @@ HRESULT CLoader::Loading_For_Tool_Map()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Telescope/Telescope.fbx", TEXT("Prototype_Component_Model_Object_Telescope"), TransformMatrix))))
 	//	return E_FAIL; 
 
-	TransformMatrix = XMMatrixIdentity();
+	/*TransformMatrix = XMMatrixIdentity();
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL_MAP, TEXT("Prototype_Component_Model_Object_Gem"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Object/Gem/Gem.fbx", TEXT("Prototype_Component_Model_Object_Gem"), TransformMatrix))))
-		return E_FAIL; 
+		return E_FAIL; */
 
 
 	m_strLoadingText = TEXT("셰이더를(을) 로딩 중 입니다.");

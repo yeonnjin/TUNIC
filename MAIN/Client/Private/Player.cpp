@@ -530,6 +530,8 @@ HRESULT CPlayer::Set_Navigation(_uint iLevel)
 	return S_OK;
 }
 
+
+
 void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 {
 	CPartObject* pWeapon = m_PartObjects.find(strWeaponTag)->second;

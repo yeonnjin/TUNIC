@@ -222,6 +222,9 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\Public\Map.h" />
     <ClInclude Include="..\Public\Map_Object.h" />
+    <ClInclude Include="..\Public\Map_WaterBlue.h" />
+    <ClInclude Include="..\Public\Map_WaterDepth.h" />
+    <ClInclude Include="..\Public\Map_WaterEdge.h" />
     <ClInclude Include="..\Public\Merchant_State_Hidden.h" />
     <ClInclude Include="..\Public\Merchant_State_Idle.h" />
     <ClInclude Include="..\Public\Merchant_State_Thankyou.h" />
@@ -368,6 +371,9 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\Private\Map.cpp" />
     <ClCompile Include="..\Private\Map_Object.cpp" />
+    <ClCompile Include="..\Private\Map_WaterBlue.cpp" />
+    <ClCompile Include="..\Private\Map_WaterDepth.cpp" />
+    <ClCompile Include="..\Private\Map_WaterEdge.cpp" />
     <ClCompile Include="..\Private\Merchant_State_Hidden.cpp" />
     <ClCompile Include="..\Private\Merchant_State_Idle.cpp" />
     <ClCompile Include="..\Private\Merchant_State_Thankyou.cpp" />

@@ -187,6 +187,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	// Texture ============================================================================================
+
 	/* Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
@@ -195,6 +196,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	/* Prototype_Component_Texture_Sky_Shop */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky_Shop"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Sky/Shop.dds")))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Sky_Boss */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky_Boss"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Sky/Boss.dds")))))
 		return E_FAIL;
 
 	// UI TEXTURE ==================================================================================================
@@ -217,6 +223,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	/* Prototype_Component_Texture_UI_Item */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Item"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Item/Item%d.png"), 13))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_UI_Item_Obtain */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Item_Obtain"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Item/Obtain/Item%d.png"), 13))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_UI_Slot */
