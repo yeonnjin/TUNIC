@@ -39,7 +39,8 @@ public:
 	enum STATE { 
 		STATE_IDLE, STATE_SLEEP, STATE_MOVE, STATE_ATTACK_STICK, STATE_ATTACK_SWORD, 
 		STATE_ATTACK_SHOTGUN, STATE_ATTACK_WAND, STATE_DAMAGE, STATE_DODGE, STATE_DEFENSE,
-		STATE_OPEN, STATE_PUZZLE, STATE_CLIMB, STATE_TOP,
+		STATE_OPEN, STATE_PUZZLE, STATE_CLIMB, STATE_TOP, STATE_DIE,
+		STATE_WATER,
 		STATE_END
 	};
 
@@ -77,7 +78,7 @@ private:
 
 public:
 	// Set
-	void			Set_Level(_uint iLevel) { m_iLevel = iLevel; }
+	void			Set_Level(_uint iLevel) { m_iPrevLevel = m_iLevel; m_iLevel = iLevel; }
 	HRESULT			Set_Navigation(_uint iLevel);
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
@@ -95,6 +96,7 @@ public:
 	void			Set_SP_Minus(_float fSPMinus) { m_fSP -= fSPMinus; m_fAccSPTime = 0.f; }
 	void			Set_MP_Minus(_float fMPMinus) { m_fMP -= fMPMinus; }
 	void			Set_MP(_float fMPPlus) { m_fMP += fMPPlus; }
+	void			Set_FullHP() { m_iHP = m_iMaxHP; }
 	void			Set_ChestOpen() { m_isChestOpen = true; }
 	void			Set_LadderUpper(_bool isUpper) { m_isUpper = isUpper; }
 	void			Set_EndDash(_bool isEndDash) { m_isEndDash = isEndDash; }
@@ -103,6 +105,8 @@ public:
 	void			Set_Gem();
 	void			Set_LockOff();
 	void			Set_EnterBoss() { m_isEnterBoss = true; }
+	void			Set_Respawan(_bool isRespawn) { m_isRespawn = isRespawn; }
+	void			Set_Scene(_bool isScene) { m_isScene = isScene; }
 
 	// Get
 	//STATE			Get_State() { return m_eState; }
@@ -135,6 +139,9 @@ public:
 	_uint			Get_Ladder_Index() { return m_iLadderIndex; }
 	_uint			Get_Level() { return m_iLevel; }
 
+	_vector			Get_ShadowEye() { return m_vShadowEye; }
+	_vector			Get_ShadowLookAt() { return m_vShadowLookAt; }
+
 	// State
 	void			Change_State(STATE eState);
 
@@ -144,9 +151,11 @@ public:
 	virtual HRESULT	Tick(_float fTimeDelta) override;
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT Render_LightDepth() override;
 
 private:
 	map<const wstring, CPartObject*>	m_PartObjects;
+	_uint								m_iPrevLevel = { LEVEL_END };
 	_uint								m_iLevel = { LEVEL_END };
 	
 	_bool								m_isBlend = { false };
@@ -169,12 +178,28 @@ private:
 	_bool								m_isEndDash = { false };
 	_bool								m_isLockOnBoss = { false };
 	_bool								m_isEnterBoss = { false };
+	_bool								m_isRespawn = { false };
+	_bool								m_isScene = { false };
+
+	_bool								m_isDamaging = { false };
+	_bool								m_isBlack = { false };
+
+	_float								m_fAccBlackTime = { 0.f };
+	_float								m_fBlackTime = { 0.1f };
+	_float								m_fAccAllBlackTime = { 0.f };
+	_float								m_fAllBlackTime = { 1.f };
 
 	_float								m_fAccChageTime = { 0.f };
 	_float								m_fChangeTime = { 0.21f };
 
+	_float								m_fAccImmuneTime = { 0.f };
+	_float								m_fImmuneTime = { 3.f };
+
 	_vector								m_vPrePosition = {};
 	_vector								m_vLook = {};
+
+	_vector								m_vShadowEye = {};
+	_vector								m_vShadowLookAt = {};
 
 private:
 	_uint								m_iMaxHP = { 7 };
@@ -227,8 +252,11 @@ private:
 	CTransform*							Set_LockOn_Target();
 	void								Compute_Stat_Gauge(_float fTimeDelta);
 	void								Compute_Height();
+	void								Compute_Shadow();
 	class CPlayer_Weapon*				Find_Weapon(WEAPON eWeapon);
 	void								Set_BossLimit();
+	void								Compute_Damage_Shader(_float fTimeDelta);
+	void								Compute_Water();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

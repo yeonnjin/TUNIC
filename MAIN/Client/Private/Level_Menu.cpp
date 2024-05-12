@@ -12,6 +12,7 @@
 #include "Camera_LockOn.h"
 
 #include "UI_Loading.h"
+#include "UI_Menu.h"
 
 CLevel_Menu::CLevel_Menu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel{ pDevice, pContext }
@@ -23,10 +24,16 @@ HRESULT CLevel_Menu::Initialize()
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
+    if (FAILED(Ready_Lights()))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_UI()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Effect()))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Player()))
@@ -42,22 +49,90 @@ void CLevel_Menu::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
 
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
+    if (true == m_pGameInstance->Get_DIKeyState(DIK_RETURN, KEY_DOWN))
+    {
+        //Layer_UI_Menu
+        m_isNext = true;
+        CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+        pUILoading->Set_Using(true, 1);
+
+        CUI_Menu* pUIMenu = dynamic_cast<CUI_Menu*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Menu")));
+        pUIMenu->Set_Index(8);
+        //pUIMenu->Set_Using(false);
+    }
+
+    if (true == m_isNext)
     {
         CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
-        pUILoading->Set_Using(true);
+        if (true == pUILoading->Get_isFadeOut())
+        {
+            CUI_Menu* pUIMenu = dynamic_cast<CUI_Menu*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Menu")));
+            pUIMenu->Set_Using(false);
+        }
 
-        if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BEACH))))
-            return;
+        if (true == pUILoading->Get_isFinish())
+        {         
+            if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BEACH))))
+                return;
+        }
     }
 }
 
 HRESULT CLevel_Menu::Render()
 {
     if (FAILED(__super::Render()))
+
+
         return E_FAIL;
 
     SetWindowText(g_hWnd, TEXT("LEVEL : MENU"));
+
+    return S_OK;
+}
+
+void CLevel_Menu::Set_NextLevel(LEVEL eNextLevel)
+{
+    CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+    pUILoading->Set_Using(true);
+
+    if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, eNextLevel))))
+        return;
+}
+
+HRESULT CLevel_Menu::Ready_Lights()
+{
+    LIGHT_DESC			LightDesc{};
+
+    LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
+    LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+
+    LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+    //LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vSpecular = _float4(0.f, 0.f, 0.f, 0.f);
+
+    if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
+
+    LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+    LightDesc.vPosition = _float4(20.f, 3.f, 20.f, 1.f);
+    LightDesc.fRange = 10.f;
+
+    LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+    LightDesc.vAmbient = _float4(0.4f, 0.2f, 0.2f, 1.f);
+    LightDesc.vSpecular = _float4(1.f, 0.4f, 0.4f, 1.f);
+    if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
+
+    LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+    LightDesc.vPosition = _float4(30.f, 3.f, 20.f, 1.f);
+    LightDesc.fRange = 10.f;
+
+    LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
+    LightDesc.vAmbient = _float4(0.2f, 0.4f, 0.2f, 1.f);
+    LightDesc.vSpecular = _float4(0.4f, 1.f, 0.4f, 1.f);
+    if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -73,6 +148,9 @@ HRESULT CLevel_Menu::Ready_Layer_BackGround(const wstring& strLayerTag)
 HRESULT CLevel_Menu::Ready_Layer_UI()
 {
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Loading"), TEXT("Prototype_GameObject_UI_Loading"))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Menu"), TEXT("Prototype_GameObject_UI_Menu"))))
         return E_FAIL;
 
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Stat"), TEXT("Prototype_GameObject_UI_Stat"))))
@@ -91,6 +169,15 @@ HRESULT CLevel_Menu::Ready_Layer_UI()
         return E_FAIL;
 
     if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_UI_Obtain"), TEXT("Prototype_GameObject_UI_Obtain"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Menu::Ready_Layer_Effect()
+{
+    // SPRITE
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Sprite_Sweat"), TEXT("Prototype_GameObject_Sprite_Sweat"))))
         return E_FAIL;
 
     return S_OK;
@@ -237,6 +324,24 @@ HRESULT CLevel_Menu::Ready_Layer_Camera()
 
     m_pGameInstance->Add_Camera(TEXT("Camera_Telescope"), pCamera);
 
+    // Camera_Scene
+    CCamera::CAMERA_DESC		tCameraSceneDesc{};
+    tCameraSceneDesc.fFovy = XMConvertToRadians(60.0f);
+    tCameraSceneDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+    tCameraSceneDesc.fNear = 0.1f;
+    tCameraSceneDesc.fFar = 1000.0f;
+
+    tCameraSceneDesc.vEye = _float4(0.f, 0.02f, -61.f, 1.f);
+    tCameraSceneDesc.vAt = _float4(0.f, 0.02f, -51.f, 1.f);
+
+    tCameraSceneDesc.fSpeedPerSec = 3.f;
+    tCameraSceneDesc.fRotationPerSec = XMConvertToRadians(10.0f);
+
+    pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Camera_Scene"), &tCameraSceneDesc));
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_Scene"), pCamera);
 
     m_pGameInstance->Change_Camera(TEXT("Camera_Free"));
 

@@ -61,6 +61,7 @@ HRESULT CUI_Obtain::Tick(_float fTimeDelta)
             m_isUsing = false;
             m_pUIItem->Set_isUsing(false);
             m_fAccShowTime = 0.f;
+            m_pGameInstance->Play_Once(TEXT("UI_Slide_Out.wav"), CSound_Manager::UI3, 0.6f);
         }
     }
 

@@ -12,6 +12,7 @@ CSpinner_State_Explode::CSpinner_State_Explode(CMonster_Spinner* pMonster, CPlay
 void CSpinner_State_Explode::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_EXPLODE);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Spinner_Death.wav"), CSound_Manager::MONSTER2);
 }
 
 void CSpinner_State_Explode::OnStateUpdate(_float fTimeDelta)

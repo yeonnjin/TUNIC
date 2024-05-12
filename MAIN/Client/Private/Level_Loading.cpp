@@ -44,14 +44,50 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 
 	if (true == m_pLoader->isFinished())
 	{
-		if (true == m_pGameInstance->Get_DIKeyState(DIK_RSHIFT, KEY_DOWN))
+		if (LEVEL_MENU != m_eNextLevelID)
 		{
-			if (LEVEL_MENU != m_eNextLevelID)
+			CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+			if (true == pUILoading->Get_isFinish())
 			{
-				CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
 				pUILoading->Set_Using(false);
-			}
 
+				CLevel* pLevel = { nullptr };
+
+				switch (m_eNextLevelID)
+				{
+				case LEVEL_LOGO:
+					pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+					break;
+				case LEVEL_GAMEPLAY:
+					pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
+					break;
+				case LEVEL_MENU:
+					pLevel = CLevel_Menu::Create(m_pDevice, m_pContext);
+					break;
+				case LEVEL_BEACH:
+					pLevel = CLevel_Beach::Create(m_pDevice, m_pContext);
+					break;
+				case LEVEL_SHOP:
+					pLevel = CLevel_Shop::Create(m_pDevice, m_pContext);
+					break;
+				case LEVEL_PUZZLE:
+					pLevel = CLevel_Puzzle::Create(m_pDevice, m_pContext);
+					break;
+				case LEVEL_BOSS:
+					pLevel = CLevel_Boss::Create(m_pDevice, m_pContext);
+					break;
+				}
+
+				if (nullptr == pLevel)
+					return;
+
+				if (FAILED(m_pGameInstance->Open_Level(m_eNextLevelID, pLevel)))
+					return;
+			}
+		}
+
+		else if (LEVEL_MENU == m_eNextLevelID && true == m_pGameInstance->Get_DIKeyState(DIK_RSHIFT, KEY_DOWN))
+		{			
 			CLevel*		pLevel = { nullptr };
 
 			switch (m_eNextLevelID)

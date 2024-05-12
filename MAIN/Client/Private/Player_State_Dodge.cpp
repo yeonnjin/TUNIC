@@ -3,9 +3,17 @@
 #include "Player.h"
 #include "Player_State_Dodge.h"
 
+#include "Particle_Sphere.h"
+#include "Sprite_Sweat.h"
+
 CPlayer_State_Dodge::CPlayer_State_Dodge(CPlayer* pPlayer)
 {
     m_pPlayer = pPlayer;
+
+    m_RandomNumber = mt19937_64(m_RandomDevice());
+
+    m_pSpriteSweat = dynamic_cast<CSprite_Sweat*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Sprite_Sweat")));
+    Safe_AddRef(m_pSpriteSweat);
 }
 
 void CPlayer_State_Dodge::OnStateEnter()
@@ -15,13 +23,15 @@ void CPlayer_State_Dodge::OnStateEnter()
     //CPlayer::DIR eDir = m_pPlayer->Get_Dir();
     _vector vLook = m_pPlayer->Get_Look();
 
+    CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
+
     if ((CPlayer::LOCK_ON_FIND == eLockOn || CPlayer::LOCK_ON_NONE == eLockOn))
     {
-        m_vPreRight = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_RIGHT);
-        m_vPreUp = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_UP);
-        m_vPreLook = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_LOOK);
+        m_vPreRight = pPlayerTransform->Get_State_Vector(CTransform::STATE_RIGHT);
+        m_vPreUp = pPlayerTransform->Get_State_Vector(CTransform::STATE_UP);
+        m_vPreLook = pPlayerTransform->Get_State_Vector(CTransform::STATE_LOOK);
 
-        dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag))->Look_At_Dir(vLook);
+        pPlayerTransform->Look_At_Dir(vLook);
     }
 
     _float fPlayerSP = m_pPlayer->Get_SP();
@@ -36,6 +46,8 @@ void CPlayer_State_Dodge::OnStateEnter()
             m_pPlayer->Set_SP_Minus(m_fSP);
             m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE);
             m_eAnim = CPlayer::ANIM_DODGE;
+
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Dodge_Roll.wav"), CSound_Manager::PLAYER);
         }
         // 기력이 없을 때
         else
@@ -43,6 +55,9 @@ void CPlayer_State_Dodge::OnStateEnter()
             m_pPlayer->Set_SP_Minus(fPlayerSP);
             m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
             m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+            m_pSpriteSweat->Set_Using(true);
+
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Dodge_NoStamina.wav"), CSound_Manager::PLAYER);
         }
     }
     else if (CPlayer::DODGE_DASH == m_eDodge)
@@ -53,6 +68,8 @@ void CPlayer_State_Dodge::OnStateEnter()
             m_pPlayer->Set_SP_Minus(m_fDashSP);
             m_pPlayer->Set_Blending(true, CPlayer::ANIM_HYPERDASH);
             m_eAnim = CPlayer::ANIM_HYPERDASH;
+
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Dodge_HyperDash.wav"), CSound_Manager::PLAYER);
         }
         // 기력이 없을 때
         else
@@ -60,6 +77,9 @@ void CPlayer_State_Dodge::OnStateEnter()
             m_pPlayer->Set_SP_Minus(fPlayerSP);
             m_pPlayer->Set_Blending(true, CPlayer::ANIM_DODGE_GARBAGE);
             m_eAnim = CPlayer::ANIM_DODGE_GARBAGE;
+            m_pSpriteSweat->Set_Using(true);
+
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Dodge_NoStamina.wav"), CSound_Manager::PLAYER);
         }
     }
 }
@@ -72,9 +92,12 @@ void CPlayer_State_Dodge::OnStateUpdate(_float fTimeDelta)
     {
         _uint iFrame = m_pPlayer->Get_Current_Frame(m_eAnim);
         if (0 <= iFrame && 40 >= iFrame)
+        {
             m_pPlayer->Set_isImmune(true);
+            Make_Cloud(fTimeDelta);
+        }
         else
-            m_pPlayer->Set_isImmune(false);
+            m_pPlayer->Set_isImmune(false);      
     }
 
     // 하이퍼 대쉬 상태일 때
@@ -134,6 +157,37 @@ void CPlayer_State_Dodge::OnStateExit()
     m_pPlayer->Set_isImmune(false);
 }
 
+void CPlayer_State_Dodge::Make_Cloud(_float fTimeDelta)
+{
+    m_fAccDelayTime += fTimeDelta;
+
+    if (m_fAccDelayTime >= m_fDelayTime)
+    {
+        // Random
+        uniform_real_distribution<_float>	PositionX(-0.4f, 0.4f);
+        uniform_real_distribution<_float>	PositionZ(-0.4f, 0.4f);
+
+        uniform_real_distribution<_float>	Scale(1.f, 3.f);
+
+        uniform_real_distribution<_float>	LifeTime(0.6f, 1.f);
+
+        // Clone
+        CParticle_Sphere::PARTICLE_DESC tDesc{};
+        CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
+        _vector vPosition = pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
+        vPosition.m128_f32[0] += PositionX(m_RandomNumber);
+        vPosition.m128_f32[2] += PositionZ(m_RandomNumber);
+        tDesc.vPosition = vPosition;
+        _float fScale = Scale(m_RandomNumber);
+        tDesc.vScale = _vector{ fScale , fScale , fScale };
+        tDesc.fLiveTime = LifeTime(m_RandomNumber);
+
+        m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Sphere"), TEXT("Prototype_GameObject_Particle_Sphere"), &tDesc);
+
+        m_fAccDelayTime = 0.f;
+    }
+}
+
 CPlayer_State_Dodge* CPlayer_State_Dodge::Create(CPlayer* pPlayer)
 {
     CPlayer_State_Dodge* pInstance = new CPlayer_State_Dodge(pPlayer);
@@ -150,4 +204,6 @@ CPlayer_State_Dodge* CPlayer_State_Dodge::Create(CPlayer* pPlayer)
 void CPlayer_State_Dodge::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pSpriteSweat);
 }

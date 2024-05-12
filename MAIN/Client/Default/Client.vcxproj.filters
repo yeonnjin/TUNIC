@@ -310,9 +310,6 @@
     <Filter Include="02.GameObjects\UI\Inventory">
       <UniqueIdentifier>{9e8827d4-db19-4192-98a5-af24b4867e5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\Player\Inventory">
       <UniqueIdentifier>{5deb4180-e774-499c-92ce-20dcc0462bab}</UniqueIdentifier>
     </Filter>
@@ -474,6 +471,54 @@
     </Filter>
     <Filter Include="02.GameObjects\Map\Beach\WaterDepth">
       <UniqueIdentifier>{729c193f-82b3-4647-979a-b92cce2df90e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Particle\Sphere">
+      <UniqueIdentifier>{2c48ab9f-322f-4aeb-a990-8d9a8895761a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Sprite">
+      <UniqueIdentifier>{ee5764ea-352c-4be9-9ef7-1ad6af6cac52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Sprite\Sweat">
+      <UniqueIdentifier>{98ab69c7-9d83-41c9-87c2-9007568455c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Sprite\Attack">
+      <UniqueIdentifier>{ac8c2037-f64c-41a4-8fd9-941a6c9735a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Sprite\Attack\Stick">
+      <UniqueIdentifier>{c3c53dc7-6677-465a-bfdf-4e723d2472d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Sprite\Attack\Sword">
+      <UniqueIdentifier>{689e1354-cfe3-4a8b-bb56-d45204bd864f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Trigger">
+      <UniqueIdentifier>{8a3136ef-702d-4b6e-a888-fe75f565e8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Trigger\Trigger_Map">
+      <UniqueIdentifier>{c9ab5ba2-0f2e-427e-9407-8893d904d0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Die">
+      <UniqueIdentifier>{88a2c274-816e-4a2c-a19b-0e07be47e7c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI\Menu">
+      <UniqueIdentifier>{6cfc5870-1231-43e7-9702-9ac41efe7d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Teleport">
+      <UniqueIdentifier>{dcbc4274-df5a-4c1f-9137-710bd7bb0b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Player\State\Player_State_Water">
+      <UniqueIdentifier>{f6fbf7a5-34d4-488c-88d8-846d21ac858a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Bridge">
+      <UniqueIdentifier>{b6da89b4-689e-4706-abcc-3149c9fac342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{ce854a45-6a35-475d-8655-cb379d1be032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Camera\Scene">
+      <UniqueIdentifier>{f2b10944-6696-4f00-91c6-639eecb7f380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\Interactive\Trigger\Trigger_Scene">
+      <UniqueIdentifier>{f84372c5-6102-4c12-aba5-9257b616a271}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -897,6 +942,51 @@
     <ClInclude Include="..\Public\Map_WaterDepth.h">
       <Filter>02.GameObjects\Map\Beach\WaterDepth</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Particle.h">
+      <Filter>02.GameObjects\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Sphere.h">
+      <Filter>02.GameObjects\Particle\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sprite.h">
+      <Filter>02.GameObjects\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sprite_Sweat.h">
+      <Filter>02.GameObjects\Sprite\Sweat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sprite_Attack_Stick.h">
+      <Filter>02.GameObjects\Sprite\Attack\Stick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sprite_Attack.h">
+      <Filter>02.GameObjects\Sprite\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sprite_Attack_Sword.h">
+      <Filter>02.GameObjects\Sprite\Attack\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Trigger_Map.h">
+      <Filter>02.GameObjects\Interactive\Trigger\Trigger_Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Die.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI_Menu.h">
+      <Filter>02.GameObjects\UI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_Teleport.h">
+      <Filter>02.GameObjects\Interactive\Teleport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_State_Water.h">
+      <Filter>02.GameObjects\Player\State\Player_State_Water</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Object_Bridge.h">
+      <Filter>02.GameObjects\Interactive\Bridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Scene.h">
+      <Filter>02.GameObjects\Camera\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Trigger_Scene.h">
+      <Filter>02.GameObjects\Interactive\Trigger\Trigger_Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1300,6 +1390,51 @@
     </ClCompile>
     <ClCompile Include="..\Private\Map_WaterDepth.cpp">
       <Filter>02.GameObjects\Map\Beach\WaterDepth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle.cpp">
+      <Filter>02.GameObjects\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Sphere.cpp">
+      <Filter>02.GameObjects\Particle\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sprite.cpp">
+      <Filter>02.GameObjects\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sprite_Sweat.cpp">
+      <Filter>02.GameObjects\Sprite\Sweat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sprite_Attack_Stick.cpp">
+      <Filter>02.GameObjects\Sprite\Attack\Stick</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite_Attack.cpp">
+      <Filter>02.GameObjects\Sprite\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sprite_Attack_Sword.cpp">
+      <Filter>02.GameObjects\Sprite\Attack\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trigger_Map.cpp">
+      <Filter>02.GameObjects\Interactive\Trigger\Trigger_Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Die.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI_Menu.cpp">
+      <Filter>02.GameObjects\UI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_Teleport.cpp">
+      <Filter>02.GameObjects\Interactive\Teleport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_State_Water.cpp">
+      <Filter>02.GameObjects\Player\State\Player_State_Water</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Object_Bridge.cpp">
+      <Filter>02.GameObjects\Interactive\Bridge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Scene.cpp">
+      <Filter>02.GameObjects\Camera\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trigger_Scene.cpp">
+      <Filter>02.GameObjects\Interactive\Trigger\Trigger_Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

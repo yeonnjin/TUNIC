@@ -32,6 +32,9 @@ private:
 	_float				m_fBlendAccTime = { 0.f };
 	_float				m_fBlendTime = { 0.21f };
 
+	_float				m_fAccSoundTime = { 0.f };
+	_float				m_fSoundTime = { 0.4f };
+
 	CPlayer::ANIMATION	m_eAnimation = { CPlayer::ANIM_END };
 
 private:

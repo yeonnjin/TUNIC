@@ -13,6 +13,7 @@ CCowBot_State_Die::CCowBot_State_Die(CMonster_CowBot* pMonster, CPlayer* pPlayer
 void CCowBot_State_Die::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_CowBot::ANIM_DIE);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_CowBot_Death.wav"), CSound_Manager::MONSTER3);
 }
 
 void CCowBot_State_Die::OnStateUpdate(_float fTimeDelta)

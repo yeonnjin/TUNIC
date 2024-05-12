@@ -44,6 +44,9 @@ HRESULT CWeapon_Laurel::Tick(_float fTimeDelta)
 void CWeapon_Laurel::Late_Tick(_float fTimeDelta)
 {
     __super::Late_Tick(fTimeDelta);
+
+    if(m_isUsing)
+        m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 //    if (true == m_isUsing)
 //    {
 //        m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);

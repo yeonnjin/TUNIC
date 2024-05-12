@@ -20,7 +20,7 @@ HRESULT CEffect_WandBeam::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC		GameObjectDesc{};
 
-	GameObjectDesc.fSpeedPerSec = 70.f;
+	GameObjectDesc.fSpeedPerSec = 150.f;
 	GameObjectDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
 	if (FAILED(__super::Initialize(&GameObjectDesc)))

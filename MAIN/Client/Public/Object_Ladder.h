@@ -17,7 +17,7 @@ public:
 		_uint			iIndex;
 	}LADDER_DESC;
 
-public:
+private:
 	CObject_Ladder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CObject_Ladder(const CObject_Ladder& rhs);
 	virtual ~CObject_Ladder() = default;

@@ -13,6 +13,8 @@ CLibrarian_State_Die::CLibrarian_State_Die(CMonster_Librarian* pMonster, CPlayer
 void CLibrarian_State_Die::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_DIE);
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Death.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Die::OnStateUpdate(_float fTimeDelta)

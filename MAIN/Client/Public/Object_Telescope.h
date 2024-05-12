@@ -7,7 +7,7 @@ BEGIN(Client)
 
 class CObject_Telescope final : public CInteractiveObject
 {
-public:
+private:
 	CObject_Telescope(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CObject_Telescope(const CObject_Telescope& rhs);
 	virtual ~CObject_Telescope() = default;
@@ -20,12 +20,10 @@ public:
 	virtual		HRESULT		Tick(_float fTimeDelta)override;
 	virtual		void		Late_Tick(_float fTimeDelta) override;
 	virtual		HRESULT		Render() override;
-
-private:
+	virtual HRESULT			Render_LightDepth() override;
 
 private:
 	CModel*					m_pModelCom = { nullptr };
-	CShader*				m_pShaderCom = { nullptr };
 	CCollider*				m_pRigidColliderCom = { nullptr };
 
 private:

@@ -13,6 +13,7 @@ CSpinner_State_Idle::CSpinner_State_Idle(CMonster_Spinner* pMonster, CPlayer* pP
 void CSpinner_State_Idle::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_IDLE);
+    //m_pGameInstance->Play_Once(TEXT("MONSTER_Spinner_Idle.wav"), CSound_Manager::MONSTER2);
 }
 
 void CSpinner_State_Idle::OnStateUpdate(_float fTimeDelta)

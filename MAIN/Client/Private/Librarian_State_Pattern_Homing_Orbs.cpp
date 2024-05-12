@@ -33,6 +33,8 @@ void CLibrarian_State_Pattern_Homing_Orbs::OnStateEnter()
 
     m_iOrbPattern = (m_iOrbPattern == 0) ? 1 : 0;
     (m_iOrbPattern == 0) ? Set_Orbs_Line() : Set_Orbs_Hexagon();
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Homing_Orb_Summon.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Pattern_Homing_Orbs::OnStateUpdate(_float fTimeDelta)
@@ -44,6 +46,7 @@ void CLibrarian_State_Pattern_Homing_Orbs::OnStateUpdate(_float fTimeDelta)
 
         // 1. ANIM_SUMMON_ORB_LOOP
         m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_SUMMON_ORB_LOOP);
+        m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Homing_Orb_Throw.wav"), CSound_Manager::BOSS);
     }
 
     // 1 -> 2

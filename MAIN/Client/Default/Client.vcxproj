@@ -171,6 +171,7 @@
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_LockOn.h" />
     <ClInclude Include="..\Public\Camera_Puzzle.h" />
+    <ClInclude Include="..\Public\Camera_Scene.h" />
     <ClInclude Include="..\Public\Camera_Telescope.h" />
     <ClInclude Include="..\Public\Camera_Top.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -237,13 +238,17 @@
     <ClInclude Include="..\Public\Monster_Librarian.h" />
     <ClInclude Include="..\Public\Monster_Spinner.h" />
     <ClInclude Include="..\Public\NPC_Merchant.h" />
+    <ClInclude Include="..\Public\Object_Bridge.h" />
     <ClInclude Include="..\Public\Object_Chest.h" />
     <ClInclude Include="..\Public\Object_ColliderBox.h" />
     <ClInclude Include="..\Public\Object_Gem.h" />
     <ClInclude Include="..\Public\Object_Ladder.h" />
+    <ClInclude Include="..\Public\Object_Teleport.h" />
     <ClInclude Include="..\Public\Object_Telescope.h" />
+    <ClInclude Include="..\Public\Particle.h" />
     <ClInclude Include="..\Public\Particle_Blue.h" />
     <ClInclude Include="..\Public\Particle_Red.h" />
+    <ClInclude Include="..\Public\Particle_Sphere.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_State_Attack.h" />
     <ClInclude Include="..\Public\Player_State_Attack_Shotgun.h" />
@@ -253,6 +258,7 @@
     <ClInclude Include="..\Public\Player_State_Climb.h" />
     <ClInclude Include="..\Public\Player_State_Damage.h" />
     <ClInclude Include="..\Public\Player_State_Defense.h" />
+    <ClInclude Include="..\Public\Player_State_Die.h" />
     <ClInclude Include="..\Public\Player_State_Dodge.h" />
     <ClInclude Include="..\Public\Player_State_Idle.h" />
     <ClInclude Include="..\Public\Player_State_LockOn.h" />
@@ -262,6 +268,7 @@
     <ClInclude Include="..\Public\Player_State_Sleep.h" />
     <ClInclude Include="..\Public\Player_State_Telescope.h" />
     <ClInclude Include="..\Public\Player_State_Top.h" />
+    <ClInclude Include="..\Public\Player_State_Water.h" />
     <ClInclude Include="..\Public\Player_Weapon.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -271,8 +278,15 @@
     <ClInclude Include="..\Public\Spinner_State_Explode.h" />
     <ClInclude Include="..\Public\Spinner_State_Hidden.h" />
     <ClInclude Include="..\Public\Spinner_State_Idle.h" />
+    <ClInclude Include="..\Public\Sprite.h" />
+    <ClInclude Include="..\Public\Sprite_Attack.h" />
+    <ClInclude Include="..\Public\Sprite_Attack_Stick.h" />
+    <ClInclude Include="..\Public\Sprite_Attack_Sword.h" />
+    <ClInclude Include="..\Public\Sprite_Sweat.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Test_Object.h" />
+    <ClInclude Include="..\Public\Trigger_Map.h" />
+    <ClInclude Include="..\Public\Trigger_Scene.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\Public\UI_Aggro.h" />
     <ClInclude Include="..\Public\UI_Arrow.h" />
@@ -283,6 +297,7 @@
     <ClInclude Include="..\Public\UI_Item.h" />
     <ClInclude Include="..\Public\UI_Loading.h" />
     <ClInclude Include="..\Public\UI_LockOn.h" />
+    <ClInclude Include="..\Public\UI_Menu.h" />
     <ClInclude Include="..\Public\UI_Obtain.h" />
     <ClInclude Include="..\Public\UI_Potion.h" />
     <ClInclude Include="..\Public\UI_Purchase.h" />
@@ -321,6 +336,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_LockOn.cpp" />
     <ClCompile Include="..\Private\Camera_Puzzle.cpp" />
+    <ClCompile Include="..\Private\Camera_Scene.cpp" />
     <ClCompile Include="..\Private\Camera_Telescope.cpp" />
     <ClCompile Include="..\Private\Camera_Top.cpp" />
     <ClCompile Include="..\Private\CowBot_State_Attack.cpp" />
@@ -386,13 +402,17 @@
     <ClCompile Include="..\Private\Monster_Librarian.cpp" />
     <ClCompile Include="..\Private\Monster_Spinner.cpp" />
     <ClCompile Include="..\Private\NPC_Merchant.cpp" />
+    <ClCompile Include="..\Private\Object_Bridge.cpp" />
     <ClCompile Include="..\Private\Object_Chest.cpp" />
     <ClCompile Include="..\Private\Object_ColliderBox.cpp" />
     <ClCompile Include="..\Private\Object_Gem.cpp" />
     <ClCompile Include="..\Private\Object_Ladder.cpp" />
+    <ClCompile Include="..\Private\Object_Teleport.cpp" />
     <ClCompile Include="..\Private\Object_Telescope.cpp" />
+    <ClCompile Include="..\Private\Particle.cpp" />
     <ClCompile Include="..\Private\Particle_Blue.cpp" />
     <ClCompile Include="..\Private\Particle_Red.cpp" />
+    <ClCompile Include="..\Private\Particle_Sphere.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack.cpp" />
     <ClCompile Include="..\Private\Player_State_Attack_Shotgun.cpp" />
@@ -402,6 +422,7 @@
     <ClCompile Include="..\Private\Player_State_Climb.cpp" />
     <ClCompile Include="..\Private\Player_State_Damage.cpp" />
     <ClCompile Include="..\Private\Player_State_Defense.cpp" />
+    <ClCompile Include="..\Private\Player_State_Die.cpp" />
     <ClCompile Include="..\Private\Player_State_Dodge.cpp" />
     <ClCompile Include="..\Private\Player_State_Idle.cpp" />
     <ClCompile Include="..\Private\Player_State_LockOn.cpp" />
@@ -411,6 +432,7 @@
     <ClCompile Include="..\Private\Player_State_Sleep.cpp" />
     <ClCompile Include="..\Private\Player_State_Telescope.cpp" />
     <ClCompile Include="..\Private\Player_State_Top.cpp" />
+    <ClCompile Include="..\Private\Player_State_Water.cpp" />
     <ClCompile Include="..\Private\Player_Weapon.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -420,8 +442,14 @@
     <ClCompile Include="..\Private\Spinner_State_Explode.cpp" />
     <ClCompile Include="..\Private\Spinner_State_Hidden.cpp" />
     <ClCompile Include="..\Private\Spinner_State_Idle.cpp" />
+    <ClCompile Include="..\Private\Sprite.cpp" />
+    <ClCompile Include="..\Private\Sprite_Attack_Stick.cpp" />
+    <ClCompile Include="..\Private\Sprite_Attack_Sword.cpp" />
+    <ClCompile Include="..\Private\Sprite_Sweat.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Test_Object.cpp" />
+    <ClCompile Include="..\Private\Trigger_Map.cpp" />
+    <ClCompile Include="..\Private\Trigger_Scene.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\Private\UI_Aggro.cpp" />
     <ClCompile Include="..\Private\UI_Arrow.cpp" />
@@ -432,6 +460,7 @@
     <ClCompile Include="..\Private\UI_Item.cpp" />
     <ClCompile Include="..\Private\UI_Loading.cpp" />
     <ClCompile Include="..\Private\UI_LockOn.cpp" />
+    <ClCompile Include="..\Private\UI_Menu.cpp" />
     <ClCompile Include="..\Private\UI_Obtain.cpp" />
     <ClCompile Include="..\Private\UI_Potion.cpp" />
     <ClCompile Include="..\Private\UI_Purchase.cpp" />
@@ -443,6 +472,7 @@
     <ClCompile Include="..\Private\Weapon_Sword.cpp" />
     <ClCompile Include="..\Private\Weapon_Wand.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Sprite_Attack.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

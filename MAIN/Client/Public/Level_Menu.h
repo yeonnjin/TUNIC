@@ -11,14 +11,21 @@ private:
 	CLevel_Menu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CLevel_Menu() = default;
 
+	void	Set_NextLevel(LEVEL eNextLevel);
+
 public:
 	virtual HRESULT Initialize() override;
 	virtual void	Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 private:
+	_bool			m_isNext = { false };
+
+private:
+	HRESULT Ready_Lights();
 	HRESULT Ready_Layer_BackGround(const wstring& strLayerTag);
 	HRESULT Ready_Layer_UI();
+	HRESULT Ready_Layer_Effect();
 	HRESULT Ready_Layer_Player();
 	HRESULT Ready_Layer_Camera();
 

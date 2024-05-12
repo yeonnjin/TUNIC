@@ -12,12 +12,20 @@ private:
 	virtual ~CLevel_Beach() = default;
 
 public:
+	void	Set_NextLevel(LEVEL eNextLevel);
+
+public:
 	virtual HRESULT Initialize() override;
 	virtual void	Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Lights();
+	_bool	m_isNext = { false };
+
+	LEVEL	m_eNextLevel = {};
+
+private:
+	//HRESULT Ready_Lights();
 	HRESULT Ready_LandObject();
 	HRESULT Ready_Layer_Player(const wstring& strLayerTag);
 	HRESULT Ready_Layer_Monster(const wstring& strLayerTag);

@@ -13,8 +13,10 @@ private:
 public:
 	typedef struct UI_Font_Desc : public CUI::UI_DESC
 	{
+		_bool		isText = { false };
+		wstring		strText = {};
 		_float2		vPosition;
-		_uint*		pCount;
+		_uint*		pCount = { nullptr };
 	}UI_FONT_DESC;
 
 public:
@@ -35,12 +37,14 @@ private:
 private:
 	_bool			m_isUsing = { true };
 	_bool			m_isObtain = { false };
+	_bool			m_isText = { false };
 
 	_uint*			m_pCount = { nullptr };
 
 	_float2			m_vPosition = {};
 
 	_tchar			m_szFont[MAX_PATH] = TEXT("");
+	wstring			m_strText;
 
 public:
 	static CUI_Font* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -33,6 +33,8 @@ void CLibrarian_State_Pattern_Lunge_Swipe::OnStateEnter()
     m_pMonsterTransform->Look_At_Dir(vDir);
     m_fOriginRotation = m_pMonsterTransform->Get_RotationPerSec();
     m_pMonsterTransform->Set_RotationPerSec(1.f);
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Lunge_Swipe.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Pattern_Lunge_Swipe::OnStateUpdate(_float fTimeDelta)

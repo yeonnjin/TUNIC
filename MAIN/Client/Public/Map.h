@@ -35,23 +35,24 @@ public:
 	MAPOBJFILE* Get_MapObj_File() { Ready_MapObj_File(); return &m_tMapObjFile; }
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT		Initialize_Prototype() override;
+	virtual HRESULT		Initialize(void* pArg) override;
+	virtual HRESULT		Tick(_float fTimeDelta) override;
+	virtual void		Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT		Render() override;
+	virtual HRESULT		Render_LightDepth() override;
 
 private:
-	wstring			m_strModelComTag;
-	LEVEL			m_eLevel = { LEVEL_END };
+	wstring				m_strModelComTag;
+	LEVEL				m_eLevel = { LEVEL_END };
 
 private:
-	CModel*			m_pModelCom = { nullptr };
-	CShader*		m_pShaderCom = { nullptr };
-	CNavigation*	m_pNavigationCom = { nullptr };
+	CModel*				m_pModelCom = { nullptr };
+	CShader*			m_pShaderCom = { nullptr };
+	CNavigation*		m_pNavigationCom = { nullptr };
 
 	// FILE
-	MAPOBJFILE		m_tMapObjFile;
+	MAPOBJFILE			m_tMapObjFile;
 
 private:
 	HRESULT Add_Components();

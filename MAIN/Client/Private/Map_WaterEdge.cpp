@@ -42,6 +42,7 @@ HRESULT CMap_WaterEdge::Tick(_float fTimeDelta)
     Compute_Height(fTimeDelta);
 
     _vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
+    vPosition.m128_f32[0] = m_fHeight;
     vPosition.m128_f32[1] = m_fHeight;
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 

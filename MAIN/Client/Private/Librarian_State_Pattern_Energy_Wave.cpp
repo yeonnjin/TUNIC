@@ -24,6 +24,8 @@ void CLibrarian_State_Pattern_Energy_Wave::OnStateEnter()
     m_iMotionIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? CMonster_Librarian::ANIM_MELEE_WIDE : CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD;
     m_iSlashIndex = (m_iMotionIndex == CMonster_Librarian::ANIM_FLYING_SWING_OVERHEAD) ? 32 : 35;
     m_pMonster->Set_Blending(true, (CMonster_Librarian::ANIMATION)m_iMotionIndex);
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Energy_Wave.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Pattern_Energy_Wave::OnStateUpdate(_float fTimeDelta)

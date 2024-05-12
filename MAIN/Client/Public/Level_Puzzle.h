@@ -12,9 +12,16 @@ private:
 	virtual ~CLevel_Puzzle() = default;
 
 public:
+	void	Set_NextLevel(LEVEL eNextLevel);
+
+public:
 	virtual HRESULT Initialize() override;
 	virtual void	Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+private:
+	_bool	m_isNext = { false };
+	LEVEL	m_eNextLevel = {};
 
 private:
 	HRESULT Ready_Layer_Map(const wstring& strLayerTag);

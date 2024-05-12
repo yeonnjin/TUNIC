@@ -30,6 +30,8 @@ void CLibrarian_State_Pattern_Lightning_Warp::OnStateEnter()
 
     // 0. Ä® µé°í ÇÏ´Ã·Î ¿Ã¶ó°¡±â
     m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_LIGHTNING_WINDUP);
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Lightning_Warp.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Pattern_Lightning_Warp::OnStateUpdate(_float fTimeDelta)

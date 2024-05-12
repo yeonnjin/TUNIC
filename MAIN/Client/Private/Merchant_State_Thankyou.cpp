@@ -22,6 +22,8 @@ CMerchant_State_Thankyou::CMerchant_State_Thankyou(CNPC_Merchant* pNPC, CPlayer*
 void CMerchant_State_Thankyou::OnStateEnter()
 {
     m_pNPC->Set_Blending(true, CNPC_Merchant::ANIM_THANKYOU);
+
+    m_pGameInstance->Play_Once(TEXT("NPC_Thankyou.wav"), CSound_Manager::MONSTER1);
 }
 
 void CMerchant_State_Thankyou::OnStateUpdate(_float fTimeDelta)

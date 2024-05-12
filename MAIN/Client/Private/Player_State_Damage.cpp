@@ -27,6 +27,8 @@ void CPlayer_State_Damage::OnStateEnter()
 	default:
 		break;
 	}*/
+
+	m_pGameInstance->Play_Once(TEXT("PLAYER_Hurt_Major.wav"), CSound_Manager::SYSTEM_EFFECT3);
 }
 
 void CPlayer_State_Damage::OnStateUpdate(_float fTimeDelta)

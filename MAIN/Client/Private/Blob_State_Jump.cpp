@@ -14,6 +14,7 @@ void CBlob_State_Jump::OnStateEnter()
 {
     m_pMonster->Set_isAggro(true);
     m_pMonster->Set_Blending(true, CMonster_Blob::ANIM_JUMP);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Blob_Aggro.wav"), CSound_Manager::MONSTER1);
 }
 
 void CBlob_State_Jump::OnStateUpdate(_float fTimeDelta)
@@ -27,6 +28,10 @@ void CBlob_State_Jump::OnStateUpdate(_float fTimeDelta)
 
     _vector vMonsterPosition = pBlob->Get_State_Vector(CTransform::STATE_POSITION);
     _float fDistance = XMVector3Length(vPlayerPosition - vMonsterPosition).m128_f32[0];
+
+    _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_Blob::ANIM_JUMP);
+    if(14 == iFrame)
+        m_pGameInstance->Play_Once(TEXT("MONSTER_Blob_Jump.wav"), CSound_Manager::MONSTER1);
 
     if (m_fAttackDistance >= fDistance)
     {

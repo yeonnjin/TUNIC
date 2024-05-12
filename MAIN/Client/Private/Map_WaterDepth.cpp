@@ -31,7 +31,7 @@ HRESULT CMap_WaterDepth::Initialize(void* pArg)
     //_vector vPosition = { 0.f, 0.01f, 0.f, 1.f };
     //m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
     m_pTransformCom->Rotation(_vector{ 0.f, 1.f, 0.f, 0.f }, XMConvertToRadians(180.f));
-    m_pTransformCom->Set_Scaled(80.f, 80.f, 80.f);
+    m_pTransformCom->Set_Scaled(100.f, 100.f, 80.f);
 
     return S_OK;
 }

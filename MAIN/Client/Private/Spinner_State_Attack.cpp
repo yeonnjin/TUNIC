@@ -44,6 +44,7 @@ void CSpinner_State_Attack::OnStateUpdate(_float fTimeDelta)
     if (true == m_isAttack && false == m_pMonster->isCollision())
     {
         pMonsterTransform->Look_At_For_LandOject(vPlayerPosition, true);
+        m_pGameInstance->Play_Loop(TEXT("MONSTER_Spinner_Spin.wav"), CSound_Manager::MONSTER2, 0.1f);
     }
 
     // 플레이어와의 거리가 일정 이상이면 IDLE
@@ -75,6 +76,8 @@ void CSpinner_State_Attack::OnStateExit()
     m_fAccChangeTime = 0.f;
 
     m_pMonster->Set_isAttackFrame(false);
+
+    m_pGameInstance->Stop_Sound(CSound_Manager::MONSTER2);
 }
 
 CSpinner_State_Attack* CSpinner_State_Attack::Create(CMonster_Spinner* pMonster, CPlayer* pPlayer)

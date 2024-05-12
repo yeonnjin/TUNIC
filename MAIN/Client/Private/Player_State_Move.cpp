@@ -13,6 +13,8 @@ void CPlayer_State_Move::OnStateEnter()
     // TODO:연달아서 누르면 블렌딩 안되는 듯
 
     m_pPlayer->Set_Blending(true, CPlayer::ANIM_WALK_FORWARD);
+
+    m_pGameInstance->Play_Once(TEXT("PLAYER_Footstep.wav"), CSound_Manager::PLAYER);
 }
 
 void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
@@ -22,6 +24,13 @@ void CPlayer_State_Move::OnStateUpdate(_float fTimeDelta)
     m_ePreDir = m_eCurDir;
     m_eCurDir = m_pPlayer->Get_Dir();
     _vector vLook = m_pPlayer->Get_Look();
+
+    m_fAccSoundTime += fTimeDelta;
+    if (m_fAccSoundTime >= m_fSoundTime)
+    {
+        m_pGameInstance->Play_Once(TEXT("PLAYER_Footstep.wav"), CSound_Manager::PLAYER);
+        m_fAccSoundTime = 0.f;
+    }
 
     // 일반 상태일 때
     if ((CPlayer::LOCK_OFF == eLockOn || CPlayer::LOCK_END == eLockOn))
@@ -108,6 +117,8 @@ void CPlayer_State_Move::OnStateExit()
 {
     m_isFirst = { true };
     m_isTurn = { false };
+
+    m_fAccSoundTime = 0.f;
 }
 
 CPlayer_State_Move* CPlayer_State_Move::Create(CPlayer* pPlayer)

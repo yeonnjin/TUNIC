@@ -208,6 +208,8 @@ _uint CUI_Slot::Set_WeaponTextureIndex(CPlayer::WEAPON eWeapon)
     default:
         break;
     }
+
+    return 0;
 }
 
 CUI_Slot* CUI_Slot::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

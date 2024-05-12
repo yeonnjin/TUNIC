@@ -29,7 +29,7 @@ private:
 	// 2. 낙하 지점에 번개
 	_vector					m_vDropPosition = {};
 	_float					m_fAccLightningTime = { 0.f };
-	_float					m_fLightningTime = { 3.f };
+	_float					m_fLightningTime = { 1.f };
 
 	// 3. 꽂은 채로 일정 시간 반복
 	_float					m_fAccLoopTime = { 0.f };

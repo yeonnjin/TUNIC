@@ -35,6 +35,7 @@ void CMerchant_State_Hidden::OnStateUpdate(_float fTimeDelta)
     {
         m_pNPC->Set_Blending(true, CNPC_Merchant::ANIM_WAKEUP);
         m_isHidden = false;
+        m_pGameInstance->Play_Once(TEXT("NPC_Arrive.wav"), CSound_Manager::MONSTER1);
     }
 
     if (false == m_isHidden && true == m_pNPC->Get_isFinished(CNPC_Merchant::ANIM_WAKEUP))

@@ -25,7 +25,7 @@ private:
 	_uint	m_iActiveOrb = { 0 };
 
 	_float	m_fAccLoopTime = { 0.f };
-	_float	m_fLoopTime = { 1.5f };
+	_float	m_fLoopTime = { 1.0f };
 
 	vector<class CLibrarian_Effect_Orb*>	m_Orbs;
 

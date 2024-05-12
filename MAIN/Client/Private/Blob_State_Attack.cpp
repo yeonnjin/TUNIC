@@ -18,6 +18,9 @@ void CBlob_State_Attack::OnStateEnter()
 void CBlob_State_Attack::OnStateUpdate(_float fTimeDelta)
 {
     _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_Blob::ANIM_ATTACK);
+    if(34 == iFrame)
+        m_pGameInstance->Play_Once(TEXT("MONSTER_Blob_Attack.wav"), CSound_Manager::MONSTER1);
+
     if (34 <= iFrame && 40 >= iFrame)
         m_pMonster->Set_isAttackFrame(true);
     else

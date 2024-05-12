@@ -171,20 +171,25 @@ void CMonster_Bat::Collision_Event(Engine::CGameObject* pGameObject)
 {
     __super::Collision_Event(pGameObject);
 
-    if (OBJ_PLAYER == pGameObject->Get_ObjectType() && STATE_ATTACK == m_eState)
+    if (OBJ_PLAYER == pGameObject->Get_ObjectType() && true == m_isAttackFrame)
     {
         // 패링 상태 아닐 때 공격
         if (false == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
         {
             dynamic_cast<CPlayer*>(pGameObject)->Set_isDamage(true);
         }
+        else
+            m_pGameInstance->Play_Loop(TEXT("PLAYER_Shield_Parry.wav"), CSound_Manager::PLAYER);
     }
 }
 
 void CMonster_Bat::Damage_Event()
 {
     if (0 >= m_iHP)
+    {
         m_isDead = true;
+        m_pGameInstance->Play_Once(TEXT("MONSTER_Bat_Death.wav"), CSound_Manager::MONSTER5);
+    }
     else
         Change_State(STATE_DAMAGE);
 }

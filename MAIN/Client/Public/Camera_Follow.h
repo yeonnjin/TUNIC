@@ -28,6 +28,8 @@ private:
 
 public:
 	void				Set_EnterBoss();
+	void				Set_EnterShop();
+	void				Set_Reset();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

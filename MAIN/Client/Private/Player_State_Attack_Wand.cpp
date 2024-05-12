@@ -27,6 +27,8 @@ void CPlayer_State_Attack_Wand::OnStateUpdate(_float fTimeDelta)
         CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
 
         dynamic_cast<CWeapon_Wand*>(m_pWeapon)->Set_Dir(pPlayerTransform->Get_State_Vector(CTransform::STATE_LOOK));
+
+        m_pGameInstance->Play_Once(TEXT("PLAYER_Wand_Beam.wav"), CSound_Manager::PLAYER);
     }
 
 

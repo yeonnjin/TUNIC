@@ -136,7 +136,14 @@ HRESULT CMonster_Librarian::Tick(_float fTimeDelta)
 
 void CMonster_Librarian::Late_Tick(_float fTimeDelta)
 {
-    __super::Late_Tick(fTimeDelta);
+    Compute_Damage_CoolTime(fTimeDelta);
+
+    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
+#ifdef _DEBUG
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
+    m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
+#endif
 
     for (auto& PartObject : m_PartObjects)
         PartObject.second->Late_Tick(fTimeDelta);

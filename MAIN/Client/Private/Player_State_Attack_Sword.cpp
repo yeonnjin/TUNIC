@@ -40,6 +40,9 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
         _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_SWORD1);
         if (23 <= iFrame && 34 >= iFrame)
             m_pWeapon->Set_isAttackFrame(true);
+
+        if(23 == iFrame)
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Sword_1.wav"), CSound_Manager::PLAYER);
     }
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
@@ -68,6 +71,9 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
         _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_SWORD2);
         if (11 <= iFrame && 23 >= iFrame)
             m_pWeapon->Set_isAttackFrame(true);
+
+        if (11 == iFrame)
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Sword_2.wav"), CSound_Manager::PLAYER);
     }
 
     // 두 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
@@ -88,6 +94,9 @@ void CPlayer_State_Attack_Sword::OnStateUpdate(_float fTimeDelta)
         _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_SWORD3);
         if (22 <= iFrame && 46 >= iFrame)
             m_pWeapon->Set_isAttackFrame(true);
+
+        if (22 == iFrame)
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Sword_3.wav"), CSound_Manager::PLAYER);
     }
 
     // 세 번째 콤보가 끝나면 상태 종료

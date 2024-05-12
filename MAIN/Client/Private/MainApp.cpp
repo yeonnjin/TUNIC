@@ -73,7 +73,7 @@ void CMainApp::Tick(_float fTimeDelta)
 	else if (true == m_pGameInstance->Get_DIKeyState(DIK_F, KEY_DOWN))
 		m_pGameInstance->Change_Camera(TEXT("Camera_Puzzle"));
 	else if (true == m_pGameInstance->Get_DIKeyState(DIK_T, KEY_DOWN))
-		m_pGameInstance->Change_Camera(TEXT("Camera_Top"));
+		m_pGameInstance->Change_Camera(TEXT("Camera_Scene"));
 
 	// Engine : Late Tick
 	m_pGameInstance->Late_Tick_Engine(fTimeDelta);	
@@ -103,7 +103,7 @@ HRESULT CMainApp::Render()
 
 HRESULT CMainApp::Ready_Fonts()
 {
-	// MakeSpriteFont "Odin Rounded" /FontSize:28 /FastPack Odin_28.spritefont
+	// MakeSpriteFont "Odin Rounded" /FontSize:50 /FastPack Odin_50.spritefont
 	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_30"), TEXT("../Bin/Resources/Fonts/Odin_30.spritefont"))))
 		return E_FAIL;
 
@@ -112,6 +112,15 @@ HRESULT CMainApp::Ready_Fonts()
 
 	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_25"), TEXT("../Bin/Resources/Fonts/Odin_25.spritefont"))))
 		return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_40"), TEXT("../Bin/Resources/Fonts/Odin_40.spritefont"))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_45"), TEXT("../Bin/Resources/Fonts/Odin_45.spritefont"))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_Odin_50"), TEXT("../Bin/Resources/Fonts/Odin_50.spritefont"))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -140,6 +149,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	// Shader =============================================================================================
+
 	/* For.Prototype_Component_Shader_VtxPosTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPosTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
@@ -170,6 +180,16 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Shader_VtxInstance_Rect */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxInstance_Rect"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxInstance_Rect.hlsl"), VTXINSTANCE_RECT::Elements, VTXINSTANCE_RECT::iNumElements))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxInstance_Point */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxInstance_Point"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxInstance_Point.hlsl"), VTXINSTANCE_POINT::Elements, VTXINSTANCE_POINT::iNumElements))))
+		return E_FAIL;
+
 	// Collider ============================================================================================
 	/* Prototype_Component_Collider_AABB */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
@@ -190,7 +210,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 	/* Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sky"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Sky/Sky.dds")))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky_Shop */
@@ -204,10 +224,13 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	// UI TEXTURE ==================================================================================================
-	
+
 	/* Prototype_Component_Texture_UI_Loading */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Loading"),
+	/*if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Loading"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/Loading%d.png")))))
+		return E_FAIL;*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_Loading"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/leaf%d.png"), 10))))
 		return E_FAIL;
 	
 	/* Prototype_Component_Texture_UI_Stat */
@@ -258,6 +281,23 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	/* Prototype_Component_Texture_UI_BossHP */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI_BossHP"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/BossHP/BossHP%d.png"), 5))))
+		return E_FAIL;
+
+	// SPRITE TEXTURE ==============================================================================================
+
+	/* Prototype_Component_Texture_Sprite_Sweat */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sprite_Sweat"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Sweat/Sweat%d.png"), 8))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Sprite_Attack_Stick */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sprite_Attack_Stick"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Attack/Stick%d.png"), 4))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Sprite_Attack_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Sprite_Attack_Sword"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Attack/Sword/Sword%d.png"), 6))))
 		return E_FAIL;
 
 	return	S_OK;
@@ -379,6 +419,7 @@ HRESULT CMainApp::Ready_Camera()
 		return E_FAIL;
 
 	m_pGameInstance->Add_Camera(TEXT("Camera_Top"), pCamera);
+
 
 
 	m_pGameInstance->Change_Camera(TEXT("Camera_Free"));

@@ -34,6 +34,11 @@ void CLibrarian_State_Melee::OnStateEnter()
     m_vDashPosition = m_vOriginPosition - vDir * 15.f;
 
     m_pMonsterTransform->Look_At_Dir(vDir);
+
+    if(0 == m_iPattern)
+        m_pGameInstance->Play_Once(TEXT("BOSS_Melee_Wide.wav"), CSound_Manager::BOSS);
+    else if (1 == m_iPattern)
+        m_pGameInstance->Play_Once(TEXT("BOSS_Melee_Thrust.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Melee::OnStateUpdate(_float fTimeDelta)

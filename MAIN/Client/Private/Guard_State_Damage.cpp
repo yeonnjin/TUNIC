@@ -13,6 +13,7 @@ CGuard_State_Damage::CGuard_State_Damage(CMonster_Guard* pMonster, CPlayer* pPla
 void CGuard_State_Damage::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_Guard::ANIM_HURT);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Guard_Hurt.wav"), CSound_Manager::MONSTER4);
 }
 
 void CGuard_State_Damage::OnStateUpdate(_float fTimeDelta)

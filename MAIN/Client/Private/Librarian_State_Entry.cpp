@@ -9,6 +9,8 @@
 #include "Camera_Follow.h"
 #include "Camera_LockOn.h"
 
+#include "UI_BossHP.h"
+
 CLibrarian_State_Entry::CLibrarian_State_Entry(CMonster_Librarian* pMonster, CPlayer* pPlayer)
 {
     m_pMonster = pMonster;
@@ -22,7 +24,7 @@ void CLibrarian_State_Entry::OnStateEnter()
     m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_ENTRY);
 
     m_fOriginRotation = m_pMonsterTransform->Get_RotationPerSec();
-    m_pMonsterTransform->Set_RotationPerSec(1.f);
+    m_pMonsterTransform->Set_RotationPerSec(1.f);  
 }
 
 void CLibrarian_State_Entry::OnStateUpdate(_float fTimeDelta)
@@ -31,8 +33,15 @@ void CLibrarian_State_Entry::OnStateUpdate(_float fTimeDelta)
     CTransform* pMonsterTransform = dynamic_cast<CTransform*>(m_pMonster->Get_Component(g_strTransformTag));
     pMonsterTransform->Set_State(CTransform::STATE_POSITION, vPosition);
 
-    if (true == m_pGameInstance->Get_DIKeyState(DIK_0, KEY_DOWN))
+    if(false == m_isTrigger && false == m_isActive)
+        m_pGameInstance->Play_Loop(TEXT("BOSS_Entry.wav"), CSound_Manager::SYSTEM_EFFECT3);
+
+    if (false == m_isCheck && true == m_pMonster->Get_isTrigger())
+    {
         m_isTrigger = true;
+        m_isCheck = true;
+        m_pGameInstance->Play_Once(TEXT("BOSS_Aggro.wav"), CSound_Manager::BOSS);
+    }
 
     if (true == m_isTrigger)
     {
@@ -66,6 +75,7 @@ void CLibrarian_State_Entry::OnStateExit()
     m_isActive = false;
 
     // TODO:TEST
+    m_pGameInstance->Change_Camera(TEXT("Camera_Follow"));
     CCamera_Follow* pCamera = dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_Camera(TEXT("Camera_Follow")));
     if (nullptr == pCamera)
         return;
@@ -79,6 +89,13 @@ void CLibrarian_State_Entry::OnStateExit()
     pLockOnCamera->Set_EnterBoss();
 
     m_pPlayer->Set_EnterBoss();
+    m_pPlayer->Set_Scene(false);
+
+    m_pGameInstance->Stop_Sound(CSound_Manager::SYSTEM_EFFECT3);
+    m_pGameInstance->PlayBGM(TEXT("BGM_Boss_Intro.wav"), 0.1f, false);
+
+    CUI_BossHP* pUI = dynamic_cast<CUI_BossHP*>(m_pGameInstance->Get_GameObject(LEVEL_BOSS, TEXT("Layer_UI_BossHP")));
+    pUI->Set_Using(true);
 }
 
 CLibrarian_State_Entry* CLibrarian_State_Entry::Create(CMonster_Librarian* pMonster, CPlayer* pPlayer)

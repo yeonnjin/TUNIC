@@ -30,6 +30,9 @@ HRESULT CUI_BossHP::Tick(_float fTimeDelta)
     if (FAILED(__super::Tick(fTimeDelta)))
         return E_FAIL;
 
+    if (false == m_isUsing)
+        return S_OK;
+
     // 체력이 0일 때
     if (0 == m_fHP)
     {
@@ -67,7 +70,8 @@ HRESULT CUI_BossHP::Tick(_float fTimeDelta)
 
 void CUI_BossHP::Late_Tick(_float fTimeDelta)
 {
-    __super::Late_Tick(fTimeDelta);
+    if(true == m_isUsing)
+        __super::Late_Tick(fTimeDelta);
 }
 
 HRESULT CUI_BossHP::Render()

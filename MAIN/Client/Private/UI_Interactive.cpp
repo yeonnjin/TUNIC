@@ -9,7 +9,8 @@ CUI_Interactive::CUI_Interactive(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 void CUI_Interactive::Set_Using(_bool isUsing, _vector vTargetPosition)
 {
     m_isUsing = isUsing;
-    vTargetPosition.m128_f32[1] += 4.f;
+    vTargetPosition.m128_f32[1] += 3.f;
+
     _vector vViewPos = XMVector3TransformCoord(vTargetPosition, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW));
     _vector vProjPos = XMVector3TransformCoord(vViewPos, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ));
 

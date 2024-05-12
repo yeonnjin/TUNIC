@@ -13,6 +13,7 @@ CBat_State_Damage::CBat_State_Damage(CMonster_Bat* pMonster, CPlayer* pPlayer)
 void CBat_State_Damage::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_Bat::ANIM_FLINCH);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Bat_Hurt.wav"), CSound_Manager::MONSTER5);
 }
 
 void CBat_State_Damage::OnStateUpdate(_float fTimeDelta)

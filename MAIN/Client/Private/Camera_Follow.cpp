@@ -24,6 +24,26 @@ void CCamera_Follow::Set_EnterBoss()
     _vector vTargetPosition = m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION);
     _vector vCamPosition = vTargetPosition + m_vCamDistance;
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCamPosition);
+    m_vLookAt = { vTargetPosition.m128_f32[0], vTargetPosition.m128_f32[1], vTargetPosition.m128_f32[2], 1.f };
+    m_pTransformCom->Look_At(m_vLookAt);
+}
+
+void CCamera_Follow::Set_EnterShop()
+{
+    m_vCamDistance = _vector{ -8.f, 16.f, -14.f };
+    _vector vTargetPosition = m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION);
+    _vector vCamPosition = vTargetPosition + m_vCamDistance;
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCamPosition);
+    m_vLookAt = { vTargetPosition.m128_f32[0], vTargetPosition.m128_f32[1], vTargetPosition.m128_f32[2], 1.f };
+    m_pTransformCom->Look_At(m_vLookAt);
+}
+
+void CCamera_Follow::Set_Reset()
+{
+    m_vCamDistance = CAM_DISTANCE;
+    _vector vTargetPosition = m_pTargetTransform->Get_State_Vector(CTransform::STATE_POSITION);
+    _vector vCamPosition = vTargetPosition + m_vCamDistance;
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCamPosition);
     m_vLookAt = { vCamPosition.m128_f32[0], vTargetPosition.m128_f32[1], vTargetPosition.m128_f32[2], 1.f };
     m_pTransformCom->Look_At(m_vLookAt);
 }

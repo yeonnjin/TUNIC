@@ -39,6 +39,9 @@ void CGuard_State_Block::OnStateUpdate(_float fTimeDelta)
 
         // 공격 가능 프레임 : 37 ~ 47
         _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_Guard::ANIM_BLOCK);
+        if(37 == iFrame)
+            m_pGameInstance->Play_Once(TEXT("MONSTER_Guard_Attack.wav"), CSound_Manager::MONSTER4);
+
         if (37 <= iFrame && 47 >= iFrame)
             m_pWeapon_Spear->Set_isAttackFrame(true);
         

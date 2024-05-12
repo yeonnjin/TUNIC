@@ -26,7 +26,11 @@ private:
 
 	_bool			m_isFirst = { true };
 	_bool			m_isTurn = { false };
+
 	_int			m_iAngle = { 0 };
+
+	_float			m_fAccSoundTime = { 0.f };
+	_float			m_fSoundTime = { 0.4f };
 
 	_vector			m_vLook = {};
 	_float3			m_vLerpLook = {};

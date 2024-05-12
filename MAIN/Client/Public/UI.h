@@ -14,7 +14,7 @@ BEGIN(Client)
 class CUI abstract : public CGameObject
 {	
 public:
-	enum UI_SHADER { UI_STAT = 2, UI_INVENTORYBG, UI_SLOT, UI_INTERACTIVE, UI_ARROW, UI_END };
+	enum UI_SHADER { UI_STAT = 2, UI_INVENTORYBG, UI_SLOT, UI_INTERACTIVE, UI_ARROW, SPRITE_SWEAT, UI_LOADING, UI_LEAF, UI_LEAFBACK, UI_END };
 
 	typedef struct UI_Desc
 	{

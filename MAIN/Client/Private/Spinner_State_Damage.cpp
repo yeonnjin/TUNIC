@@ -12,6 +12,7 @@ CSpinner_State_Damage::CSpinner_State_Damage(CMonster_Spinner* pMonster, CPlayer
 void CSpinner_State_Damage::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_Spinner::ANIM_RECOIL);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Spinner_Block.wav"), CSound_Manager::MONSTER2);
 }
 
 void CSpinner_State_Damage::OnStateUpdate(_float fTimeDelta)

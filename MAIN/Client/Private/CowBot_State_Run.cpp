@@ -19,6 +19,7 @@ CCowBot_State_Run::CCowBot_State_Run(CMonster_CowBot* pMonster, CPlayer* pPlayer
 
 void CCowBot_State_Run::OnStateEnter()
 {
+    m_pGameInstance->Play_Once(TEXT("MONSTER_CowBot_Aggro.wav"), CSound_Manager::MONSTER3);
     m_pMonster->Set_isAggro(true);
     m_pMonster->Set_Blending(true, CMonster_CowBot::ANIM_RUN);
 
@@ -35,6 +36,13 @@ void CCowBot_State_Run::OnStateEnter()
 void CCowBot_State_Run::OnStateUpdate(_float fTimeDelta)
 {
     m_fAccChangeTime += fTimeDelta;
+
+    m_fAccSoundTime += fTimeDelta;
+    if (m_fAccSoundTime >= m_fSoundTime)
+    {
+        m_pGameInstance->Play_Once(TEXT("MONSTER_CowBot_Run.wav"), CSound_Manager::MONSTER3);
+        m_fAccSoundTime = 0.f;
+    }
 
     // 플레이어 바라보기
     _vector vMonsterPosition = m_pMonsterTransform->Get_State_Vector(CTransform::STATE_POSITION);
@@ -89,6 +97,7 @@ void CCowBot_State_Run::OnStateExit()
 
     m_fAccLookTime = 0.f;
     m_fAccChangeTime = 0.f;
+    m_fAccSoundTime = 0.f;
 
     m_pMonster->Set_isAggro(false);
 }

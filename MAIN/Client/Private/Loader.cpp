@@ -43,6 +43,10 @@
 #include "Object_ColliderBox.h"
 #include "Object_Ladder.h"
 #include "Object_Gem.h"
+#include "Object_Teleport.h"
+#include "Object_Bridge.h"
+#include "Trigger_Map.h"
+#include "Trigger_Scene.h"
 
 // NPC
 #include "NPC_Merchant.h"
@@ -62,6 +66,7 @@
 #include "UI_Aggro.h"
 #include "UI_LockOn.h"
 #include "UI_BossHP.h"
+#include "UI_Menu.h"
 
 #include "BlendEffect.h"
 #include "Sky.h"
@@ -85,6 +90,14 @@
 #include "Particle_Blue.h"
 #include "Particle_Red.h"
 
+// EFFECT
+#include "Particle_Sphere.h"
+
+// SPRITE
+#include "Sprite_Sweat.h"
+#include "Sprite_Attack_Stick.h"
+#include "Sprite_Attack_Sword.h"
+
 // Camera
 #include "Camera_Free.h"
 #include "Camera_Follow.h"
@@ -92,6 +105,7 @@
 #include "Camera_Puzzle.h"
 #include "Camera_Top.h"
 #include "Camera_Telescope.h"
+#include "Camera_Scene.h"
 
 #include <fstream>
 
@@ -776,14 +790,34 @@ HRESULT CLoader::Loading_For_Menu()
 		CObject_ColliderBox::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Object_Ladder*/
+	/* For.Prototype_GameObject_Object_Ladder */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Ladder"),
 		CObject_Ladder::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Object_Gem*/
+	/* For.Prototype_GameObject_Object_Gem */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Gem"),
 		CObject_Gem::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Object_Teleport */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Teleport"),
+		CObject_Teleport::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Object_Bridge */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Bridge"),
+		CObject_Bridge::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Object_Trigger_Map */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Trigger_Map"),
+		CTrigger_Map::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Object_Trigger_Scene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Object_Trigger_Scene"),
+		CTrigger_Scene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// NPC ==========================================================================================
@@ -823,6 +857,11 @@ HRESULT CLoader::Loading_For_Menu()
 	/* For.Prototype_GameObject_Camera_Telescope */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Telescope"),
 		CCamera_Telescope::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Camera_Scene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Scene"),
+		CCamera_Scene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// UI ===========================================================================================
@@ -897,6 +936,45 @@ HRESULT CLoader::Loading_For_Menu()
 		CUI_BossHP::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_UI_Menu */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI_Menu"),
+		CUI_Menu::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// PARTICLE =====================================================================================
+
+	/* For.Prototype_GameObject_Particle_Blue */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Blue"),
+		CParticle_Blue::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	///* For.Prototype_GameObject_Particle_Red */
+	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Red"),
+	//	CParticle_Red::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
+
+	/* For.Prototype_GameObject_Particle_Sphere */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Sphere"),
+		CParticle_Sphere::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// SPRITE =======================================================================================
+	
+	/* For.Prototype_GameObject_Sprite_Sweat */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sprite_Sweat"),
+		CSprite_Sweat::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Sprite_Attack_Stick */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sprite_Attack_Stick"),
+		CSprite_Attack_Stick::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Sprite_Attack_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sprite_Attack_Sword"),
+		CSprite_Attack_Sword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	// MODEL ========================================================================================
 
 	m_strLoadingText = TEXT("모델를(을) 로딩 중 입니다.");
@@ -914,6 +992,7 @@ HRESULT CLoader::Loading_For_Menu()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Weapon_Wandbow.dat", LEVEL_STATIC);
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Player_Effect_Beam.dat", LEVEL_STATIC);
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Items.dat", LEVEL_STATIC);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Effect_Sphere.dat", LEVEL_STATIC);
 
 	// FINISH =======================================================================================
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");
@@ -953,6 +1032,8 @@ HRESULT CLoader::Loading_For_Beach()
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Monster_Guard_Weapon.dat", LEVEL_BEACH);
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Telescope.dat", LEVEL_BEACH);
 	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Gem.dat", LEVEL_BEACH);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Teleport.dat", LEVEL_BEACH);
+	Load_NonAnim_Model("../Bin/Resources/Data/Model/Object_Bridge.dat", LEVEL_BEACH);
 
 	// FINISH =======================================================================================
 	m_strLoadingText = TEXT("로딩이 완료되었습니다.");

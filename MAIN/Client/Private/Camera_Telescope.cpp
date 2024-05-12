@@ -145,6 +145,8 @@ void CCamera_Telescope::OnEnter(void* pArg)
 	CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag));
 	m_vCamLook = pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
 	m_fCamFovy = m_fFovy;
+
+	m_pGameInstance->Play_Once(TEXT("INTERACT_Telescope_Use.wav"), CSound_Manager::EFFECT1);
 }
 
 void CCamera_Telescope::OnExit()
@@ -156,6 +158,8 @@ void CCamera_Telescope::OnExit()
 	m_fAccMoveTime = 0.f;
 	m_fAccStopTime = 0.f;
 	m_fAccOriginTime = 0.f;
+
+	m_pGameInstance->Play_Once(TEXT("INTERACT_Telescope_Reset.wav"), CSound_Manager::EFFECT1);
 }
 
 CCamera_Telescope* CCamera_Telescope::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

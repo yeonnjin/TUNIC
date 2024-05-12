@@ -30,6 +30,7 @@ private:
 	_bool			m_isIdle = { false };
 	_bool			m_isSuccess = { false };
 	_bool			m_isFly = { false };
+	_bool			m_isFadeOut = { false };
 
 	_float			m_fAccEnterTime = { 0.f };
 	_float			m_fEnterTime = { 2.f };

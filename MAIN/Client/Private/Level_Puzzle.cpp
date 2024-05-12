@@ -21,6 +21,17 @@ CLevel_Puzzle::CLevel_Puzzle(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 {
 }
 
+void CLevel_Puzzle::Set_NextLevel(LEVEL eNextLevel)
+{
+	m_isNext = true;
+	CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+	pUILoading->Set_Using(true);
+
+	pUILoading->Set_Using(true, 5);
+
+	m_eNextLevel = eNextLevel;
+}
+
 HRESULT CLevel_Puzzle::Initialize()
 {
     if (FAILED(__super::Initialize()))
@@ -47,12 +58,21 @@ HRESULT CLevel_Puzzle::Initialize()
 	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, TEXT("Layer_Editor"), TEXT("Prototype_GameObject_Editor"))))
 		return E_FAIL;
 
+	m_pGameInstance->PlayBGM(TEXT("BGM_Puzzle_Intro.wav"), 0.1f, false);
+
     return S_OK;
 }
 
 void CLevel_Puzzle::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
+
+	static _bool isEnd = false;
+	if (false == isEnd && false == m_pGameInstance->Sound_isPlaying(CSound_Manager::BGM))
+	{
+		m_pGameInstance->PlayBGM(TEXT("BGM_Puzzle_Loop.wav"));
+		isEnd = true;
+	}
 
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
@@ -62,6 +82,16 @@ void CLevel_Puzzle::Tick(_float fTimeDelta)
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BOSS))))
             return;
     }
+
+	if (true == m_isNext)
+	{
+		CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+		if (true == pUILoading->Get_isFinish())
+		{
+			if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, m_eNextLevel))))
+				return;
+		}
+	}
 }
 
 HRESULT CLevel_Puzzle::Render()
@@ -253,4 +283,6 @@ CLevel_Puzzle* CLevel_Puzzle::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 void CLevel_Puzzle::Free()
 {
     __super::Free();
+
+	m_pGameInstance->Stop_Sound(CSound_Manager::BGM);
 }

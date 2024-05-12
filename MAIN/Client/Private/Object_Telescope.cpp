@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Object_Telescope.h"
 
+#include "Player.h"
+
 CObject_Telescope::CObject_Telescope(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CInteractiveObject{ pDevice, pContext }
 {
@@ -52,6 +54,7 @@ HRESULT CObject_Telescope::Tick(_float fTimeDelta)
 void CObject_Telescope::Late_Tick(_float fTimeDelta)
 {
     __super::Late_Tick(fTimeDelta);
+    m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_SHADOW, this);
 
 #ifdef _DEBUG
     m_pGameInstance->Add_DebugComponent(m_pRigidColliderCom);
@@ -71,6 +74,50 @@ HRESULT CObject_Telescope::Render()
             return E_FAIL;
 
         if (FAILED(m_pShaderCom->Begin(0)))
+            return E_FAIL;
+
+        m_pModelCom->Render(i);
+    }
+
+    return S_OK;
+}
+
+HRESULT CObject_Telescope::Render_LightDepth()
+{
+    if (nullptr == m_pShaderCom)
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldFloat4x4_Ptr())))
+        return E_FAIL;
+
+    _float4x4		ViewMatrix, ProjMatrix;
+
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")));
+
+    _vector vShadowEye = pPlayer->Get_ShadowEye();
+    _vector vShadowLookAt = pPlayer->Get_ShadowLookAt();
+
+    XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(vShadowEye, vShadowLookAt, XMVectorSet(0.f, 1.f, 0.f, 0.f)));
+    XMStoreFloat4x4(&ProjMatrix, XMMatrixPerspectiveFovLH(XMConvertToRadians(120.0f), (_float)g_iWinSizeX / g_iWinSizeY, 0.1f, 2000.f));
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &ViewMatrix)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &ProjMatrix)))
+        return E_FAIL;
+
+    _float fCamFar = m_pGameInstance->Get_Camera_Far();
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+        return E_FAIL;
+
+    _uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+    for (size_t i = 0; i < iNumMeshes; i++)
+    {
+        if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Begin(3)))
             return E_FAIL;
 
         m_pModelCom->Render(i);

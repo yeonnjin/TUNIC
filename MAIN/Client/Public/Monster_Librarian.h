@@ -43,12 +43,14 @@ public:
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
 	void			Set_Damage_AccCoolTime(_float fCoolTime) { m_fAccDamageCoolTime = fCoolTime; }
+	void			Set_isTrigger(_bool isTrigger) { m_isTrigger = isTrigger; }
 	void			Set_isGroggy(_bool isGroggy) { m_isGroggy = isGroggy; }
 
 	// Get
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
 	_float4			Get_Bone_Position(_uint iBoneIndex);
 	_uint			Get_Pattern();
+	_bool			Get_isTrigger() { return m_isTrigger; }
 	//_bool			Get_isCollision();
 
 	// State
@@ -62,6 +64,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	_bool								m_isTrigger = { false };
 	_bool								m_isGroggy = { false };
 
 	map<const wstring, CPartObject*>	m_PartObjects;

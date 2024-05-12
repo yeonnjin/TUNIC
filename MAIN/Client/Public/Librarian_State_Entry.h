@@ -25,6 +25,7 @@ public:
 
 private:
 	_bool	m_isTrigger = { false };
+	_bool	m_isCheck = { false };
 	_bool	m_isActive = { false };
 
 	_float	m_fOriginRotation = {};

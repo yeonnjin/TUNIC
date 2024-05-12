@@ -16,7 +16,7 @@ BEGIN(Client)
 class CInteractiveObject abstract: public CGameObject
 {
 public:
-	enum INTERACTIVE { INTERACTIVE_CHEST, INTERACTIVE_ITEM, INTERACTIVE_TELESCOPE, INTERACTIVE_LADDER, INTERACTIVE_GEM, INTERACTIVE_COLLIDER, INTERACTIVE_END };
+	enum INTERACTIVE { INTERACTIVE_CHEST, INTERACTIVE_ITEM, INTERACTIVE_TELESCOPE, INTERACTIVE_LADDER, INTERACTIVE_GEM, INTERACTIVE_COLLIDER, INTERACTIVE_TELEPORT, INTERACTIVE_TRIGGER_MAP, INTERACTIVE_TRIGGER_SCENE, INTERACTIVE_END };
 
 protected:
 	CInteractiveObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -32,6 +32,7 @@ public:
 	virtual HRESULT			Tick(_float fTimeDelta) override;
 	virtual void			Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT			Render() override;
+	virtual HRESULT			Render_LightDepth() override;
 
 protected:
 	INTERACTIVE				m_eInteractiveType = { INTERACTIVE_END };

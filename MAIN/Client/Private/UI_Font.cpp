@@ -25,9 +25,18 @@ HRESULT CUI_Font::Initialize(void* pArg)
 
     _float fDistanceX = 90.f;
     UI_FONT_DESC* pDesc = (UI_FONT_DESC*)pArg;
-    m_vPosition = pDesc->vPosition;
-    m_vPosition.x -= fDistanceX;
-    m_pCount = pDesc->pCount;
+    m_isText = pDesc->isText;
+    if(false == m_isText)
+    {
+        m_vPosition = pDesc->vPosition;
+        m_vPosition.x -= fDistanceX;
+        m_pCount = pDesc->pCount;
+    }
+    else
+    {
+        m_vPosition = pDesc->vPosition;
+        m_strText = pDesc->strText;
+    }
 
     return S_OK;
 }
@@ -47,10 +56,18 @@ void CUI_Font::Late_Tick(_float fTimeDelta)
 
 HRESULT CUI_Font::Render()
 {
-    _stprintf_s(m_szFont, _countof(m_szFont), _T("%d"), *m_pCount);
+    if(false == m_isText)
+    {
+        _stprintf_s(m_szFont, _countof(m_szFont), _T("%d"), *m_pCount);
 
-    m_pGameInstance->Render_Font(TEXT("Font_Odin_35"), m_szFont, _float2(m_vPosition.x, m_vPosition.y), XMVectorSet(0.f, 0.f, 0.f, 1.f), 0.f);
-    m_pGameInstance->Render_Font(TEXT("Font_Odin_25"), m_szFont, _float2(m_vPosition.x + 6.f, m_vPosition.y + 6.f), XMVectorSet(1.f, 1.f, 1.f, 1.f), 0.f);
+        m_pGameInstance->Render_Font(TEXT("Font_Odin_35"), m_szFont, _float2(m_vPosition.x, m_vPosition.y), XMVectorSet(0.f, 0.f, 0.f, 1.f), 0.f);
+        m_pGameInstance->Render_Font(TEXT("Font_Odin_25"), m_szFont, _float2(m_vPosition.x + 6.f, m_vPosition.y + 6.f), XMVectorSet(1.f, 1.f, 1.f, 1.f), 0.f);
+    }
+    else
+    {
+        m_pGameInstance->Render_Font(TEXT("Font_Odin_45"), m_strText, _float2(m_vPosition.x, m_vPosition.y), XMVectorSet(0.f, 0.f, 0.f, 1.f), 0.f);
+        //m_pGameInstance->Render_Font(TEXT("Font_Odin_40"), m_strText, _float2(m_vPosition.x, m_vPosition.y), XMVectorSet(1.f, 1.f, 1.f, 1.f), 0.f);
+    }
 
     return S_OK;
 }

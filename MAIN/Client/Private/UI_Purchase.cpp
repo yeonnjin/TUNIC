@@ -35,9 +35,15 @@ HRESULT CUI_Purchase::Tick(_float fTimeDelta)
         Set_SelectRenderOn();
 
         if (true == m_isOK && m_pGameInstance->Get_DIKeyState(DIK_RIGHT, KEY_DOWN))
+        {
             m_isOK = false;
+            m_pGameInstance->Play_Once(TEXT("UI_Popup_Rollover.wav"), CSound_Manager::UI2);
+        }
         else if(false == m_isOK && m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_DOWN))
+        {
             m_isOK = true;
+            m_pGameInstance->Play_Once(TEXT("UI_Popup_Rollover.wav"), CSound_Manager::UI2);
+        }
 
         if (true == m_isOK)
         {

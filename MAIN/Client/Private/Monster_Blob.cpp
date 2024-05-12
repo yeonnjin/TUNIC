@@ -199,9 +199,13 @@ void CMonster_Blob::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_Blob::Damage_Event()
 {
+    if(0 < m_iHP)
+        m_pGameInstance->Play_Once(TEXT("MONSTER_Blob_Hurt.wav"), CSound_Manager::MONSTER1);
+
     if (0 >= m_iHP)
     {
         m_isDead = true;
         Clone_Gem();
+        m_pGameInstance->Play_Once(TEXT("MONSTER_Blob_Death.wav"), CSound_Manager::MONSTER1);
     }
 }

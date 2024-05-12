@@ -79,10 +79,14 @@ void CPlayer_State_Climb::OnStateUpdate(_float fTimeDelta)
 
                 if (true == m_pPlayer->isEndLadder())
                     m_isEndLadder = true;
+
+                m_pGameInstance->Play_Once(TEXT("PLAYER_Climb_Mount.wav"), CSound_Manager::PLAYER);
             }
             // 내려가는 상태였을 때 : 바로 상태 종료
             else
             {
+                m_pGameInstance->Play_Once(TEXT("PLAYER_Climb_Dismount.wav"), CSound_Manager::PLAYER);
+
                 if (true == m_isPuzzle)
                     m_pPlayer->Change_State(CPlayer::STATE_PUZZLE);
                 else
@@ -111,14 +115,27 @@ void CPlayer_State_Climb::OnStateUpdate(_float fTimeDelta)
                 true == m_pGameInstance->Get_DIKeyState(DIK_S, KEY_DOWN))
             {
                 m_pPlayer->Set_Blending(true, CPlayer::ANIM_CLIMB);
-                m_pPlayer->Set_StopAnimation(false);
+                m_pPlayer->Set_StopAnimation(false);             
+                m_pGameInstance->Play_Once(TEXT("PLAYER_Climb_Up.wav"), CSound_Manager::PLAYER);
+            }
+            else if (true == m_pGameInstance->Get_DIKeyState(DIK_W, KEY_PRESS) ||
+                true == m_pGameInstance->Get_DIKeyState(DIK_S, KEY_PRESS))
+            {
+                m_fAccSoundTime += fTimeDelta;
+                if(m_fAccSoundTime >= m_fSoundTime)
+                {
+                    m_pGameInstance->Play_Once(TEXT("PLAYER_Climb_Up.wav"), CSound_Manager::PLAYER);
+                    m_fAccSoundTime = 0.f;
+                }
             }
             else if (true == m_pGameInstance->Get_DIKeyState(DIK_W, KEY_UP) ||
                     true == m_pGameInstance->Get_DIKeyState(DIK_S, KEY_UP))
             {
                 m_pPlayer->Set_StopAnimation(true);
+                m_pGameInstance->Stop_Sound(CSound_Manager::PLAYER);
+                m_fAccSoundTime = 0.f;
             }
-
+          
             CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pPlayer->Get_Component(g_strTransformTag));
             _vector vPlayerPosition = pPlayerTransform->Get_State_Vector(CTransform::STATE_POSITION);
             _float fPlayerSpeed = m_pPlayer->Get_Speed();
@@ -147,6 +164,7 @@ void CPlayer_State_Climb::OnStateExit()
     m_isEndLadder = false;
 
     m_fBlendAccTime = 0.f;
+    m_fAccSoundTime = 0.f;
 
     m_eAnimation = CPlayer::ANIM_END;
     m_pPlayer->Set_StopAnimation(false);

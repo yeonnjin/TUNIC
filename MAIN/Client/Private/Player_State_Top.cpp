@@ -8,6 +8,10 @@
 
 #include "Camera_Top.h"
 
+#include "Level_Puzzle.h"
+
+#include "UI_Loading.h"
+
 CPlayer_State_Top::CPlayer_State_Top(CPlayer* pPlayer)
 {
     m_pPlayer = pPlayer;
@@ -60,6 +64,13 @@ void CPlayer_State_Top::OnStateUpdate(_float fTimeDelta)
         m_pUIArrow->Tick(fTimeDelta);
         m_pUIArrow->Late_Tick(fTimeDelta);
     }
+
+    if (true == m_isFadeOut)
+    {
+        CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+        if(true == pUILoading->Get_isFinish())
+            m_pPlayer->Change_State(CPlayer::STATE_IDLE);
+    }
 }
 
 void CPlayer_State_Top::OnStateExit()
@@ -69,6 +80,7 @@ void CPlayer_State_Top::OnStateExit()
     m_isIdle = false;
     m_isSuccess = false;
     m_isFly = false;
+    m_isFadeOut = false;
 
     m_fAccEnterTime = 0.f;
     m_fAccFlyTime = 0.f;
@@ -161,9 +173,9 @@ void CPlayer_State_Top::Input_Arrow()
         CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_Player")));
         m_vOriginPosition = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag))->Get_State_Vector(CTransform::STATE_POSITION);
         m_vFlyPosition = m_vOriginPosition;
-        m_vFlyPosition.m128_f32[1] += 5.f;
+        m_vFlyPosition.m128_f32[1] += 10.f;
         m_vEndPosition = m_vFlyPosition;
-        m_vEndPosition.m128_f32[1] += 10.f;
+        m_vEndPosition.m128_f32[1] += 20.f;
     }
 }
 
@@ -201,16 +213,23 @@ void CPlayer_State_Top::Success(_float fTimeDelta)
         {
             fRatio = 1.f;
             m_fAccChangeTime = 0.f;
-            pPlayer->Change_State(CPlayer::STATE_IDLE);
+            
+            CLevel* pLevel = m_pGameInstance->Get_Current_Level();
+            CLevel_Puzzle* pCurLevel = dynamic_cast<CLevel_Puzzle*>(pLevel);
+            pCurLevel->Set_NextLevel(LEVEL_BOSS);
+            m_isFadeOut = true;        
         }
 
-        _vector vPosition;
-        vPosition.m128_f32[0] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, m_vFlyPosition.m128_f32[0], m_vEndPosition.m128_f32[0], fRatio);
-        vPosition.m128_f32[1] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, m_vFlyPosition.m128_f32[1], m_vEndPosition.m128_f32[1], fRatio);
-        vPosition.m128_f32[2] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, m_vFlyPosition.m128_f32[2], m_vEndPosition.m128_f32[2], fRatio);
-        vPosition.m128_f32[3] = 1.f;
+        if(false == m_isFadeOut)
+        {
+            _vector vPosition;
+            vPosition.m128_f32[0] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, m_vFlyPosition.m128_f32[0], m_vEndPosition.m128_f32[0], fRatio);
+            vPosition.m128_f32[1] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, m_vFlyPosition.m128_f32[1], m_vEndPosition.m128_f32[1], fRatio);
+            vPosition.m128_f32[2] = m_pEasing->Get_Ease(CEasing::Ease_OutQuad, m_vFlyPosition.m128_f32[2], m_vEndPosition.m128_f32[2], fRatio);
+            vPosition.m128_f32[3] = 1.f;
 
-        pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPosition);
+            pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPosition);
+        }
     }
 }
 

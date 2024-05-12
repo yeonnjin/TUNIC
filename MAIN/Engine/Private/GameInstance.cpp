@@ -70,6 +70,10 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInstance, _uint iNumLevels, 
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
 
+	m_pSound_Manager = CSound_Manager::Create();
+	if (nullptr == m_pSound_Manager)
+		return E_FAIL;
+
 	m_pSampler = CSampler::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pSampler)
 		return E_FAIL;
@@ -220,6 +224,14 @@ HRESULT CGameInstance::Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, CGam
 	return m_pRenderer->Add_RenderGroup(eRenderGroup, pRenderObject);	
 }
 
+void CGameInstance::Set_ShadowPosition(_vector vEye, _vector vLookAt)
+{
+	if (nullptr == m_pRenderer)
+		return;
+
+	m_pRenderer->Set_ShadowPosition(vEye, vLookAt);
+}
+
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugComponent(CComponent* pRenderComponent)
 {
@@ -237,6 +249,11 @@ HRESULT CGameInstance::Open_Level(_uint iNewLevelID, CLevel * pNewLevel)
 		return E_FAIL;
 
 	return m_pLevel_Manager->Open_Level(iNewLevelID, pNewLevel);
+}
+
+CLevel* CGameInstance::Get_Current_Level()
+{
+	return m_pLevel_Manager->Get_Current_Level();
 }
 
 /* For.Object_Manager */
@@ -528,9 +545,9 @@ HRESULT CGameInstance::Add_MRT(const wstring& strMRTTag, const wstring& strRende
 	return m_pTarget_Manager->Add_MRT(strMRTTag, strRenderTargetTag);
 }
 
-HRESULT CGameInstance::Begin_MRT(const wstring& strMRTTag)
+HRESULT CGameInstance::Begin_MRT(const wstring& strMRTTag, ID3D11DepthStencilView* pDSV)
 {
-	return m_pTarget_Manager->Begin_MRT(strMRTTag);
+	return m_pTarget_Manager->Begin_MRT(strMRTTag, pDSV);
 }
 
 HRESULT CGameInstance::End_MRT()
@@ -559,6 +576,37 @@ HRESULT CGameInstance::Draw_RTVDebug(const wstring& strMRTTag, CShader* pShader,
 	return m_pTarget_Manager->Render_Debug(strMRTTag, pShader, pVIBuffer);
 }
 #endif
+
+/* For.Sound_Manager */
+void CGameInstance::PlayBGM(TCHAR* pSoundKey, _float fVolume, _bool isLoop)
+{
+	m_pSound_Manager->PlayBGM(pSoundKey, fVolume, isLoop);
+}
+
+_bool CGameInstance::Sound_isPlaying(CSound_Manager::CHANNELID eID)
+{
+	return m_pSound_Manager->isPlaying(eID);
+}
+
+void CGameInstance::Stop_Sound(CSound_Manager::CHANNELID eID)
+{
+	m_pSound_Manager->StopSound(eID);
+}
+
+void CGameInstance::Stop_AllSound()
+{
+	m_pSound_Manager->StopAll();
+}
+
+void CGameInstance::Play_Once(TCHAR* pSoundKey, CSound_Manager::CHANNELID eID, _float fVolume)
+{
+	m_pSound_Manager->Play_Once(pSoundKey, eID, fVolume);
+}
+
+void CGameInstance::Play_Loop(TCHAR* pSoundKey, CSound_Manager::CHANNELID eID, _float fVolume)
+{
+	m_pSound_Manager->Play_Loop(pSoundKey, eID, fVolume);
+}
 
 /* For.Sampler */
 _vector CGameInstance::Compute_WorldPos(const _float2& vViewPos, const wstring& strZRenderTargetTag, _uint iOffset)
@@ -616,5 +664,6 @@ void CGameInstance::Free()
 	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pGraphic_Device);
 }

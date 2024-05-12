@@ -17,7 +17,7 @@ public:
 		_bool		isUseCollider = { false };
 	}COLLIDERBOX_DESC;
 
-public:
+private:
 	CObject_ColliderBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CObject_ColliderBox(const CObject_ColliderBox& rhs);
 	virtual ~CObject_ColliderBox() = default;

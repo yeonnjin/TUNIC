@@ -13,6 +13,7 @@ CCowBot_State_Damage::CCowBot_State_Damage(CMonster_CowBot* pMonster, CPlayer* p
 void CCowBot_State_Damage::OnStateEnter()
 {
     m_pMonster->Set_Blending(true, CMonster_CowBot::ANIM_HIT);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_CowBot_Hurt.wav"), CSound_Manager::MONSTER3);
 }
 
 void CCowBot_State_Damage::OnStateUpdate(_float fTimeDelta)

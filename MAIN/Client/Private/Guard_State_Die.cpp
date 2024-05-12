@@ -13,6 +13,7 @@ CGuard_State_Die::CGuard_State_Die(CMonster_Guard* pMonster, CPlayer* pPlayer)
 void CGuard_State_Die::OnStateEnter()
 {
 	m_pMonster->Set_Blending(true, CMonster_Guard::ANIM_DIE);
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Guard_Death.wav"), CSound_Manager::MONSTER4);
 }
 
 void CGuard_State_Die::OnStateUpdate(_float fTimeDelta)

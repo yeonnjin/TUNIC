@@ -6,6 +6,7 @@
 #include "Component_Manager.h"
 #include "Collision_Manager.h"
 #include "Input_Device.h"
+#include "Sound_Manager.h"
 #include "PipeLine.h"
 
 BEGIN(Engine)
@@ -33,12 +34,14 @@ public: /* For.Input_Device */
 
 public: /* For.Renderer */
 	HRESULT				Add_RenderGroup(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
+	void				Set_ShadowPosition(_vector vEye, _vector vLookAt);
 #ifdef _DEBUG
 	HRESULT				Add_DebugComponent(class CComponent* pRenderComponent);
 #endif
 
 public: /* For.Level_Manager */
 	HRESULT				Open_Level(_uint iNewLevelID, class CLevel* pNewLevel);
+	CLevel*				Get_Current_Level();
 
 public: /* For.Object_Manager */
 	HRESULT				Add_Prototype(const wstring& strPrototypeTag, class CGameObject* pPrototype);
@@ -95,7 +98,7 @@ public: /* For.Font_Manager */
 public: /* For.Target_Manager */
 	HRESULT				Add_RenderTarget(const wstring& strRenderTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT				Add_MRT(const wstring& strMRTTag, const wstring& strRenderTargetTag);
-	HRESULT				Begin_MRT(const wstring& strMRTTag);
+	HRESULT				Begin_MRT(const wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr);
 	HRESULT				End_MRT();
 	HRESULT				Bind_RTShaderResource(class CShader* pShader, const wstring& strRenderTargetTag, const _char* pConstantName);
 	HRESULT				Copy_Resource(const wstring& strRenderTargetTag, ID3D11Texture2D** ppRTTexture);
@@ -103,6 +106,14 @@ public: /* For.Target_Manager */
 	HRESULT				Ready_RTVDebug(const wstring& strRenderTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	HRESULT				Draw_RTVDebug(const wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 #endif
+
+public: /* For.Sound_Manager */
+	void				PlayBGM(TCHAR* pSoundKey, _float fVolume = 0.2f, _bool isLoop = true);
+	_bool				Sound_isPlaying(CSound_Manager::CHANNELID eID);
+	void				Stop_Sound(CSound_Manager::CHANNELID eID);
+	void				Stop_AllSound();
+	void				Play_Once(TCHAR* pSoundKey, CSound_Manager::CHANNELID eID, _float fVolume = 0.2f);	// 한 번만 호출해야함, 한 번 재생 후 종료
+	void				Play_Loop(TCHAR* pSoundKey, CSound_Manager::CHANNELID eID, _float fVolume = 0.2f);	// 여러 번 호출해도 알아서 반복적으로 재생 
 
 public:	/* For.Sampler */
 	_vector				Compute_WorldPos(const _float2& vViewPos, const wstring& strZRenderTargetTag, _uint iOffset = 0);
@@ -131,6 +142,7 @@ private:
 	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
+	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CSampler*					m_pSampler = { nullptr };
 	class CFrustum*					m_pFrustum = { nullptr };
 	class CImGui_Manager*			m_pImGui_Manager = { nullptr };

@@ -30,6 +30,8 @@ void CLibrarian_State_Pattern_Summon_Bat::OnStateEnter()
     // 2. ANIM_SUMMON_ORB_END   : 패턴 종료
 
     m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_SUMMON_ORB_START);
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Summon_Bat.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Pattern_Summon_Bat::OnStateUpdate(_float fTimeDelta)

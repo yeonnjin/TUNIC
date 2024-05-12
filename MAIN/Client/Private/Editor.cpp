@@ -16,6 +16,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Monster_Spinner.h"
+#include "Camera_Follow.h"
 #include "Camera_Free.h"
 #include "Camera_Telescope.h"
 

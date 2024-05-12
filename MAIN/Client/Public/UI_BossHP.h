@@ -11,6 +11,7 @@ private:
 	virtual ~CUI_BossHP() = default;
 
 public:
+	void				Set_Using(_bool isUsing) { m_isUsing = isUsing; }
 	void				Set_MaxHp(_float fMaxHP) { m_fHP = m_fRenderHP = m_fMaxHP = fMaxHP; }
 	void				Set_HPMinus() { m_fHP -= 1.f; }
 
@@ -22,6 +23,8 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	_bool				m_isUsing = { false };
+
 	_float				m_fHP = { 7.f };
 	_float				m_fRenderHP = { 7.f };
 	_float				m_fMaxHP = { 7.f };

@@ -207,6 +207,7 @@ void CMonster_Spinner::Collision_Event(Engine::CGameObject* pGameObject)
         if (true == dynamic_cast<CPlayer*>(pGameObject)->isParrying())
         {
             Change_State(STATE_DAMAGE);
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Shield_Parry.wav"), CSound_Manager::PLAYER);
         }
         // 패링 상태가 아닐 때 : 데미지 주기
         else
@@ -218,6 +219,9 @@ void CMonster_Spinner::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CMonster_Spinner::Damage_Event()
 {
-    if (0 >= m_iHP)
+    if(0 < m_iHP)
+        m_pGameInstance->Play_Once(TEXT("MONSTER_Spinner_Hurt.wav"), CSound_Manager::MONSTER2);
+
+    else if (0 >= m_iHP)
         Change_State(STATE_EXPLODE);
 }

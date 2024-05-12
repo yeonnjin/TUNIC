@@ -30,15 +30,16 @@ private:
 	virtual ~CCowBot_Weapon() = default;
 
 public:
-	void			Set_isRender(_bool isRender) { m_isRender = isRender; }
-	void			Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
+	void						Set_isRender(_bool isRender) { m_isRender = isRender; }
+	void						Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT				Initialize_Prototype() override;
+	virtual HRESULT				Initialize(void* pArg) override;
+	virtual HRESULT				Tick(_float fTimeDelta) override;
+	virtual void				Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT				Render() override;
+	virtual HRESULT				Render_LightDepth() override;
 
 private:
 	wstring						m_strModelComTag = {};

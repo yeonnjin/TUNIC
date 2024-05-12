@@ -22,6 +22,15 @@ CLevel_Boss::CLevel_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 }
 
+void CLevel_Boss::Set_NextLevel(LEVEL eNextLevel)
+{
+    m_isNext = true;
+    CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+    pUILoading->Set_Using(true);
+
+    m_eNextLevel = eNextLevel;
+}
+
 HRESULT CLevel_Boss::Initialize()
 {
     if (FAILED(__super::Initialize()))
@@ -58,6 +67,13 @@ void CLevel_Boss::Tick(_float fTimeDelta)
 {
     __super::Tick(fTimeDelta);
 
+    static _bool isEnd = false;
+    if (false == isEnd && false == m_pGameInstance->Sound_isPlaying(CSound_Manager::BGM))
+    {
+        m_pGameInstance->PlayBGM(TEXT("BGM_Boss_Loop.wav"));
+        isEnd = true;
+    }
+
     if (true == m_pGameInstance->Get_DIKeyState(DIK_RCONTROL, KEY_DOWN))
     {
         CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
@@ -65,6 +81,16 @@ void CLevel_Boss::Tick(_float fTimeDelta)
 
         if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_BEACH))))
             return;
+    }
+
+    if (true == m_isNext)
+    {
+        CUI_Loading* pUILoading = dynamic_cast<CUI_Loading*>(m_pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_UI_Loading")));
+        if (true == pUILoading->Get_isFinish())
+        {
+            if (FAILED(m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, m_eNextLevel))))
+                return;
+        }
     }
 }
 
@@ -153,7 +179,7 @@ HRESULT CLevel_Boss::Ready_Layer_Object(const wstring& strLayerTag)
 
         tColliderBoxDesc.vSize = { 4.f, 1.f, 1.f };
 
-        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, TEXT("Layer_Object_ColliderBox"), TEXT("Prototype_GameObject_Object_ColliderBox"), &tColliderBoxDesc)))
+        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Object_ColliderBox"), TEXT("Prototype_GameObject_Object_ColliderBox"), &tColliderBoxDesc)))
             return E_FAIL;
     }
 
@@ -177,9 +203,13 @@ HRESULT CLevel_Boss::Ready_Layer_Object(const wstring& strLayerTag)
         /*if (13 == i)
             tLadderDesc.isEnd = true;*/
 
-        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_PUZZLE, TEXT("Layer_Object_Ladder"), TEXT("Prototype_GameObject_Object_Ladder"), &tLadderDesc)))
+        if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Object_Ladder"), TEXT("Prototype_GameObject_Object_Ladder"), &tLadderDesc)))
             return E_FAIL;
     }
+
+    // Trigger
+    if (FAILED(m_pGameInstance->Add_Clone(LEVEL_BOSS, TEXT("Layer_Trigger_Scene"), TEXT("Prototype_GameObject_Object_Trigger_Scene"))))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -206,8 +236,6 @@ HRESULT CLevel_Boss::Ready_Layer_Camera()
     CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pPlayer->Get_Component(g_strTransformTag));
     _vector vPlayerPosition = pCameraTransform->Get_State_Vector(CTransform::STATE_POSITION);
 
-    //_vector vPlayerPosition = { 0.f, - 40.250f, 54.f, 1.f };
-    //_vector vCamPosition = {0.f, vPlayerPosition.m128_f32[1] + 13.f, vPlayerPosition.m128_f32[2] + 13.f, 1.f };
    _vector vCamPosition = { vPlayerPosition.m128_f32[0], vPlayerPosition.m128_f32[1] + 12.8f, vPlayerPosition.m128_f32[2] + 13.f, 1.f };
     pCameraTransform->Set_State(CTransform::STATE_POSITION, vCamPosition);
     pCameraTransform->Look_At(vPlayerPosition);
@@ -232,4 +260,6 @@ CLevel_Boss* CLevel_Boss::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 void CLevel_Boss::Free()
 {
     __super::Free();
+
+    m_pGameInstance->Stop_Sound(CSound_Manager::BGM);
 }

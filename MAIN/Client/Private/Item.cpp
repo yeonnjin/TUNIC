@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "NPC_Merchant.h"
+#include "UI_Interactive.h"
 
 CItem::CItem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CInteractiveObject{ pDevice, pContext }
@@ -43,6 +44,8 @@ HRESULT CItem::Use_Item()
         {
             pPlayer->Set_HP(m_iPlusHP);
         }
+
+        m_pGameInstance->Play_Once(TEXT("PLAYER_Item_BerryHP.wav"), CSound_Manager::PLAYER);
     }
     else if (ITEM_MP == m_eItem)
     {
@@ -61,6 +64,8 @@ HRESULT CItem::Use_Item()
         {
             pPlayer->Set_MP(m_fPlusMP);
         }
+
+        m_pGameInstance->Play_Once(TEXT("PLAYER_Item_BerryMP.wav"), CSound_Manager::PLAYER);
     }
 
     return S_OK;
@@ -134,6 +139,9 @@ HRESULT CItem::Tick(_float fTimeDelta)
 {
     if (true == m_isShop)
     {
+        if (E_FAIL == __super::Tick(fTimeDelta))
+            return E_FAIL;
+
         m_pTransformCom->Turn(_vector{ 0.f, 1.f, 0.f, 0.f }, fTimeDelta * 0.3f);
 
         m_pColliderCom->Tick(m_ColliderMatrix);
@@ -148,7 +156,11 @@ void CItem::Late_Tick(_float fTimeDelta)
 {
     if(true == m_isShop)
     {
+        m_pUIInteractive->Late_Tick(fTimeDelta);
         m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+
+        if(ITEM_DASH == m_eItem)
+            m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this);
 
 //#ifdef _DEBUG
 //        m_pGameInstance->Add_DebugComponent(m_pColliderCom);

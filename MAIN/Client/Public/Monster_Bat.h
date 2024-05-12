@@ -31,6 +31,7 @@ public:
 	// Set
 	void			Set_Blending(_bool isBlend, ANIMATION eBlendAnimIndex) { m_isBlend = isBlend; m_eBlendAnimIndex = eBlendAnimIndex; }
 	void			Set_AnimationIndex(ANIMATION eAnimIndex) { m_eAnimationIndex = eAnimIndex; }
+	void			Set_isAttackFrame(_bool isAttack) { m_isAttackFrame = isAttack; }
 
 	// Get
 	_bool			Get_isFinished(ANIMATION eAnimIndex) { return m_pModelCom->isFinished(eAnimIndex); }
@@ -45,8 +46,9 @@ public:
 	virtual void	Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-
 private:
+	_bool			m_isAttackFrame = { false };
+
 	_uint			m_iNavigationIndex = { 0 };
 
 private:

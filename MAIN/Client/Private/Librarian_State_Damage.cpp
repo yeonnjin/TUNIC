@@ -17,6 +17,9 @@ void CLibrarian_State_Damage::OnStateEnter()
     // 1. 애니메이션 재생 중 추가 데미지 맞으면 다시 처음부터 재생
 
     m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_FLINCH);
+
+    m_pGameInstance->Stop_Sound(CSound_Manager::BOSS);
+    m_pGameInstance->Play_Once(TEXT("BOSS_Hurt.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Damage::OnStateUpdate(_float fTimeDelta)

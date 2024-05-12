@@ -31,7 +31,7 @@ public:
 		_uint			iPrice;
 	}ITEM_DESC;
 
-public:
+private:
 	CItem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CItem(const CItem& rhs);
 	virtual ~CItem() = default;

@@ -12,6 +12,7 @@ void CPlayer_State_Defense::OnStateEnter()
 {
     m_pPlayer->Set_Blending(true, CPlayer::ANIM_SHIELD);   
     m_pPlayer->Set_Parrying(true);
+    m_pGameInstance->Play_Once(TEXT("PLAYER_Shield_Up.wav"), CSound_Manager::PLAYER);
 }
 
 void CPlayer_State_Defense::OnStateUpdate(_float fTimeDelta)
@@ -138,6 +139,8 @@ void CPlayer_State_Defense::OnStateExit()
 
     m_isFirst = { true };
     m_isTurn = { false };
+
+    m_pGameInstance->Play_Once(TEXT("PLAYER_Shield_Down.wav"), CSound_Manager::PLAYER);
 }
 
 CPlayer_State_Defense* CPlayer_State_Defense::Create(CPlayer* pPlayer)

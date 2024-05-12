@@ -29,11 +29,20 @@ private:
 	_vector m_vPreUp = {};
 	_vector	m_vPreLook = {};
 
-private:
-	class CPlayer* m_pPlayer = { nullptr };
-	CPlayer::DODGE	m_eDodge = { CPlayer::DODGE_END };
-	CPlayer::ANIMATION m_eAnim = { CPlayer::ANIM_END };
+	_float	m_fAccDelayTime = { 0.f };
+	_float	m_fDelayTime = { 0.05f };
 
+private:
+	class CSprite_Sweat*	m_pSpriteSweat = { nullptr };
+	class CPlayer*			m_pPlayer = { nullptr };
+	CPlayer::DODGE			m_eDodge = { CPlayer::DODGE_END };
+	CPlayer::ANIMATION		m_eAnim = { CPlayer::ANIM_END };
+
+	random_device			m_RandomDevice;
+	mt19937_64				m_RandomNumber;
+
+private:
+	void	Make_Cloud(_float fTimeDelta);
 
 
 public:

@@ -3,6 +3,8 @@
 
 #include "Bone.h"
 
+#include "Sprite_Attack_Stick.h"
+
 CWeapon_Stick::CWeapon_Stick(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CPlayer_Weapon{ pDevice, pContext }
 {
@@ -123,5 +125,11 @@ void CWeapon_Stick::Free()
 void CWeapon_Stick::Collision_Event(Engine::CGameObject* pGameObject)
 {
     if (true == m_isAttackFrame && OBJ_MONSTER == pGameObject->Get_ObjectType())
+    {
         pGameObject->Set_isDamage(true);
+
+        CSprite_Attack_Stick* pSprite = dynamic_cast<CSprite_Attack_Stick*>(m_pGameInstance->Get_GameObject_Clone(TEXT("Prototype_GameObject_Sprite_Attack_Stick")));
+        pSprite->Set_Using(true, dynamic_cast<CTransform*>(pGameObject->Get_Component(g_strTransformTag)));
+        m_pGameInstance->Add_Clone(LEVEL_STATIC, TEXT("Layer_Sprite_Attack"), pSprite);
+    }
 }

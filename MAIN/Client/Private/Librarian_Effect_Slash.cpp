@@ -65,6 +65,8 @@ HRESULT CLibrarian_Effect_Slash::Tick(_float fTimeDelta)
 
 	m_pTransformCom->Go_Backward(fTimeDelta);
 
+	m_pGameInstance->Play_Loop(TEXT("BOSS_Pattern_Enegy_Wave_Effect.wav"), CSound_Manager::EFFECT1);
+
 	return S_OK;
 }
 

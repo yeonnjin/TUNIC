@@ -31,6 +31,8 @@ void CLibrarian_State_Pattern_Energy_Beam::OnStateEnter()
     // 3. 다리 살짝 접으면서 종료 : ANIM_PALPATINE_EXIT
 
     m_pMonster->Set_Blending(true, CMonster_Librarian::ANIM_PALPATINE_START);
+
+    m_pGameInstance->Play_Once(TEXT("BOSS_Pattern_Energy_Beam.wav"), CSound_Manager::BOSS);
 }
 
 void CLibrarian_State_Pattern_Energy_Beam::OnStateUpdate(_float fTimeDelta)

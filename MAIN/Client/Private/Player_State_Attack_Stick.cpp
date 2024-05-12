@@ -39,6 +39,9 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
         _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_STICK1);
         if (28 <= iFrame && 36 >= iFrame)
             m_pWeapon->Set_isAttackFrame(true);
+
+        if(28 == iFrame)
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Stick_1.wav"), CSound_Manager::PLAYER);
     }
 
     // 첫 번째 콤보가 끝나기 전까지 추가 공격을 못했을 때 : 상태 종료
@@ -59,6 +62,9 @@ void CPlayer_State_Attack_Stick::OnStateUpdate(_float fTimeDelta)
         _uint iFrame = m_pPlayer->Get_Current_Frame(CPlayer::ANIM_SWING_STICK2);
         if (20 <= iFrame && 33 >= iFrame)
             m_pWeapon->Set_isAttackFrame(true);
+
+        if(20 == iFrame)
+            m_pGameInstance->Play_Once(TEXT("PLAYER_Stick_2.wav"), CSound_Manager::PLAYER);
     }
 
     // 두 번째 콤보가 끝나면 상태 종료

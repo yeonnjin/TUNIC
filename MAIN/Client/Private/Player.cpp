@@ -21,6 +21,8 @@
 #include "Player_State_Puzzle.h"
 #include "Player_State_Climb.h"
 #include "Player_State_Top.h"
+#include "Player_State_Die.h"
+#include "Player_State_Water.h"
 
 // Camera
 #include "Camera_LockOn.h"
@@ -36,8 +38,8 @@
 #include "Object_Chest.h"
 #include "Object_Ladder.h"
 
-// TEST
-//#include "Particle_Red.h"
+// Particle
+#include "Particle_Sphere.h"
 
 #define	WEAPONBONEIDX 45
 #define SHIELDBONE 24
@@ -129,6 +131,9 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	if (E_FAIL == __super::Tick(fTimeDelta))
 		return E_FAIL;
 
+	if (LEVEL_MENU == m_iLevel || true == m_isScene)
+		return S_OK;
+
 	// TEST
 	if (true == m_pGameInstance->Get_DIKeyState(DIK_B, KEY_DOWN))
 	{
@@ -183,7 +188,7 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 		m_vPrePosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
 		// Height : 사다리 타는 중이 아닐 때만
-		if (STATE_CLIMB != m_eState)
+		if (STATE_CLIMB != m_eState && STATE_TOP != m_eState)
 		{
 			_float fHeight = m_pNavigationCom->Compute_Height(m_vPrePosition);
 			if(false == isnan(fHeight))
@@ -209,6 +214,11 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 			m_isUsingInventory = !m_isUsingInventory;
 			m_pInventory->Set_Using(m_isUsingInventory);
 			Change_State(STATE_IDLE);
+
+			if (true == m_isUsingInventory)
+				m_pGameInstance->Play_Once(TEXT("UI_Popup_In.wav"), CSound_Manager::UI1);
+			else
+				m_pGameInstance->Play_Once(TEXT("UI_Popup_Out.wav"), CSound_Manager::UI1, 0.6f);
 		}
 	}
 	m_pInventory->Tick(fTimeDelta);
@@ -220,12 +230,28 @@ HRESULT CPlayer::Tick(_float fTimeDelta)
 	if (LEVEL_BOSS == m_iLevel)
 		Set_BossLimit();
 
+	// Damage
+	if(true == m_isDamaging && STATE_DAMAGE != m_eState)
+	{
+		Compute_Damage_Shader(fTimeDelta);		
+	}
+
+	// Respawn
+	if (true == m_isRespawn)
+	{
+		m_fAccImmuneTime += fTimeDelta;
+		if (m_fAccImmuneTime >= m_fImmuneTime)
+		{
+			m_isRespawn = false;
+			Set_isImmune(false);
+		}
+	}
+
 	// Collider
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 	m_pRigidColliderCom->Tick(m_pTransformCom->Get_WorldMatrix());
 	m_pGameInstance->Add_Group(CCollision_Manager::GROUP_PLAYER, this);
 	m_pGameInstance->Add_RigidGroup(this);
-
 
 	return S_OK;
 }
@@ -235,16 +261,10 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	for (auto& PartObject : m_PartObjects)
 		PartObject.second->Late_Tick(fTimeDelta);
 
-	/*if (true == m_pColliderCom->Check_Collision((CCollider*)m_pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Com_Collider"))))
-	{
-		m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.2f);
-	}
-	else
-		m_pModelCom->Set_SlowMotion(ANIM_SWING_STICK1, 16, 26, 0.f);*/
-
 	Compute_Damage_CoolTime(fTimeDelta);
 
 	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this);
+	m_pGameInstance->Add_RenderGroup(CRenderer::RENDER_SHADOW, this);
 
 #ifdef _DEBUG
 		m_pGameInstance->Add_DebugComponent(m_pColliderCom);
@@ -267,7 +287,57 @@ HRESULT CPlayer::Render()
 		if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin((true == m_isDamaging) ? 2 : 0)))
+			return E_FAIL;
+
+		m_pModelCom->Render(i);
+	}
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Render_LightDepth()
+{
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	/*if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;*/
+
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldFloat4x4_Ptr())))
+		return E_FAIL;
+
+	_float4x4		ViewMatrix, ProjMatrix;
+
+	Compute_Shadow();
+	m_pGameInstance->Set_ShadowPosition(m_vShadowEye, m_vShadowLookAt);
+	// _float4(65.f, 2.f, -62.f, 1.f);
+	//XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(75.f, 10.f, -72.f, 1.f), XMVectorSet(65.f, 2.f, -62.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
+	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(m_vShadowEye, m_vShadowLookAt, XMVectorSet(0.f, 1.f, 0.f, 0.f)));
+	XMStoreFloat4x4(&ProjMatrix, XMMatrixPerspectiveFovLH(XMConvertToRadians(120.0f), (_float)g_iWinSizeX / g_iWinSizeY, 0.1f, 2000.f));
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &ViewMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &ProjMatrix)))
+		return E_FAIL;
+
+	_float fCamFar = m_pGameInstance->Get_Camera_Far();
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+		return E_FAIL;
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		if (FAILED(m_pModelCom->Bind_ShaderResource(m_pShaderCom, "g_DiffuseTexture", i, TEX_DIFFUSE)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(1)))
 			return E_FAIL;
 
 		m_pModelCom->Render(i);
@@ -292,29 +362,22 @@ void CPlayer::Update_State()
 		 
 		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
-			//m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
 		}
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_O, KEY_DOWN))
 			Change_State(STATE_SLEEP);
 
-		/*if (m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN))
-			Change_State(STATE_DAMAGE);*/
-
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
 
 		if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
 			Change_State(STATE_PUZZLE);
-
 		break;
 
 	case STATE_PUZZLE:
-
 		if (m_pGameInstance->Get_DIKeyState(DIK_Z, KEY_DOWN))
 			Change_State(STATE_IDLE);
-
 		break;
 
 	case STATE_MOVE:
@@ -323,30 +386,16 @@ void CPlayer::Update_State()
 			!m_pGameInstance->Get_DIKeyState(DIK_A, KEY_PRESS) &&
 			!m_pGameInstance->Get_DIKeyState(DIK_D, KEY_PRESS))
 		{
-			//m_eDir = DIR_FORWARD;
 			Change_State(STATE_IDLE);
 		}
-
 
 		if (m_pGameInstance->Get_DIMouseState(DIMKS_RBUTTON, KEY_DOWN))
 			Change_State(STATE_DEFENSE);
 
 		if (false == m_isInteractive && m_pGameInstance->Get_DIKeyState(DIK_SPACE, KEY_DOWN))
 		{
-			//m_eDodge = DODGE_ROLL;
 			Change_State(STATE_DODGE);
 		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_LCONTROL, KEY_DOWN))
-		{
-			m_eDodge = DODGE_FAST;
-			Change_State(STATE_DODGE);
-		}
-		/*if (m_pGameInstance->Get_DIKeyState(DIK_C, KEY_DOWN))
-		{
-			m_eDodge = DODGE_DASH;
-			Change_State(STATE_DODGE);
-		}*/
-
 		break;
 	case STATE_END:
 		break;
@@ -487,7 +536,7 @@ void CPlayer::Change_State(STATE eState)
 		m_isCanChange = false;
 		m_fAccChageTime = 0.f;
 	}
-}	
+}
 
 HRESULT CPlayer::Set_Navigation(_uint iLevel)
 {
@@ -498,39 +547,54 @@ HRESULT CPlayer::Set_Navigation(_uint iLevel)
 		Delete_Component(TEXT("Com_Navigation"));
 	}
 
-	CNavigation::NAVIGATION_DESC			NavigationDesc{};
-	NavigationDesc.iCurrentIndex = 0;
-	if (FAILED(__super::Add_Component(iLevel, TEXT("Prototype_Component_Navigation"),
-		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-		return E_FAIL;
+	_uint	iNaviIndex = 0;
 
 	_float4 vPosition{};
+	_vector vLookDir{};
 
 	switch (iLevel)
 	{
 	case LEVEL_BEACH:
-		vPosition = _float4(65.f, 2.f, -62.f, 1.f);
+		if(LEVEL_SHOP == m_iPrevLevel)
+		{
+			vPosition = _float4(-2.f, 2.f, -61.f, 1.f);
+			iNaviIndex = 333;
+			vLookDir = { -1.f, 0.f, 0.f, 0.f };
+		}
+		else
+		{
+			vPosition = _float4(65.f, 2.f, -62.f, 1.f);
+			vLookDir = { 0.f, 0.f, 1.f, 0.f };
+		}
 		break;
 	case LEVEL_SHOP:
 		vPosition = _float4(0.f, 17.f, 8.f, 1.f);
+		vLookDir = { 0.f, 0.f, -1.f, 0.f };
 		break;
 	case LEVEL_PUZZLE:
 		vPosition = _float4(-0.2f, 0.02f, -51.f, 1.f);
+		vLookDir = { -1.f, 0.f, 0.f, 0.f };
 		break;
 	case LEVEL_BOSS:
 		vPosition = _float4(0.f, 0.2f, 54.f, 1.f);
+		vLookDir = { 0.f, 0.f, 1.f, 0.f };
 		break;
 	default:
 		break;
 	}
 
+	CNavigation::NAVIGATION_DESC			NavigationDesc{};
+	NavigationDesc.iCurrentIndex = iNaviIndex;
+	if (FAILED(__super::Add_Component(iLevel, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
+		return E_FAIL;
+
 	m_vPrePosition = XMLoadFloat4(&vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	m_pTransformCom->Look_At_Dir(vLookDir, true);
 
 	return S_OK;
 }
-
-
 
 void CPlayer::Set_Weapon_Render(const wstring& strWeaponTag, _bool isRender)
 {
@@ -573,15 +637,6 @@ HRESULT CPlayer::Add_Components()
 		return E_FAIL;
 
 	/* For. Com_Collider */
-	/*CBounding_SPHERE::BOUNDING_SPHERE_DESC ColliderDesc{};
-	
-	ColliderDesc.fRadius = 0.8f;
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.fRadius + 0.6f , 0.f);
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_SPHERE"),
-		TEXT("Com_Collider"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
-		return E_FAIL;*/
-
 	CBounding_OBB::BOUNDING_OBB_DESC		ColliderDesc{};
 	ColliderDesc.vSize = _float3(1.7f, 2.f, 1.7f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
@@ -600,13 +655,6 @@ HRESULT CPlayer::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_RigidCollider"), (CComponent**)&m_pRigidColliderCom, &RigidDesc)))
 		return E_FAIL;
-
-	///* For.Com_Navigation */
-	//CNavigation::NAVIGATION_DESC			NavigationDesc{};
-	//NavigationDesc.iCurrentIndex = 0;
-	//if (FAILED(__super::Add_Component(LEVEL_BEACH, TEXT("Prototype_Component_Navigation"),
-	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &NavigationDesc)))
-	//	return E_FAIL;
 	
 	return S_OK;
 }
@@ -700,6 +748,8 @@ HRESULT CPlayer::Add_States()
 	m_pModelCom->Add_State(STATE_PUZZLE, CPlayer_State_Puzzle::Create(this));
 	m_pModelCom->Add_State(STATE_CLIMB, CPlayer_State_Climb::Create(this));
 	m_pModelCom->Add_State(STATE_TOP, CPlayer_State_Top::Create(this));
+	m_pModelCom->Add_State(STATE_DIE, CPlayer_State_Die::Create(this));
+	m_pModelCom->Add_State(STATE_WATER, CPlayer_State_Water::Create(this));
 	m_pModelCom->Change_State(STATE_IDLE);
 	m_eState = STATE_IDLE;
 
@@ -721,6 +771,9 @@ HRESULT CPlayer::Bind_ShaderResources()
 
 	_float fCamFar = m_pGameInstance->Get_Camera_Far();
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fCamFar", &fCamFar, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_isBlack", &m_isBlack, sizeof(_bool))))
 		return E_FAIL;
 
 	return S_OK;
@@ -959,61 +1012,24 @@ void CPlayer::Compute_Stat_Gauge(_float fTimeDelta)
 
 void CPlayer::Compute_Height()
 {
-	/*matrix matWV, matWVP;
-
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
-
-	Out.vPosition = mul(vPosition, matWVP);*/
-
-
-	//_matrix matWVP = /*m_pTransformCom->Get_WorldMatrix() * */m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW) * m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ);
-
-	//_vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
-	//vPosition = XMVector3TransformCoord(vPosition, matWVP);
-
-	//_float2 vProjPosition = { (XMVectorGetX(vPosition) / XMVectorGetW(vPosition) + 1.f) * 0.5f * 1280.f,
-	//							(1.f - XMVectorGetY(vPosition) / XMVectorGetW(vPosition)) * 0.5f * 720.f };
-
-	//vPosition = m_pGameInstance->Compute_WorldPos(vProjPosition, TEXT("Target_FieldDepth"));
-
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-
 	_vector vWorldPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
-	//static _float fY = vWorldPosition.m128_f32[1];
-	//vWorldPosition.m128_f32[1] = fY;
 	_vector vViewPos = XMVector3TransformCoord(vWorldPosition, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_VIEW));
 	_vector vProjPos = XMVector3TransformCoord(vViewPos, m_pGameInstance->Get_Transform_Matrix(CPipeLine::D3DTS_PROJ));
-
-	// -1 ~ 1 -> 0 ~ 1
-	/*_float2 vProjPosition = { (XMVectorGetX(vProjPos) / XMVectorGetW(vProjPos) + 1.f) * 0.5f * 1280.f,
-								(1.f - XMVectorGetY(vProjPos) / XMVectorGetW(vProjPos)) * 0.5f * 720.f };*/
-
 	
 	_float2 vProjPosition = { (XMVectorGetX(vProjPos) + 1.f) * 0.5f * 1280.f,
 								(1.f - XMVectorGetY(vProjPos)) * 0.5f * 720.f };
 
 	_vector vPosition = m_pGameInstance->Compute_WorldPos(vProjPosition, TEXT("Target_FieldDepth"));
-	//vPosition.m128_f32[1] += 0.2f;
-	//fY = vPosition.m128_f32[1];
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+}
 
+void CPlayer::Compute_Shadow()
+{
+	_vector vPosition = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
 
-	/*_vector		vWorldPos = m_pTransformCom->Get_State_Vector(CTransform::STATE_POSITION);
-
-	POINT		ptMouse;
-	GetCursorPos(&ptMouse);
-	ScreenToClient(g_hWnd, &ptMouse);
-
-	_float2		vMousePos = _float2(ptMouse.x, ptMouse.y);
-
-	vWorldPos = m_pGameInstance->Compute_WorldPos(vMousePos, TEXT("Target_FieldDepth"));*/
-
-	/*CParticle_Red::PARTICLE_DESC tDesc{};
-	tDesc.vPosition = vWorldPos;
-	if (FAILED(m_pGameInstance->Add_Clone(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Particle_Red"), &tDesc)))
-		return;*/
+	m_vShadowEye = { vPosition.m128_f32[0] - 10.f, vPosition.m128_f32[1] + 10.f, vPosition.m128_f32[2] - 10.f, 1.f };
+	m_vShadowLookAt = vPosition;
 }
 
 CPlayer_Weapon* CPlayer::Find_Weapon(WEAPON eWeapon)
@@ -1034,6 +1050,33 @@ void CPlayer::Set_BossLimit()
 	{
 		m_vPrePosition.m128_f32[2] = 42.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPrePosition);
+	}
+}
+
+void CPlayer::Compute_Damage_Shader(_float fTimeDelta)
+{
+	m_fAccBlackTime += fTimeDelta;
+	if (m_fAccBlackTime >= m_fBlackTime)
+	{
+		m_isBlack = !m_isBlack;
+		m_fAccAllBlackTime += m_fAccBlackTime;
+		m_fAccBlackTime = 0.f;
+
+		if (m_fAccAllBlackTime >= m_fAllBlackTime)
+		{
+			m_isDamaging = false;
+			m_fAccAllBlackTime = 0.f;
+		}
+	}
+}
+
+void CPlayer::Compute_Water()
+{
+	_uint iIndex = m_pNavigationCom->Get_CurrentIndex();
+	if (238 == iIndex || 239 == iIndex || 241 == iIndex || 242 == iIndex ||
+		243 == iIndex || 244 == iIndex || 256 == iIndex)
+	{
+		Change_State(STATE_WATER);
 	}
 }
 
@@ -1079,7 +1122,9 @@ void CPlayer::Free()
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pRigidColliderCom);
 	Safe_Release(m_pNavigationCom);
-	Safe_Release(m_pLookOnTransform);
+
+	if(nullptr != m_pLookOnTransform)
+		Safe_Release(m_pLookOnTransform);
 
 	Safe_Release(m_pUI_Stat);
 	Safe_Release(m_pUI_LockOn);
@@ -1122,7 +1167,12 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 			// 아이템 구매
 			else if (CInteractiveObject::INTERACTIVE_ITEM == eInteractiveType)
 			{
-				m_isUsingShop = true;
+				if (false == m_isUsingShop)
+				{
+					m_isUsingShop = true;
+					m_pGameInstance->Play_Once(TEXT("UI_Popup_In.wav"), CSound_Manager::UI1);
+				}
+
 				CItem* pItem = dynamic_cast<CItem*>(pObject);
 				pItem->Select_Item();
 			
@@ -1132,6 +1182,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					if (true == pItem->Get_isOK())
 					{
 						CItem::ITEM eItem = pItem->Get_Item();
+						m_pGameInstance->Play_Once(TEXT("UI_Popup_Ok.wav"), CSound_Manager::UI2);
 
 						if (CItem::ITEM_POTION == eItem)
 						{
@@ -1163,6 +1214,7 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 					else
 					{
 						pItem->Exit_Shop();
+						m_pGameInstance->Play_Once(TEXT("UI_Popup_Out.wav"), CSound_Manager::UI1, 0.6f);
 					}
 
 					Change_State(STATE_IDLE);
@@ -1213,4 +1265,9 @@ void CPlayer::Collision_Event(Engine::CGameObject* pGameObject)
 
 void CPlayer::Damage_Event()
 {
+	m_isDamaging = true;
+	m_pGameInstance->Play_Once(TEXT("PLAYER_Hurt_Minor.wav"), CSound_Manager::SYSTEM_EFFECT3);
+
+	if (0 >= m_iHP)
+		Change_State(STATE_DIE);
 }

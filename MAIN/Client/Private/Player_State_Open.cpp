@@ -24,8 +24,15 @@ void CPlayer_State_Open::OnStateEnter()
 
 void CPlayer_State_Open::OnStateUpdate(_float fTimeDelta)
 {
+    if (20 == m_pPlayer->Get_Current_Frame(CPlayer::ANIM_OPEN_CHEST))
+    {
+        m_pGameInstance->Play_Once(TEXT("INTERACT_Chest_Open.wav"), CSound_Manager::EFFECT1);
+    } 
+
     if (49 == m_pPlayer->Get_Current_Frame(CPlayer::ANIM_OPEN_CHEST))
+    {
         m_pPlayer->Set_ChestOpen();
+    }
 
     if (true == m_pPlayer->Get_isFinished(CPlayer::ANIM_OPEN_CHEST))
         m_pPlayer->Change_State(CPlayer::STATE_IDLE);

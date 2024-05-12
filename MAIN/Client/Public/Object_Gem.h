@@ -20,7 +20,7 @@ public:
 		_uint				iNavigationIndex;
 	}OBJECT_GEM_DESC;
 
-public:
+private:
 	CObject_Gem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CObject_Gem(const CObject_Gem& rhs);
 	virtual ~CObject_Gem() = default;
@@ -31,6 +31,7 @@ public:
 	virtual		HRESULT		Tick(_float fTimeDelta)override;
 	virtual		void		Late_Tick(_float fTimeDelta) override;
 	virtual		HRESULT		Render() override;
+	virtual HRESULT			Render_LightDepth() override;
 
 private:
 	_bool					m_isLand = { false };

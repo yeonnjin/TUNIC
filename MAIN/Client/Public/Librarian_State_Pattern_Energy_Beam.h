@@ -23,7 +23,7 @@ private:
 	_uint	m_iPattern = { 0 };
 
 	_float	m_fAccLoopTime = { 0.f };
-	_float	m_fLoopTime = { 2.f };
+	_float	m_fLoopTime = { 1.5f };
 
 private:
 	class CLibrarian_Effect_Beam* m_pBeam = { nullptr };

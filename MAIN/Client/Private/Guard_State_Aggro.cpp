@@ -19,6 +19,7 @@ CGuard_State_Aggro::CGuard_State_Aggro(CMonster_Guard* pMonster, CPlayer* pPlaye
 
 void CGuard_State_Aggro::OnStateEnter()
 {
+    m_pGameInstance->Play_Once(TEXT("MONSTER_Guard_Aggro.wav"), CSound_Manager::MONSTER4);
     m_pMonster->Set_isAggro(true);
 	m_pMonster->Set_Blending(true, CMonster_Guard::ANIM_AGGRO);
 

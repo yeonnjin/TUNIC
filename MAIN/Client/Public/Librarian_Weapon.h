@@ -30,14 +30,15 @@ private:
 	virtual ~CLibrarian_Weapon() = default;
 
 public:
-	void			Set_isRender(_bool isRender) { m_isRender = isRender; }
+	void							Set_isRender(_bool isRender) { m_isRender = isRender; }
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT	Tick(_float fTimeDelta) override;
-	virtual void	Late_Tick(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	virtual HRESULT					Initialize_Prototype() override;
+	virtual HRESULT					Initialize(void* pArg) override;
+	virtual HRESULT					Tick(_float fTimeDelta) override;
+	virtual void					Late_Tick(_float fTimeDelta) override;
+	virtual HRESULT					Render() override;
+	virtual HRESULT					Render_LightDepth() override;
 
 private:
 	wstring							m_strModelComTag = {};

@@ -54,6 +54,9 @@ void CCowBot_State_Attack::OnStateUpdate(_float fTimeDelta)
         if (false == m_isCombo)
         {
             _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_CowBot::ANIM_ATTACK);
+            if(34 == iFrame)
+                m_pGameInstance->Play_Once(TEXT("MONSTER_CowBot_Attack1.wav"), CSound_Manager::MONSTER3);
+
             if (34 <= iFrame && 40 >= iFrame)
                 m_pWeapon->Set_isAttackFrame(true);
         }
@@ -74,6 +77,9 @@ void CCowBot_State_Attack::OnStateUpdate(_float fTimeDelta)
         if (true == m_isCombo)
         {
             _uint iFrame = m_pMonster->Get_Current_Frame(CMonster_CowBot::ANIM_BACKSWIPE);
+            if(20 == iFrame)
+                m_pGameInstance->Play_Once(TEXT("MONSTER_CowBot_Attack2.wav"), CSound_Manager::MONSTER3);
+
             if (20 <= iFrame && 26 >= iFrame)
                 m_pWeapon->Set_isAttackFrame(true);
         }

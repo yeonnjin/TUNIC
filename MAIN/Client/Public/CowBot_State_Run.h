@@ -33,6 +33,9 @@ private:
 	_float						m_fAccChangeTime = { 0.f };
 	_float						m_fChangeTime = { 0.4f };
 
+	_float				m_fAccSoundTime = { 0.f };
+	_float				m_fSoundTime = { 0.4f };
+
 	_vector						m_vTargetDir = {};
 	_vector						m_vEnterPosition = {};
 

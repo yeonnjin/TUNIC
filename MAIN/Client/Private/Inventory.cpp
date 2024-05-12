@@ -55,6 +55,7 @@ void CInventory::Add_Item(CItem* pItem)
 
     // 소비 아이템일 때, 이미 있는 아이템인 경우 : 기존 아이템의 개수 증가
     m_pUIObtain->Set_Using(true, eItem);
+    m_pGameInstance->Play_Once(TEXT("UI_Slide_In.wav"), CSound_Manager::UI3, 0.4f);
 
     if(CItem::TYPE_USE == eType)
     {
@@ -124,23 +125,26 @@ void CInventory::Select_Item()
             if (nullptr != m_Items[m_iSelectRow - i][m_iSelectColumn])
             {
                 m_iSelectRow -= i;
+                m_pGameInstance->Play_Once(TEXT("UI_Inventory_Top.wav"), CSound_Manager::SYSTEM_EFFECT);
                 break;
             }
         }
+
     }
     else if (true == m_pGameInstance->Get_DIKeyState(DIK_DOWN, KEY_DOWN) && CItem::TYPE_END - 1 > m_iSelectRow)
-    {
+    {      
         for (size_t i = 1; i < CItem::TYPE_END - m_iSelectRow; i++)
         {
             if (nullptr != m_Items[m_iSelectRow + i][m_iSelectColumn])
             {
                 m_iSelectRow += i;
+                m_pGameInstance->Play_Once(TEXT("UI_Inventory_Top.wav"), CSound_Manager::SYSTEM_EFFECT);
                 break;
             }
         }
     }
     else if (true == m_pGameInstance->Get_DIKeyState(DIK_LEFT, KEY_DOWN))
-    {
+    {      
         if(0 < m_iSelectColumn)
         {
             for (size_t i = 1; i < m_iSelectColumn + 1; i++)
@@ -148,6 +152,7 @@ void CInventory::Select_Item()
                 if (nullptr != m_Items[m_iSelectRow][m_iSelectColumn - i])
                 {
                     m_iSelectColumn -= i;
+                    m_pGameInstance->Play_Once(TEXT("UI_Inventory_Left.wav"), CSound_Manager::SYSTEM_EFFECT);
                     break;
                 }
             }
@@ -161,6 +166,7 @@ void CInventory::Select_Item()
                 {
                     m_iSelectRow -= 1;
                     m_iSelectColumn = i;
+                    m_pGameInstance->Play_Once(TEXT("UI_Inventory_Left.wav"), CSound_Manager::SYSTEM_EFFECT);
                     break;
                 }
             }
@@ -175,6 +181,7 @@ void CInventory::Select_Item()
                 if (nullptr != m_Items[m_iSelectRow][m_iSelectColumn + i])
                 {
                     m_iSelectColumn += i;
+                    m_pGameInstance->Play_Once(TEXT("UI_Inventory_Right.wav"), CSound_Manager::SYSTEM_EFFECT);
                     break;
                 }
             }
@@ -188,6 +195,7 @@ void CInventory::Select_Item()
                 {
                     m_iSelectRow += 1;
                     m_iSelectColumn = i;
+                    m_pGameInstance->Play_Once(TEXT("UI_Inventory_Right.wav"), CSound_Manager::SYSTEM_EFFECT);
                     break;
                 }
             }
@@ -202,6 +210,7 @@ void CInventory::Select_Item()
     {
         if (S_OK == m_Items[m_iSelectRow][m_iSelectColumn]->Use_Item())
         {
+            m_pGameInstance->Play_Once(TEXT("UI_Inventory_Invalid.wav"), CSound_Manager::SYSTEM_EFFECT2);
             m_iNumItems[m_iSelectRow][m_iSelectColumn] -= 1;
             m_Items[m_iSelectRow][m_iSelectColumn]->Plus_Count(false);
             if (0 == m_iNumItems[m_iSelectRow][m_iSelectColumn])
@@ -242,16 +251,19 @@ void CInventory::Select_Item()
     else if (true == m_pGameInstance->Get_DIKeyState(DIK_J, KEY_DOWN) && m_iSelectRow == CItem::TYPE_WEAPON)
     {
         m_pUISlot->Set_Slot(CUI_Slot::SLOT_J, (CPlayer::WEAPON)Set_WeaponIndex(m_Items[m_iSelectRow][m_iSelectColumn]->Get_Item()));
+        m_pGameInstance->Play_Once(TEXT("UI_Inventory_Invalid.wav"), CSound_Manager::SYSTEM_EFFECT2);
     }
     // SLOT_K
     else if (true == m_pGameInstance->Get_DIKeyState(DIK_K, KEY_DOWN) && m_iSelectRow == CItem::TYPE_WEAPON)
     {
         m_pUISlot->Set_Slot(CUI_Slot::SLOT_K, (CPlayer::WEAPON)Set_WeaponIndex(m_Items[m_iSelectRow][m_iSelectColumn]->Get_Item()));
+        m_pGameInstance->Play_Once(TEXT("UI_Inventory_Invalid.wav"), CSound_Manager::SYSTEM_EFFECT2);
     }
     // SLOT_L
     else if (true == m_pGameInstance->Get_DIKeyState(DIK_L, KEY_DOWN) && m_iSelectRow == CItem::TYPE_WEAPON)
     {
         m_pUISlot->Set_Slot(CUI_Slot::SLOT_L, (CPlayer::WEAPON)Set_WeaponIndex(m_Items[m_iSelectRow][m_iSelectColumn]->Get_Item()));
+        m_pGameInstance->Play_Once(TEXT("UI_Inventory_Invalid.wav"), CSound_Manager::SYSTEM_EFFECT2);
     }
 }
 
@@ -328,6 +340,8 @@ _uint CInventory::Set_WeaponIndex(CItem::ITEM eItem)
     default:
         break;
     }
+
+    return 0;
 }
 
 CInventory* CInventory::Create()
