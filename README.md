@@ -91,7 +91,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 ## ⭐ 주요 구현 코드
 
-▶ Engine Core
+### ▶ Engine Core
 
  [CollisionManager]
 - Bounding Box 충돌 검사 구현 
@@ -105,14 +105,14 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/State_Machine.cpp
 
 
-▶ Animation
+### ▶ Animation
 
  [AnimatorController]
 - 애니메이션 보간 및 루트 모션 처리 
 - https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Animator_Controller.cpp
 
 
-▶ Navigation + Tool
+### ▶ Navigation + Tool
 
  [Navigation Tool]
 - 맵 상에 점을 찍어 삼각형 메쉬 정보를 만든 후 데이터 저장
