@@ -41,39 +41,14 @@ HRESULT CNavigation::Initialize_Prototype()
 
 HRESULT CNavigation::Initialize_Prototype(const wstring& strDataFile)
 {
-	/*_ulong		dwByte = { 0 };
-	HANDLE		hFile = CreateFile(strDataFile.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
-
-	while (true)
-	{
-		_float3		vPoints[3];
-
-		ReadFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
-
-		if (0 == dwByte)
-			break;
-
-		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, m_Cells.size());
-		if (nullptr == pCell)
-			return E_FAIL;
-
-		m_Cells.emplace_back(pCell);
-	}
-
-	if (FAILED(SetUp_Neighbors()))
-		return E_FAIL;*/
-
-
 	ifstream fin;
 	fin.open(strDataFile.c_str(), ios::in | ios::binary);
 
-	// ¡° ∞≥ºˆ ¿˙¿Â
+	// Ï†ê Í∞úÏàò Ï†ÄÏû•
 	_uint iNumDot{};
 	fin.read(reinterpret_cast<char*>(&iNumDot), sizeof(_uint));
 
-	// ¡° ¿ßƒ° ¿˙¿Â
+	// Ï†ê ÏúÑÏπò Ï†ÄÏû•
 	vector<_float3> vSavePositions;
 	for (size_t i = 0; i < iNumDot; i++)
 	{
@@ -82,11 +57,11 @@ HRESULT CNavigation::Initialize_Prototype(const wstring& strDataFile)
 		vSavePositions.push_back(vDotPosition);
 	}
 
-	// ºø ∞≥ºˆ ¿˙¿Â (¡° ∞≥ºˆ x 3)
+	// ÏÖÄ Í∞úÏàò Ï†ÄÏû• (Ï†ê Í∞úÏàò x 3)
 	_uint iNumCell{};
 	fin.read(reinterpret_cast<char*>(&iNumCell), sizeof(_uint));
 
-	// ºø ª˝º∫
+	// ÏÖÄ ÏÉùÏÑ±
 	for (size_t i = 0; i < iNumCell; i++)
 	{
 		_float3	vPositions[3] = {};
@@ -95,7 +70,7 @@ HRESULT CNavigation::Initialize_Prototype(const wstring& strDataFile)
 			vPositions[j] = vSavePositions[i * 3 + j];
 		}
 
-		// ∞¢ ¡°µÈ¿« ¿ÃøÙ ¿Œµ¶Ω∫ ¿˙¿Â
+		// Í∞Å Ï†êÎì§Ïùò Ïù¥ÏõÉ Ïù∏Îç±Ïä§ Ï†ÄÏû•
 		_int vNeighborIndex[3] = {};
 		fin.read(reinterpret_cast<char*>(&vNeighborIndex), sizeof(_int) * 3);
 
@@ -138,16 +113,16 @@ _bool CNavigation::isMove(_fvector vPosition)
 
 	_int	iNeighborIndex = { -1 };
 
-	// «ˆ¿Á ºøø° ±◊¥Î∑Œ ¿÷¿ª ∂ß
+	// ÌòÑÏû¨ ÏÖÄÏóê Í∑∏ÎåÄÎ°ú ÏûàÏùÑ Îïå
 	if (true == m_Cells[m_iCurrentIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
 		return true;
-	// π€ø° ≥™∞¨¿ª ∂ß
+	// Î∞ñÏóê ÎÇòÍ∞îÏùÑ Îïå
 	else
 	{
-		// ≥™∞£ πÊ«‚ø° ¿ÃøÙ¿Ã æ¯æ˙¿ª ∂ß
+		// ÎÇòÍ∞Ñ Î∞©Ìñ•Ïóê Ïù¥ÏõÉÏù¥ ÏóÜÏóàÏùÑ Îïå
 		if (-1 == iNeighborIndex)
 			return false;
-		// ≥™∞£ πÊ«‚ø° ¿ÃøÙ¿Ã ¿÷æ˙¿ª ∂ß
+		// ÎÇòÍ∞Ñ Î∞©Ìñ•Ïóê Ïù¥ÏõÉÏù¥ ÏûàÏóàÏùÑ Îïå
 		else
 		{
 			while (true)
@@ -175,16 +150,16 @@ _vector CNavigation::Get_Sliding(_fvector vPosition, _fvector vOriginPosition, _
 	_int	iSlidingIndex = m_iCurrentIndex;
 	_vector vSlidingPosition{};
 
-	// «ˆ¿Á ºøø° ±◊¥Î∑Œ ¿÷¿ª ∂ß
+	// ÌòÑÏû¨ ÏÖÄÏóê Í∑∏ÎåÄÎ°ú ÏûàÏùÑ Îïå
 	if (true == m_Cells[m_iCurrentIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
 		return vPosition;
 
-	// π€ø° ≥™∞¨¿ª ∂ß
+	// Î∞ñÏóê ÎÇòÍ∞îÏùÑ Îïå
 	else
 	{
 		while (true)
 		{
-			if (-1 == iNeighborIndex) // ΩΩ∂Û¿Ãµ˘
+			if (-1 == iNeighborIndex) // Ïä¨ÎùºÏù¥Îî©
 				vSlidingPosition = m_Cells[iSlidingIndex]->Get_Sliding(vPosition, vOriginPosition, vTargetLook, fSpeed, fTimeDelta, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex);
 			else
 			{
@@ -211,41 +186,6 @@ _vector CNavigation::Get_Sliding(_fvector vPosition, _fvector vOriginPosition, _
 		}	
 	}
 }
-
-//_vector CNavigation::Go_Sliding(_fvector vPosition, _fvector vLook)
-//{
-//	if (-1 == m_iCurrentIndex)
-//		return _vector{ 0.f, 0.f, 0.f };
-//
-//	_int	iNeighborIndex = { -1 };
-//
-//	_int	iSlidingIndex = m_iCurrentIndex;
-//	_vector vSlidingPosition{};
-//
-//	// «ˆ¿Á ºøø° ±◊¥Î∑Œ ¿÷¿ª ∂ß
-//	if (true == m_Cells[m_iCurrentIndex]->isIn(vPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
-//		return vPosition;
-//	// π€ø° ≥™∞¨¿ª ∂ß
-//	else
-//	{
-//		while (true)
-//		{
-//			if (-1 == iNeighborIndex) // ΩΩ∂Û¿Ãµ˘
-//				vSlidingPosition = m_Cells[iSlidingIndex]->isIn_Sliding(vPosition, vLook, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex);
-//			else
-//			{
-//				m_iCurrentIndex = iNeighborIndex;
-//				return vPosition;
-//			}
-//
-//			if (true == m_Cells[iSlidingIndex]->isIn(vSlidingPosition, XMLoadFloat4x4(&m_WorldMatrix), &iNeighborIndex))
-//			{
-//				m_iCurrentIndex = iSlidingIndex;
-//				return vSlidingPosition;
-//			}
-//		}	
-//	}
-//}
 
 HRESULT CNavigation::Add_Cell(CCell* pCell)
 {
