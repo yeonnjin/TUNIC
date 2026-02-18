@@ -101,6 +101,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 ### Engine Core
 - [CollisionManager](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Collision_Manager.cpp)
 - [CameraManager](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Camera_Manager.cpp)
+- [StateMachine](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/State_Machine.cpp)
 
 ### Animation
 - [AnimatorController](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Animator_Controller.cpp)
