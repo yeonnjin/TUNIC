@@ -32,7 +32,6 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - Bounding Box 기반 충돌 검사 구현
 - 충돌 발생 시 최상위 Object 클래스의 `collision_event()` 호출
 - 오브젝트 타입별로 서로 다른 충돌 이벤트 처리
-- [ CollisionManager ] https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Collision_Manager.cpp
 
 ---
 
@@ -40,7 +39,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 - 카메라 태그(wstring) 기반 다중 카메라 관리
 - 카메라 전환 시 이전 카메라 행렬을 다음 카메라에 전달하여 자연스러운 시점 이동 구현
-- 
+  
 ---
 
 ### ▶ FSM 기반 캐릭터 상태 관리
@@ -110,7 +109,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - [Navigation Tool](https://github.com/yeonnjin/TUNIC/blob/master/TOOL/Engine/Private/Navigation.cpp)
 - [Navigation Runtime](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Navigation.cpp)
 
---
+---
 
 ## 💡 이 프로젝트를 통해 얻은 경험
 
