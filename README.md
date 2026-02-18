@@ -6,28 +6,21 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 ---
 
-## 📌 개발 환경
+## 📌 프로젝트 개요
 
-- DirectX11  
-- C++14 / HLSL  
-- Visual Studio 2022  
-- Git  
-- ImGui  
+자체 엔진 구조를 설계하고 렌더링부터 게임 로직까지 전체 파이프라인 이해하는 것을 목표로 작업했습니다.
+다양한 콘텐츠 구현을 통한 게임 시스템 전반적인 경험을 쌓았고 맵 툴 제작 및 멀티스레드 리소스 로딩 적용을 했습니다.
 
----
-
-## 🎯 프로젝트 목적
-
-- 자체 엔진 구조 설계 경험
-- 렌더링부터 게임 로직까지 전체 파이프라인 이해
-- 다양한 콘텐츠 구현을 통한 게임 시스템 전반 경험
-- 맵 툴 제작 및 멀티스레드 리소스 로딩 적용
+- 프로젝트 형태: 개인 프로젝트
+- 엔진: DirectX11
+- 언어: C++14 / HLSL
+- 개발 도구 : Visual Studio 2022, Git, ImGui
 
 ---
 
 ## 🙋 직접 구현한 주요 시스템
 
-### ▶ CollisionManager
+### 1️⃣ CollisionManager
 
 - Bounding Box 기반 충돌 검사 구현
 - 충돌 발생 시 최상위 Object 클래스의 `collision_event()` 호출
@@ -35,14 +28,14 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 ---
 
-### ▶ CameraManager
+### 2️⃣ CameraManager
 
 - 카메라 태그(wstring) 기반 다중 카메라 관리
 - 카메라 전환 시 이전 카메라 행렬을 다음 카메라에 전달하여 자연스러운 시점 이동 구현
   
 ---
 
-### ▶ FSM 기반 캐릭터 상태 관리
+### 3️⃣ FSM 기반 캐릭터 상태 관리
 
 - 플레이어, 몬스터, NPC를 FSM 구조로 관리
 - 플레이어는 이동 / 전투 / 퍼즐 / 상호작용 등 약 14개의 상태 구현
@@ -51,7 +44,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
   
 ---
 
-### ▶ 상호작용 및 콘텐츠
+### 4️⃣ 상호작용 및 콘텐츠
 
 - 상자 열기
 - 몬스터 처치 시 아이템 드랍
@@ -61,7 +54,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 ---
 
-### ▶ UI 시스템
+### 5️⃣ UI 시스템
 
 - Player HUD
 - 로딩 UI
@@ -96,19 +89,39 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 ---
 
-## ⭐ 주요 구현 코드 바로가기
+## ⭐ 주요 구현 코드
 
-### Engine Core
-- [CollisionManager](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Collision_Manager.cpp)
-- [CameraManager](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Camera_Manager.cpp)
-- [StateMachine](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/State_Machine.cpp)
+▶ Engine Core
 
-### Animation
-- [AnimatorController](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Animator_Controller.cpp)
+ [CollisionManager]
+- Bounding Box 충돌 검사 구현 
+- https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Collision_Manager.cpp
+  
+ [CameraManager]
+- 카메라 태그 기반 다중 카메라 처리
+- https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Camera_Manager.cpp
+  
+ [StateMachine]
+- https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/State_Machine.cpp
 
-### Navigation + Tool
-- [Navigation Tool](https://github.com/yeonnjin/TUNIC/blob/master/TOOL/Engine/Private/Navigation.cpp)
-- [Navigation Runtime](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Navigation.cpp)
+
+▶ Animation
+
+ [AnimatorController]
+- 애니메이션 보간 및 루트 모션 처리 
+- https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Animator_Controller.cpp
+
+
+▶ Navigation + Tool
+
+ [Navigation Tool]
+- 맵 상에 점을 찍어 삼각형 메쉬 정보를 만든 후 데이터 저장
+- https://github.com/yeonnjin/TUNIC/blob/master/TOOL/Engine/Private/Navigation.cpp
+
+
+ [Navigation Runtime]
+- 삼각형 메쉬 기반 이동/지형 처리
+- https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Navigation.cpp
 
 ---
 
