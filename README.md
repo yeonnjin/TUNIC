@@ -1,8 +1,8 @@
 # TUNIC – DirectX11 개인 프로젝트
 
 DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입니다.
-게임 프레임워크 설계부터 렌더링, 캐릭터 로직, 콘텐츠 구현까지 전반을 혼자 담당한 개인 프로젝트입니다.
-엔진 구조 설계, 다양한 콘텐츠 구현, 맵 툴 제작, 멀티스레드 리소스 로딩까지 직접 구현했습니다.
+게임 프레임워크 설계부터 렌더링, 캐릭터 로직, 콘텐츠 구현까지 전반을 직접 담당했으며,
+엔진 구조 설계, 맵 툴 제작, 멀티스레드 리소스 로딩 등을 구현했습니다.
 
 ---
 
@@ -32,6 +32,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - Bounding Box 기반 충돌 검사 구현
 - 충돌 발생 시 최상위 Object 클래스의 `collision_event()` 호출
 - 오브젝트 타입별로 서로 다른 충돌 이벤트 처리
+- [ CollisionManager ] https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Collision_Manager.cpp
 
 ---
 
@@ -39,7 +40,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 - 카메라 태그(wstring) 기반 다중 카메라 관리
 - 카메라 전환 시 이전 카메라 행렬을 다음 카메라에 전달하여 자연스러운 시점 이동 구현
-
+- 
 ---
 
 ### ▶ FSM 기반 캐릭터 상태 관리
@@ -48,7 +49,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - 플레이어는 이동 / 전투 / 퍼즐 / 상호작용 등 약 14개의 상태 구현
 - 보스는 7가지 공격 패턴을 FSM 기반으로 구성
 - NPC는 상황별 상태 전환 구조 적용
-
+  
 ---
 
 ### ▶ 상호작용 및 콘텐츠
@@ -86,7 +87,7 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 
 - 3D 지형을 삼각형 메쉬로 분할
 - 각 삼각형의 정점 및 인덱스 데이터 저장
-- 플레이어 이동 경로에 따라 현재 위치한 삼각형을 실시간 추적
+- 플레이어 이동 시 현재 위치한 삼각형을 실시간 추적
 - 해당 삼각형 정보를 기반으로 높이 보정 적용
 
 또한 맵 툴을 직접 제작하여:
@@ -95,6 +96,21 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - 해당 데이터를 파싱하여 네비게이션 정보로 사용
 
 ---
+
+## ⭐ 주요 구현 코드 바로가기
+
+### Engine Core
+- [CollisionManager](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Collision_Manager.cpp)
+- [CameraManager](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Camera_Manager.cpp)
+
+### Animation
+- [AnimatorController](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Animator_Controller.cpp)
+
+### Navigation + Tool
+- [Navigation Tool](https://github.com/yeonnjin/TUNIC/blob/master/TOOL/Engine/Private/Navigation.cpp)
+- [Navigation Runtime](https://github.com/yeonnjin/TUNIC/blob/master/MAIN/Engine/Private/Navigation.cpp)
+
+--
 
 ## 💡 이 프로젝트를 통해 얻은 경험
 
@@ -105,8 +121,3 @@ DirectX11 기반 자체 엔진으로 개발한 3D 액션 어드벤처 게임입�
 - 다양한 콘텐츠를 구조적으로 통합하는 경험
 - 단일 프로젝트에서 엔진 / 콘텐츠 / 툴을 모두 직접 다뤄본 경험
 
----
-
-## ⭐ 핵심 한 줄
-
-DirectX 기반 자체 엔진 위에서 렌더링, 캐릭터 FSM, 애니메이션, 네비게이션, 콘텐츠까지 전 과정을 혼자 구현하며 게임 개발의 전체 흐름을 경험한 개인 프로젝트입니다.
